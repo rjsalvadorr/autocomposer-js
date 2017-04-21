@@ -1,0 +1,25 @@
+{
+  "name": "autocomposer-melody",
+  "version": "0.0.1",
+  "description": "A web app that displays simple musical melodies based on a chord progression",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-react": "browserify src/react-test-raw.js -o dist/index.js -t [ babelify --presets [ react ] ] && stylus src/style.styl -o dist/style.css"
+  },
+  "author": "RJ Salvador",
+  "license": "ISC",
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
+    "vexflow": "^1.2.83"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babelify": "^7.3.0",
+    "browserify": "^14.3.0",
+    "stylus": "^0.54.5"
+  }
+}
