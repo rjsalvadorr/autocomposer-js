@@ -65,7 +65,7 @@ class RjToggleButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentState: props.initialState
+      currentState: props.initialState === "true"
     };
   }
 
@@ -204,31 +204,36 @@ class ControlPanel extends React.Component {
   }
 
   render() {
-    var testSelectOptions = [];
-    testSelectOptions['opt1'] = 'Something 1';
-    testSelectOptions['opt2'] = 'Something 2';
-    testSelectOptions['opt3'] = 'Something 3';
-    testSelectOptions['opt4'] = 'Something 4';
+    if(!this.props.isHidden) {
+      var testSelectOptions = [];
+      testSelectOptions['opt1'] = 'Something 1';
+      testSelectOptions['opt2'] = 'Something 2';
+      testSelectOptions['opt3'] = 'Something 3';
+      testSelectOptions['opt4'] = 'Something 4';
 
-    return (
-      <div className="r-component">
-        <h2>Controls</h2>
+      return (
 
-        <RjTextField inputKey="text1" inputLabel="For text1" value={this.state.text1} onChange={this.handleChange} />
-        <RjTextField inputKey="text2" inputLabel="For text2" value={this.state.text2} onChange={this.handleChange} />
+        <div className="r-component">
+          <h2>Controls</h2>
 
-        <RjCheckbox inputKey="hideDebug" inputLabel="Hide Debug Panel?" isChecked={this.state.hideDebug} onChange={this.handleChange} />
-        <RjCheckbox inputKey="chk1" inputLabel="Testing chk1" isChecked={this.state.chk1} onChange={this.handleChange} />
+          <RjTextField inputKey="text1" inputLabel="For text1" value={this.state.text1} onChange={this.handleChange} />
+          <RjTextField inputKey="text2" inputLabel="For text2" value={this.state.text2} onChange={this.handleChange} />
 
-        <RjSelect inputKey="select1" inputLabel="For select1" value={this.state.select1} onChange={this.handleChange} options={testSelectOptions} />
+          <RjCheckbox inputKey="hideDebug" inputLabel="Hide Debug Panel?" isChecked={this.state.hideDebug} onChange={this.handleChange} />
+          <RjCheckbox inputKey="chk1" inputLabel="Testing chk1" isChecked={this.state.chk1} onChange={this.handleChange} />
 
-        <RjRadioSet inputKey="rad1" inputLabel="For rad1" value={this.state.rad1} onChange={this.handleChange} options={testSelectOptions} />
+          <RjSelect inputKey="select1" inputLabel="For select1" value={this.state.select1} onChange={this.handleChange} options={testSelectOptions} />
 
-        <RjToggleButton inputKey="btn1" inputLabel="For btn1" initialState={this.state.btn1} onClickHandler={this.handleChange} />
+          <RjRadioSet inputKey="rad1" inputLabel="For rad1" value={this.state.rad1} onChange={this.handleChange} options={testSelectOptions} />
 
-        <DebugPanel isHidden={this.state.hideDebug} debugData={JSON.stringify(this.state, null, 2)}/>
-      </div>
-    );
+          <RjToggleButton inputKey="btn1" inputLabel="For btn1" initialState={this.state.btn1} onClickHandler={this.handleChange} />
+
+          <DebugPanel isHidden={this.state.hideDebug} debugData={JSON.stringify(this.state, null, 2)}/>
+        </div>
+      );
+    } else {
+      return null;
+    }
   }
 }
 
@@ -240,16 +245,51 @@ class App extends React.Component {
     this.state = {
       hideHelp: true,
       hideControls: true,
-      hideOutput: true
+      hideOutput: true,
+      debugMode: true
     };
+
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(event) {
+    var stateObj = function() {
+      var stateKey = this.target.dataset["stateKey"];
+      var returnObj = {};
+      var debugMessage;
+
+      if(this.target.type === "checkbox") {
+        returnObj[stateKey] = this.target.checked;
+        debugMessage = '[handleChange] stateKey=' + stateKey + ', this.target.value=' + this.target.value;
+      } else if(this.target.type === "button") {
+        returnObj[stateKey] = this.target.dataset["currentState"] === "true";
+        debugMessage = '[handleChange] stateKey=' + stateKey + ', this.target.dataset[\'currentState\']' + this.target.dataset["currentState"];
+      } else {
+        returnObj[stateKey] = this.target.value;
+        debugMessage = '[handleChange] stateKey=' + stateKey + ', this.target.value=' + this.target.value;
+      }
+
+      console.debug(debugMessage);
+
+      return returnObj;
+    }.bind(event)();
+
+    this.setState(stateObj);
   }
 
   render() {
     return (
       <div id="r-app-container" className="r-component">
-        <ControlPanel />
-        <HelpPanel />
-        <OutputPanel />
+
+        <RjToggleButton inputKey="hideHelp" inputLabel="Help Panel" initialState={this.state.hideHelp} onClickHandler={this.handleChange} />
+        <RjToggleButton inputKey="hideControls" inputLabel="Control Panel" initialState={this.state.hideControls} onClickHandler={this.handleChange} />
+        <RjToggleButton inputKey="hideOutput" inputLabel="Output Panel" initialState={this.state.hideOutput} onClickHandler={this.handleChange} />
+
+        <ControlPanel isHidden={this.state.hideControls} />
+        <HelpPanel isHidden={this.state.hideHelp} />
+        <OutputPanel isHidden={this.state.hideOutput} />
+
+        <DebugPanel isHidden={!this.state.debugMode} debugData={JSON.stringify(this.state, null, 2)}/>
       </div>
     );
   }
