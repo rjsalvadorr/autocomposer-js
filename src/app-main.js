@@ -1,6 +1,10 @@
-window.$ = window.jQuery = require('jQuery');
+window.$ = window.jQuery = require('jquery/dist/jquery.min');
 var React = require('react');
 var ReactDOM = require('react-dom');
+
+var AutoComposerData = require('./autocomposer-data');
+var AutoComposerMelody = require('./autocomposer-melody');
+var AutoComposerParser = require('./autocomposer-parser');
 
 
 
@@ -56,7 +60,7 @@ class RjRadioSet extends React.Component {
 
     for (var k in totalOptions) {
       if (totalOptions.hasOwnProperty(k)) {
-        items.push(<label>{totalOptions[k]} <input key={k} id={this.props.inputKey} name={this.props.inputKey}  data-state-key={this.props.inputKey} type="radio" value={k}  onChange={this.props.onChange} /> </label>);
+        items.push(<label key={"label-" + k} >{totalOptions[k]} <input key={k} id={this.props.inputKey} name={this.props.inputKey}  data-state-key={this.props.inputKey} type="radio" value={k}  onChange={this.props.onChange} /> </label>);
       }
     }
 
