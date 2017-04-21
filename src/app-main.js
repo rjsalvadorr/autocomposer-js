@@ -8,6 +8,40 @@ var AutoComposerParser = require('./autocomposer-parser');
 
 
 
+class HelpPanel extends React.Component {
+  render() {
+    if(!this.props.isHidden) {
+      return (
+        <div id="help-panel" className="autocomposer-panel">
+          <h2>Help!</h2>
+          <p>Help text will go here eventually...</p>
+        </div>
+      );
+    } else {
+      return null;
+    }
+  }
+}
+
+
+
+class OutputPanel extends React.Component {
+  render() {
+    if(!this.props.isHidden) {
+      return (
+        <div id="output-panel" className="autocomposer-panel">
+          <h2>Melodies!</h2>
+          <p>Melodies will go here eventually...</p>
+        </div>
+      );
+    } else {
+      return null;
+    }
+  }
+}
+
+
+
 class DebugPanel extends React.Component {
   render() {
     if(!this.props.isHidden) {
@@ -22,6 +56,28 @@ class DebugPanel extends React.Component {
     } else {
       return null;
     }
+  }
+}
+
+
+
+class RjToggleButton extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentState: props.initialState
+    };
+  }
+
+  handleClick(e) {
+    this.setState({currentState: !this.state.currentState});
+    this.props.onClickHandler(e);
+  }
+
+  render() {
+    return (
+      <input type="button" className="r-component-input" id={this.props.inputKey} value={this.props.inputLabel} data-state-key={this.props.inputKey} data-current-state={this.state.currentState} onClick={(e) => this.handleClick(e)} />
+    );
   }
 }
 
@@ -118,7 +174,8 @@ class ControlPanel extends React.Component {
       text2: 'text two init',
       chk1: true,
       chk2: false,
-      hideDebug: false
+      hideDebug: false,
+      btn1: true
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -132,6 +189,8 @@ class ControlPanel extends React.Component {
 
       if(this.target.type === "checkbox") {
         returnObj[stateKey] = this.target.checked;
+      } else if(this.target.type === "button") {
+        returnObj[stateKey] = this.target.dataset["currentState"] === "true";
       } else {
         returnObj[stateKey] = this.target.value;
       }
@@ -165,6 +224,8 @@ class ControlPanel extends React.Component {
 
         <RjRadioSet inputKey="rad1" inputLabel="For rad1" value={this.state.rad1} onChange={this.handleChange} options={testSelectOptions} />
 
+        <RjToggleButton inputKey="btn1" inputLabel="For btn1" initialState={this.state.btn1} onClickHandler={this.handleChange} />
+
         <DebugPanel isHidden={this.state.hideDebug} debugData={JSON.stringify(this.state, null, 2)}/>
       </div>
     );
@@ -173,13 +234,25 @@ class ControlPanel extends React.Component {
 
 
 
-function App() {
-  return (
-    <div id="r-app-container" className="r-component">
-      <h1>React App</h1>
-      <ControlPanel />
-    </div>
-  )
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hideHelp: true,
+      hideControls: true,
+      hideOutput: true
+    };
+  }
+
+  render() {
+    return (
+      <div id="r-app-container" className="r-component">
+        <ControlPanel />
+        <HelpPanel />
+        <OutputPanel />
+      </div>
+    );
+  }
 }
 
 
