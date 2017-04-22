@@ -1,3 +1,5 @@
+
+
 /**
  * AutoComposerParser - determines if user input represents a valid note/chord.
  * Also handles conversions between proper accidental signs and ASCII accidentals like "b" or "#".

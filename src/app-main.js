@@ -1,4 +1,3 @@
-window.$ = window.jQuery = require('jquery/dist/jquery.min');
 var React = require('react');
 var ReactDOM = require('react-dom');
 
@@ -119,7 +118,7 @@ class RjTextArea extends React.Component {
     } else {
       labelElement = "";
     }
-    
+
     return (
       <div>
         {labelElement}
@@ -274,7 +273,7 @@ class ControlPanel extends React.Component {
 
 
 
-class App extends React.Component {
+class AutoComposer extends React.Component {
   constructor(props) {
     super(props);
 
@@ -314,7 +313,7 @@ class App extends React.Component {
 
     this.setState(stateObj);
   }
-    
+
   generateMelodies(event) {
       console.log('[App.generateMelodies]')
       //nothing yet...
@@ -325,7 +324,7 @@ class App extends React.Component {
       <div id="r-app-container" className="r-component">
         <h2>Chord Progression</h2>
         <RjTextArea inputKey="chordProgressionRaw" value={this.state.chordProgressionRaw} onChange={this.handleChange} />
-        
+
         <RjToggleButton inputKey="hideHelp" inputLabel="Help Panel" initialState={this.state.hideHelp} onClickHandler={this.handleChange} />
         <RjToggleButton inputKey="hideControls" inputLabel="Control Panel" initialState={this.state.hideControls} onClickHandler={this.handleChange} />
         <RjButton inputKey="generateMelodies" inputLabel="Generate Melodies!" onClick={this.generateMelodies} />
@@ -342,9 +341,4 @@ class App extends React.Component {
 
 
 
-$(document).ready(function() {
-  ReactDOM.render(
-    <App />,
-    document.getElementById('react-root')
-  );
-});
+ReactDOM.render(<AutoComposer />, document.getElementById('react-root'));
