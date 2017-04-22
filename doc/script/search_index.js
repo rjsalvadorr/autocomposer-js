@@ -36,24 +36,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "",
-    "test-file/test/test.js.html#lineNumber2",
-    "Array",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/test.js.html#lineNumber3",
-    "Array #indexOf()",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/test.js.html#lineNumber4",
-    "Array #indexOf() should return -1 when the value is not present",
-    "test"
-  ],
-  [
     "builtinexternal/ecmascriptexternal.js~array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
     "BuiltinExternal/ECMAScriptExternal.js~Array",
@@ -556,11 +538,5 @@ window.esdocSearchIndex = [
     "class/src/score-writer.js~ScoreWriter.html#instance-method-writeScore",
     "src/score-writer.js~ScoreWriter#writeScore",
     "method"
-  ],
-  [
-    "test/test.js",
-    "test-file/test/test.js.html",
-    "test/test.js",
-    "testFile"
   ]
 ]

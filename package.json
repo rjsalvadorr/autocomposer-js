@@ -8,7 +8,7 @@
     "url": "https://github.com/rjsalvadorr/autocomposer-melody.git"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "mocha && esdoc",
     "build-dev": "browserify src/app-main.js -o dist/index.js -t [ babelify --presets [ react ] ] && stylus src/style.styl -o dist/style.css && esdoc",
     "build-prod": "browserify src/app-main.js -t [ babelify --presets [ react ] ] | uglifyjs -o dist/index.js && stylus src/style.styl -o dist/style.css && esdoc"
   },

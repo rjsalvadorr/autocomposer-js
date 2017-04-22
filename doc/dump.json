@@ -1539,7 +1539,7 @@
     "__docId__": 59,
     "kind": "file",
     "name": "src/autocomposer-parser.js",
-    "content": "\r\n\r\n/**\r\n * AutoComposerParser - determines if user input represents a valid note/chord.\r\n * Also handles conversions between proper accidental signs and ASCII accidentals like \"b\" or \"#\".\r\n */\r\nclass AutoComposerParser {\r\n  constructor() {\r\n      //\r\n  }\r\n    /**\r\n    * Parses text, and determines if user input represents a valid note/chord.\r\n    * @param {string} input - value given by the user\r\n    * @return {boolean} - a true value means the string can be used by the rest of the program.\r\n    */\r\n  isValidText(input) {\r\n    return false;\r\n  }\r\n\r\n    /**\r\n    * Converts ASCII accidentals to Unicode accidentals in HTML\r\n    * @param {string} input - text with ASCII accidentals\r\n    * @return {string} - text with Unicode accidentals in HTML\r\n    */\r\n  convertAsciiAccidentalsToHtml(input) {\r\n    return \"\";\r\n  }\r\n\r\n    /**\r\n    * Converts ASCII accidentals to Unicode accidentals\r\n    * @param {string} input - text with ASCII accidentals\r\n    * @return {string} - text with Unicode accidentals\r\n    */\r\n  convertAsciiAccidentalsToText(input) {\r\n    return \"\";\r\n  }\r\n\r\n    /**\r\n    * Converts Unicode accidentals to ASCII\r\n    * @param {string} input - text with Unicode accidentals\r\n    * @return {string} - text with ASCII accidentals\r\n    */\r\n  convertAccidentalsToAscii(input) {\r\n    return \"\";\r\n  }\r\n}\r\n\r\nexports.AutoComposerParser = AutoComposerParser;\r\n",
+    "content": "\r\n\r\n/**\r\n * AutoComposerParser - determines if user input represents a valid note/chord.\r\n * Also handles conversions between proper accidental signs and ASCII accidentals like \"b\" or \"#\".\r\n */\r\nclass AutoComposerParser {\r\n  constructor() {\r\n      //\r\n  }\r\n    /**\r\n    * Parses text, and determines if user input represents a valid note/chord.\r\n    * @param {string} input - value given by the user\r\n    * @return {boolean} - a true value means the string can be used by the rest of the program.\r\n    */\r\n  isValidText(input) {\r\n    return false;\r\n  }\r\n\r\n    /**\r\n    * Converts ASCII accidentals to Unicode accidentals in HTML\r\n    * @param {string} input - text with ASCII accidentals\r\n    * @return {string} - text with Unicode accidentals in HTML\r\n    */\r\n  convertAsciiAccidentalsToHtml(input) {\r\n    return \"not implemented yet\";\r\n  }\r\n\r\n    /**\r\n    * Converts ASCII accidentals to Unicode accidentals\r\n    * @param {string} input - text with ASCII accidentals\r\n    * @return {string} - text with Unicode accidentals\r\n    */\r\n  convertAsciiAccidentalsToText(input) {\r\n    return \"not implemented yet\";\r\n  }\r\n\r\n    /**\r\n    * Converts Unicode accidentals to ASCII\r\n    * @param {string} input - text with Unicode accidentals\r\n    * @return {string} - text with ASCII accidentals\r\n    */\r\n  convertAccidentalsToAscii(input) {\r\n    return \"not implemented yet\";\r\n  }\r\n}\r\n\r\nexports.AutoComposerParser = AutoComposerParser;\r\n",
     "static": true,
     "longname": "src/autocomposer-parser.js",
     "access": null,
@@ -2701,55 +2701,5 @@
     "description": "",
     "lineNumber": 34,
     "builtinExternal": true
-  },
-  {
-    "__docId__": 139,
-    "kind": "testFile",
-    "name": "test/test.js",
-    "content": "var assert = require('assert');\r\ndescribe('Array', function() {\r\n  describe('#indexOf()', function() {\r\n    it('should return -1 when the value is not present', function() {\r\n      assert.equal(-1, [1,2,3].indexOf(4));\r\n    });\r\n  });\r\n});\r\n",
-    "static": true,
-    "longname": "test/test.js",
-    "access": null,
-    "description": null,
-    "lineNumber": 1
-  },
-  {
-    "__docId__": 140,
-    "kind": "testDescribe",
-    "name": "describe0",
-    "testId": 0,
-    "memberof": "test/test.js",
-    "testDepth": 0,
-    "static": true,
-    "longname": "test/test.js~describe0",
-    "access": null,
-    "description": "Array",
-    "lineNumber": 2
-  },
-  {
-    "__docId__": 141,
-    "kind": "testDescribe",
-    "name": "describe1",
-    "testId": 1,
-    "memberof": "test/test.js~describe0",
-    "testDepth": 1,
-    "static": true,
-    "longname": "test/test.js~describe0.describe1",
-    "access": null,
-    "description": "#indexOf()",
-    "lineNumber": 3
-  },
-  {
-    "__docId__": 142,
-    "kind": "testIt",
-    "name": "it2",
-    "testId": 2,
-    "memberof": "test/test.js~describe0.describe1",
-    "testDepth": 2,
-    "static": true,
-    "longname": "test/test.js~describe0.describe1.it2",
-    "access": null,
-    "description": "should return -1 when the value is not present",
-    "lineNumber": 4
   }
 ]

@@ -23,7 +23,7 @@ class AutoComposerParser {
     * @return {string} - text with Unicode accidentals in HTML
     */
   convertAsciiAccidentalsToHtml(input) {
-    return "";
+    return "not implemented yet";
   }
 
     /**
@@ -32,7 +32,7 @@ class AutoComposerParser {
     * @return {string} - text with Unicode accidentals
     */
   convertAsciiAccidentalsToText(input) {
-    return "";
+    return "not implemented yet";
   }
 
     /**
@@ -41,7 +41,7 @@ class AutoComposerParser {
     * @return {string} - text with ASCII accidentals
     */
   convertAccidentalsToAscii(input) {
-    return "";
+    return "not implemented yet";
   }
 }
 
