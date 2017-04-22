@@ -4,8 +4,8 @@
 class AutoComposerMelody {
   constructor() {
     this.chordProgression = null,
-    this.upperLimit = 0;
-    this.lowerLimit = 0;
+    this.upperLimit = 0,
+    this.lowerLimit = 0
   }
 
     /**

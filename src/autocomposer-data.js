@@ -4,7 +4,8 @@
 class AutoComposerData {
   constructor() {
     this.DEFAULT_LOWER_LIMIT = "B3",
-    this.DEFAULT_UPPER_LIMIT = "B5"
+    this.DEFAULT_UPPER_LIMIT = "B5",
+    this.INITIAL_PROGRESSION = "G Em C D"
   }
 };
 

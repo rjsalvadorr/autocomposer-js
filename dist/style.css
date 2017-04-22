@@ -19,3 +19,6 @@ body {
   border: 1px dashed #222;
   padding: 15px;
 }
+.ac-input.textarea {
+  resize: none;
+}

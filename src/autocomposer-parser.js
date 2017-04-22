@@ -3,6 +3,9 @@
  * Also handles conversions between proper accidental signs and ASCII accidentals like "b" or "#".
  */
 class AutoComposerParser {
+  constructor() {
+      //
+  }
     /**
     * Parses text, and determines if user input represents a valid note/chord.
     * @param {string} input - value given by the user
