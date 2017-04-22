@@ -28,17 +28,17 @@ describe('AutoComposerParser', function() {
 
   describe('#convertAsciiAccidentalsToText', function() {
     it('should convert ASCII accentals to Unicode versions', function() {
-      assert.equal(AutoComposerParser.convertAsciiAccidentalsToHtml('Bb'), 'B♭');
-      assert.equal(AutoComposerParser.convertAsciiAccidentalsToHtml('C#'), 'C♯');
-      assert.equal(AutoComposerParser.convertAsciiAccidentalsToHtml('Fo'), 'F°');
+      assert.equal(AutoComposerParser.convertAsciiAccidentalsToText('Bb'), 'B♭');
+      assert.equal(AutoComposerParser.convertAsciiAccidentalsToText('C#'), 'C♯');
+      assert.equal(AutoComposerParser.convertAsciiAccidentalsToText('Fo'), 'F°');
     });
   });
 
   describe('#convertAccidentalsToAscii', function() {
     it('should convert Unicode accentals to ASCII versions', function() {
-      assert.equal(AutoComposerParser.convertAsciiAccidentalsToHtml('B♭'), 'Bb');
-      assert.equal(AutoComposerParser.convertAsciiAccidentalsToHtml('C♯'), 'C#');
-      assert.equal(AutoComposerParser.convertAsciiAccidentalsToHtml('F°'), 'Fo');
+      assert.equal(AutoComposerParser.convertAccidentalsToAscii('B♭'), 'Bb');
+      assert.equal(AutoComposerParser.convertAccidentalsToAscii('C♯'), 'C#');
+      assert.equal(AutoComposerParser.convertAccidentalsToAscii('F°'), 'Fo');
     });
   });
 });

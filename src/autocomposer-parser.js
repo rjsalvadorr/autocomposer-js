@@ -23,7 +23,11 @@ class AutoComposerParser {
     * @return {string} - text with Unicode accidentals in HTML
     */
   convertAsciiAccidentalsToHtml(input) {
-    return "not implemented yet";
+    var out = input.replace(/([A-G0-9])b/g, '$1&#9837;');
+    out = out.replace(/([A-G0-9])#/g, '$1&#9839;');
+    out = out.replace(/([A-G0-9])o/g, '$1&‌deg;');
+
+    return out;
   }
 
     /**
@@ -32,7 +36,11 @@ class AutoComposerParser {
     * @return {string} - text with Unicode accidentals
     */
   convertAsciiAccidentalsToText(input) {
-    return "not implemented yet";
+    var out = input.replace(/([A-G0-9])b/g, '$1♭');
+    out = out.replace(/([A-G0-9])#/g, '$1♯');
+    out = out.replace(/([A-G0-9])o/g, '$1°');
+
+    return out;
   }
 
     /**
@@ -41,7 +49,11 @@ class AutoComposerParser {
     * @return {string} - text with ASCII accidentals
     */
   convertAccidentalsToAscii(input) {
-    return "not implemented yet";
+    var out = input.replace(/([A-G0-9])♭/g, '$1b');
+    out = out.replace(/([A-G0-9])♯/g, '$1#');
+    out = out.replace(/([A-G0-9])°/g, '$1o');
+
+    return out;
   }
 }
 
