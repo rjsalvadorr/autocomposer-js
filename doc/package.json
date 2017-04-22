@@ -8,9 +8,9 @@
     "url": "https://github.com/rjsalvadorr/autocomposer-melody.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build-dev": "browserify src/app-main.js -o dist/index.js -t [ babelify --presets [ react ] ] && stylus src/style.styl -o dist/style.css",
-    "build-prod": "browserify src/app-main.js -t [ babelify --presets [ react ] ] | uglifyjs -o dist/index.js && stylus src/style.styl -o dist/style.css"
+    "test": "mocha",
+    "build-dev": "browserify src/app-main.js -o dist/index.js -t [ babelify --presets [ react ] ] && stylus src/style.styl -o dist/style.css && esdoc",
+    "build-prod": "browserify src/app-main.js -t [ babelify --presets [ react ] ] | uglifyjs -o dist/index.js && stylus src/style.styl -o dist/style.css && esdoc"
   },
   "author": "RJ Salvador",
   "license": "ISC",
@@ -27,6 +27,7 @@
     "browserify": "^14.3.0",
     "esdoc": "^0.5.2",
     "esdoc-node": "^1.0.1",
+    "mocha": "^3.2.0",
     "stylus": "^0.54.5",
     "uglify-js": "git+https://github.com/mishoo/UglifyJS2.git#harmony"
   }

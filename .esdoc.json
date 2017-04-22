@@ -1,5 +1,9 @@
 {
   "source": "./src",
   "destination": "./doc",
-  "plugins": [{"name": "esdoc-node"}]
+  "plugins": [{"name": "esdoc-node"}],
+  "test": {
+    "type": "mocha",
+    "source": "./test"
+  }
 }
