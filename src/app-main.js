@@ -49,16 +49,74 @@ class HelpPanel extends React.Component {
 
 
 class OutputPanel extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    var melodiesExist = this.props.melodyUnitList[0] ? true : false;
+
+    if(melodiesExist && this.props.melodyUnitList[0].chordProgression === nextProps.melodyUnitList[0].chordProgression) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  componentDidUpdate() {
+    window.VexTabDiv.Div.start();
+  }
+
+  createVexTab(arrChords, arrMelody) {
+    var vtString, pitchClass;
+    var vexTabText = "options scale=0.9 space=5 font-size=15 font-face=Times\n";
+    vexTabText += "tabstave\n";
+    vexTabText += "notation=true tablature=false\n";
+    vexTabText += "notes :w ";
+
+    arrMelody.forEach(function(melodyNote) {
+      // Turns a note name like "C#4" into "C#/4 |"
+      // Or "Bb4" into "B@/4 |"
+      // VexTab notation sure is odd.
+      pitchClass = melodyNote.slice(0, -1);
+      pitchClass = pitchClass.replace("b", "@");
+      console.debug("pitchClass=" + pitchClass);
+
+      vtString = pitchClass + "/"+ melodyNote.slice(-1) + " | ";
+      vexTabText += vtString;
+    });
+
+    vexTabText = vexTabText.slice(0, - 3) + "\n";
+    vexTabText += "text :w, ";
+
+    arrChords.forEach(function(chordSymbol) {
+      vtString = chordSymbol + ", |, ";
+      vexTabText += vtString;
+    });
+
+    vexTabText = vexTabText.slice(0, - 5);
+
+    console.debug(vexTabText);
+
+    return vexTabText;
+  }
+
   createMelodyRows() {
     var melodyUnitList = this.props.melodyUnitList;
-    var melodyRows = [];
+    melodyUnitList.sort(function(a, b) {
+      return a.smoothness - b.smoothness;
+    });
 
-    console.debug('[OutputPanel.createMelodyRows()] creating rows...');
+    var melodyRows = [];
 
     for(var i = 0; i < melodyUnitList.length; i++) {
       melodyRows.push(
         <tr key={"melody" + i} className="ac-melody-row">
-          <td>{JSON.stringify(melodyUnitList[i].melodyNotes)}</td>
+          <td>
+            <div className="vex-tabdiv">
+              {this.createVexTab(melodyUnitList[i].chordProgression, melodyUnitList[i].melodyNotes)}
+            </div>
+          </td>
           <td>{melodyUnitList[i].smoothness}</td>
           <td>{melodyUnitList[i].range}</td>
           <td>{melodyUnitList[i].contour}</td>
@@ -70,9 +128,7 @@ class OutputPanel extends React.Component {
   }
 
   createMelodyTable() {
-
     console.debug('[OutputPanel.createMelodyTable()] creating table...');
-
     return(
       <table id="ac-melody-output">
         <thead>
