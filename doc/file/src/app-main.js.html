@@ -78,9 +78,11 @@ class HelpPanel extends React.Component {
           &lt;p&gt;
             Default range is Bb3 to B5. Smoothness = total distance between the notes in the melody (in semitones). Range = distance between lowest note and highest note (in semitones).
             &lt;br/&gt;
-            Melodies are filtered by a few rules:
+            Melodies are filtered/sorted by a few rules:
             &lt;ul&gt;
               &lt;li&gt;Range must be no greater than one octave&lt;/li&gt;
+              &lt;li&gt;Smoothest melodies are shown first&lt;/li&gt;
+              &lt;li&gt;Only the 100 smoothest melodies are shown&lt;/li&gt;
             &lt;/ul&gt;
           &lt;/p&gt;
         &lt;/div&gt;
@@ -124,7 +126,8 @@ class OutputPanel extends React.Component {
       // Or &quot;Bb4&quot; into &quot;B@/4 |&quot;
       // VexTab notation sure is odd.
       pitchClass = melodyNote.slice(0, -1);
-      pitchClass.replace(&quot;b&quot;, &quot;@&quot;);
+      pitchClass = pitchClass.replace(&quot;b&quot;, &quot;@&quot;);
+      console.debug(&quot;pitchClass=&quot; + pitchClass);
 
       vtString = pitchClass + &quot;/&quot;+ melodyNote.slice(-1) + &quot; | &quot;;
       vexTabText += vtString;
@@ -147,10 +150,6 @@ class OutputPanel extends React.Component {
 
   createMelodyRows() {
     var melodyUnitList = this.props.melodyUnitList;
-    melodyUnitList.sort(function(a, b) {
-      return a.smoothness - b.smoothness;
-    });
-
     var melodyRows = [];
 
     for(var i = 0; i &lt; melodyUnitList.length; i++) {

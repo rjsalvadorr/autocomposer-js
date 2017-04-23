@@ -135,6 +135,37 @@ class AutoComposerMelody {
   }
 
     /**
+    * For a given chord progression and melody, generate a series of melodies that fit over the progression
+    * @private
+    * @param {string[]} chordProgression - a chord progression
+    * @param {string[]} rawMelodies - a string representing the melody
+    * @param {Object} options - if true, generated melodies will be sorted, with smoothest melodies coming first.
+    * @param {boolean} options.sort - if true, generated melodies will be sorted, with smoothest melodies coming first.
+    * @param {number} options.limit - limits the output to a set number.
+    * @return {MelodyUnit[]} - a list of ChordUnit objects.
+    */
+  buildMelodyUnitList(chordProgression, rawMelodies, options) {
+    var melodyUnits = [];
+    var haxThis = this;
+
+    if(options &amp;&amp; options.limit) {
+      rawMelodies.splice(options.limit);
+    }
+
+    rawMelodies.forEach(function(rawMelody) {
+      melodyUnits.push(haxThis.buildMelodyUnit(chordProgression, rawMelody));
+    });
+
+    if(options &amp;&amp; options.sort) {
+      melodyUnits.sort(function(a, b) {
+        return a.smoothness - b.smoothness;
+      });
+    }
+
+    return melodyUnits;
+  }
+
+    /**
     * For a given chord progression, generate a series of melodies that fit over the progression
     * @private
     * @param {string[]} chordProgression - chord symbols
@@ -246,18 +277,16 @@ class AutoComposerMelody {
 
     /**
     * For a given chord progression, generate a series of melodies that fit over the progression.
+    * Currently, the melodies are sorted by smoothness, and are limited to the first 100 melodies.
     * @param {string[]} chordProgression - chord progression given by user
     * @return {MelodyUnit[]} - an array of MelodyUnits
     */
   getMelodies(chordProgression) {
     var chordUnitList = this.buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);
-    var melodies = this.getMelodiesCore(chordUnitList[0], null, {filtered: true});
+    var rawMelodies = this.getMelodiesCore(chordUnitList[0], null, {filtered: true});
+    var options = {sort: true, limit: AcData.NUM_MELODIES_LIMIT};
 
-    var melodyUnits = [];
-    var haxThis = this;
-    melodies.forEach(function(rawMelody) {
-      melodyUnits.push(haxThis.buildMelodyUnit(chordProgression, rawMelody));
-    });
+    var melodyUnits = this.buildMelodyUnitList(chordProgression, rawMelodies, options);
 
     return melodyUnits;
   }

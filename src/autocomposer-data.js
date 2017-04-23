@@ -17,7 +17,8 @@ class AutoComposerData {
     this.BASS_LOWER_LIMIT = "E1",
     this.BASS_UPPER_LIMIT = "F2",
 
-    this.INITIAL_PROGRESSION = "G Em C D"
+    this.INITIAL_PROGRESSION = "G Em C D",
+    this.NUM_MELODIES_LIMIT = 100
   }
 
   /**

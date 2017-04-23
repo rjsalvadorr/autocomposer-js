@@ -55,67 +55,85 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber17",
+    "test-file/test/autocomposer-melody.js.html#lineNumber20",
     "AutoComposerMelody",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber31",
+    "test-file/test/autocomposer-melody.js.html#lineNumber34",
     "AutoComposerMelody #buildChordUnitList",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber32",
+    "test-file/test/autocomposer-melody.js.html#lineNumber35",
     "AutoComposerMelody #buildChordUnitList should return a list of ChordUnits for a given progression",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber56",
+    "test-file/test/autocomposer-melody.js.html#lineNumber59",
     "AutoComposerMelody #buildMelodyUnit",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber57",
+    "test-file/test/autocomposer-melody.js.html#lineNumber60",
     "AutoComposerMelody #buildMelodyUnit should build a melody unit with metadata for each raw melody",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber18",
+    "test-file/test/autocomposer-melody.js.html#lineNumber89",
+    "AutoComposerMelody #buildMelodyUnitList",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-melody.js.html#lineNumber99",
+    "AutoComposerMelody #buildMelodyUnitList should limit the output if specified",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-melody.js.html#lineNumber93",
+    "AutoComposerMelody #buildMelodyUnitList should sort the output if specified",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-melody.js.html#lineNumber21",
     "AutoComposerMelody #getAllChordTones",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber19",
+    "test-file/test/autocomposer-melody.js.html#lineNumber22",
     "AutoComposerMelody #getAllChordTones should return all chord tones in the range (inclusive)",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber86",
+    "test-file/test/autocomposer-melody.js.html#lineNumber107",
     "AutoComposerMelody #getMelodies",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber87",
+    "test-file/test/autocomposer-melody.js.html#lineNumber108",
     "AutoComposerMelody #getMelodies should return a list of melodies for a given progression",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber95",
+    "test-file/test/autocomposer-melody.js.html#lineNumber116",
     "AutoComposerMelody #getMelodies should return less melodies if filters are on",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber103",
+    "test-file/test/autocomposer-melody.js.html#lineNumber124",
     "AutoComposerMelody #getMelodies should return raw melodies as a string array",
     "test"
   ],

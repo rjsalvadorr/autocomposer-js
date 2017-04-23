@@ -4,6 +4,9 @@ const _ = require('underscore');
 var AcMelody = require('../src/autocomposer-melody');
 var AutoComposerMelody = new AcMelody.AutoComposerMelody();
 
+var AutoComposerData = require('../src/autocomposer-data');
+var AcData = new AutoComposerData.AutoComposerData();
+
 var TEST_CHORD_1 = "Gm7";
 var TEST_CHORD_2 = "Cm7";
 var TEST_CHORD_3 = "D7";
@@ -83,6 +86,24 @@ describe('AutoComposerMelody', function() {
     });
   });
 
+  describe('#buildMelodyUnitList', function() {
+    var chordProgression = ["G", "Em", "C", "D"];
+    var melodies = ["B3 G4 E4 F#4", "G4 B4 C5 D5", "G4 G4 G4 F#4", "G5 G5 G5 A5"];
+
+    it('should sort the output if specified', function() {
+      resultSorted = AutoComposerMelody.buildMelodyUnitList(chordProgression, melodies, {sort: true});
+
+      assert(resultSorted[0].smoothness < resultSorted[3].smoothness);
+    });
+
+    it('should limit the output if specified', function() {
+      var numLimit = 2;
+      result = AutoComposerMelody.buildMelodyUnitList(chordProgression, melodies, {limit: numLimit});
+
+      assert.equal(result.length, numLimit);
+    });
+  });
+
   describe('#getMelodies', function() {
     it('should return a list of melodies for a given progression', function() {
       var chordProgression = ["Gm","Cm","D"];
@@ -96,7 +117,7 @@ describe('AutoComposerMelody', function() {
       var chordProgression = ["Gm","Cm","D"];
       var melodyList = AutoComposerMelody.getMelodies(chordProgression);
 
-      assert.equal(melodyList.length, 123);
+      assert.equal(melodyList.length, AcData.NUM_MELODIES_LIMIT);
       assert.equal(typeof melodyList[0] === 'string', false);
     });
 

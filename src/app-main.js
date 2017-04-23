@@ -33,9 +33,11 @@ class HelpPanel extends React.Component {
           <p>
             Default range is Bb3 to B5. Smoothness = total distance between the notes in the melody (in semitones). Range = distance between lowest note and highest note (in semitones).
             <br/>
-            Melodies are filtered by a few rules:
+            Melodies are filtered/sorted by a few rules:
             <ul>
               <li>Range must be no greater than one octave</li>
+              <li>Smoothest melodies are shown first</li>
+              <li>Only the 100 smoothest melodies are shown</li>
             </ul>
           </p>
         </div>
@@ -103,10 +105,6 @@ class OutputPanel extends React.Component {
 
   createMelodyRows() {
     var melodyUnitList = this.props.melodyUnitList;
-    melodyUnitList.sort(function(a, b) {
-      return a.smoothness - b.smoothness;
-    });
-
     var melodyRows = [];
 
     for(var i = 0; i < melodyUnitList.length; i++) {
