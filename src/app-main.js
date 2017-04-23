@@ -226,19 +226,18 @@ class RjTextField extends React.Component {
 
 class RjTextArea extends React.Component {
   render() {
-    var labelElement;
     if(this.props.inputLabel) {
-      labelElement = <label htmlFor={this.props.inputKey}>{this.props.inputLabel}</label>
+      return (
+        <div>
+          <label htmlFor={this.props.inputKey}>{this.props.inputLabel}</label>
+          <textarea id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className="ac-input textarea" value={this.props.value} placeholder={this.props.placeholder} onChange={this.props.onChange} />
+        </div>
+      );
     } else {
-      labelElement = "";
+      return (
+        <textarea id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className="ac-input textarea" value={this.props.value} placeholder={this.props.placeholder} onChange={this.props.onChange} />
+      );
     }
-
-    return (
-      <div>
-        {labelElement}
-        <textarea id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className="ac-input textarea" value={this.props.value} placeholder={this.props.placeholder} onChange={this.props.onChange} rows="1" cols="50" />
-      </div>
-    );
   }
 }
 
@@ -477,15 +476,23 @@ class AutoComposer extends React.Component {
     return (
       <div id="r-app-container" className="r-component">
         <h2>Chord Progression</h2>
-        <RjTextArea inputKey="chordProgressionRaw" value={this.state.chordProgressionRaw} placeholder={this.state.chordProgressionPlaceholder} onChange={this.handleChange} />
 
-        <RjToggleButton inputKey="hideHelp" inputLabel="Help/Info" initialState={this.state.hideHelp} onClickHandler={this.handleChange} />
-        <RjToggleButton inputKey="hideControls" inputLabel="Settings" initialState={this.state.hideControls} onClickHandler={this.handleChange} />
-        <RjButton inputKey="generateMelodies" inputLabel="Generate Melodies" onClick={this.generateMelodies} />
+        <div id="wrapper-main-input">
+          <div className="wrapper-textarea">
+            <RjTextArea inputKey="chordProgressionRaw" value={this.state.chordProgressionRaw} placeholder={this.state.chordProgressionPlaceholder} onChange={this.handleChange} />
+            <RjButton inputKey="generateMelodies" inputLabel="Generate Melodies" onClick={this.generateMelodies} />
+          </div>
+          <div className="wrapper-buttons">
+            <RjToggleButton inputKey="hideHelp" inputLabel="Help/Info" initialState={this.state.hideHelp} onClickHandler={this.handleChange} />
+            <RjToggleButton inputKey="hideControls" inputLabel="Settings" initialState={this.state.hideControls} onClickHandler={this.handleChange} />
+          </div>
+        </div>
 
         <ErrorMessage isHidden={this.state.hideError} errorMessage={this.state.errorMessage} />
+
         <ControlPanel isHidden={this.state.hideControls} />
         <HelpPanel isHidden={this.state.hideHelp} />
+        
         <OutputPanel isHidden={this.state.hideOutput} melodyUnitList={this.state.melodyUnitList} />
 
         <DebugPanel isHidden={!this.state.debugMode} debugData={JSON.stringify(this.state, null, 2)}/>

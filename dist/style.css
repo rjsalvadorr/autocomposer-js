@@ -1,28 +1,53 @@
+#wrapper-main-input {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+}
+.wrapper-textarea {
+  width: 100%;
+  padding: 10px;
+}
+.wrapper-textarea .ac-input.button,
+.wrapper-textarea .ac-input.textarea {
+  width: 100%;
+}
+.wrapper-textarea .ac-input.textarea {
+  height: 75px;
+  vertical-align: top;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 45px;
+  line-height: 45px;
+}
+.wrapper-textarea .ac-input.button {
+  font-size: 40px;
+}
+.wrapper-buttons {
+  width: 95px;
+  padding: 10px;
+}
+.wrapper-buttons .ac-input.button {
+  width: 75px;
+}
+.ac-input.button {
+  border-radius: 8px;
+  height: 75px;
+  margin-bottom: 10px;
+}
 body {
   background-color: #eee;
   font-family: 'Helvetica', 'Arial', sans-serif;
 }
 .r-component {
-  background-color: #ccc;
-  border: 1px dashed #8f8f8f;
   padding: 15px;
 }
-.r-component#r-app-container {
-  background-color: #caa;
-  border: 1px dashed #a26464;
-}
-.r-component#r-debug-panel {
-  background-color: #aca;
-  border: 1px dashed #64a264;
-}
 .autocomposer-panel {
-  border: 1px dashed #222;
   padding: 15px;
 }
 .ac-input.textarea {
   resize: none;
   font-size: 2em;
-  padding: 1vw;
 }
 table#ac-melody-output {
   width: 100%;

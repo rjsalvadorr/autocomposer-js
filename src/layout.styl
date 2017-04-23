@@ -1,0 +1,44 @@
+buttonHeight = 75px
+layoutPadding = 10px
+
+textAreaFontSize = buttonHeight - (layoutPadding * 3)
+
+#wrapper-main-input
+  display: flex
+  flex-wrap: nowrap
+  flex-direction: row
+
+.wrapper-textarea
+  width: 100%
+  padding: layoutPadding
+
+  .ac-input.button
+  .ac-input.textarea
+    width: 100%
+
+  .ac-input.textarea
+    height: buttonHeight
+    vertical-align: top
+    box-sizing: border-box
+    margin-bottom: layoutPadding
+
+    padding: layoutPadding
+    font-size: textAreaFontSize
+    line-height: textAreaFontSize
+
+  .ac-input.button
+    font-size: 40px
+
+
+.wrapper-buttons
+  width: buttonHeight + (layoutPadding * 2)
+  padding: layoutPadding
+
+  .ac-input.button
+    width: buttonHeight
+
+
+.ac-input.button
+  border-radius: 8px
+  height: buttonHeight
+  margin-bottom: layoutPadding

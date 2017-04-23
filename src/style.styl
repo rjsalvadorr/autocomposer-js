@@ -6,32 +6,21 @@ bgComponent4 = #aaaacc
 
 innerPadding = 15px
 
+@require "layout"
+
 body
   background-color: bgBody
   font-family: 'Helvetica', 'Arial', sans-serif
 
 .r-component
-  background-color: bgComponent1
-  border: 1px dashed darken(bgComponent1, 30%)
   padding: innerPadding
 
-  &#r-app-container
-    background-color: bgComponent2
-    border: 1px dashed darken(bgComponent2, 30%)
-
-  &#r-debug-panel
-    background-color: bgComponent3
-    border: 1px dashed darken(bgComponent3, 30%)
-
-
 .autocomposer-panel
-  border: 1px dashed #222
   padding: innerPadding
 
 .ac-input.textarea
   resize: none
   font-size: 2em
-  padding: 1vw
 
 table#ac-melody-output
   width: 100%
