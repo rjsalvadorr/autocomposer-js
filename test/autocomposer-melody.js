@@ -18,8 +18,7 @@ describe('AutoComposerMelody', function() {
   describe('#getAllChordTones', function() {
     it('should return all chord tones in the range (inclusive)', function() {
       expectedTones1 = ["Bb3", "D4", "F4", "G4"];
-      //expectedTones2 = ["Bb4", "C5", "Eb5", "G5", "Bb5"];
-      expectedTones2 = ["A4", "C5", "D5", "F#5", "A5"],
+      expectedTones2 = ["A4", "C5", "D5", "F#5", "A5"];
 
       resultTones1 = AutoComposerMelody.getAllChordTones(TEST_CHORD_1, TEST_LOWER_LIMIT_1, TEST_UPPER_LIMIT_1);
       resultTones2 = AutoComposerMelody.getAllChordTones(TEST_CHORD_3, TEST_LOWER_LIMIT_2, TEST_UPPER_LIMIT_2);
@@ -54,19 +53,58 @@ describe('AutoComposerMelody', function() {
     });
   });
 
+  describe('#buildMelodyUnit', function() {
+    it('should build a melody unit with metadata for each raw melody', function() {
+      var chordProgression = ["G", "Em", "C", "D"];
+      var melody1 = "B3 G4 E4 F#4";
+      var melody2 = "G4 B4 C5 D5";
+
+      exp1 = {
+        chordProgression: chordProgression,
+        melodyNotes: melody1.split(" "),
+        smoothness: 13,
+        range: 8,
+        contour: ""
+      }
+
+      exp2 = {
+        chordProgression: chordProgression,
+        melodyNotes: melody2.split(" "),
+        smoothness: 7,
+        range: 7,
+        contour: ""
+      }
+
+      result1 = AutoComposerMelody.buildMelodyUnit(chordProgression, melody1);
+      result2 = AutoComposerMelody.buildMelodyUnit(chordProgression, melody2);
+
+      assert.deepEqual(result1, exp1);
+      assert.deepEqual(result2, exp2);
+    });
+  });
+
   describe('#getMelodies', function() {
     it('should return a list of melodies for a given progression', function() {
       var chordProgression = ["Gm","Cm","D"];
-      var melodyList = AutoComposerMelody.getMelodies(chordProgression);
+      var melodyList = AutoComposerMelody.getAllMelodies(chordProgression);
 
       assert.equal(melodyList.length, 252);
+      assert.equal(typeof melodyList[0] === 'string', false);
     });
 
     it('should return less melodies if filters are on', function() {
       var chordProgression = ["Gm","Cm","D"];
-      var melodyList = AutoComposerMelody.getMelodies(chordProgression, true);
+      var melodyList = AutoComposerMelody.getMelodies(chordProgression);
 
       assert.equal(melodyList.length, 123);
+      assert.equal(typeof melodyList[0] === 'string', false);
+    });
+
+    it('should return raw melodies as a string array', function() {
+      var chordProgression = ["Gm","Cm","D"];
+      var melodyList = AutoComposerMelody.getRawMelodies(chordProgression);
+
+      assert.equal(typeof melodyList[0] === 'string', true);
     });
   });
 });

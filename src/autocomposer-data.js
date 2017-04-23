@@ -29,7 +29,7 @@ class AutoComposerData {
     var totalRange = range.numeric(melodyString);
     var highest = Math.max.apply(null, totalRange);
     var lowest = Math.min.apply(null, totalRange);
-    
+
     return highest - lowest <= 12;
   }
 };

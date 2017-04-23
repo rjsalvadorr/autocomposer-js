@@ -317,7 +317,7 @@ class AutoComposer extends React.Component {
 
   generateMelodies(event) {
       var chordProgression = this.state.chordProgressionRaw.split(" ");
-      this.setState({melodiesRaw: AcMelody.getMelodies(chordProgression, true)});
+      this.setState({melodiesRaw: AcMelody.getMelodies(chordProgression)});
   }
 
   render() {

@@ -1,5 +1,6 @@
 var tonal = require('tonal');
 var ChordUnit = require('./chord-unit');
+var MelodyUnit = require('./melody-unit');
 
 var AutoComposerData = require('./autocomposer-data');
 var AcData = new AutoComposerData.AutoComposerData();
@@ -24,6 +25,7 @@ class AutoComposerMelody {
 
     /**
     * For a given note, find its lowest instance in the specified range.
+    * @private
     * @param {string} note - note (written in scientific notation)
     * @param {string} upperLimit - note (written in scientific notation)
     * @param {string} lowerLimit - note (written in scientific notation)
@@ -35,6 +37,7 @@ class AutoComposerMelody {
 
     /**
     * For a given chord, get all the chord tones between the upper and lower limits.
+    * @private
     * @param {string} chord - chord symbol
     * @param {string} lowerLimit - note (written in scientific notation)
     * @param {string} upperLimit - note (written in scientific notation)
@@ -61,6 +64,7 @@ class AutoComposerMelody {
 
     /**
     * For a given chord symbol, creates a ChordUnit object
+    * @private
     * @param {string} chord - chord symbol
     * @param {string} lowerLimit - note (in scientific notation)
     * @param {string} upperLimit - note (in scientific notation)
@@ -73,7 +77,21 @@ class AutoComposerMelody {
   }
 
     /**
+    * For a given melody, creates a MelodyUnit object
+    * @private
+    * @param {string[]} chordProgression - a chord progression
+    * @param {string} melodyString - a melody (in scientific notation)
+    * @return {MelodyUnit}
+    */
+  buildMelodyUnit(chordProgression, melodyString) {
+    var arrMelody = melodyString.split(" ");
+    var melodyUnit = new MelodyUnit.MelodyUnit(chordProgression, arrMelody);
+    return melodyUnit;
+  }
+
+    /**
     * For a given chord progression, generate a series of melodies that fit over the progression
+    * @private
     * @param {string[]} chordProgression - chord symbols
     * @param {string} lowerLimit - lower limit (in scientific notation). Optional value.
     * @param {string} upperLimit - upper limit (in scientific notation). Optional value.
@@ -104,15 +122,99 @@ class AutoComposerMelody {
   }
 
     /**
+    * Recursive function that adds new notes to the previous notes passed into it.
+    * On the first call of this function, melodyList should be null.
+    * @private
+    * @param {ChordUnit} chordUnit - the ChordUnit for the next chord
+    * @param {?string[]} melodyList - list of existing melodies
+    * @param {Object} options - if true, generated melodies will be filtered
+    * @param {boolean} options.filtered - if true, generated melodies will be filtered
+    * @param {boolean} options.rawOutput - if true, generated melodies will be given as strings
+    * @return {string[]} - a list of melodies. Each element is a string represeting a melody. Each melody string is written as a series of pitches delimited by a space.
+    */
+  getMelodiesCore(chordUnit, melodyList, options) {
+    var returnList = [];
+    var chordTones = chordUnit.chordTones;
+    var rawMelody, newMelody;
+    var haxThis = this;
+
+    if(melodyList) {
+      // We're somewhere along the middle of the chain.
+      melodyList.forEach(function(currentMelody) {
+        chordTones.forEach(function(currentChordTone) {
+          newMelody = currentMelody + " " + currentChordTone;
+
+          if(options.filtered) {
+            if(AcData.filterMelodyRange(newMelody)) {
+              returnList.push(newMelody);
+            }
+          } else {
+            returnList.push(newMelody);
+          }
+
+        });
+      });
+    } else {
+      // This is the beginning of the chain.
+      melodyList = chordUnit.chordTones;
+      returnList.push.apply(returnList, melodyList);
+    }
+
+    if(chordUnit.nextChordUnit) {
+      // We're somewhere along the middle of the chain.
+      return this.getMelodiesCore(chordUnit.nextChordUnit, returnList, options);
+    } else {
+      // End of the chain.
+      return returnList;
+    }
+  }
+
+    /**
     * For a given chord progression, generate a series of melodies that fit over the progression.
     * @param {string[]} chordProgression - chord progression given by user
-    * @param {boolean} enableFiltering - if true, generated melodies will be filtered.
+    * @return {MelodyUnit[]} - an array of notes (written in scientific pitch)
+    */
+  getAllMelodies(chordProgression) {
+    var chordUnitList = this.buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);
+    var melodies = this.getMelodiesCore(chordUnitList[0], null, {filtered: false});
+
+    var melodyUnits = [];
+    var haxThis = this;
+    melodies.forEach(function(rawMelody) {
+      melodyUnits.push(haxThis.buildMelodyUnit(chordProgression, rawMelody));
+    });
+
+    return melodyUnits;
+  }
+
+    /**
+    * For a given chord progression, generate a series of melodies that fit over the progression.
+    * @param {string[]} chordProgression - chord progression given by user
     * @return {string[]} - an array of notes (written in scientific pitch)
     */
-  getMelodies(chordProgression, enableFiltering) {
+  getRawMelodies(chordProgression) {
     var chordUnitList = this.buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);
-    var melodies = chordUnitList[0].getMelodies(null, enableFiltering);
+    var melodies = this.getMelodiesCore(chordUnitList[0], null, {filtered: true, rawOutput: true});
+
     return melodies;
+  }
+
+    /**
+    * For a given chord progression, generate a series of melodies that fit over the progression.
+    * @param {string[]} chordProgression - chord progression given by user
+    * @return {MelodyUnit[]} - an array of MelodyUnits
+    */
+  getMelodies(chordProgression) {
+    var chordUnitList = this.buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);
+    var melodies = this.getMelodiesCore(chordUnitList[0], null, {filtered: true});
+
+    var melodyUnits = [];
+    var haxThis = this;
+    melodies.forEach(function(rawMelody) {
+      melodyUnits.push(haxThis.buildMelodyUnit(chordProgression, rawMelody));
+    });
+
+    return melodyUnits;
   }
 
 };

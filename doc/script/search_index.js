@@ -61,14 +61,26 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber32",
+    "test-file/test/autocomposer-melody.js.html#lineNumber31",
     "AutoComposerMelody #buildChordUnitList",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber33",
+    "test-file/test/autocomposer-melody.js.html#lineNumber32",
     "AutoComposerMelody #buildChordUnitList should return a list of ChordUnits for a given progression",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-melody.js.html#lineNumber56",
+    "AutoComposerMelody #buildMelodyUnit",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-melody.js.html#lineNumber57",
+    "AutoComposerMelody #buildMelodyUnit should build a melody unit with metadata for each raw melody",
     "test"
   ],
   [
@@ -85,20 +97,26 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber57",
+    "test-file/test/autocomposer-melody.js.html#lineNumber86",
     "AutoComposerMelody #getMelodies",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber58",
+    "test-file/test/autocomposer-melody.js.html#lineNumber87",
     "AutoComposerMelody #getMelodies should return a list of melodies for a given progression",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber65",
+    "test-file/test/autocomposer-melody.js.html#lineNumber95",
     "AutoComposerMelody #getMelodies should return less melodies if filters are on",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-melody.js.html#lineNumber103",
+    "AutoComposerMelody #getMelodies should return raw melodies as a string array",
     "test"
   ],
   [
@@ -522,39 +540,27 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/autocomposer-melody.js~autocomposermelody#buildchordunit",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-buildChordUnit",
-    "src/autocomposer-melody.js~AutoComposerMelody#buildChordUnit",
-    "method"
-  ],
-  [
-    "src/autocomposer-melody.js~autocomposermelody#buildchordunitlist",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-buildChordUnitList",
-    "src/autocomposer-melody.js~AutoComposerMelody#buildChordUnitList",
-    "method"
-  ],
-  [
     "src/autocomposer-melody.js~autocomposermelody#constructor",
     "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-constructor-constructor",
     "src/autocomposer-melody.js~AutoComposerMelody#constructor",
     "method"
   ],
   [
-    "src/autocomposer-melody.js~autocomposermelody#getallchordtones",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-getAllChordTones",
-    "src/autocomposer-melody.js~AutoComposerMelody#getAllChordTones",
-    "method"
-  ],
-  [
-    "src/autocomposer-melody.js~autocomposermelody#getlowestnoteinrange",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-getLowestNoteInRange",
-    "src/autocomposer-melody.js~AutoComposerMelody#getLowestNoteInRange",
+    "src/autocomposer-melody.js~autocomposermelody#getallmelodies",
+    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-getAllMelodies",
+    "src/autocomposer-melody.js~AutoComposerMelody#getAllMelodies",
     "method"
   ],
   [
     "src/autocomposer-melody.js~autocomposermelody#getmelodies",
     "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-getMelodies",
     "src/autocomposer-melody.js~AutoComposerMelody#getMelodies",
+    "method"
+  ],
+  [
+    "src/autocomposer-melody.js~autocomposermelody#getrawmelodies",
+    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-getRawMelodies",
+    "src/autocomposer-melody.js~AutoComposerMelody#getRawMelodies",
     "method"
   ],
   [
@@ -615,12 +621,6 @@ window.esdocSearchIndex = [
     "src/chord-unit.js~chordunit#constructor",
     "class/src/chord-unit.js~ChordUnit.html#instance-constructor-constructor",
     "src/chord-unit.js~ChordUnit#constructor",
-    "method"
-  ],
-  [
-    "src/chord-unit.js~chordunit#getmelodies",
-    "class/src/chord-unit.js~ChordUnit.html#instance-method-getMelodies",
-    "src/chord-unit.js~ChordUnit#getMelodies",
     "method"
   ],
   [
