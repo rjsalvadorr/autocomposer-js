@@ -73,6 +73,16 @@ class HelpPanel extends React.Component {
               &lt;li&gt;Click the &quot;Generate Melodies&quot; button&lt;/li&gt;
               &lt;li&gt;Squeal in delight, as the promised melodies are shown on the screen.&lt;/li&gt;
             &lt;/ol&gt;
+
+            Other pointers:
+            &lt;ul&gt;
+              &lt;li&gt;You can toggle the Help/Settings panel from the buttons to the right&lt;/li&gt;
+            &lt;/ul&gt;
+
+            To-Do:
+            &lt;ul&gt;
+              &lt;li&gt;Update this page with the complete chord dictionary, so users will know what kind of input is valid.&lt;/li&gt;
+            &lt;/ul&gt;
           &lt;/p&gt;
           &lt;h2&gt;Technical Info&lt;/h2&gt;
           &lt;p&gt;
@@ -271,19 +281,18 @@ class RjTextField extends React.Component {
 
 class RjTextArea extends React.Component {
   render() {
-    var labelElement;
     if(this.props.inputLabel) {
-      labelElement = &lt;label htmlFor={this.props.inputKey}&gt;{this.props.inputLabel}&lt;/label&gt;
+      return (
+        &lt;div&gt;
+          &lt;label htmlFor={this.props.inputKey}&gt;{this.props.inputLabel}&lt;/label&gt;
+          &lt;textarea id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className=&quot;ac-input textarea&quot; value={this.props.value} placeholder={this.props.placeholder} onChange={this.props.onChange} /&gt;
+        &lt;/div&gt;
+      );
     } else {
-      labelElement = &quot;&quot;;
+      return (
+        &lt;textarea id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className=&quot;ac-input textarea&quot; value={this.props.value} placeholder={this.props.placeholder} onChange={this.props.onChange} /&gt;
+      );
     }
-
-    return (
-      &lt;div&gt;
-        {labelElement}
-        &lt;textarea id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className=&quot;ac-input textarea&quot; value={this.props.value} placeholder={this.props.placeholder} onChange={this.props.onChange} rows=&quot;1&quot; cols=&quot;50&quot; /&gt;
-      &lt;/div&gt;
-    );
   }
 }
 
@@ -522,15 +531,23 @@ class AutoComposer extends React.Component {
     return (
       &lt;div id=&quot;r-app-container&quot; className=&quot;r-component&quot;&gt;
         &lt;h2&gt;Chord Progression&lt;/h2&gt;
-        &lt;RjTextArea inputKey=&quot;chordProgressionRaw&quot; value={this.state.chordProgressionRaw} placeholder={this.state.chordProgressionPlaceholder} onChange={this.handleChange} /&gt;
 
-        &lt;RjToggleButton inputKey=&quot;hideHelp&quot; inputLabel=&quot;Help/Info&quot; initialState={this.state.hideHelp} onClickHandler={this.handleChange} /&gt;
-        &lt;RjToggleButton inputKey=&quot;hideControls&quot; inputLabel=&quot;Settings&quot; initialState={this.state.hideControls} onClickHandler={this.handleChange} /&gt;
-        &lt;RjButton inputKey=&quot;generateMelodies&quot; inputLabel=&quot;Generate Melodies&quot; onClick={this.generateMelodies} /&gt;
+        &lt;div id=&quot;wrapper-main-input&quot;&gt;
+          &lt;div className=&quot;wrapper-textarea&quot;&gt;
+            &lt;RjTextArea inputKey=&quot;chordProgressionRaw&quot; value={this.state.chordProgressionRaw} placeholder={this.state.chordProgressionPlaceholder} onChange={this.handleChange} /&gt;
+            &lt;RjButton inputKey=&quot;generateMelodies&quot; inputLabel=&quot;Generate Melodies&quot; onClick={this.generateMelodies} /&gt;
+          &lt;/div&gt;
+          &lt;div className=&quot;wrapper-buttons&quot;&gt;
+            &lt;RjToggleButton inputKey=&quot;hideHelp&quot; inputLabel=&quot;Help/Info&quot; initialState={this.state.hideHelp} onClickHandler={this.handleChange} /&gt;
+            &lt;RjToggleButton inputKey=&quot;hideControls&quot; inputLabel=&quot;Settings&quot; initialState={this.state.hideControls} onClickHandler={this.handleChange} /&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
 
         &lt;ErrorMessage isHidden={this.state.hideError} errorMessage={this.state.errorMessage} /&gt;
+
         &lt;ControlPanel isHidden={this.state.hideControls} /&gt;
         &lt;HelpPanel isHidden={this.state.hideHelp} /&gt;
+
         &lt;OutputPanel isHidden={this.state.hideOutput} melodyUnitList={this.state.melodyUnitList} /&gt;
 
         &lt;DebugPanel isHidden={!this.state.debugMode} debugData={JSON.stringify(this.state, null, 2)}/&gt;

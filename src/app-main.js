@@ -28,6 +28,16 @@ class HelpPanel extends React.Component {
               <li>Click the "Generate Melodies" button</li>
               <li>Squeal in delight, as the promised melodies are shown on the screen.</li>
             </ol>
+
+            Other pointers:
+            <ul>
+              <li>You can toggle the Help/Settings panel from the buttons to the right</li>
+            </ul>
+
+            To-Do:
+            <ul>
+              <li>Update this page with the complete chord dictionary, so users will know what kind of input is valid.</li>
+            </ul>
           </p>
           <h2>Technical Info</h2>
           <p>
@@ -492,7 +502,7 @@ class AutoComposer extends React.Component {
 
         <ControlPanel isHidden={this.state.hideControls} />
         <HelpPanel isHidden={this.state.hideHelp} />
-        
+
         <OutputPanel isHidden={this.state.hideOutput} melodyUnitList={this.state.melodyUnitList} />
 
         <DebugPanel isHidden={!this.state.debugMode} debugData={JSON.stringify(this.state, null, 2)}/>
