@@ -282,7 +282,8 @@ class AutoComposer extends React.Component {
       hideControls: true,
       hideOutput: false,
       debugMode: true,
-      chordProgressionRaw: AcData.INITIAL_PROGRESSION
+      chordProgressionRaw: AcData.INITIAL_PROGRESSION,
+      melodiesRaw: []
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -315,8 +316,8 @@ class AutoComposer extends React.Component {
   }
 
   generateMelodies(event) {
-      console.log('[App.generateMelodies]')
-      //nothing yet...
+      var chordProgression = this.state.chordProgressionRaw.split(" ");
+      this.setState({melodiesRaw: AcMelody.getMelodies(chordProgression)});
   }
 
   render() {

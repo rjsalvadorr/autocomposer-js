@@ -1,5 +1,5 @@
 /**
- * ScoreWriter - responsible for rendering musical data as a score.
+ * Class responsible for rendering musical data as a score.
  */
 class ScoreWriter {
   constructor() {

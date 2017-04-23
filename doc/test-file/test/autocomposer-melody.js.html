@@ -98,6 +98,15 @@ describe(&apos;AutoComposerMelody&apos;, function() {
       assert.deepEqual(chordUnitList[2].chordTones, expectedArray[2].chordTones);
     });
   });
+
+  describe(&apos;#getMelodies&apos;, function() {
+    it(&apos;should return a list of melodies for a given progression&apos;, function() {
+      var chordProgression = [&quot;Gm&quot;,&quot;Cm&quot;,&quot;D&quot;];
+      var melodyList = AutoComposerMelody.getMelodies(chordProgression);
+
+      assert.equal(melodyList.length, 252);
+    });
+  });
 });
 </code></pre>
 

@@ -2,7 +2,7 @@ var chord = require('tonal-chord');
 var note = require('tonal-note');
 
 /**
- * AutoComposerParser - determines if user input represents a valid note/chord.
+ * Determines if user input represents a valid note/chord.
  * Also handles conversions between proper accidental signs and ASCII accidentals like "b" or "#".
  */
 class AutoComposerParser {

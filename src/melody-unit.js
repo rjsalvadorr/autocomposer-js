@@ -1,5 +1,5 @@
 /**
- * MelodyUnit - represents some data built around a melody.
+ * Represents some data built around a melody.
  * Has a reference to the chord progression, and the notes in the melody.
  */
 class MelodyUnit {

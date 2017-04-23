@@ -67,6 +67,18 @@ window.esdocSearchIndex = [
   ],
   [
     "",
+    "test-file/test/autocomposer-melody.js.html#lineNumber57",
+    "AutoComposerMelody #getMelodies",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-melody.js.html#lineNumber58",
+    "AutoComposerMelody #getMelodies should return a list of melodies for a given progression",
+    "test"
+  ],
+  [
+    "",
     "test-file/test/autocomposer-parser.js.html#lineNumber6",
     "AutoComposerParser",
     "test"

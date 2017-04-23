@@ -53,4 +53,13 @@ describe('AutoComposerMelody', function() {
       assert.deepEqual(chordUnitList[2].chordTones, expectedArray[2].chordTones);
     });
   });
+
+  describe('#getMelodies', function() {
+    it('should return a list of melodies for a given progression', function() {
+      var chordProgression = ["Gm","Cm","D"];
+      var melodyList = AutoComposerMelody.getMelodies(chordProgression);
+
+      assert.equal(melodyList.length, 252);
+    });
+  });
 });

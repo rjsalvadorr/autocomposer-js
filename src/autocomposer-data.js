@@ -1,9 +1,9 @@
 /**
- * AutoComposerData - contains data to be used by the application
+ * Encapsulates data to be used by the application
  */
 class AutoComposerData {
   constructor() {
-    this.DEFAULT_LOWER_LIMIT = "B3",
+    this.DEFAULT_LOWER_LIMIT = "Bb3",
     this.DEFAULT_UPPER_LIMIT = "B5",
 
     this.ACCOMPANIMENT_LOWER_LIMIT = "G2",

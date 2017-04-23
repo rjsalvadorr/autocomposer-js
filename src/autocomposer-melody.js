@@ -8,10 +8,18 @@ var AcData = new AutoComposerData.AutoComposerData();
  * Creates melodies from a given chord progression
  */
 class AutoComposerMelody {
-  constructor() {
-    this.chordProgression = null,
-    this.lowerLimit = AcData.DEFAULT_LOWER_LIMIT,
-    this.upperLimit = AcData.DEFAULT_UPPER_LIMIT
+  /**
+  * @param {string[]} chordProgression - array of chord symbols
+  * @param {string} lowerLimit - lower boundary note (in scientific notation)
+  * @param {string} upperLimit - upper boundary note (in scientific notation)
+  */
+  constructor(chordProgression, lowerLimit, upperLimit) {
+    /** @type {string[]} */
+    this.chordProgression = chordProgression || AcData.INITIAL_PROGRESSION,
+    /** @type {string} */
+    this.lowerLimit = lowerLimit || AcData.DEFAULT_LOWER_LIMIT,
+    /** @type {string} */
+    this.upperLimit = upperLimit || AcData.DEFAULT_UPPER_LIMIT
   }
 
     /**
@@ -43,7 +51,6 @@ class AutoComposerMelody {
         // Override it with the chord tone.
         if(tonal.note.pc(chordTonesInRange[i]) != chordTones[j]
           && tonal.note.enharmonics(chordTones[j]).indexOf(tonal.note.pc(chordTonesInRange[i])) > -1) {
-          console.log("enharmonic!");
           chordTonesInRange[i] = chordTones[j] + tonal.note.oct(chordTonesInRange[i]);
         }
       }
@@ -98,11 +105,13 @@ class AutoComposerMelody {
 
     /**
     * For a given chord progression, generate a series of melodies that fit over the progression.
-    * @param {string[]} chordProgression - value given by the user
+    * @param {string[]} chordProgression - chord progression given by user
     * @return {string[]} - an array of notes (written in scientific pitch)
     */
   getMelodies(chordProgression) {
-    return [];
+    var chordUnitList = this.buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);
+    var melodies = chordUnitList[0].getMelodies();
+    return melodies;
   }
 
 };

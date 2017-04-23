@@ -69,7 +69,7 @@
 
   
   
-  <div class="description" data-ice="description"><p>ChordUnit - represents some data built around a specific chord.
+  <div class="description" data-ice="description"><p>Represents some data built around a specific chord.
 Has a reference to the next ChordUnit in the progression, and the chord tones that will be used in melody generation.</p>
 </div>
   
@@ -102,7 +102,7 @@ Has a reference to the next ChordUnit in the progression, and the chord tones th
         <p>
           
           
-          <span data-ice="name"><span><a href="class/src/chord-unit.js~ChordUnit.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">(chord: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, chordTones: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span>, nextChordUnit: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span>)</span>
+          <span data-ice="name"><span><a href="class/src/chord-unit.js~ChordUnit.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">(chord: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, chordTones: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span>, nextChordUnit: <span><a href="class/src/chord-unit.js~ChordUnit.html">ChordUnit</a></span>)</span>
         </p>
       </div>
       <div>
@@ -136,7 +136,7 @@ Has a reference to the next ChordUnit in the progression, and the chord tones th
         <p>
           
           
-          <span data-ice="name"><span><a href="class/src/chord-unit.js~ChordUnit.html#instance-member-chord">chord</a></span></span><span data-ice="signature">: <span>*</span></span>
+          <span data-ice="name"><span><a href="class/src/chord-unit.js~ChordUnit.html#instance-member-chord">chord</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
         </p>
       </div>
       <div>
@@ -163,7 +163,7 @@ Has a reference to the next ChordUnit in the progression, and the chord tones th
         <p>
           
           
-          <span data-ice="name"><span><a href="class/src/chord-unit.js~ChordUnit.html#instance-member-chordTones">chordTones</a></span></span><span data-ice="signature">: <span>*</span></span>
+          <span data-ice="name"><span><a href="class/src/chord-unit.js~ChordUnit.html#instance-member-chordTones">chordTones</a></span></span><span data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span></span>
         </p>
       </div>
       <div>
@@ -190,7 +190,7 @@ Has a reference to the next ChordUnit in the progression, and the chord tones th
         <p>
           
           
-          <span data-ice="name"><span><a href="class/src/chord-unit.js~ChordUnit.html#instance-member-nextChordUnit">nextChordUnit</a></span></span><span data-ice="signature">: <span>*</span></span>
+          <span data-ice="name"><span><a href="class/src/chord-unit.js~ChordUnit.html#instance-member-nextChordUnit">nextChordUnit</a></span></span><span data-ice="signature">: <span><a href="class/src/chord-unit.js~ChordUnit.html">ChordUnit</a></span></span>
         </p>
       </div>
       <div>
@@ -224,7 +224,7 @@ Has a reference to the next ChordUnit in the progression, and the chord tones th
         <p>
           
           
-          <span data-ice="name"><span><a href="class/src/chord-unit.js~ChordUnit.html#instance-method-getMelodies">getMelodies</a></span></span><span data-ice="signature">(): <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span></span>
+          <span data-ice="name"><span><a href="class/src/chord-unit.js~ChordUnit.html#instance-method-getMelodies">getMelodies</a></span></span><span data-ice="signature">(melodyList: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span>): <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span></span>
         </p>
       </div>
       <div>
@@ -284,7 +284,7 @@ Has a reference to the next ChordUnit in the progression, and the chord tones th
     
     
     
-    <span data-ice="name">constructor</span><span data-ice="signature">(chord: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, chordTones: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span>, nextChordUnit: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span>)</span>
+    <span data-ice="name">constructor</span><span data-ice="signature">(chord: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, chordTones: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span>, nextChordUnit: <span><a href="class/src/chord-unit.js~ChordUnit.html">ChordUnit</a></span>)</span>
     <span class="right-info">
       
       
@@ -323,9 +323,9 @@ Has a reference to the next ChordUnit in the progression, and the chord tones th
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">nextChordUnit</td>
-      <td data-ice="type"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span></td>
+      <td data-ice="type"><span><a href="class/src/chord-unit.js~ChordUnit.html">ChordUnit</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>array of chord symbols</p>
+      <td data-ice="description"><p>next ChordUnit in the chain</p>
 </td>
     </tr>
 </tbody>
@@ -361,11 +361,11 @@ Has a reference to the next ChordUnit in the progression, and the chord tones th
     
     
     
-    <span data-ice="name">chord</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">chord</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/chord-unit.js.html#lineNumber12">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/chord-unit.js.html#lineNumber13">source</a></span></span>
     </span>
   </h3>
 
@@ -404,11 +404,11 @@ Has a reference to the next ChordUnit in the progression, and the chord tones th
     
     
     
-    <span data-ice="name">chordTones</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">chordTones</span><span data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/chord-unit.js.html#lineNumber13">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/chord-unit.js.html#lineNumber15">source</a></span></span>
     </span>
   </h3>
 
@@ -447,11 +447,11 @@ Has a reference to the next ChordUnit in the progression, and the chord tones th
     
     
     
-    <span data-ice="name">nextChordUnit</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">nextChordUnit</span><span data-ice="signature">: <span><a href="class/src/chord-unit.js~ChordUnit.html">ChordUnit</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/chord-unit.js.html#lineNumber14">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/chord-unit.js.html#lineNumber17">source</a></span></span>
     </span>
   </h3>
 
@@ -493,11 +493,11 @@ Has a reference to the next ChordUnit in the progression, and the chord tones th
     
     
     
-    <span data-ice="name">getMelodies</span><span data-ice="signature">(): <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span></span>
+    <span data-ice="name">getMelodies</span><span data-ice="signature">(melodyList: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span>): <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/chord-unit.js.html#lineNumber21">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/chord-unit.js.html#lineNumber25">source</a></span></span>
     </span>
   </h3>
 
@@ -509,7 +509,24 @@ Has a reference to the next ChordUnit in the progression, and the chord tones th
 
   
 
-  <div data-ice="properties">
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">melodyList</td>
+      <td data-ice="type"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>list of existing melodies</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
 </div>
 
   <div class="return-params" data-ice="returnParams">
@@ -518,7 +535,7 @@ Has a reference to the next ChordUnit in the progression, and the chord tones th
       <tbody>
         <tr>
           <td class="return-type" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>a list of note progressions. Each element is a string represeting a melody. Each melody string is written as a series of pitches delimited by a space.</p>
+          <td class="return-desc" data-ice="returnDescription"><p>a list of melodies. Each element is a string represeting a melody. Each melody string is written as a series of pitches delimited by a space.</p>
 </td>
         </tr>
       </tbody>
@@ -554,7 +571,7 @@ Has a reference to the next ChordUnit in the progression, and the chord tones th
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/chord-unit.js.html#lineNumber28">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/chord-unit.js.html#lineNumber57">source</a></span></span>
     </span>
   </h3>
 
