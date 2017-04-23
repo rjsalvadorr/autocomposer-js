@@ -10,7 +10,10 @@ var AcMelody = new AutoComposerMelody.AutoComposerMelody();
 var AutoComposerParser = require('./autocomposer-parser');
 var AcParser = new AutoComposerParser.AutoComposerParser();
 
-
+function AcInputException(message) {
+   this.message = message;
+   this.name = 'AcInputException';
+}
 
 class HelpPanel extends React.Component {
   render() {
@@ -179,7 +182,7 @@ class RjTextArea extends React.Component {
     return (
       <div>
         {labelElement}
-        <textarea id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className="ac-input textarea" value={this.props.value} onChange={this.props.onChange} rows="1" cols="50" />
+        <textarea id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className="ac-input textarea" value={this.props.value} placeholder={this.props.placeholder} onChange={this.props.onChange} rows="1" cols="50" />
       </div>
     );
   }
@@ -330,6 +333,25 @@ class ControlPanel extends React.Component {
 
 
 
+class ErrorMessage extends React.Component {
+  render() {
+    if(!this.props.isHidden) {
+      return(
+        <div id="error-message">
+          <h2>Error</h2>
+          <p>
+            {this.props.errorMessage}
+          </p>
+        </div>
+      );
+    } else {
+      return null;
+    }
+  }
+}
+
+
+
 class AutoComposer extends React.Component {
   constructor(props) {
     super(props);
@@ -338,9 +360,12 @@ class AutoComposer extends React.Component {
       hideHelp: true,
       hideControls: true,
       hideOutput: true,
+      hideError: true,
       debugMode: false,
-      chordProgressionRaw: AcData.INITIAL_PROGRESSION,
-      melodyUnitList: []
+      chordProgressionRaw: "",
+      chordProgressionPlaceholder: AcData.INITIAL_PROGRESSION,
+      melodyUnitList: [],
+      errorMessage: "",
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -373,20 +398,38 @@ class AutoComposer extends React.Component {
   }
 
   generateMelodies(event) {
-      var chordProgression = this.state.chordProgressionRaw.split(" ");
-      this.setState({hideOutput: false, melodyUnitList: AcMelody.getMelodies(chordProgression)});
+      var chordProgression = this.state.chordProgressionRaw.trim().split(" ");
+
+      try {
+      if(this.state.chordProgressionRaw == null || this.state.chordProgressionRaw == "") {
+        throw new AcInputException('Chord input appears to be empty!');
+      }
+
+      chordProgression.forEach(function(currentChordInput) {
+        if(!AcParser.isValidText(currentChordInput)) {
+          throw new AcInputException('Chord input \'' + currentChordInput + '\' is not formatted properly! You should check the chord dictionary in the Help! section.');
+        }
+      });
+
+      this.setState({hideError: true, hideOutput: false, melodyUnitList: AcMelody.getMelodies(chordProgression)});
+    } catch(exc) {
+      console.debug("exc=" + JSON.stringify(exc, 2));
+      var errorMsg = exc.message + " Error Type: [" + exc.name + "]";
+      this.setState({hideError: false, errorMessage: errorMsg});
+    }
   }
 
   render() {
     return (
       <div id="r-app-container" className="r-component">
         <h2>Chord Progression</h2>
-        <RjTextArea inputKey="chordProgressionRaw" value={this.state.chordProgressionRaw} onChange={this.handleChange} />
+        <RjTextArea inputKey="chordProgressionRaw" value={this.state.chordProgressionRaw} placeholder={this.state.chordProgressionPlaceholder} onChange={this.handleChange} />
 
         <RjToggleButton inputKey="hideHelp" inputLabel="Help/Info" initialState={this.state.hideHelp} onClickHandler={this.handleChange} />
         <RjToggleButton inputKey="hideControls" inputLabel="Settings" initialState={this.state.hideControls} onClickHandler={this.handleChange} />
         <RjButton inputKey="generateMelodies" inputLabel="Generate Melodies" onClick={this.generateMelodies} />
 
+        <ErrorMessage isHidden={this.state.hideError} errorMessage={this.state.errorMessage} />
         <ControlPanel isHidden={this.state.hideControls} />
         <HelpPanel isHidden={this.state.hideHelp} />
         <OutputPanel isHidden={this.state.hideOutput} melodyUnitList={this.state.melodyUnitList} />

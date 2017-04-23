@@ -42,3 +42,8 @@ table#ac-melody-output td {
 .ac-melody-row {
   background-color: #eee;
 }
+#error-message {
+  padding: 0.75vw;
+  background-color: #d33;
+  color: #300;
+}
