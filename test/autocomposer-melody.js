@@ -61,5 +61,12 @@ describe('AutoComposerMelody', function() {
 
       assert.equal(melodyList.length, 252);
     });
+
+    it('should return less melodies if filters are on', function() {
+      var chordProgression = ["Gm","Cm","D"];
+      var melodyList = AutoComposerMelody.getMelodies(chordProgression, true);
+
+      assert.equal(melodyList.length, 123);
+    });
   });
 });

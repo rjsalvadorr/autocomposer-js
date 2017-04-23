@@ -1,14 +1,12 @@
 {
-  "coverage": "90.62%",
-  "expectCount": 32,
-  "actualCount": 29,
+  "coverage": "100%",
+  "expectCount": 33,
+  "actualCount": 33,
   "files": {
     "src/autocomposer-data.js": {
-      "expectCount": 2,
-      "actualCount": 1,
-      "undocumentLines": [
-        5
-      ]
+      "expectCount": 3,
+      "actualCount": 3,
+      "undocumentLines": []
     },
     "src/autocomposer-melody.js": {
       "expectCount": 7,
@@ -17,10 +15,8 @@
     },
     "src/autocomposer-parser.js": {
       "expectCount": 6,
-      "actualCount": 5,
-      "undocumentLines": [
-        9
-      ]
+      "actualCount": 6,
+      "undocumentLines": []
     },
     "src/chord-unit.js": {
       "expectCount": 7,
@@ -34,10 +30,8 @@
     },
     "src/score-writer.js": {
       "expectCount": 3,
-      "actualCount": 2,
-      "undocumentLines": [
-        5
-      ]
+      "actualCount": 3,
+      "undocumentLines": []
     }
   }
 }

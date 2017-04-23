@@ -37,6 +37,24 @@ window.esdocSearchIndex = [
   ],
   [
     "",
+    "test-file/test/autocomposer-data.js.html#lineNumber6",
+    "AutoComposerData",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-data.js.html#lineNumber7",
+    "AutoComposerData #filterMelodyRange",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-data.js.html#lineNumber8",
+    "AutoComposerData #filterMelodyRange should filter out melodies that have a range larger than an octave",
+    "test"
+  ],
+  [
+    "",
     "test-file/test/autocomposer-melody.js.html#lineNumber17",
     "AutoComposerMelody",
     "test"
@@ -75,6 +93,12 @@ window.esdocSearchIndex = [
     "",
     "test-file/test/autocomposer-melody.js.html#lineNumber58",
     "AutoComposerMelody #getMelodies should return a list of melodies for a given progression",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-melody.js.html#lineNumber65",
+    "AutoComposerMelody #getMelodies should return less melodies if filters are on",
     "test"
   ],
   [
@@ -486,6 +510,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/autocomposer-data.js~autocomposerdata#filtermelodyrange",
+    "class/src/autocomposer-data.js~AutoComposerData.html#instance-method-filterMelodyRange",
+    "src/autocomposer-data.js~AutoComposerData#filterMelodyRange",
+    "method"
+  ],
+  [
     "src/autocomposer-melody.js",
     "file/src/autocomposer-melody.js.html",
     "src/autocomposer-melody.js",
@@ -664,6 +694,12 @@ window.esdocSearchIndex = [
     "class/src/score-writer.js~ScoreWriter.html#instance-method-writeScore",
     "src/score-writer.js~ScoreWriter#writeScore",
     "method"
+  ],
+  [
+    "test/autocomposer-data.js",
+    "test-file/test/autocomposer-data.js.html",
+    "test/autocomposer-data.js",
+    "testFile"
   ],
   [
     "test/autocomposer-melody.js",

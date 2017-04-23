@@ -151,11 +151,12 @@ class AutoComposerMelody {
     /**
     * For a given chord progression, generate a series of melodies that fit over the progression.
     * @param {string[]} chordProgression - chord progression given by user
+    * @param {boolean} enableFiltering - if true, generated melodies will be filtered.
     * @return {string[]} - an array of notes (written in scientific pitch)
     */
-  getMelodies(chordProgression) {
+  getMelodies(chordProgression, enableFiltering) {
     var chordUnitList = this.buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);
-    var melodies = chordUnitList[0].getMelodies();
+    var melodies = chordUnitList[0].getMelodies(null, enableFiltering);
     return melodies;
   }
 

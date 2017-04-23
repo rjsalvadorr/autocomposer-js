@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 4759,
+  "end": 4885,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 120,
+      "line": 121,
       "column": 0
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 4759,
+    "end": 4885,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 120,
+        "line": 121,
         "column": 0
       }
     },
@@ -477,14 +477,14 @@
       {
         "type": "Identifier",
         "start": 250,
-        "end": 4722,
+        "end": 4848,
         "loc": {
           "start": {
             "line": 10,
             "column": 0
           },
           "end": {
-            "line": 117,
+            "line": 118,
             "column": 1
           }
         },
@@ -510,14 +510,14 @@
         "body": {
           "type": "ClassBody",
           "start": 275,
-          "end": 4722,
+          "end": 4848,
           "loc": {
             "start": {
               "line": 10,
               "column": 25
             },
             "end": {
-              "line": 117,
+              "line": 118,
               "column": 1
             }
           },
@@ -5648,16 +5648,16 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\r\n    * For a given chord progression, generate a series of melodies that fit over the progression.\r\n    * @param {string[]} chordProgression - chord progression given by user\r\n    * @return {string[]} - an array of notes (written in scientific pitch)\r\n    ",
+                  "value": "*\r\n    * For a given chord progression, generate a series of melodies that fit over the progression.\r\n    * @param {string[]} chordProgression - chord progression given by user\r\n    * @param {boolean} enableFiltering - if true, generated melodies will be filtered.\r\n    * @return {string[]} - an array of notes (written in scientific pitch)\r\n    ",
                   "start": 4239,
-                  "end": 4501,
+                  "end": 4589,
                   "loc": {
                     "start": {
                       "line": 106,
                       "column": 4
                     },
                     "end": {
-                      "line": 110,
+                      "line": 111,
                       "column": 6
                     }
                   }
@@ -5666,30 +5666,30 @@
             },
             {
               "type": "ClassMethod",
-              "start": 4505,
-              "end": 4717,
+              "start": 4593,
+              "end": 4843,
               "loc": {
                 "start": {
-                  "line": 111,
+                  "line": 112,
                   "column": 2
                 },
                 "end": {
-                  "line": 115,
+                  "line": 116,
                   "column": 3
                 }
               },
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 4505,
-                "end": 4516,
+                "start": 4593,
+                "end": 4604,
                 "loc": {
                   "start": {
-                    "line": 111,
+                    "line": 112,
                     "column": 2
                   },
                   "end": {
-                    "line": 111,
+                    "line": 112,
                     "column": 13
                   },
                   "identifierName": "getMelodies"
@@ -5706,77 +5706,94 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 4517,
-                  "end": 4533,
+                  "start": 4605,
+                  "end": 4621,
                   "loc": {
                     "start": {
-                      "line": 111,
+                      "line": 112,
                       "column": 14
                     },
                     "end": {
-                      "line": 111,
+                      "line": 112,
                       "column": 30
                     },
                     "identifierName": "chordProgression"
                   },
                   "name": "chordProgression"
+                },
+                {
+                  "type": "Identifier",
+                  "start": 4623,
+                  "end": 4638,
+                  "loc": {
+                    "start": {
+                      "line": 112,
+                      "column": 32
+                    },
+                    "end": {
+                      "line": 112,
+                      "column": 47
+                    },
+                    "identifierName": "enableFiltering"
+                  },
+                  "name": "enableFiltering"
                 }
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 4535,
-                "end": 4717,
+                "start": 4640,
+                "end": 4843,
                 "loc": {
                   "start": {
-                    "line": 111,
-                    "column": 32
+                    "line": 112,
+                    "column": 49
                   },
                   "end": {
-                    "line": 115,
+                    "line": 116,
                     "column": 3
                   }
                 },
                 "body": [
                   {
                     "type": "VariableDeclaration",
-                    "start": 4542,
-                    "end": 4638,
+                    "start": 4647,
+                    "end": 4743,
                     "loc": {
                       "start": {
-                        "line": 112,
+                        "line": 113,
                         "column": 4
                       },
                       "end": {
-                        "line": 112,
+                        "line": 113,
                         "column": 100
                       }
                     },
                     "declarations": [
                       {
                         "type": "VariableDeclarator",
-                        "start": 4546,
-                        "end": 4637,
+                        "start": 4651,
+                        "end": 4742,
                         "loc": {
                           "start": {
-                            "line": 112,
+                            "line": 113,
                             "column": 8
                           },
                           "end": {
-                            "line": 112,
+                            "line": 113,
                             "column": 99
                           }
                         },
                         "id": {
                           "type": "Identifier",
-                          "start": 4546,
-                          "end": 4559,
+                          "start": 4651,
+                          "end": 4664,
                           "loc": {
                             "start": {
-                              "line": 112,
+                              "line": 113,
                               "column": 8
                             },
                             "end": {
-                              "line": 112,
+                              "line": 113,
                               "column": 21
                             },
                             "identifierName": "chordUnitList"
@@ -5785,58 +5802,58 @@
                         },
                         "init": {
                           "type": "CallExpression",
-                          "start": 4562,
-                          "end": 4637,
+                          "start": 4667,
+                          "end": 4742,
                           "loc": {
                             "start": {
-                              "line": 112,
+                              "line": 113,
                               "column": 24
                             },
                             "end": {
-                              "line": 112,
+                              "line": 113,
                               "column": 99
                             }
                           },
                           "callee": {
                             "type": "MemberExpression",
-                            "start": 4562,
-                            "end": 4585,
+                            "start": 4667,
+                            "end": 4690,
                             "loc": {
                               "start": {
-                                "line": 112,
+                                "line": 113,
                                 "column": 24
                               },
                               "end": {
-                                "line": 112,
+                                "line": 113,
                                 "column": 47
                               }
                             },
                             "object": {
                               "type": "ThisExpression",
-                              "start": 4562,
-                              "end": 4566,
+                              "start": 4667,
+                              "end": 4671,
                               "loc": {
                                 "start": {
-                                  "line": 112,
+                                  "line": 113,
                                   "column": 24
                                 },
                                 "end": {
-                                  "line": 112,
+                                  "line": 113,
                                   "column": 28
                                 }
                               }
                             },
                             "property": {
                               "type": "Identifier",
-                              "start": 4567,
-                              "end": 4585,
+                              "start": 4672,
+                              "end": 4690,
                               "loc": {
                                 "start": {
-                                  "line": 112,
+                                  "line": 113,
                                   "column": 29
                                 },
                                 "end": {
-                                  "line": 112,
+                                  "line": 113,
                                   "column": 47
                                 },
                                 "identifierName": "buildChordUnitList"
@@ -5848,15 +5865,15 @@
                           "arguments": [
                             {
                               "type": "Identifier",
-                              "start": 4586,
-                              "end": 4602,
+                              "start": 4691,
+                              "end": 4707,
                               "loc": {
                                 "start": {
-                                  "line": 112,
+                                  "line": 113,
                                   "column": 48
                                 },
                                 "end": {
-                                  "line": 112,
+                                  "line": 113,
                                   "column": 64
                                 },
                                 "identifierName": "chordProgression"
@@ -5865,44 +5882,44 @@
                             },
                             {
                               "type": "MemberExpression",
-                              "start": 4604,
-                              "end": 4619,
+                              "start": 4709,
+                              "end": 4724,
                               "loc": {
                                 "start": {
-                                  "line": 112,
+                                  "line": 113,
                                   "column": 66
                                 },
                                 "end": {
-                                  "line": 112,
+                                  "line": 113,
                                   "column": 81
                                 }
                               },
                               "object": {
                                 "type": "ThisExpression",
-                                "start": 4604,
-                                "end": 4608,
+                                "start": 4709,
+                                "end": 4713,
                                 "loc": {
                                   "start": {
-                                    "line": 112,
+                                    "line": 113,
                                     "column": 66
                                   },
                                   "end": {
-                                    "line": 112,
+                                    "line": 113,
                                     "column": 70
                                   }
                                 }
                               },
                               "property": {
                                 "type": "Identifier",
-                                "start": 4609,
-                                "end": 4619,
+                                "start": 4714,
+                                "end": 4724,
                                 "loc": {
                                   "start": {
-                                    "line": 112,
+                                    "line": 113,
                                     "column": 71
                                   },
                                   "end": {
-                                    "line": 112,
+                                    "line": 113,
                                     "column": 81
                                   },
                                   "identifierName": "lowerLimit"
@@ -5913,44 +5930,44 @@
                             },
                             {
                               "type": "MemberExpression",
-                              "start": 4621,
-                              "end": 4636,
+                              "start": 4726,
+                              "end": 4741,
                               "loc": {
                                 "start": {
-                                  "line": 112,
+                                  "line": 113,
                                   "column": 83
                                 },
                                 "end": {
-                                  "line": 112,
+                                  "line": 113,
                                   "column": 98
                                 }
                               },
                               "object": {
                                 "type": "ThisExpression",
-                                "start": 4621,
-                                "end": 4625,
+                                "start": 4726,
+                                "end": 4730,
                                 "loc": {
                                   "start": {
-                                    "line": 112,
+                                    "line": 113,
                                     "column": 83
                                   },
                                   "end": {
-                                    "line": 112,
+                                    "line": 113,
                                     "column": 87
                                   }
                                 }
                               },
                               "property": {
                                 "type": "Identifier",
-                                "start": 4626,
-                                "end": 4636,
+                                "start": 4731,
+                                "end": 4741,
                                 "loc": {
                                   "start": {
-                                    "line": 112,
+                                    "line": 113,
                                     "column": 88
                                   },
                                   "end": {
-                                    "line": 112,
+                                    "line": 113,
                                     "column": 98
                                   },
                                   "identifierName": "upperLimit"
@@ -5967,44 +5984,44 @@
                   },
                   {
                     "type": "VariableDeclaration",
-                    "start": 4644,
-                    "end": 4690,
+                    "start": 4749,
+                    "end": 4816,
                     "loc": {
                       "start": {
-                        "line": 113,
+                        "line": 114,
                         "column": 4
                       },
                       "end": {
-                        "line": 113,
-                        "column": 50
+                        "line": 114,
+                        "column": 71
                       }
                     },
                     "declarations": [
                       {
                         "type": "VariableDeclarator",
-                        "start": 4648,
-                        "end": 4689,
+                        "start": 4753,
+                        "end": 4815,
                         "loc": {
                           "start": {
-                            "line": 113,
+                            "line": 114,
                             "column": 8
                           },
                           "end": {
-                            "line": 113,
-                            "column": 49
+                            "line": 114,
+                            "column": 70
                           }
                         },
                         "id": {
                           "type": "Identifier",
-                          "start": 4648,
-                          "end": 4656,
+                          "start": 4753,
+                          "end": 4761,
                           "loc": {
                             "start": {
-                              "line": 113,
+                              "line": 114,
                               "column": 8
                             },
                             "end": {
-                              "line": 113,
+                              "line": 114,
                               "column": 16
                             },
                             "identifierName": "melodies"
@@ -6013,57 +6030,57 @@
                         },
                         "init": {
                           "type": "CallExpression",
-                          "start": 4659,
-                          "end": 4689,
+                          "start": 4764,
+                          "end": 4815,
                           "loc": {
                             "start": {
-                              "line": 113,
+                              "line": 114,
                               "column": 19
                             },
                             "end": {
-                              "line": 113,
-                              "column": 49
+                              "line": 114,
+                              "column": 70
                             }
                           },
                           "callee": {
                             "type": "MemberExpression",
-                            "start": 4659,
-                            "end": 4687,
+                            "start": 4764,
+                            "end": 4792,
                             "loc": {
                               "start": {
-                                "line": 113,
+                                "line": 114,
                                 "column": 19
                               },
                               "end": {
-                                "line": 113,
+                                "line": 114,
                                 "column": 47
                               }
                             },
                             "object": {
                               "type": "MemberExpression",
-                              "start": 4659,
-                              "end": 4675,
+                              "start": 4764,
+                              "end": 4780,
                               "loc": {
                                 "start": {
-                                  "line": 113,
+                                  "line": 114,
                                   "column": 19
                                 },
                                 "end": {
-                                  "line": 113,
+                                  "line": 114,
                                   "column": 35
                                 }
                               },
                               "object": {
                                 "type": "Identifier",
-                                "start": 4659,
-                                "end": 4672,
+                                "start": 4764,
+                                "end": 4777,
                                 "loc": {
                                   "start": {
-                                    "line": 113,
+                                    "line": 114,
                                     "column": 19
                                   },
                                   "end": {
-                                    "line": 113,
+                                    "line": 114,
                                     "column": 32
                                   },
                                   "identifierName": "chordUnitList"
@@ -6072,15 +6089,15 @@
                               },
                               "property": {
                                 "type": "NumericLiteral",
-                                "start": 4673,
-                                "end": 4674,
+                                "start": 4778,
+                                "end": 4779,
                                 "loc": {
                                   "start": {
-                                    "line": 113,
+                                    "line": 114,
                                     "column": 33
                                   },
                                   "end": {
-                                    "line": 113,
+                                    "line": 114,
                                     "column": 34
                                   }
                                 },
@@ -6094,15 +6111,15 @@
                             },
                             "property": {
                               "type": "Identifier",
-                              "start": 4676,
-                              "end": 4687,
+                              "start": 4781,
+                              "end": 4792,
                               "loc": {
                                 "start": {
-                                  "line": 113,
+                                  "line": 114,
                                   "column": 36
                                 },
                                 "end": {
-                                  "line": 113,
+                                  "line": 114,
                                   "column": 47
                                 },
                                 "identifierName": "getMelodies"
@@ -6111,7 +6128,40 @@
                             },
                             "computed": false
                           },
-                          "arguments": []
+                          "arguments": [
+                            {
+                              "type": "NullLiteral",
+                              "start": 4793,
+                              "end": 4797,
+                              "loc": {
+                                "start": {
+                                  "line": 114,
+                                  "column": 48
+                                },
+                                "end": {
+                                  "line": 114,
+                                  "column": 52
+                                }
+                              }
+                            },
+                            {
+                              "type": "Identifier",
+                              "start": 4799,
+                              "end": 4814,
+                              "loc": {
+                                "start": {
+                                  "line": 114,
+                                  "column": 54
+                                },
+                                "end": {
+                                  "line": 114,
+                                  "column": 69
+                                },
+                                "identifierName": "enableFiltering"
+                              },
+                              "name": "enableFiltering"
+                            }
+                          ]
                         }
                       }
                     ],
@@ -6119,29 +6169,29 @@
                   },
                   {
                     "type": "ReturnStatement",
-                    "start": 4696,
-                    "end": 4712,
+                    "start": 4822,
+                    "end": 4838,
                     "loc": {
                       "start": {
-                        "line": 114,
+                        "line": 115,
                         "column": 4
                       },
                       "end": {
-                        "line": 114,
+                        "line": 115,
                         "column": 20
                       }
                     },
                     "argument": {
                       "type": "Identifier",
-                      "start": 4703,
-                      "end": 4711,
+                      "start": 4829,
+                      "end": 4837,
                       "loc": {
                         "start": {
-                          "line": 114,
+                          "line": 115,
                           "column": 11
                         },
                         "end": {
-                          "line": 114,
+                          "line": 115,
                           "column": 19
                         },
                         "identifierName": "melodies"
@@ -6155,16 +6205,16 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\r\n    * For a given chord progression, generate a series of melodies that fit over the progression.\r\n    * @param {string[]} chordProgression - chord progression given by user\r\n    * @return {string[]} - an array of notes (written in scientific pitch)\r\n    ",
+                  "value": "*\r\n    * For a given chord progression, generate a series of melodies that fit over the progression.\r\n    * @param {string[]} chordProgression - chord progression given by user\r\n    * @param {boolean} enableFiltering - if true, generated melodies will be filtered.\r\n    * @return {string[]} - an array of notes (written in scientific pitch)\r\n    ",
                   "start": 4239,
-                  "end": 4501,
+                  "end": 4589,
                   "loc": {
                     "start": {
                       "line": 106,
                       "column": 4
                     },
                     "end": {
-                      "line": 110,
+                      "line": 111,
                       "column": 6
                     }
                   }
@@ -6179,30 +6229,30 @@
       },
       {
         "type": "EmptyStatement",
-        "start": 4722,
-        "end": 4723,
+        "start": 4848,
+        "end": 4849,
         "loc": {
           "start": {
-            "line": 117,
+            "line": 118,
             "column": 1
           },
           "end": {
-            "line": 117,
+            "line": 118,
             "column": 2
           }
         }
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 4727,
-        "end": 4757,
+        "start": 4853,
+        "end": 4883,
         "loc": {
           "start": {
-            "line": 119,
+            "line": 120,
             "column": 0
           },
           "end": {
-            "line": 119,
+            "line": 120,
             "column": 30
           }
         },
@@ -6210,29 +6260,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 4736,
-            "end": 4754,
+            "start": 4862,
+            "end": 4880,
             "loc": {
               "start": {
-                "line": 119,
+                "line": 120,
                 "column": 9
               },
               "end": {
-                "line": 119,
+                "line": 120,
                 "column": 27
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 4736,
-              "end": 4754,
+              "start": 4862,
+              "end": 4880,
               "loc": {
                 "start": {
-                  "line": 119,
+                  "line": 120,
                   "column": 9
                 },
                 "end": {
-                  "line": 119,
+                  "line": 120,
                   "column": 27
                 },
                 "identifierName": "AutoComposerMelody"
@@ -6241,15 +6291,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 4736,
-              "end": 4754,
+              "start": 4862,
+              "end": 4880,
               "loc": {
                 "start": {
-                  "line": 119,
+                  "line": 120,
                   "column": 9
                 },
                 "end": {
-                  "line": 119,
+                  "line": 120,
                   "column": 27
                 },
                 "identifierName": "AutoComposerMelody"
@@ -6262,29 +6312,29 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 4727,
-        "end": 4757,
+        "start": 4853,
+        "end": 4883,
         "loc": {
           "start": {
-            "line": 119,
+            "line": 120,
             "column": 0
           },
           "end": {
-            "line": 119,
+            "line": 120,
             "column": 30
           }
         },
         "declaration": {
           "type": "ClassDeclaration",
           "start": 250,
-          "end": 4722,
+          "end": 4848,
           "loc": {
             "start": {
               "line": 10,
               "column": 0
             },
             "end": {
-              "line": 117,
+              "line": 118,
               "column": 1
             }
           },
@@ -6310,14 +6360,14 @@
           "body": {
             "type": "ClassBody",
             "start": 275,
-            "end": 4722,
+            "end": 4848,
             "loc": {
               "start": {
                 "line": 10,
                 "column": 25
               },
               "end": {
-                "line": 117,
+                "line": 118,
                 "column": 1
               }
             },
@@ -11448,16 +11498,16 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\r\n    * For a given chord progression, generate a series of melodies that fit over the progression.\r\n    * @param {string[]} chordProgression - chord progression given by user\r\n    * @return {string[]} - an array of notes (written in scientific pitch)\r\n    ",
+                    "value": "*\r\n    * For a given chord progression, generate a series of melodies that fit over the progression.\r\n    * @param {string[]} chordProgression - chord progression given by user\r\n    * @param {boolean} enableFiltering - if true, generated melodies will be filtered.\r\n    * @return {string[]} - an array of notes (written in scientific pitch)\r\n    ",
                     "start": 4239,
-                    "end": 4501,
+                    "end": 4589,
                     "loc": {
                       "start": {
                         "line": 106,
                         "column": 4
                       },
                       "end": {
-                        "line": 110,
+                        "line": 111,
                         "column": 6
                       }
                     }
@@ -11466,30 +11516,30 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 4505,
-                "end": 4717,
+                "start": 4593,
+                "end": 4843,
                 "loc": {
                   "start": {
-                    "line": 111,
+                    "line": 112,
                     "column": 2
                   },
                   "end": {
-                    "line": 115,
+                    "line": 116,
                     "column": 3
                   }
                 },
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 4505,
-                  "end": 4516,
+                  "start": 4593,
+                  "end": 4604,
                   "loc": {
                     "start": {
-                      "line": 111,
+                      "line": 112,
                       "column": 2
                     },
                     "end": {
-                      "line": 111,
+                      "line": 112,
                       "column": 13
                     },
                     "identifierName": "getMelodies"
@@ -11506,77 +11556,94 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 4517,
-                    "end": 4533,
+                    "start": 4605,
+                    "end": 4621,
                     "loc": {
                       "start": {
-                        "line": 111,
+                        "line": 112,
                         "column": 14
                       },
                       "end": {
-                        "line": 111,
+                        "line": 112,
                         "column": 30
                       },
                       "identifierName": "chordProgression"
                     },
                     "name": "chordProgression"
+                  },
+                  {
+                    "type": "Identifier",
+                    "start": 4623,
+                    "end": 4638,
+                    "loc": {
+                      "start": {
+                        "line": 112,
+                        "column": 32
+                      },
+                      "end": {
+                        "line": 112,
+                        "column": 47
+                      },
+                      "identifierName": "enableFiltering"
+                    },
+                    "name": "enableFiltering"
                   }
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 4535,
-                  "end": 4717,
+                  "start": 4640,
+                  "end": 4843,
                   "loc": {
                     "start": {
-                      "line": 111,
-                      "column": 32
+                      "line": 112,
+                      "column": 49
                     },
                     "end": {
-                      "line": 115,
+                      "line": 116,
                       "column": 3
                     }
                   },
                   "body": [
                     {
                       "type": "VariableDeclaration",
-                      "start": 4542,
-                      "end": 4638,
+                      "start": 4647,
+                      "end": 4743,
                       "loc": {
                         "start": {
-                          "line": 112,
+                          "line": 113,
                           "column": 4
                         },
                         "end": {
-                          "line": 112,
+                          "line": 113,
                           "column": 100
                         }
                       },
                       "declarations": [
                         {
                           "type": "VariableDeclarator",
-                          "start": 4546,
-                          "end": 4637,
+                          "start": 4651,
+                          "end": 4742,
                           "loc": {
                             "start": {
-                              "line": 112,
+                              "line": 113,
                               "column": 8
                             },
                             "end": {
-                              "line": 112,
+                              "line": 113,
                               "column": 99
                             }
                           },
                           "id": {
                             "type": "Identifier",
-                            "start": 4546,
-                            "end": 4559,
+                            "start": 4651,
+                            "end": 4664,
                             "loc": {
                               "start": {
-                                "line": 112,
+                                "line": 113,
                                 "column": 8
                               },
                               "end": {
-                                "line": 112,
+                                "line": 113,
                                 "column": 21
                               },
                               "identifierName": "chordUnitList"
@@ -11585,58 +11652,58 @@
                           },
                           "init": {
                             "type": "CallExpression",
-                            "start": 4562,
-                            "end": 4637,
+                            "start": 4667,
+                            "end": 4742,
                             "loc": {
                               "start": {
-                                "line": 112,
+                                "line": 113,
                                 "column": 24
                               },
                               "end": {
-                                "line": 112,
+                                "line": 113,
                                 "column": 99
                               }
                             },
                             "callee": {
                               "type": "MemberExpression",
-                              "start": 4562,
-                              "end": 4585,
+                              "start": 4667,
+                              "end": 4690,
                               "loc": {
                                 "start": {
-                                  "line": 112,
+                                  "line": 113,
                                   "column": 24
                                 },
                                 "end": {
-                                  "line": 112,
+                                  "line": 113,
                                   "column": 47
                                 }
                               },
                               "object": {
                                 "type": "ThisExpression",
-                                "start": 4562,
-                                "end": 4566,
+                                "start": 4667,
+                                "end": 4671,
                                 "loc": {
                                   "start": {
-                                    "line": 112,
+                                    "line": 113,
                                     "column": 24
                                   },
                                   "end": {
-                                    "line": 112,
+                                    "line": 113,
                                     "column": 28
                                   }
                                 }
                               },
                               "property": {
                                 "type": "Identifier",
-                                "start": 4567,
-                                "end": 4585,
+                                "start": 4672,
+                                "end": 4690,
                                 "loc": {
                                   "start": {
-                                    "line": 112,
+                                    "line": 113,
                                     "column": 29
                                   },
                                   "end": {
-                                    "line": 112,
+                                    "line": 113,
                                     "column": 47
                                   },
                                   "identifierName": "buildChordUnitList"
@@ -11648,15 +11715,15 @@
                             "arguments": [
                               {
                                 "type": "Identifier",
-                                "start": 4586,
-                                "end": 4602,
+                                "start": 4691,
+                                "end": 4707,
                                 "loc": {
                                   "start": {
-                                    "line": 112,
+                                    "line": 113,
                                     "column": 48
                                   },
                                   "end": {
-                                    "line": 112,
+                                    "line": 113,
                                     "column": 64
                                   },
                                   "identifierName": "chordProgression"
@@ -11665,44 +11732,44 @@
                               },
                               {
                                 "type": "MemberExpression",
-                                "start": 4604,
-                                "end": 4619,
+                                "start": 4709,
+                                "end": 4724,
                                 "loc": {
                                   "start": {
-                                    "line": 112,
+                                    "line": 113,
                                     "column": 66
                                   },
                                   "end": {
-                                    "line": 112,
+                                    "line": 113,
                                     "column": 81
                                   }
                                 },
                                 "object": {
                                   "type": "ThisExpression",
-                                  "start": 4604,
-                                  "end": 4608,
+                                  "start": 4709,
+                                  "end": 4713,
                                   "loc": {
                                     "start": {
-                                      "line": 112,
+                                      "line": 113,
                                       "column": 66
                                     },
                                     "end": {
-                                      "line": 112,
+                                      "line": 113,
                                       "column": 70
                                     }
                                   }
                                 },
                                 "property": {
                                   "type": "Identifier",
-                                  "start": 4609,
-                                  "end": 4619,
+                                  "start": 4714,
+                                  "end": 4724,
                                   "loc": {
                                     "start": {
-                                      "line": 112,
+                                      "line": 113,
                                       "column": 71
                                     },
                                     "end": {
-                                      "line": 112,
+                                      "line": 113,
                                       "column": 81
                                     },
                                     "identifierName": "lowerLimit"
@@ -11713,44 +11780,44 @@
                               },
                               {
                                 "type": "MemberExpression",
-                                "start": 4621,
-                                "end": 4636,
+                                "start": 4726,
+                                "end": 4741,
                                 "loc": {
                                   "start": {
-                                    "line": 112,
+                                    "line": 113,
                                     "column": 83
                                   },
                                   "end": {
-                                    "line": 112,
+                                    "line": 113,
                                     "column": 98
                                   }
                                 },
                                 "object": {
                                   "type": "ThisExpression",
-                                  "start": 4621,
-                                  "end": 4625,
+                                  "start": 4726,
+                                  "end": 4730,
                                   "loc": {
                                     "start": {
-                                      "line": 112,
+                                      "line": 113,
                                       "column": 83
                                     },
                                     "end": {
-                                      "line": 112,
+                                      "line": 113,
                                       "column": 87
                                     }
                                   }
                                 },
                                 "property": {
                                   "type": "Identifier",
-                                  "start": 4626,
-                                  "end": 4636,
+                                  "start": 4731,
+                                  "end": 4741,
                                   "loc": {
                                     "start": {
-                                      "line": 112,
+                                      "line": 113,
                                       "column": 88
                                     },
                                     "end": {
-                                      "line": 112,
+                                      "line": 113,
                                       "column": 98
                                     },
                                     "identifierName": "upperLimit"
@@ -11767,44 +11834,44 @@
                     },
                     {
                       "type": "VariableDeclaration",
-                      "start": 4644,
-                      "end": 4690,
+                      "start": 4749,
+                      "end": 4816,
                       "loc": {
                         "start": {
-                          "line": 113,
+                          "line": 114,
                           "column": 4
                         },
                         "end": {
-                          "line": 113,
-                          "column": 50
+                          "line": 114,
+                          "column": 71
                         }
                       },
                       "declarations": [
                         {
                           "type": "VariableDeclarator",
-                          "start": 4648,
-                          "end": 4689,
+                          "start": 4753,
+                          "end": 4815,
                           "loc": {
                             "start": {
-                              "line": 113,
+                              "line": 114,
                               "column": 8
                             },
                             "end": {
-                              "line": 113,
-                              "column": 49
+                              "line": 114,
+                              "column": 70
                             }
                           },
                           "id": {
                             "type": "Identifier",
-                            "start": 4648,
-                            "end": 4656,
+                            "start": 4753,
+                            "end": 4761,
                             "loc": {
                               "start": {
-                                "line": 113,
+                                "line": 114,
                                 "column": 8
                               },
                               "end": {
-                                "line": 113,
+                                "line": 114,
                                 "column": 16
                               },
                               "identifierName": "melodies"
@@ -11813,57 +11880,57 @@
                           },
                           "init": {
                             "type": "CallExpression",
-                            "start": 4659,
-                            "end": 4689,
+                            "start": 4764,
+                            "end": 4815,
                             "loc": {
                               "start": {
-                                "line": 113,
+                                "line": 114,
                                 "column": 19
                               },
                               "end": {
-                                "line": 113,
-                                "column": 49
+                                "line": 114,
+                                "column": 70
                               }
                             },
                             "callee": {
                               "type": "MemberExpression",
-                              "start": 4659,
-                              "end": 4687,
+                              "start": 4764,
+                              "end": 4792,
                               "loc": {
                                 "start": {
-                                  "line": 113,
+                                  "line": 114,
                                   "column": 19
                                 },
                                 "end": {
-                                  "line": 113,
+                                  "line": 114,
                                   "column": 47
                                 }
                               },
                               "object": {
                                 "type": "MemberExpression",
-                                "start": 4659,
-                                "end": 4675,
+                                "start": 4764,
+                                "end": 4780,
                                 "loc": {
                                   "start": {
-                                    "line": 113,
+                                    "line": 114,
                                     "column": 19
                                   },
                                   "end": {
-                                    "line": 113,
+                                    "line": 114,
                                     "column": 35
                                   }
                                 },
                                 "object": {
                                   "type": "Identifier",
-                                  "start": 4659,
-                                  "end": 4672,
+                                  "start": 4764,
+                                  "end": 4777,
                                   "loc": {
                                     "start": {
-                                      "line": 113,
+                                      "line": 114,
                                       "column": 19
                                     },
                                     "end": {
-                                      "line": 113,
+                                      "line": 114,
                                       "column": 32
                                     },
                                     "identifierName": "chordUnitList"
@@ -11872,15 +11939,15 @@
                                 },
                                 "property": {
                                   "type": "NumericLiteral",
-                                  "start": 4673,
-                                  "end": 4674,
+                                  "start": 4778,
+                                  "end": 4779,
                                   "loc": {
                                     "start": {
-                                      "line": 113,
+                                      "line": 114,
                                       "column": 33
                                     },
                                     "end": {
-                                      "line": 113,
+                                      "line": 114,
                                       "column": 34
                                     }
                                   },
@@ -11894,15 +11961,15 @@
                               },
                               "property": {
                                 "type": "Identifier",
-                                "start": 4676,
-                                "end": 4687,
+                                "start": 4781,
+                                "end": 4792,
                                 "loc": {
                                   "start": {
-                                    "line": 113,
+                                    "line": 114,
                                     "column": 36
                                   },
                                   "end": {
-                                    "line": 113,
+                                    "line": 114,
                                     "column": 47
                                   },
                                   "identifierName": "getMelodies"
@@ -11911,7 +11978,40 @@
                               },
                               "computed": false
                             },
-                            "arguments": []
+                            "arguments": [
+                              {
+                                "type": "NullLiteral",
+                                "start": 4793,
+                                "end": 4797,
+                                "loc": {
+                                  "start": {
+                                    "line": 114,
+                                    "column": 48
+                                  },
+                                  "end": {
+                                    "line": 114,
+                                    "column": 52
+                                  }
+                                }
+                              },
+                              {
+                                "type": "Identifier",
+                                "start": 4799,
+                                "end": 4814,
+                                "loc": {
+                                  "start": {
+                                    "line": 114,
+                                    "column": 54
+                                  },
+                                  "end": {
+                                    "line": 114,
+                                    "column": 69
+                                  },
+                                  "identifierName": "enableFiltering"
+                                },
+                                "name": "enableFiltering"
+                              }
+                            ]
                           }
                         }
                       ],
@@ -11919,29 +12019,29 @@
                     },
                     {
                       "type": "ReturnStatement",
-                      "start": 4696,
-                      "end": 4712,
+                      "start": 4822,
+                      "end": 4838,
                       "loc": {
                         "start": {
-                          "line": 114,
+                          "line": 115,
                           "column": 4
                         },
                         "end": {
-                          "line": 114,
+                          "line": 115,
                           "column": 20
                         }
                       },
                       "argument": {
                         "type": "Identifier",
-                        "start": 4703,
-                        "end": 4711,
+                        "start": 4829,
+                        "end": 4837,
                         "loc": {
                           "start": {
-                            "line": 114,
+                            "line": 115,
                             "column": 11
                           },
                           "end": {
-                            "line": 114,
+                            "line": 115,
                             "column": 19
                           },
                           "identifierName": "melodies"
@@ -11955,16 +12055,16 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\r\n    * For a given chord progression, generate a series of melodies that fit over the progression.\r\n    * @param {string[]} chordProgression - chord progression given by user\r\n    * @return {string[]} - an array of notes (written in scientific pitch)\r\n    ",
+                    "value": "*\r\n    * For a given chord progression, generate a series of melodies that fit over the progression.\r\n    * @param {string[]} chordProgression - chord progression given by user\r\n    * @param {boolean} enableFiltering - if true, generated melodies will be filtered.\r\n    * @return {string[]} - an array of notes (written in scientific pitch)\r\n    ",
                     "start": 4239,
-                    "end": 4501,
+                    "end": 4589,
                     "loc": {
                       "start": {
                         "line": 106,
                         "column": 4
                       },
                       "end": {
-                        "line": 110,
+                        "line": 111,
                         "column": 6
                       }
                     }
@@ -12196,16 +12296,16 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\r\n    * For a given chord progression, generate a series of melodies that fit over the progression.\r\n    * @param {string[]} chordProgression - chord progression given by user\r\n    * @return {string[]} - an array of notes (written in scientific pitch)\r\n    ",
+      "value": "*\r\n    * For a given chord progression, generate a series of melodies that fit over the progression.\r\n    * @param {string[]} chordProgression - chord progression given by user\r\n    * @param {boolean} enableFiltering - if true, generated melodies will be filtered.\r\n    * @return {string[]} - an array of notes (written in scientific pitch)\r\n    ",
       "start": 4239,
-      "end": 4501,
+      "end": 4589,
       "loc": {
         "start": {
           "line": 106,
           "column": 4
         },
         "end": {
-          "line": 110,
+          "line": 111,
           "column": 6
         }
       }
@@ -23527,16 +23627,16 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\r\n    * For a given chord progression, generate a series of melodies that fit over the progression.\r\n    * @param {string[]} chordProgression - chord progression given by user\r\n    * @return {string[]} - an array of notes (written in scientific pitch)\r\n    ",
+      "value": "*\r\n    * For a given chord progression, generate a series of melodies that fit over the progression.\r\n    * @param {string[]} chordProgression - chord progression given by user\r\n    * @param {boolean} enableFiltering - if true, generated melodies will be filtered.\r\n    * @return {string[]} - an array of notes (written in scientific pitch)\r\n    ",
       "start": 4239,
-      "end": 4501,
+      "end": 4589,
       "loc": {
         "start": {
           "line": 106,
           "column": 4
         },
         "end": {
-          "line": 110,
+          "line": 111,
           "column": 6
         }
       }
@@ -23554,15 +23654,15 @@
         "binop": null
       },
       "value": "getMelodies",
-      "start": 4505,
-      "end": 4516,
+      "start": 4593,
+      "end": 4604,
       "loc": {
         "start": {
-          "line": 111,
+          "line": 112,
           "column": 2
         },
         "end": {
-          "line": 111,
+          "line": 112,
           "column": 13
         }
       }
@@ -23579,15 +23679,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4516,
-      "end": 4517,
+      "start": 4604,
+      "end": 4605,
       "loc": {
         "start": {
-          "line": 111,
+          "line": 112,
           "column": 13
         },
         "end": {
-          "line": 111,
+          "line": 112,
           "column": 14
         }
       }
@@ -23605,16 +23705,68 @@
         "binop": null
       },
       "value": "chordProgression",
-      "start": 4517,
-      "end": 4533,
+      "start": 4605,
+      "end": 4621,
       "loc": {
         "start": {
-          "line": 111,
+          "line": 112,
           "column": 14
         },
         "end": {
-          "line": 111,
+          "line": 112,
           "column": 30
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 4621,
+      "end": 4622,
+      "loc": {
+        "start": {
+          "line": 112,
+          "column": 30
+        },
+        "end": {
+          "line": 112,
+          "column": 31
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "enableFiltering",
+      "start": 4623,
+      "end": 4638,
+      "loc": {
+        "start": {
+          "line": 112,
+          "column": 32
+        },
+        "end": {
+          "line": 112,
+          "column": 47
         }
       }
     },
@@ -23630,16 +23782,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4533,
-      "end": 4534,
+      "start": 4638,
+      "end": 4639,
       "loc": {
         "start": {
-          "line": 111,
-          "column": 30
+          "line": 112,
+          "column": 47
         },
         "end": {
-          "line": 111,
-          "column": 31
+          "line": 112,
+          "column": 48
         }
       }
     },
@@ -23655,16 +23807,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4535,
-      "end": 4536,
+      "start": 4640,
+      "end": 4641,
       "loc": {
         "start": {
-          "line": 111,
-          "column": 32
+          "line": 112,
+          "column": 49
         },
         "end": {
-          "line": 111,
-          "column": 33
+          "line": 112,
+          "column": 50
         }
       }
     },
@@ -23683,15 +23835,15 @@
         "updateContext": null
       },
       "value": "var",
-      "start": 4542,
-      "end": 4545,
+      "start": 4647,
+      "end": 4650,
       "loc": {
         "start": {
-          "line": 112,
+          "line": 113,
           "column": 4
         },
         "end": {
-          "line": 112,
+          "line": 113,
           "column": 7
         }
       }
@@ -23709,15 +23861,15 @@
         "binop": null
       },
       "value": "chordUnitList",
-      "start": 4546,
-      "end": 4559,
+      "start": 4651,
+      "end": 4664,
       "loc": {
         "start": {
-          "line": 112,
+          "line": 113,
           "column": 8
         },
         "end": {
-          "line": 112,
+          "line": 113,
           "column": 21
         }
       }
@@ -23736,15 +23888,15 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 4560,
-      "end": 4561,
+      "start": 4665,
+      "end": 4666,
       "loc": {
         "start": {
-          "line": 112,
+          "line": 113,
           "column": 22
         },
         "end": {
-          "line": 112,
+          "line": 113,
           "column": 23
         }
       }
@@ -23764,15 +23916,15 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 4562,
-      "end": 4566,
+      "start": 4667,
+      "end": 4671,
       "loc": {
         "start": {
-          "line": 112,
+          "line": 113,
           "column": 24
         },
         "end": {
-          "line": 112,
+          "line": 113,
           "column": 28
         }
       }
@@ -23790,15 +23942,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4566,
-      "end": 4567,
+      "start": 4671,
+      "end": 4672,
       "loc": {
         "start": {
-          "line": 112,
+          "line": 113,
           "column": 28
         },
         "end": {
-          "line": 112,
+          "line": 113,
           "column": 29
         }
       }
@@ -23816,15 +23968,15 @@
         "binop": null
       },
       "value": "buildChordUnitList",
-      "start": 4567,
-      "end": 4585,
+      "start": 4672,
+      "end": 4690,
       "loc": {
         "start": {
-          "line": 112,
+          "line": 113,
           "column": 29
         },
         "end": {
-          "line": 112,
+          "line": 113,
           "column": 47
         }
       }
@@ -23841,15 +23993,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4585,
-      "end": 4586,
+      "start": 4690,
+      "end": 4691,
       "loc": {
         "start": {
-          "line": 112,
+          "line": 113,
           "column": 47
         },
         "end": {
-          "line": 112,
+          "line": 113,
           "column": 48
         }
       }
@@ -23867,15 +24019,15 @@
         "binop": null
       },
       "value": "chordProgression",
-      "start": 4586,
-      "end": 4602,
+      "start": 4691,
+      "end": 4707,
       "loc": {
         "start": {
-          "line": 112,
+          "line": 113,
           "column": 48
         },
         "end": {
-          "line": 112,
+          "line": 113,
           "column": 64
         }
       }
@@ -23893,15 +24045,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4602,
-      "end": 4603,
+      "start": 4707,
+      "end": 4708,
       "loc": {
         "start": {
-          "line": 112,
+          "line": 113,
           "column": 64
         },
         "end": {
-          "line": 112,
+          "line": 113,
           "column": 65
         }
       }
@@ -23921,15 +24073,15 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 4604,
-      "end": 4608,
+      "start": 4709,
+      "end": 4713,
       "loc": {
         "start": {
-          "line": 112,
+          "line": 113,
           "column": 66
         },
         "end": {
-          "line": 112,
+          "line": 113,
           "column": 70
         }
       }
@@ -23947,15 +24099,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4608,
-      "end": 4609,
+      "start": 4713,
+      "end": 4714,
       "loc": {
         "start": {
-          "line": 112,
+          "line": 113,
           "column": 70
         },
         "end": {
-          "line": 112,
+          "line": 113,
           "column": 71
         }
       }
@@ -23973,15 +24125,15 @@
         "binop": null
       },
       "value": "lowerLimit",
-      "start": 4609,
-      "end": 4619,
+      "start": 4714,
+      "end": 4724,
       "loc": {
         "start": {
-          "line": 112,
+          "line": 113,
           "column": 71
         },
         "end": {
-          "line": 112,
+          "line": 113,
           "column": 81
         }
       }
@@ -23999,15 +24151,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4619,
-      "end": 4620,
+      "start": 4724,
+      "end": 4725,
       "loc": {
         "start": {
-          "line": 112,
+          "line": 113,
           "column": 81
         },
         "end": {
-          "line": 112,
+          "line": 113,
           "column": 82
         }
       }
@@ -24027,15 +24179,15 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 4621,
-      "end": 4625,
+      "start": 4726,
+      "end": 4730,
       "loc": {
         "start": {
-          "line": 112,
+          "line": 113,
           "column": 83
         },
         "end": {
-          "line": 112,
+          "line": 113,
           "column": 87
         }
       }
@@ -24053,15 +24205,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4625,
-      "end": 4626,
+      "start": 4730,
+      "end": 4731,
       "loc": {
         "start": {
-          "line": 112,
+          "line": 113,
           "column": 87
         },
         "end": {
-          "line": 112,
+          "line": 113,
           "column": 88
         }
       }
@@ -24079,15 +24231,15 @@
         "binop": null
       },
       "value": "upperLimit",
-      "start": 4626,
-      "end": 4636,
+      "start": 4731,
+      "end": 4741,
       "loc": {
         "start": {
-          "line": 112,
+          "line": 113,
           "column": 88
         },
         "end": {
-          "line": 112,
+          "line": 113,
           "column": 98
         }
       }
@@ -24104,15 +24256,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4636,
-      "end": 4637,
+      "start": 4741,
+      "end": 4742,
       "loc": {
         "start": {
-          "line": 112,
+          "line": 113,
           "column": 98
         },
         "end": {
-          "line": 112,
+          "line": 113,
           "column": 99
         }
       }
@@ -24130,15 +24282,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4637,
-      "end": 4638,
+      "start": 4742,
+      "end": 4743,
       "loc": {
         "start": {
-          "line": 112,
+          "line": 113,
           "column": 99
         },
         "end": {
-          "line": 112,
+          "line": 113,
           "column": 100
         }
       }
@@ -24158,15 +24310,15 @@
         "updateContext": null
       },
       "value": "var",
-      "start": 4644,
-      "end": 4647,
+      "start": 4749,
+      "end": 4752,
       "loc": {
         "start": {
-          "line": 113,
+          "line": 114,
           "column": 4
         },
         "end": {
-          "line": 113,
+          "line": 114,
           "column": 7
         }
       }
@@ -24184,15 +24336,15 @@
         "binop": null
       },
       "value": "melodies",
-      "start": 4648,
-      "end": 4656,
+      "start": 4753,
+      "end": 4761,
       "loc": {
         "start": {
-          "line": 113,
+          "line": 114,
           "column": 8
         },
         "end": {
-          "line": 113,
+          "line": 114,
           "column": 16
         }
       }
@@ -24211,15 +24363,15 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 4657,
-      "end": 4658,
+      "start": 4762,
+      "end": 4763,
       "loc": {
         "start": {
-          "line": 113,
+          "line": 114,
           "column": 17
         },
         "end": {
-          "line": 113,
+          "line": 114,
           "column": 18
         }
       }
@@ -24237,15 +24389,15 @@
         "binop": null
       },
       "value": "chordUnitList",
-      "start": 4659,
-      "end": 4672,
+      "start": 4764,
+      "end": 4777,
       "loc": {
         "start": {
-          "line": 113,
+          "line": 114,
           "column": 19
         },
         "end": {
-          "line": 113,
+          "line": 114,
           "column": 32
         }
       }
@@ -24263,15 +24415,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4672,
-      "end": 4673,
+      "start": 4777,
+      "end": 4778,
       "loc": {
         "start": {
-          "line": 113,
+          "line": 114,
           "column": 32
         },
         "end": {
-          "line": 113,
+          "line": 114,
           "column": 33
         }
       }
@@ -24290,15 +24442,15 @@
         "updateContext": null
       },
       "value": 0,
-      "start": 4673,
-      "end": 4674,
+      "start": 4778,
+      "end": 4779,
       "loc": {
         "start": {
-          "line": 113,
+          "line": 114,
           "column": 33
         },
         "end": {
-          "line": 113,
+          "line": 114,
           "column": 34
         }
       }
@@ -24316,15 +24468,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4674,
-      "end": 4675,
+      "start": 4779,
+      "end": 4780,
       "loc": {
         "start": {
-          "line": 113,
+          "line": 114,
           "column": 34
         },
         "end": {
-          "line": 113,
+          "line": 114,
           "column": 35
         }
       }
@@ -24342,15 +24494,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4675,
-      "end": 4676,
+      "start": 4780,
+      "end": 4781,
       "loc": {
         "start": {
-          "line": 113,
+          "line": 114,
           "column": 35
         },
         "end": {
-          "line": 113,
+          "line": 114,
           "column": 36
         }
       }
@@ -24368,15 +24520,15 @@
         "binop": null
       },
       "value": "getMelodies",
-      "start": 4676,
-      "end": 4687,
+      "start": 4781,
+      "end": 4792,
       "loc": {
         "start": {
-          "line": 113,
+          "line": 114,
           "column": 36
         },
         "end": {
-          "line": 113,
+          "line": 114,
           "column": 47
         }
       }
@@ -24393,16 +24545,96 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4687,
-      "end": 4688,
+      "start": 4792,
+      "end": 4793,
       "loc": {
         "start": {
-          "line": 113,
+          "line": 114,
           "column": 47
         },
         "end": {
-          "line": 113,
+          "line": 114,
           "column": 48
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "null",
+        "keyword": "null",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "null",
+      "start": 4793,
+      "end": 4797,
+      "loc": {
+        "start": {
+          "line": 114,
+          "column": 48
+        },
+        "end": {
+          "line": 114,
+          "column": 52
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 4797,
+      "end": 4798,
+      "loc": {
+        "start": {
+          "line": 114,
+          "column": 52
+        },
+        "end": {
+          "line": 114,
+          "column": 53
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "enableFiltering",
+      "start": 4799,
+      "end": 4814,
+      "loc": {
+        "start": {
+          "line": 114,
+          "column": 54
+        },
+        "end": {
+          "line": 114,
+          "column": 69
         }
       }
     },
@@ -24418,16 +24650,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4688,
-      "end": 4689,
+      "start": 4814,
+      "end": 4815,
       "loc": {
         "start": {
-          "line": 113,
-          "column": 48
+          "line": 114,
+          "column": 69
         },
         "end": {
-          "line": 113,
-          "column": 49
+          "line": 114,
+          "column": 70
         }
       }
     },
@@ -24444,16 +24676,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4689,
-      "end": 4690,
+      "start": 4815,
+      "end": 4816,
       "loc": {
         "start": {
-          "line": 113,
-          "column": 49
+          "line": 114,
+          "column": 70
         },
         "end": {
-          "line": 113,
-          "column": 50
+          "line": 114,
+          "column": 71
         }
       }
     },
@@ -24472,15 +24704,15 @@
         "updateContext": null
       },
       "value": "return",
-      "start": 4696,
-      "end": 4702,
+      "start": 4822,
+      "end": 4828,
       "loc": {
         "start": {
-          "line": 114,
+          "line": 115,
           "column": 4
         },
         "end": {
-          "line": 114,
+          "line": 115,
           "column": 10
         }
       }
@@ -24498,15 +24730,15 @@
         "binop": null
       },
       "value": "melodies",
-      "start": 4703,
-      "end": 4711,
+      "start": 4829,
+      "end": 4837,
       "loc": {
         "start": {
-          "line": 114,
+          "line": 115,
           "column": 11
         },
         "end": {
-          "line": 114,
+          "line": 115,
           "column": 19
         }
       }
@@ -24524,15 +24756,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4711,
-      "end": 4712,
+      "start": 4837,
+      "end": 4838,
       "loc": {
         "start": {
-          "line": 114,
+          "line": 115,
           "column": 19
         },
         "end": {
-          "line": 114,
+          "line": 115,
           "column": 20
         }
       }
@@ -24549,15 +24781,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4716,
-      "end": 4717,
+      "start": 4842,
+      "end": 4843,
       "loc": {
         "start": {
-          "line": 115,
+          "line": 116,
           "column": 2
         },
         "end": {
-          "line": 115,
+          "line": 116,
           "column": 3
         }
       }
@@ -24574,15 +24806,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4721,
-      "end": 4722,
+      "start": 4847,
+      "end": 4848,
       "loc": {
         "start": {
-          "line": 117,
+          "line": 118,
           "column": 0
         },
         "end": {
-          "line": 117,
+          "line": 118,
           "column": 1
         }
       }
@@ -24600,15 +24832,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4722,
-      "end": 4723,
+      "start": 4848,
+      "end": 4849,
       "loc": {
         "start": {
-          "line": 117,
+          "line": 118,
           "column": 1
         },
         "end": {
-          "line": 117,
+          "line": 118,
           "column": 2
         }
       }
@@ -24628,15 +24860,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 4727,
-      "end": 4733,
+      "start": 4853,
+      "end": 4859,
       "loc": {
         "start": {
-          "line": 119,
+          "line": 120,
           "column": 0
         },
         "end": {
-          "line": 119,
+          "line": 120,
           "column": 6
         }
       }
@@ -24653,15 +24885,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4734,
-      "end": 4735,
+      "start": 4860,
+      "end": 4861,
       "loc": {
         "start": {
-          "line": 119,
+          "line": 120,
           "column": 7
         },
         "end": {
-          "line": 119,
+          "line": 120,
           "column": 8
         }
       }
@@ -24679,15 +24911,15 @@
         "binop": null
       },
       "value": "AutoComposerMelody",
-      "start": 4736,
-      "end": 4754,
+      "start": 4862,
+      "end": 4880,
       "loc": {
         "start": {
-          "line": 119,
+          "line": 120,
           "column": 9
         },
         "end": {
-          "line": 119,
+          "line": 120,
           "column": 27
         }
       }
@@ -24704,15 +24936,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4755,
-      "end": 4756,
+      "start": 4881,
+      "end": 4882,
       "loc": {
         "start": {
-          "line": 119,
+          "line": 120,
           "column": 28
         },
         "end": {
-          "line": 119,
+          "line": 120,
           "column": 29
         }
       }
@@ -24730,15 +24962,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4756,
-      "end": 4757,
+      "start": 4882,
+      "end": 4883,
       "loc": {
         "start": {
-          "line": 119,
+          "line": 120,
           "column": 29
         },
         "end": {
-          "line": 119,
+          "line": 120,
           "column": 30
         }
       }
@@ -24756,15 +24988,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4759,
-      "end": 4759,
+      "start": 4885,
+      "end": 4885,
       "loc": {
         "start": {
-          "line": 120,
+          "line": 121,
           "column": 0
         },
         "end": {
-          "line": 120,
+          "line": 121,
           "column": 0
         }
       }

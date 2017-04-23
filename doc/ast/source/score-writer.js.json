@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 440,
+  "end": 477,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 20,
+      "line": 23,
       "column": 0
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 440,
+    "end": 477,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 20,
+        "line": 23,
         "column": 0
       }
     },
@@ -31,14 +31,14 @@
       {
         "type": "Identifier",
         "start": 71,
-        "end": 411,
+        "end": 448,
         "loc": {
           "start": {
             "line": 4,
             "column": 0
           },
           "end": {
-            "line": 17,
+            "line": 20,
             "column": 1
           }
         },
@@ -64,49 +64,50 @@
         "body": {
           "type": "ClassBody",
           "start": 89,
-          "end": 411,
+          "end": 448,
           "loc": {
             "start": {
               "line": 4,
               "column": 18
             },
             "end": {
-              "line": 17,
+              "line": 20,
               "column": 1
             }
           },
           "body": [
             {
               "type": "ClassMethod",
-              "start": 94,
-              "end": 116,
+              "start": 131,
+              "end": 153,
               "loc": {
                 "start": {
-                  "line": 5,
+                  "line": 8,
                   "column": 2
                 },
                 "end": {
-                  "line": 7,
+                  "line": 10,
                   "column": 3
                 }
               },
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 94,
-                "end": 105,
+                "start": 131,
+                "end": 142,
                 "loc": {
                   "start": {
-                    "line": 5,
+                    "line": 8,
                     "column": 2
                   },
                   "end": {
-                    "line": 5,
+                    "line": 8,
                     "column": 13
                   },
                   "identifierName": "constructor"
                 },
-                "name": "constructor"
+                "name": "constructor",
+                "leadingComments": null
               },
               "static": false,
               "kind": "constructor",
@@ -117,15 +118,15 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 108,
-                "end": 116,
+                "start": 145,
+                "end": 153,
                 "loc": {
                   "start": {
-                    "line": 5,
+                    "line": 8,
                     "column": 16
                   },
                   "end": {
-                    "line": 7,
+                    "line": 10,
                     "column": 3
                   }
                 },
@@ -134,19 +135,37 @@
                 "leadingComments": null,
                 "trailingComments": null
               },
+              "leadingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\r\n  * Plain constructor.\r\n  ",
+                  "start": 94,
+                  "end": 127,
+                  "loc": {
+                    "start": {
+                      "line": 5,
+                      "column": 2
+                    },
+                    "end": {
+                      "line": 7,
+                      "column": 4
+                    }
+                  }
+                }
+              ],
               "trailingComments": [
                 {
                   "type": "CommentBlock",
                   "value": "*\r\n    * Renders musical data as a score.\r\n    * @param {string} targetElement - selector for the element which will hold score data.\r\n    * @param {MelodyUnit} melodyUnit - MelodyUnit which has all of the melody data.\r\n    ",
-                  "start": 124,
-                  "end": 352,
+                  "start": 161,
+                  "end": 389,
                   "loc": {
                     "start": {
-                      "line": 9,
+                      "line": 12,
                       "column": 4
                     },
                     "end": {
-                      "line": 13,
+                      "line": 16,
                       "column": 6
                     }
                   }
@@ -155,30 +174,30 @@
             },
             {
               "type": "ClassMethod",
-              "start": 356,
-              "end": 408,
+              "start": 393,
+              "end": 445,
               "loc": {
                 "start": {
-                  "line": 14,
+                  "line": 17,
                   "column": 2
                 },
                 "end": {
-                  "line": 16,
+                  "line": 19,
                   "column": 3
                 }
               },
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 356,
-                "end": 366,
+                "start": 393,
+                "end": 403,
                 "loc": {
                   "start": {
-                    "line": 14,
+                    "line": 17,
                     "column": 2
                   },
                   "end": {
-                    "line": 14,
+                    "line": 17,
                     "column": 12
                   },
                   "identifierName": "writeScore"
@@ -195,15 +214,15 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 367,
-                  "end": 380,
+                  "start": 404,
+                  "end": 417,
                   "loc": {
                     "start": {
-                      "line": 14,
+                      "line": 17,
                       "column": 13
                     },
                     "end": {
-                      "line": 14,
+                      "line": 17,
                       "column": 26
                     },
                     "identifierName": "targetElement"
@@ -212,15 +231,15 @@
                 },
                 {
                   "type": "Identifier",
-                  "start": 382,
-                  "end": 392,
+                  "start": 419,
+                  "end": 429,
                   "loc": {
                     "start": {
-                      "line": 14,
+                      "line": 17,
                       "column": 28
                     },
                     "end": {
-                      "line": 14,
+                      "line": 17,
                       "column": 38
                     },
                     "identifierName": "melodyUnit"
@@ -230,15 +249,15 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 394,
-                "end": 408,
+                "start": 431,
+                "end": 445,
                 "loc": {
                   "start": {
-                    "line": 14,
+                    "line": 17,
                     "column": 40
                   },
                   "end": {
-                    "line": 16,
+                    "line": 19,
                     "column": 3
                   }
                 },
@@ -249,15 +268,15 @@
                   {
                     "type": "CommentLine",
                     "value": "",
-                    "start": 401,
-                    "end": 403,
+                    "start": 438,
+                    "end": 440,
                     "loc": {
                       "start": {
-                        "line": 15,
+                        "line": 18,
                         "column": 4
                       },
                       "end": {
-                        "line": 15,
+                        "line": 18,
                         "column": 6
                       }
                     }
@@ -268,15 +287,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\r\n    * Renders musical data as a score.\r\n    * @param {string} targetElement - selector for the element which will hold score data.\r\n    * @param {MelodyUnit} melodyUnit - MelodyUnit which has all of the melody data.\r\n    ",
-                  "start": 124,
-                  "end": 352,
+                  "start": 161,
+                  "end": 389,
                   "loc": {
                     "start": {
-                      "line": 9,
+                      "line": 12,
                       "column": 4
                     },
                     "end": {
-                      "line": 13,
+                      "line": 16,
                       "column": 6
                     }
                   }
@@ -291,15 +310,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 415,
-        "end": 438,
+        "start": 452,
+        "end": 475,
         "loc": {
           "start": {
-            "line": 19,
+            "line": 22,
             "column": 0
           },
           "end": {
-            "line": 19,
+            "line": 22,
             "column": 23
           }
         },
@@ -307,29 +326,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 424,
-            "end": 435,
+            "start": 461,
+            "end": 472,
             "loc": {
               "start": {
-                "line": 19,
+                "line": 22,
                 "column": 9
               },
               "end": {
-                "line": 19,
+                "line": 22,
                 "column": 20
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 424,
-              "end": 435,
+              "start": 461,
+              "end": 472,
               "loc": {
                 "start": {
-                  "line": 19,
+                  "line": 22,
                   "column": 9
                 },
                 "end": {
-                  "line": 19,
+                  "line": 22,
                   "column": 20
                 },
                 "identifierName": "ScoreWriter"
@@ -338,15 +357,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 424,
-              "end": 435,
+              "start": 461,
+              "end": 472,
               "loc": {
                 "start": {
-                  "line": 19,
+                  "line": 22,
                   "column": 9
                 },
                 "end": {
-                  "line": 19,
+                  "line": 22,
                   "column": 20
                 },
                 "identifierName": "ScoreWriter"
@@ -359,29 +378,29 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 415,
-        "end": 438,
+        "start": 452,
+        "end": 475,
         "loc": {
           "start": {
-            "line": 19,
+            "line": 22,
             "column": 0
           },
           "end": {
-            "line": 19,
+            "line": 22,
             "column": 23
           }
         },
         "declaration": {
           "type": "ClassDeclaration",
           "start": 71,
-          "end": 411,
+          "end": 448,
           "loc": {
             "start": {
               "line": 4,
               "column": 0
             },
             "end": {
-              "line": 17,
+              "line": 20,
               "column": 1
             }
           },
@@ -407,49 +426,50 @@
           "body": {
             "type": "ClassBody",
             "start": 89,
-            "end": 411,
+            "end": 448,
             "loc": {
               "start": {
                 "line": 4,
                 "column": 18
               },
               "end": {
-                "line": 17,
+                "line": 20,
                 "column": 1
               }
             },
             "body": [
               {
                 "type": "ClassMethod",
-                "start": 94,
-                "end": 116,
+                "start": 131,
+                "end": 153,
                 "loc": {
                   "start": {
-                    "line": 5,
+                    "line": 8,
                     "column": 2
                   },
                   "end": {
-                    "line": 7,
+                    "line": 10,
                     "column": 3
                   }
                 },
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 94,
-                  "end": 105,
+                  "start": 131,
+                  "end": 142,
                   "loc": {
                     "start": {
-                      "line": 5,
+                      "line": 8,
                       "column": 2
                     },
                     "end": {
-                      "line": 5,
+                      "line": 8,
                       "column": 13
                     },
                     "identifierName": "constructor"
                   },
-                  "name": "constructor"
+                  "name": "constructor",
+                  "leadingComments": null
                 },
                 "static": false,
                 "kind": "constructor",
@@ -460,15 +480,15 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 108,
-                  "end": 116,
+                  "start": 145,
+                  "end": 153,
                   "loc": {
                     "start": {
-                      "line": 5,
+                      "line": 8,
                       "column": 16
                     },
                     "end": {
-                      "line": 7,
+                      "line": 10,
                       "column": 3
                     }
                   },
@@ -477,19 +497,37 @@
                   "leadingComments": null,
                   "trailingComments": null
                 },
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\r\n  * Plain constructor.\r\n  ",
+                    "start": 94,
+                    "end": 127,
+                    "loc": {
+                      "start": {
+                        "line": 5,
+                        "column": 2
+                      },
+                      "end": {
+                        "line": 7,
+                        "column": 4
+                      }
+                    }
+                  }
+                ],
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
                     "value": "*\r\n    * Renders musical data as a score.\r\n    * @param {string} targetElement - selector for the element which will hold score data.\r\n    * @param {MelodyUnit} melodyUnit - MelodyUnit which has all of the melody data.\r\n    ",
-                    "start": 124,
-                    "end": 352,
+                    "start": 161,
+                    "end": 389,
                     "loc": {
                       "start": {
-                        "line": 9,
+                        "line": 12,
                         "column": 4
                       },
                       "end": {
-                        "line": 13,
+                        "line": 16,
                         "column": 6
                       }
                     }
@@ -498,30 +536,30 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 356,
-                "end": 408,
+                "start": 393,
+                "end": 445,
                 "loc": {
                   "start": {
-                    "line": 14,
+                    "line": 17,
                     "column": 2
                   },
                   "end": {
-                    "line": 16,
+                    "line": 19,
                     "column": 3
                   }
                 },
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 356,
-                  "end": 366,
+                  "start": 393,
+                  "end": 403,
                   "loc": {
                     "start": {
-                      "line": 14,
+                      "line": 17,
                       "column": 2
                     },
                     "end": {
-                      "line": 14,
+                      "line": 17,
                       "column": 12
                     },
                     "identifierName": "writeScore"
@@ -538,15 +576,15 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 367,
-                    "end": 380,
+                    "start": 404,
+                    "end": 417,
                     "loc": {
                       "start": {
-                        "line": 14,
+                        "line": 17,
                         "column": 13
                       },
                       "end": {
-                        "line": 14,
+                        "line": 17,
                         "column": 26
                       },
                       "identifierName": "targetElement"
@@ -555,15 +593,15 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 382,
-                    "end": 392,
+                    "start": 419,
+                    "end": 429,
                     "loc": {
                       "start": {
-                        "line": 14,
+                        "line": 17,
                         "column": 28
                       },
                       "end": {
-                        "line": 14,
+                        "line": 17,
                         "column": 38
                       },
                       "identifierName": "melodyUnit"
@@ -573,15 +611,15 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 394,
-                  "end": 408,
+                  "start": 431,
+                  "end": 445,
                   "loc": {
                     "start": {
-                      "line": 14,
+                      "line": 17,
                       "column": 40
                     },
                     "end": {
-                      "line": 16,
+                      "line": 19,
                       "column": 3
                     }
                   },
@@ -592,15 +630,15 @@
                     {
                       "type": "CommentLine",
                       "value": "",
-                      "start": 401,
-                      "end": 403,
+                      "start": 438,
+                      "end": 440,
                       "loc": {
                         "start": {
-                          "line": 15,
+                          "line": 18,
                           "column": 4
                         },
                         "end": {
-                          "line": 15,
+                          "line": 18,
                           "column": 6
                         }
                       }
@@ -611,15 +649,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\r\n    * Renders musical data as a score.\r\n    * @param {string} targetElement - selector for the element which will hold score data.\r\n    * @param {MelodyUnit} melodyUnit - MelodyUnit which has all of the melody data.\r\n    ",
-                    "start": 124,
-                    "end": 352,
+                    "start": 161,
+                    "end": 389,
                     "loc": {
                       "start": {
-                        "line": 9,
+                        "line": 12,
                         "column": 4
                       },
                       "end": {
-                        "line": 13,
+                        "line": 16,
                         "column": 6
                       }
                     }
@@ -675,16 +713,32 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\r\n    * Renders musical data as a score.\r\n    * @param {string} targetElement - selector for the element which will hold score data.\r\n    * @param {MelodyUnit} melodyUnit - MelodyUnit which has all of the melody data.\r\n    ",
-      "start": 124,
-      "end": 352,
+      "value": "*\r\n  * Plain constructor.\r\n  ",
+      "start": 94,
+      "end": 127,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 5,
+          "column": 2
+        },
+        "end": {
+          "line": 7,
+          "column": 4
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\r\n    * Renders musical data as a score.\r\n    * @param {string} targetElement - selector for the element which will hold score data.\r\n    * @param {MelodyUnit} melodyUnit - MelodyUnit which has all of the melody data.\r\n    ",
+      "start": 161,
+      "end": 389,
+      "loc": {
+        "start": {
+          "line": 12,
           "column": 4
         },
         "end": {
-          "line": 13,
+          "line": 16,
           "column": 6
         }
       }
@@ -692,15 +746,15 @@
     {
       "type": "CommentLine",
       "value": "",
-      "start": 401,
-      "end": 403,
+      "start": 438,
+      "end": 440,
       "loc": {
         "start": {
-          "line": 15,
+          "line": 18,
           "column": 4
         },
         "end": {
-          "line": 15,
+          "line": 18,
           "column": 6
         }
       }
@@ -803,6 +857,22 @@
       }
     },
     {
+      "type": "CommentBlock",
+      "value": "*\r\n  * Plain constructor.\r\n  ",
+      "start": 94,
+      "end": 127,
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 2
+        },
+        "end": {
+          "line": 7,
+          "column": 4
+        }
+      }
+    },
+    {
       "type": {
         "label": "name",
         "beforeExpr": false,
@@ -815,15 +885,15 @@
         "binop": null
       },
       "value": "constructor",
-      "start": 94,
-      "end": 105,
+      "start": 131,
+      "end": 142,
       "loc": {
         "start": {
-          "line": 5,
+          "line": 8,
           "column": 2
         },
         "end": {
-          "line": 5,
+          "line": 8,
           "column": 13
         }
       }
@@ -840,15 +910,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 105,
-      "end": 106,
+      "start": 142,
+      "end": 143,
       "loc": {
         "start": {
-          "line": 5,
+          "line": 8,
           "column": 13
         },
         "end": {
-          "line": 5,
+          "line": 8,
           "column": 14
         }
       }
@@ -865,15 +935,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 106,
-      "end": 107,
+      "start": 143,
+      "end": 144,
       "loc": {
         "start": {
-          "line": 5,
+          "line": 8,
           "column": 14
         },
         "end": {
-          "line": 5,
+          "line": 8,
           "column": 15
         }
       }
@@ -890,15 +960,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 108,
-      "end": 109,
+      "start": 145,
+      "end": 146,
       "loc": {
         "start": {
-          "line": 5,
+          "line": 8,
           "column": 16
         },
         "end": {
-          "line": 5,
+          "line": 8,
           "column": 17
         }
       }
@@ -915,15 +985,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 115,
-      "end": 116,
+      "start": 152,
+      "end": 153,
       "loc": {
         "start": {
-          "line": 7,
+          "line": 10,
           "column": 2
         },
         "end": {
-          "line": 7,
+          "line": 10,
           "column": 3
         }
       }
@@ -931,15 +1001,15 @@
     {
       "type": "CommentBlock",
       "value": "*\r\n    * Renders musical data as a score.\r\n    * @param {string} targetElement - selector for the element which will hold score data.\r\n    * @param {MelodyUnit} melodyUnit - MelodyUnit which has all of the melody data.\r\n    ",
-      "start": 124,
-      "end": 352,
+      "start": 161,
+      "end": 389,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 12,
           "column": 4
         },
         "end": {
-          "line": 13,
+          "line": 16,
           "column": 6
         }
       }
@@ -957,15 +1027,15 @@
         "binop": null
       },
       "value": "writeScore",
-      "start": 356,
-      "end": 366,
+      "start": 393,
+      "end": 403,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 17,
           "column": 2
         },
         "end": {
-          "line": 14,
+          "line": 17,
           "column": 12
         }
       }
@@ -982,15 +1052,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 366,
-      "end": 367,
+      "start": 403,
+      "end": 404,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 17,
           "column": 12
         },
         "end": {
-          "line": 14,
+          "line": 17,
           "column": 13
         }
       }
@@ -1008,15 +1078,15 @@
         "binop": null
       },
       "value": "targetElement",
-      "start": 367,
-      "end": 380,
+      "start": 404,
+      "end": 417,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 17,
           "column": 13
         },
         "end": {
-          "line": 14,
+          "line": 17,
           "column": 26
         }
       }
@@ -1034,15 +1104,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 380,
-      "end": 381,
+      "start": 417,
+      "end": 418,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 17,
           "column": 26
         },
         "end": {
-          "line": 14,
+          "line": 17,
           "column": 27
         }
       }
@@ -1060,15 +1130,15 @@
         "binop": null
       },
       "value": "melodyUnit",
-      "start": 382,
-      "end": 392,
+      "start": 419,
+      "end": 429,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 17,
           "column": 28
         },
         "end": {
-          "line": 14,
+          "line": 17,
           "column": 38
         }
       }
@@ -1085,15 +1155,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 392,
-      "end": 393,
+      "start": 429,
+      "end": 430,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 17,
           "column": 38
         },
         "end": {
-          "line": 14,
+          "line": 17,
           "column": 39
         }
       }
@@ -1110,15 +1180,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 394,
-      "end": 395,
+      "start": 431,
+      "end": 432,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 17,
           "column": 40
         },
         "end": {
-          "line": 14,
+          "line": 17,
           "column": 41
         }
       }
@@ -1126,15 +1196,15 @@
     {
       "type": "CommentLine",
       "value": "",
-      "start": 401,
-      "end": 403,
+      "start": 438,
+      "end": 440,
       "loc": {
         "start": {
-          "line": 15,
+          "line": 18,
           "column": 4
         },
         "end": {
-          "line": 15,
+          "line": 18,
           "column": 6
         }
       }
@@ -1151,15 +1221,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 407,
-      "end": 408,
+      "start": 444,
+      "end": 445,
       "loc": {
         "start": {
-          "line": 16,
+          "line": 19,
           "column": 2
         },
         "end": {
-          "line": 16,
+          "line": 19,
           "column": 3
         }
       }
@@ -1176,15 +1246,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 410,
-      "end": 411,
+      "start": 447,
+      "end": 448,
       "loc": {
         "start": {
-          "line": 17,
+          "line": 20,
           "column": 0
         },
         "end": {
-          "line": 17,
+          "line": 20,
           "column": 1
         }
       }
@@ -1204,15 +1274,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 415,
-      "end": 421,
+      "start": 452,
+      "end": 458,
       "loc": {
         "start": {
-          "line": 19,
+          "line": 22,
           "column": 0
         },
         "end": {
-          "line": 19,
+          "line": 22,
           "column": 6
         }
       }
@@ -1229,15 +1299,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 422,
-      "end": 423,
+      "start": 459,
+      "end": 460,
       "loc": {
         "start": {
-          "line": 19,
+          "line": 22,
           "column": 7
         },
         "end": {
-          "line": 19,
+          "line": 22,
           "column": 8
         }
       }
@@ -1255,15 +1325,15 @@
         "binop": null
       },
       "value": "ScoreWriter",
-      "start": 424,
-      "end": 435,
+      "start": 461,
+      "end": 472,
       "loc": {
         "start": {
-          "line": 19,
+          "line": 22,
           "column": 9
         },
         "end": {
-          "line": 19,
+          "line": 22,
           "column": 20
         }
       }
@@ -1280,15 +1350,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 436,
-      "end": 437,
+      "start": 473,
+      "end": 474,
       "loc": {
         "start": {
-          "line": 19,
+          "line": 22,
           "column": 21
         },
         "end": {
-          "line": 19,
+          "line": 22,
           "column": 22
         }
       }
@@ -1306,15 +1376,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 437,
-      "end": 438,
+      "start": 474,
+      "end": 475,
       "loc": {
         "start": {
-          "line": 19,
+          "line": 22,
           "column": 22
         },
         "end": {
-          "line": 19,
+          "line": 22,
           "column": 23
         }
       }
@@ -1332,15 +1402,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 440,
-      "end": 440,
+      "start": 477,
+      "end": 477,
       "loc": {
         "start": {
-          "line": 20,
+          "line": 23,
           "column": 0
         },
         "end": {
-          "line": 20,
+          "line": 23,
           "column": 0
         }
       }

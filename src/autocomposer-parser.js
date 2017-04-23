@@ -6,6 +6,9 @@ var note = require('tonal-note');
  * Also handles conversions between proper accidental signs and ASCII accidentals like "b" or "#".
  */
 class AutoComposerParser {
+  /**
+  * Plain constructor.
+  */
   constructor() {
       //
   }

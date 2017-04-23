@@ -43,7 +43,10 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/chord-unit.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">var AcData = require(&apos;../src/autocomposer-data&apos;);
+var AutoComposerData = new AcData.AutoComposerData();
+
+/**
  * Represents some data built around a specific chord.
  * Has a reference to the next ChordUnit in the progression, and the chord tones that will be used in melody generation.
  */
@@ -65,20 +68,26 @@ class ChordUnit {
     /**
     * Recursive function that adds new notes to the previous notes passed into it.
     * @param {string[]} melodyList - list of existing melodies
+    * @param {boolean} enableFiltering - if true, generated melodies will be filtered.
     * @return {string[]} - a list of melodies. Each element is a string represeting a melody. Each melody string is written as a series of pitches delimited by a space.
     */
-  getMelodies(melodyList) {
+  getMelodies(melodyList, enableFiltering) {
     var returnList = [];
     var chordTones = this.chordTones;
-
-    //console.log(&quot;melodyList=&quot; + JSON.stringify(melodyList));
-    console.log(&quot;chord=&quot; + this.chord + &quot;, chordTones=&quot; + JSON.stringify(chordTones));
+    var newMelody;
 
     if(melodyList) {
       // We&apos;re somewhere along the middle of the chain.
       melodyList.forEach(function(currentMelody) {
         chordTones.forEach(function(currentChordTone) {
-          returnList.push(currentMelody + &quot; &quot; + currentChordTone);
+          newMelody = currentMelody + &quot; &quot; + currentChordTone;
+          if(enableFiltering) {
+            if(AutoComposerData.filterMelodyRange(newMelody)) {
+              returnList.push(newMelody);
+            }
+          } else {
+            returnList.push(newMelody);
+          }
         });
       });
     } else {
@@ -89,7 +98,7 @@ class ChordUnit {
 
     if(this.nextChordUnit) {
       // We&apos;re somewhere along the middle of the chain.
-      return this.nextChordUnit.getMelodies(returnList);
+      return this.nextChordUnit.getMelodies(returnList, enableFiltering);
     } else {
       // End of the chain.
       return returnList;

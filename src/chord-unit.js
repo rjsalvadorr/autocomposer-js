@@ -1,3 +1,6 @@
+var AcData = require('../src/autocomposer-data');
+var AutoComposerData = new AcData.AutoComposerData();
+
 /**
  * Represents some data built around a specific chord.
  * Has a reference to the next ChordUnit in the progression, and the chord tones that will be used in melody generation.
@@ -20,20 +23,26 @@ class ChordUnit {
     /**
     * Recursive function that adds new notes to the previous notes passed into it.
     * @param {string[]} melodyList - list of existing melodies
+    * @param {boolean} enableFiltering - if true, generated melodies will be filtered.
     * @return {string[]} - a list of melodies. Each element is a string represeting a melody. Each melody string is written as a series of pitches delimited by a space.
     */
-  getMelodies(melodyList) {
+  getMelodies(melodyList, enableFiltering) {
     var returnList = [];
     var chordTones = this.chordTones;
-
-    //console.log("melodyList=" + JSON.stringify(melodyList));
-    console.log("chord=" + this.chord + ", chordTones=" + JSON.stringify(chordTones));
+    var newMelody;
 
     if(melodyList) {
       // We're somewhere along the middle of the chain.
       melodyList.forEach(function(currentMelody) {
         chordTones.forEach(function(currentChordTone) {
-          returnList.push(currentMelody + " " + currentChordTone);
+          newMelody = currentMelody + " " + currentChordTone;
+          if(enableFiltering) {
+            if(AutoComposerData.filterMelodyRange(newMelody)) {
+              returnList.push(newMelody);
+            }
+          } else {
+            returnList.push(newMelody);
+          }
         });
       });
     } else {
@@ -44,7 +53,7 @@ class ChordUnit {
 
     if(this.nextChordUnit) {
       // We're somewhere along the middle of the chain.
-      return this.nextChordUnit.getMelodies(returnList);
+      return this.nextChordUnit.getMelodies(returnList, enableFiltering);
     } else {
       // End of the chain.
       return returnList;

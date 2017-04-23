@@ -2,6 +2,9 @@
  * Class responsible for rendering musical data as a score.
  */
 class ScoreWriter {
+  /**
+  * Plain constructor.
+  */
   constructor() {
 
   }

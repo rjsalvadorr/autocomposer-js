@@ -106,6 +106,13 @@ describe(&apos;AutoComposerMelody&apos;, function() {
 
       assert.equal(melodyList.length, 252);
     });
+
+    it(&apos;should return less melodies if filters are on&apos;, function() {
+      var chordProgression = [&quot;Gm&quot;,&quot;Cm&quot;,&quot;D&quot;];
+      var melodyList = AutoComposerMelody.getMelodies(chordProgression, true);
+
+      assert.equal(melodyList.length, 123);
+    });
   });
 });
 </code></pre>
