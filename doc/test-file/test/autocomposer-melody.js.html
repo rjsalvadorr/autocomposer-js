@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">test/autocomposer-melody.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <a data-ice="repoURL" href="https://github.com/rjsalvadorr/autocomposer-melody.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-data.js~AutoComposerData.html">AutoComposerData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-melody.js~AutoComposerMelody.html">AutoComposerMelody</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-parser.js~AutoComposerParser.html">AutoComposerParser</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/chord-unit.js~ChordUnit.html">ChordUnit</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/melody-unit.js~MelodyUnit.html">MelodyUnit</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/score-writer.js~ScoreWriter.html">ScoreWriter</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">test/autocomposer-melody.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">var assert = require(&apos;assert&apos;);
+const _ = require(&apos;underscore&apos;);
+
+var AcMelody = require(&apos;../src/autocomposer-melody&apos;);
+var AutoComposerMelody = new AcMelody.AutoComposerMelody();
+
+var TEST_CHORD_1 = &quot;Gm7&quot;;
+var TEST_CHORD_2 = &quot;Cm7&quot;;
+var TEST_CHORD_3 = &quot;D7&quot;;
+
+var TEST_LOWER_LIMIT_1 = &quot;Bb3&quot;;
+var TEST_UPPER_LIMIT_1 = &quot;G#4&quot;;
+
+var TEST_LOWER_LIMIT_2 = &quot;Ab4&quot;;
+var TEST_UPPER_LIMIT_2 = &quot;B5&quot;;
+
+describe(&apos;AutoComposerMelody&apos;, function() {
+  describe(&apos;#getAllChordTones&apos;, function() {
+    it(&apos;should return all chord tones in the range (inclusive)&apos;, function() {
+      expectedTones1 = [&quot;Bb3&quot;, &quot;D4&quot;, &quot;F4&quot;, &quot;G4&quot;];
+      //expectedTones2 = [&quot;Bb4&quot;, &quot;C5&quot;, &quot;Eb5&quot;, &quot;G5&quot;, &quot;Bb5&quot;];
+      expectedTones2 = [&quot;A4&quot;, &quot;C5&quot;, &quot;D5&quot;, &quot;F#5&quot;, &quot;A5&quot;],
+
+      resultTones1 = AutoComposerMelody.getAllChordTones(TEST_CHORD_1, TEST_LOWER_LIMIT_1, TEST_UPPER_LIMIT_1);
+      resultTones2 = AutoComposerMelody.getAllChordTones(TEST_CHORD_3, TEST_LOWER_LIMIT_2, TEST_UPPER_LIMIT_2);
+
+      assert.deepEqual(resultTones1, expectedTones1);
+      assert.deepEqual(resultTones2, expectedTones2);
+    });
+  });
+
+  describe(&apos;#buildChordUnitList&apos;, function() {
+    it(&apos;should return a list of ChordUnits for a given progression&apos;, function() {
+      var expChordUnit3 = {
+        chord: &quot;D7&quot;,
+        chordTones: [&quot;A4&quot;, &quot;C5&quot;, &quot;D5&quot;, &quot;F#5&quot;, &quot;A5&quot;],
+      };
+      var expChordUnit2 = {
+        chord: &quot;Cm7&quot;,
+        chordTones: [&quot;Bb4&quot;, &quot;C5&quot;, &quot;Eb5&quot;, &quot;G5&quot;, &quot;Bb5&quot;],
+      };
+      var expChordUnit1 = {
+        chord: &quot;Gm7&quot;,
+        chordTones: [&quot;Bb4&quot;, &quot;D5&quot;, &quot;F5&quot;, &quot;G5&quot;, &quot;Bb5&quot;],
+      };
+
+      var expectedArray = [expChordUnit1, expChordUnit2, expChordUnit3];
+      var chordProgression = [&quot;Gm7&quot;,&quot;Cm7&quot;,&quot;D7&quot;];
+      var chordUnitList = AutoComposerMelody.buildChordUnitList(chordProgression, TEST_LOWER_LIMIT_2, TEST_UPPER_LIMIT_2);
+
+      assert.deepEqual(chordUnitList[0].chordTones, expectedArray[0].chordTones);
+      assert.deepEqual(chordUnitList[1].chordTones, expectedArray[1].chordTones);
+      assert.deepEqual(chordUnitList[2].chordTones, expectedArray[2].chordTones);
+    });
+  });
+});
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.5.2)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

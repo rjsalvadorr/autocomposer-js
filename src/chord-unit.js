@@ -1,11 +1,17 @@
 /**
  * ChordUnit - represents some data built around a specific chord.
- * Has a reference to the next chord in the progression, and the chord tones that will be used in melody generation.
+ * Has a reference to the next ChordUnit in the progression, and the chord tones that will be used in melody generation.
  */
 class ChordUnit {
-  constructor(nextChord, chordTones) {
-    this.nextChord = nextChord;
+    /**
+    * @param {string} chord - chord symbol
+    * @param {string[]} chordTones - array of notes in the melody
+    * @param {string[]} nextChordUnit - array of chord symbols
+    */
+  constructor(chord, chordTones, nextChordUnit) {
+    this.chord = chord;
     this.chordTones = chordTones;
+    this.nextChordUnit = nextChordUnit;
   }
 
     /**
@@ -14,6 +20,13 @@ class ChordUnit {
     */
   getMelodies() {
     return [];
+  }
+
+    /**
+    * @param {ChordUnit} next - the next ChordUnit in the chain.
+    */
+  setNextChordUnit(next) {
+    this.nextChordUnit(next);
   }
 }
 

@@ -36,6 +36,96 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "",
+    "test-file/test/autocomposer-melody.js.html#lineNumber17",
+    "AutoComposerMelody",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-melody.js.html#lineNumber32",
+    "AutoComposerMelody #buildChordUnitList",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-melody.js.html#lineNumber33",
+    "AutoComposerMelody #buildChordUnitList should return a list of ChordUnits for a given progression",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-melody.js.html#lineNumber18",
+    "AutoComposerMelody #getAllChordTones",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-melody.js.html#lineNumber19",
+    "AutoComposerMelody #getAllChordTones should return all chord tones in the range (inclusive)",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-parser.js.html#lineNumber6",
+    "AutoComposerParser",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-parser.js.html#lineNumber38",
+    "AutoComposerParser #convertAccidentalsToAscii",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-parser.js.html#lineNumber39",
+    "AutoComposerParser #convertAccidentalsToAscii should convert Unicode accentals to ASCII versions",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-parser.js.html#lineNumber22",
+    "AutoComposerParser #convertAsciiAccidentalsToHtml",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-parser.js.html#lineNumber23",
+    "AutoComposerParser #convertAsciiAccidentalsToHtml should convert ASCII accidentals to Unicode HTML entities",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-parser.js.html#lineNumber30",
+    "AutoComposerParser #convertAsciiAccidentalsToText",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-parser.js.html#lineNumber31",
+    "AutoComposerParser #convertAsciiAccidentalsToText should convert ASCII accentals to Unicode versions",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-parser.js.html#lineNumber7",
+    "AutoComposerParser #isValidText",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-parser.js.html#lineNumber15",
+    "AutoComposerParser #isValidText should return false for non-chord inputs",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-parser.js.html#lineNumber8",
+    "AutoComposerParser #isValidText should return true for chord inputs",
+    "test"
+  ],
+  [
     "builtinexternal/ecmascriptexternal.js~array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
     "BuiltinExternal/ECMAScriptExternal.js~Array",
@@ -390,15 +480,15 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/autocomposer-melody.js~autocomposermelody#buildchordlist",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-buildChordList",
-    "src/autocomposer-melody.js~AutoComposerMelody#buildChordList",
-    "method"
-  ],
-  [
     "src/autocomposer-melody.js~autocomposermelody#buildchordunit",
     "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-buildChordUnit",
     "src/autocomposer-melody.js~AutoComposerMelody#buildChordUnit",
+    "method"
+  ],
+  [
+    "src/autocomposer-melody.js~autocomposermelody#buildchordunitlist",
+    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-buildChordUnitList",
+    "src/autocomposer-melody.js~AutoComposerMelody#buildChordUnitList",
     "method"
   ],
   [
@@ -468,6 +558,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/chord-unit.js~chordunit#chord",
+    "class/src/chord-unit.js~ChordUnit.html#instance-member-chord",
+    "src/chord-unit.js~ChordUnit#chord",
+    "member"
+  ],
+  [
     "src/chord-unit.js~chordunit#chordtones",
     "class/src/chord-unit.js~ChordUnit.html#instance-member-chordTones",
     "src/chord-unit.js~ChordUnit#chordTones",
@@ -486,10 +582,16 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/chord-unit.js~chordunit#nextchord",
-    "class/src/chord-unit.js~ChordUnit.html#instance-member-nextChord",
-    "src/chord-unit.js~ChordUnit#nextChord",
+    "src/chord-unit.js~chordunit#nextchordunit",
+    "class/src/chord-unit.js~ChordUnit.html#instance-member-nextChordUnit",
+    "src/chord-unit.js~ChordUnit#nextChordUnit",
     "member"
+  ],
+  [
+    "src/chord-unit.js~chordunit#setnextchordunit",
+    "class/src/chord-unit.js~ChordUnit.html#instance-method-setNextChordUnit",
+    "src/chord-unit.js~ChordUnit#setNextChordUnit",
+    "method"
   ],
   [
     "src/melody-unit.js",
@@ -510,9 +612,21 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/melody-unit.js~melodyunit#contour",
+    "class/src/melody-unit.js~MelodyUnit.html#instance-member-contour",
+    "src/melody-unit.js~MelodyUnit#contour",
+    "member"
+  ],
+  [
     "src/melody-unit.js~melodyunit#melodynotes",
     "class/src/melody-unit.js~MelodyUnit.html#instance-member-melodyNotes",
     "src/melody-unit.js~MelodyUnit#melodyNotes",
+    "member"
+  ],
+  [
+    "src/melody-unit.js~melodyunit#range",
+    "class/src/melody-unit.js~MelodyUnit.html#instance-member-range",
+    "src/melody-unit.js~MelodyUnit#range",
     "member"
   ],
   [
@@ -538,5 +652,17 @@ window.esdocSearchIndex = [
     "class/src/score-writer.js~ScoreWriter.html#instance-method-writeScore",
     "src/score-writer.js~ScoreWriter#writeScore",
     "method"
+  ],
+  [
+    "test/autocomposer-melody.js",
+    "test-file/test/autocomposer-melody.js.html",
+    "test/autocomposer-melody.js",
+    "testFile"
+  ],
+  [
+    "test/autocomposer-parser.js",
+    "test-file/test/autocomposer-parser.js.html",
+    "test/autocomposer-parser.js",
+    "testFile"
   ]
 ]

@@ -1,4 +1,5 @@
-
+var chord = require('tonal-chord');
+var note = require('tonal-note');
 
 /**
  * AutoComposerParser - determines if user input represents a valid note/chord.
@@ -14,7 +15,10 @@ class AutoComposerParser {
     * @return {boolean} - a true value means the string can be used by the rest of the program.
     */
   isValidText(input) {
-    return false;
+    var isChord = chord.isKnownChord(input) ? true : false;
+    var isNote = note.name(input) ? true : false;
+
+    return isChord || isNote;
   }
 
     /**

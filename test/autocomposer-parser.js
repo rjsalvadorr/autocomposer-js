@@ -8,6 +8,7 @@ describe('AutoComposerParser', function() {
     it('should return true for chord inputs', function() {
       assert.equal(AutoComposerParser.isValidText('Gm7'), true);
       assert.equal(AutoComposerParser.isValidText('C'), true);
+      assert.equal(AutoComposerParser.isValidText('D7'), true);
       assert.equal(AutoComposerParser.isValidText('A#m7b5'), true);
     });
 

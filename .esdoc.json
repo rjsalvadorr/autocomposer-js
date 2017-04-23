@@ -4,6 +4,7 @@
   "plugins": [{"name": "esdoc-node"}],
   "test": {
     "type": "mocha",
-    "source": "./test"
+    "source": "./test",
+    "includes": ["(spec|Spec|test|Test)\\.(js|es6)$", ".*.js"]
   }
 }

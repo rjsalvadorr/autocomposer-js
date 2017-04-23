@@ -43,7 +43,8 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/autocomposer-parser.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">var chord = require(&apos;tonal-chord&apos;);
+var note = require(&apos;tonal-note&apos;);
 
 /**
  * AutoComposerParser - determines if user input represents a valid note/chord.
@@ -59,7 +60,10 @@ class AutoComposerParser {
     * @return {boolean} - a true value means the string can be used by the rest of the program.
     */
   isValidText(input) {
-    return false;
+    var isChord = chord.isKnownChord(input) ? true : false;
+    var isNote = note.name(input) ? true : false;
+
+    return isChord || isNote;
   }
 
     /**
@@ -68,7 +72,11 @@ class AutoComposerParser {
     * @return {string} - text with Unicode accidentals in HTML
     */
   convertAsciiAccidentalsToHtml(input) {
-    return &quot;not implemented yet&quot;;
+    var out = input.replace(/([A-G0-9])b/g, &apos;$1&amp;#9837;&apos;);
+    out = out.replace(/([A-G0-9])#/g, &apos;$1&amp;#9839;&apos;);
+    out = out.replace(/([A-G0-9])o/g, &apos;$1&amp;&#x200C;deg;&apos;);
+
+    return out;
   }
 
     /**
@@ -77,7 +85,11 @@ class AutoComposerParser {
     * @return {string} - text with Unicode accidentals
     */
   convertAsciiAccidentalsToText(input) {
-    return &quot;not implemented yet&quot;;
+    var out = input.replace(/([A-G0-9])b/g, &apos;$1&#x266D;&apos;);
+    out = out.replace(/([A-G0-9])#/g, &apos;$1&#x266F;&apos;);
+    out = out.replace(/([A-G0-9])o/g, &apos;$1&#xB0;&apos;);
+
+    return out;
   }
 
     /**
@@ -86,7 +98,11 @@ class AutoComposerParser {
     * @return {string} - text with ASCII accidentals
     */
   convertAccidentalsToAscii(input) {
-    return &quot;not implemented yet&quot;;
+    var out = input.replace(/([A-G0-9])&#x266D;/g, &apos;$1b&apos;);
+    out = out.replace(/([A-G0-9])&#x266F;/g, &apos;$1#&apos;);
+    out = out.replace(/([A-G0-9])&#xB0;/g, &apos;$1o&apos;);
+
+    return out;
   }
 }
 
