@@ -63,7 +63,16 @@ class HelpPanel extends React.Component {
       return (
         &lt;div id=&quot;help-panel&quot; className=&quot;autocomposer-panel&quot;&gt;
           &lt;h2&gt;Help!&lt;/h2&gt;
-          &lt;p&gt;Help text will go here eventually...&lt;/p&gt;
+          &lt;p&gt;
+            Useful text will go here eventually...
+          &lt;/p&gt;
+          &lt;h2&gt;Technical Info&lt;/h2&gt;
+          &lt;p&gt;
+            Default range is Bb3 to B5. Melodies are filtered by a few rules:
+            &lt;ul&gt;
+              &lt;li&gt;Range must be no greater than one octave&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/p&gt;
         &lt;/div&gt;
       );
     } else {
@@ -75,12 +84,53 @@ class HelpPanel extends React.Component {
 
 
 class OutputPanel extends React.Component {
+  createMelodyRows() {
+    var melodyUnitList = this.props.melodyUnitList;
+    var melodyRows = [];
+
+    console.debug(&apos;[OutputPanel.createMelodyRows()] creating rows...&apos;);
+
+    for(var i = 0; i &lt; melodyUnitList.length; i++) {
+      melodyRows.push(
+        &lt;tr key={&quot;melody&quot; + i} className=&quot;ac-melody-row&quot;&gt;
+          &lt;td&gt;{JSON.stringify(melodyUnitList[i].melodyNotes)}&lt;/td&gt;
+          &lt;td&gt;{melodyUnitList[i].smoothness}&lt;/td&gt;
+          &lt;td&gt;{melodyUnitList[i].range}&lt;/td&gt;
+          &lt;td&gt;{melodyUnitList[i].contour}&lt;/td&gt;
+        &lt;/tr&gt;
+      );
+    }
+
+    return melodyRows;
+  }
+
+  createMelodyTable() {
+
+    console.debug(&apos;[OutputPanel.createMelodyTable()] creating table...&apos;);
+
+    return(
+      &lt;table id=&quot;ac-melody-output&quot;&gt;
+        &lt;thead&gt;
+          &lt;tr&gt;
+            &lt;th&gt;Melody&lt;/th&gt;
+            &lt;th&gt;Smoothness&lt;/th&gt;
+            &lt;th&gt;Range&lt;/th&gt;
+            &lt;th&gt;Contour&lt;/th&gt;
+          &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+          {this.createMelodyRows()}
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    );
+  }
+
   render() {
     if(!this.props.isHidden) {
       return (
         &lt;div id=&quot;output-panel&quot; className=&quot;autocomposer-panel&quot;&gt;
           &lt;h2&gt;Melodies!&lt;/h2&gt;
-          &lt;p&gt;Melodies will go here eventually...&lt;/p&gt;
+          {this.createMelodyTable()}
         &lt;/div&gt;
       );
     } else {
@@ -325,10 +375,10 @@ class AutoComposer extends React.Component {
     this.state = {
       hideHelp: true,
       hideControls: true,
-      hideOutput: false,
-      debugMode: true,
+      hideOutput: true,
+      debugMode: false,
       chordProgressionRaw: AcData.INITIAL_PROGRESSION,
-      melodiesRaw: []
+      melodyUnitList: []
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -362,7 +412,7 @@ class AutoComposer extends React.Component {
 
   generateMelodies(event) {
       var chordProgression = this.state.chordProgressionRaw.split(&quot; &quot;);
-      this.setState({melodiesRaw: AcMelody.getMelodies(chordProgression)});
+      this.setState({hideOutput: false, melodyUnitList: AcMelody.getMelodies(chordProgression)});
   }
 
   render() {
@@ -371,13 +421,13 @@ class AutoComposer extends React.Component {
         &lt;h2&gt;Chord Progression&lt;/h2&gt;
         &lt;RjTextArea inputKey=&quot;chordProgressionRaw&quot; value={this.state.chordProgressionRaw} onChange={this.handleChange} /&gt;
 
-        &lt;RjToggleButton inputKey=&quot;hideHelp&quot; inputLabel=&quot;Help Panel&quot; initialState={this.state.hideHelp} onClickHandler={this.handleChange} /&gt;
-        &lt;RjToggleButton inputKey=&quot;hideControls&quot; inputLabel=&quot;Control Panel&quot; initialState={this.state.hideControls} onClickHandler={this.handleChange} /&gt;
-        &lt;RjButton inputKey=&quot;generateMelodies&quot; inputLabel=&quot;Generate Melodies!&quot; onClick={this.generateMelodies} /&gt;
+        &lt;RjToggleButton inputKey=&quot;hideHelp&quot; inputLabel=&quot;Help/Info&quot; initialState={this.state.hideHelp} onClickHandler={this.handleChange} /&gt;
+        &lt;RjToggleButton inputKey=&quot;hideControls&quot; inputLabel=&quot;Settings&quot; initialState={this.state.hideControls} onClickHandler={this.handleChange} /&gt;
+        &lt;RjButton inputKey=&quot;generateMelodies&quot; inputLabel=&quot;Generate Melodies&quot; onClick={this.generateMelodies} /&gt;
 
         &lt;ControlPanel isHidden={this.state.hideControls} /&gt;
         &lt;HelpPanel isHidden={this.state.hideHelp} /&gt;
-        &lt;OutputPanel isHidden={this.state.hideOutput} /&gt;
+        &lt;OutputPanel isHidden={this.state.hideOutput} melodyUnitList={this.state.melodyUnitList} /&gt;
 
         &lt;DebugPanel isHidden={!this.state.debugMode} debugData={JSON.stringify(this.state, null, 2)}/&gt;
       &lt;/div&gt;

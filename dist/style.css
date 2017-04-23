@@ -21,4 +21,24 @@ body {
 }
 .ac-input.textarea {
   resize: none;
+  font-size: 2em;
+  padding: 1vw;
+}
+table#ac-melody-output {
+  width: 100%;
+  text-align: center;
+  border: 1px #000 solid;
+  border-collapse: collapse;
+}
+table#ac-melody-output thead {
+  background-color: #006;
+  color: #fff;
+}
+table#ac-melody-output th,
+table#ac-melody-output td {
+  border: 1px #000 solid;
+  padding: 0.75vw;
+}
+.ac-melody-row {
+  background-color: #eee;
 }
