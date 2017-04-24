@@ -115,10 +115,11 @@ class AutoComposerMelody {
       }
 
       if(options.limit) {
-        rawMelodies.splice(options.limit);
+        melodyUnits.splice(options.limit);
       }
     }
 
+    console.log("[AutoComposerMelody.buildMelodyUnitList()] Returning list of " + melodyUnits.length + " melodies");
     return melodyUnits;
   }
 
@@ -194,10 +195,12 @@ class AutoComposerMelody {
     }
 
     if(chordUnit.nextChordUnit) {
-      // We're somewhere along the middle of the chain.
+      // We're somewhere before the end of the chain.
       return this.getMelodiesCore(chordUnit.nextChordUnit, returnList, options);
     } else {
       // End of the chain.
+      console.log("[AutoComposerMelody.getMelodiesCore()] Returning list of " + returnList.length + " melodies");
+      //console.log(JSON.stringify(returnList))
       return returnList;
     }
   }

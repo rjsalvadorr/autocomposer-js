@@ -1,5 +1,6 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+const React = require('react');
+const ReactDOM = require('react-dom');
+const _ = require('underscore');
 
 var AutoComposerData = require('./autocomposer-data');
 var AcData = new AutoComposerData.AutoComposerData();
@@ -16,40 +17,63 @@ function AcInputException(message) {
 }
 
 class HelpPanel extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      chordArray: AcData.getChordDictionary(true)
+    }
+  }
+
+  buildChordDictionary() {
+    var dictionaryItems = [];
+    var ctr = 1;
+
+    this.state.chordArray.forEach(function(chordString) {
+      dictionaryItems.push(<li key={"chordType" + ctr}>{chordString}</li>);
+      ctr++;
+    });
+
+    return(
+      <ul id="chord-dictionary">
+        {dictionaryItems}
+      </ul>
+    );
+  }
+
   render() {
     if(!this.props.isHidden) {
       return (
         <div id="help-panel" className="autocomposer-panel">
           <h2>Help!</h2>
-          <p>
-            How to use this web app:
-            <ol>
-              <li>Enter a chord progression in the text box.</li>
-              <li>Click the "Generate Melodies" button</li>
-              <li>Squeal in delight, as the promised melodies are shown on the screen.</li>
-            </ol>
+          <p>How to use this web app:</p>
+          <ol>
+            <li>Enter a chord progression in the text box.</li>
+            <li>Click the "Generate Melodies" button</li>
+            <li>Squeal in delight, as the promised melodies are shown on the screen.</li>
+          </ol>
 
-            Other pointers:
-            <ul>
-              <li>You can toggle the Help/Settings panel from the buttons to the right</li>
-            </ul>
+          <p>Other pointers:</p>
+          <ul>
+            <li>You can toggle the Help/Settings panel from the buttons to the right</li>
+          </ul>
 
-            To-Do:
-            <ul>
-              <li>Update this page with the complete chord dictionary, so users will know what kind of input is valid.</li>
-            </ul>
-          </p>
+          <h2>Chord Dictionary</h2>
+          <p>These are the chords you can use for this application:</p>
+          {this.buildChordDictionary()}
+
           <h2>Technical Info</h2>
-          <p>
-            Default range is Bb3 to B5. Smoothness = total distance between the notes in the melody (in semitones). Range = distance between lowest note and highest note (in semitones).
-            <br/>
-            Melodies are filtered/sorted by a few rules:
-            <ul>
-              <li>Range must be no greater than one octave</li>
-              <li>Smoothest melodies are shown first</li>
-              <li>Only the 100 smoothest melodies are shown</li>
-            </ul>
-          </p>
+          <ul>
+            <li>Default range is Bb3 to B5</li>
+            <li>Smoothness = the distance between notes in the melody (in semitones), all added together</li>
+            <li>Range = distance between the lowest note and the highest note (in semitones)</li>
+          </ul>
+
+          <p>Melodies are filtered/sorted by a few rules:</p>
+          <ul>
+            <li>Range must be no greater than one octave</li>
+            <li>Smoothest melodies are shown first</li>
+            <li>Only the 100 smoothest melodies are shown</li>
+          </ul>
         </div>
       );
     } else {
@@ -63,20 +87,31 @@ class HelpPanel extends React.Component {
 class OutputPanel extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      melodyUnitList: null
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    var melodiesExist = this.props.melodyUnitList[0] ? true : false;
-
-    if(melodiesExist && this.props.melodyUnitList[0].chordProgression === nextProps.melodyUnitList[0].chordProgression) {
-      return false;
-    } else {
+    if(nextProps.allowMelodyGeneration) {
+      console.debug("[OutputPanel.shouldComponentUpdate()] Component is updating...");
       return true;
+    } else {
+      return false;
+    }
+  }
+
+  componentWillReceiveProps(nextProps, nextState){
+    if(nextProps.allowMelodyGeneration) {
+      console.debug("[OutputPanel.componentWillReceiveProps()] Generating melodies...");
+      var chordProgression = this.props.chordProgression;
+      this.setState({melodyUnitList: AcMelody.getMelodies(chordProgression)});
     }
   }
 
   componentDidUpdate() {
     window.VexTabDiv.Div.start();
+    this.props.outputCallback();
   }
 
   createVexTab(arrChords, arrMelody) {
@@ -111,7 +146,7 @@ class OutputPanel extends React.Component {
   }
 
   createMelodyRows() {
-    var melodyUnitList = this.props.melodyUnitList;
+    var melodyUnitList = this.state.melodyUnitList;
     var melodyRows = [];
 
     for(var i = 0; i < melodyUnitList.length; i++) {
@@ -188,8 +223,11 @@ class DebugPanel extends React.Component {
 
 class RjButton extends React.Component {
   render() {
+    // This can have a status, passed in from the parent Component
+    var buttonClass = this.props.isActive ? "ac-input button active" : "ac-input button";
+
     return (
-      <input type="button" className="ac-input button" id={this.props.inputKey} value={this.props.inputLabel} onClick={this.props.onClick} />
+      <input type="button" className="ac-input button" id={this.props.inputKey} value={this.props.inputLabel} onClick={this.props.onClick} disabled={this.props.disabled}/>
     );
   }
 }
@@ -200,18 +238,19 @@ class RjToggleButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentState: props.initialState === "true"
+      isActive: props.initialState === "true"
     };
   }
 
   handleClick(e) {
-    this.setState({currentState: !this.state.currentState});
+    this.setState({isActive: !this.state.isActive});
     this.props.onClickHandler(e);
   }
 
   render() {
+    var buttonClass = this.state.isActive ? "ac-input button active" : "ac-input button";
     return (
-      <input type="button" className="ac-input button" id={this.props.inputKey} value={this.props.inputLabel} data-state-key={this.props.inputKey} data-current-state={this.state.currentState} onClick={(e) => this.handleClick(e)} />
+      <input type="button" className="ac-input button" id={this.props.inputKey} value={this.props.inputLabel} data-state-key={this.props.inputKey} data-current-state={this.state.isActive} onClick={(e) => this.handleClick(e)} disabled={this.props.disabled}/>
     );
   }
 }
@@ -421,15 +460,24 @@ class AutoComposer extends React.Component {
       hideControls: true,
       hideOutput: true,
       hideError: true,
+
       debugMode: false,
+      controlsDisabled: true, // While this is a mess, no need to show it.
+
       chordProgressionRaw: "",
+      chordProgressionChanged: false,
       chordProgressionPlaceholder: AcData.INITIAL_PROGRESSION,
-      melodyUnitList: [],
+
       errorMessage: "",
+
+      // This becomes true whenever we have a chord progression change, and the correct button is clicked.
+      // Returns to false after output finishes rendering
+      allowMelodyGeneration: ""
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.generateMelodies = this.generateMelodies.bind(this);
+    this.outputFinishCallback = this.outputFinishCallback.bind(this);
   }
 
   handleChange(event) {
@@ -440,13 +488,18 @@ class AutoComposer extends React.Component {
 
       if(this.target.type === "checkbox") {
         returnObj[stateKey] = this.target.checked;
-        debugMessage = '[handleChange] stateKey=' + stateKey + ', this.target.value=' + this.target.value;
+        debugMessage = '[handleChange()] stateKey=' + stateKey + ', this.target.value=' + this.target.value;
       } else if(this.target.type === "button") {
         returnObj[stateKey] = this.target.dataset["currentState"] === "true";
-        debugMessage = '[handleChange] stateKey=' + stateKey + ', this.target.dataset[\'currentState\']' + this.target.dataset["currentState"];
+        debugMessage = '[handleChange()] stateKey=' + stateKey + ', this.target.dataset[\'currentState\']' + this.target.dataset["currentState"];
       } else {
         returnObj[stateKey] = this.target.value;
-        debugMessage = '[handleChange] stateKey=' + stateKey + ', this.target.value=' + this.target.value;
+
+        if(stateKey === "chordProgressionRaw") {
+          returnObj["chordProgressionChanged"] = true;
+        }
+
+        debugMessage = '[handleChange()] stateKey=' + stateKey + ', this.target.value=' + this.target.value;
       }
 
       console.debug(debugMessage);
@@ -458,11 +511,21 @@ class AutoComposer extends React.Component {
   }
 
   generateMelodies(event) {
-      var chordProgression = this.state.chordProgressionRaw.trim().split(" ");
+    var chordProgression = this.state.chordProgressionRaw.trim().split(" ");
 
-      try {
+    if(!this.state.chordProgressionChanged) {
+      // Chord progression hasn't changed. No need to continue.
+      console.debug("[AutoComposer.generateMelodies()] Chord progression hasn't changed. No generation for you.");
+      return;
+    }
+
+    try {
       if(this.state.chordProgressionRaw == null || this.state.chordProgressionRaw == "") {
         throw new AcInputException('Chord input appears to be empty!');
+      }
+
+      if(chordProgression.length < 2) {
+        throw new AcInputException('You need to enter more chords. Two chords in a row is a completely valid input.');
       }
 
       chordProgression.forEach(function(currentChordInput) {
@@ -471,14 +534,23 @@ class AutoComposer extends React.Component {
         }
       });
 
-      this.setState({hideError: true, hideOutput: false, melodyUnitList: AcMelody.getMelodies(chordProgression)});
+      this.setState({hideError: true, hideOutput: false, allowMelodyGeneration: true});
     } catch(exc) {
       var errorMsg = exc.message + " Error Type: [" + exc.name + "]";
       this.setState({hideError: false, errorMessage: errorMsg});
     }
   }
 
+  outputFinishCallback() {
+    // Callback that runs when output panel is finished rendering.
+    // Prevents melody generation until the user enters a new progression.
+    console.debug("[AutoComposer.outputFinishCallback()] done!");
+    this.setState({allowMelodyGeneration: false, chordProgressionChanged: false});
+  }
+
   render() {
+    var chordProgressionArray = this.state.chordProgressionRaw.split(" ");
+
     return (
       <div id="r-app-container" className="r-component">
         <h2>Chord Progression</h2>
@@ -490,7 +562,7 @@ class AutoComposer extends React.Component {
           </div>
           <div className="wrapper-buttons">
             <RjToggleButton inputKey="hideHelp" inputLabel="Help/Info" initialState={this.state.hideHelp} onClickHandler={this.handleChange} />
-            <RjToggleButton inputKey="hideControls" inputLabel="Settings" initialState={this.state.hideControls} onClickHandler={this.handleChange} />
+            <RjToggleButton inputKey="hideControls" inputLabel="Settings" initialState={this.state.hideControls} onClickHandler={this.handleChange} disabled={this.state.controlsDisabled} />
           </div>
         </div>
 
@@ -499,7 +571,7 @@ class AutoComposer extends React.Component {
         <ControlPanel isHidden={this.state.hideControls} />
         <HelpPanel isHidden={this.state.hideHelp} />
 
-        <OutputPanel isHidden={this.state.hideOutput} melodyUnitList={this.state.melodyUnitList} />
+        <OutputPanel isHidden={this.state.hideOutput} chordProgression={chordProgressionArray} allowMelodyGeneration={this.state.allowMelodyGeneration} outputCallback={this.outputFinishCallback}/>
 
         <DebugPanel isHidden={!this.state.debugMode} debugData={JSON.stringify(this.state, null, 2)}/>
       </div>

@@ -37,7 +37,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-parser.js~AutoComposerParser.html">AutoComposerParser</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/chord-unit.js~ChordUnit.html">ChordUnit</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/melody-unit.js~MelodyUnit.html">MelodyUnit</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/score-writer.js~ScoreWriter.html">ScoreWriter</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -148,20 +147,23 @@ class AutoComposerMelody {
     var melodyUnits = [];
     var haxThis = this;
 
-    if(options &amp;&amp; options.limit) {
-      rawMelodies.splice(options.limit);
-    }
-
     rawMelodies.forEach(function(rawMelody) {
       melodyUnits.push(haxThis.buildMelodyUnit(chordProgression, rawMelody));
     });
 
-    if(options &amp;&amp; options.sort) {
-      melodyUnits.sort(function(a, b) {
-        return a.smoothness - b.smoothness;
-      });
+    if(options) {
+      if(options.sort) {
+        melodyUnits.sort(function(a, b) {
+          return a.smoothness - b.smoothness;
+        });
+      }
+
+      if(options.limit) {
+        melodyUnits.splice(options.limit);
+      }
     }
 
+    console.log(&quot;[AutoComposerMelody.buildMelodyUnitList()] Returning list of &quot; + melodyUnits.length + &quot; melodies&quot;);
     return melodyUnits;
   }
 
@@ -237,10 +239,12 @@ class AutoComposerMelody {
     }
 
     if(chordUnit.nextChordUnit) {
-      // We&apos;re somewhere along the middle of the chain.
+      // We&apos;re somewhere before the end of the chain.
       return this.getMelodiesCore(chordUnit.nextChordUnit, returnList, options);
     } else {
       // End of the chain.
+      console.log(&quot;[AutoComposerMelody.getMelodiesCore()] Returning list of &quot; + returnList.length + &quot; melodies&quot;);
+      //console.log(JSON.stringify(returnList))
       return returnList;
     }
   }

@@ -1,12 +1,14 @@
 {
-  "coverage": "100%",
-  "expectCount": 30,
-  "actualCount": 30,
+  "coverage": "96.55%",
+  "expectCount": 29,
+  "actualCount": 28,
   "files": {
     "src/autocomposer-data.js": {
-      "expectCount": 3,
-      "actualCount": 3,
-      "undocumentLines": []
+      "expectCount": 5,
+      "actualCount": 4,
+      "undocumentLines": [
+        23
+      ]
     },
     "src/autocomposer-melody.js": {
       "expectCount": 5,
@@ -26,11 +28,6 @@
     "src/melody-unit.js": {
       "expectCount": 7,
       "actualCount": 7,
-      "undocumentLines": []
-    },
-    "src/score-writer.js": {
-      "expectCount": 3,
-      "actualCount": 3,
       "undocumentLines": []
     }
   }

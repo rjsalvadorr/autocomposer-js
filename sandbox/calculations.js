@@ -73,3 +73,4 @@ console.log("- 12 pentads: " + Math.floor(Math.pow(chordTonesPentads, 12)));
 console.log("\nNote that this doesn't account for simple filtering rules.");
 
 var debugMessage3 = '';
+debugMessage3 += 

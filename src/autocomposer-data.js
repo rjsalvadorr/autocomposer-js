@@ -1,4 +1,5 @@
-var range = require('tonal-range')
+var range = require('tonal-range');
+var chord = require('tonal-chord');
 
 /**
  * Encapsulates data and musical logic to be used by the application
@@ -23,9 +24,17 @@ class AutoComposerData {
   }
 
   /**
+  * Returns all the chord types available for use.
+  * @return {string[]} - chord types available for use
+  */
+  getChordDictionary() {
+    return chord.names();
+  }
+
+  /**
   * Filters out melodies that have a range larger than an octave.
-  * @param {string} melodyString - String representing the melody.
-  * @return {boolean} - Returns false if the melody has a range larger than one octave. Returns true otherwise.
+  * @param {string} melodyString - String representing the melody
+  * @return {boolean} - Returns false if the melody has a range larger than one octave. Returns true otherwise
   */
   filterMelodyRange(melodyString) {
     var totalRange = range.numeric(melodyString);

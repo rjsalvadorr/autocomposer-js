@@ -30,12 +30,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "autocomposer-melody/src/score-writer.js~scorewriter",
-    "class/src/score-writer.js~ScoreWriter.html",
-    "<span>ScoreWriter</span> <span class=\"search-result-import-path\">autocomposer-melody/src/score-writer.js</span>",
-    "class"
-  ],
-  [
     "",
     "test-file/test/autocomposer-data.js.html#lineNumber6",
     "AutoComposerData",
@@ -540,6 +534,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/autocomposer-data.js~autocomposerdata#chords_limit",
+    "class/src/autocomposer-data.js~AutoComposerData.html#instance-member-CHORDS_LIMIT",
+    "src/autocomposer-data.js~AutoComposerData#CHORDS_LIMIT",
+    "member"
+  ],
+  [
     "src/autocomposer-data.js~autocomposerdata#constructor",
     "class/src/autocomposer-data.js~AutoComposerData.html#instance-constructor-constructor",
     "src/autocomposer-data.js~AutoComposerData#constructor",
@@ -549,6 +549,12 @@ window.esdocSearchIndex = [
     "src/autocomposer-data.js~autocomposerdata#filtermelodyrange",
     "class/src/autocomposer-data.js~AutoComposerData.html#instance-method-filterMelodyRange",
     "src/autocomposer-data.js~AutoComposerData#filterMelodyRange",
+    "method"
+  ],
+  [
+    "src/autocomposer-data.js~autocomposerdata#getchorddictionary",
+    "class/src/autocomposer-data.js~AutoComposerData.html#instance-method-getChordDictionary",
+    "src/autocomposer-data.js~AutoComposerData#getChordDictionary",
     "method"
   ],
   [
@@ -694,24 +700,6 @@ window.esdocSearchIndex = [
     "class/src/melody-unit.js~MelodyUnit.html#instance-member-smoothness",
     "src/melody-unit.js~MelodyUnit#smoothness",
     "member"
-  ],
-  [
-    "src/score-writer.js",
-    "file/src/score-writer.js.html",
-    "src/score-writer.js",
-    "file"
-  ],
-  [
-    "src/score-writer.js~scorewriter#constructor",
-    "class/src/score-writer.js~ScoreWriter.html#instance-constructor-constructor",
-    "src/score-writer.js~ScoreWriter#constructor",
-    "method"
-  ],
-  [
-    "src/score-writer.js~scorewriter#writescore",
-    "class/src/score-writer.js~ScoreWriter.html#instance-method-writeScore",
-    "src/score-writer.js~ScoreWriter#writeScore",
-    "method"
   ],
   [
     "test/autocomposer-data.js",
