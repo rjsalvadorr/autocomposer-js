@@ -103,18 +103,20 @@ class AutoComposerMelody {
     var melodyUnits = [];
     var haxThis = this;
 
-    if(options && options.limit) {
-      rawMelodies.splice(options.limit);
-    }
-
     rawMelodies.forEach(function(rawMelody) {
       melodyUnits.push(haxThis.buildMelodyUnit(chordProgression, rawMelody));
     });
 
-    if(options && options.sort) {
-      melodyUnits.sort(function(a, b) {
-        return a.smoothness - b.smoothness;
-      });
+    if(options) {
+      if(options.sort) {
+        melodyUnits.sort(function(a, b) {
+          return a.smoothness - b.smoothness;
+        });
+      }
+
+      if(options.limit) {
+        rawMelodies.splice(options.limit);
+      }
     }
 
     return melodyUnits;

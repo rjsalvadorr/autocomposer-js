@@ -92,7 +92,6 @@ class OutputPanel extends React.Component {
       // VexTab notation sure is odd.
       pitchClass = melodyNote.slice(0, -1);
       pitchClass = pitchClass.replace("b", "@");
-      console.debug("pitchClass=" + pitchClass);
 
       vtString = pitchClass + "/"+ melodyNote.slice(-1) + " | ";
       vexTabText += vtString;
@@ -107,8 +106,6 @@ class OutputPanel extends React.Component {
     });
 
     vexTabText = vexTabText.slice(0, - 5);
-
-    console.debug(vexTabText);
 
     return vexTabText;
   }
@@ -476,7 +473,6 @@ class AutoComposer extends React.Component {
 
       this.setState({hideError: true, hideOutput: false, melodyUnitList: AcMelody.getMelodies(chordProgression)});
     } catch(exc) {
-      console.debug("exc=" + JSON.stringify(exc, 2));
       var errorMsg = exc.message + " Error Type: [" + exc.name + "]";
       this.setState({hideError: false, errorMessage: errorMsg});
     }

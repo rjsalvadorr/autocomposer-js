@@ -19,6 +19,7 @@ class AutoComposerData {
 
     this.INITIAL_PROGRESSION = "G Em C D",
     this.NUM_MELODIES_LIMIT = 100
+    this.CHORDS_LIMIT = 4;
   }
 
   /**
