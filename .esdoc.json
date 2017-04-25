@@ -1,6 +1,7 @@
 {
   "source": "./src",
   "destination": "./doc",
+  "access": ["public", "private", "protected"],
   "plugins": [{"name": "esdoc-node"}],
   "test": {
     "type": "mocha",

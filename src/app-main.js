@@ -63,7 +63,7 @@ class HelpPanel extends React.Component {
 
           <h2>Technical Info</h2>
           <ul>
-            <li>Default range is Bb3 to B5</li>
+            <li>Default range is Db4 to G#5</li>
             <li>Smoothness = the distance between notes in the melody (in semitones), all added together</li>
             <li>Range = distance between the lowest note and the highest note (in semitones)</li>
           </ul>
@@ -227,7 +227,7 @@ class RjButton extends React.Component {
     var buttonClass = this.props.isActive ? "ac-input button active" : "ac-input button";
 
     return (
-      <input type="button" className="ac-input button" id={this.props.inputKey} value={this.props.inputLabel} onClick={this.props.onClick} disabled={this.props.disabled}/>
+      <input type="button" className={buttonClass} id={this.props.inputKey} value={this.props.inputLabel} onClick={this.props.onClick} disabled={this.props.disabled}/>
     );
   }
 }
@@ -250,7 +250,7 @@ class RjToggleButton extends React.Component {
   render() {
     var buttonClass = this.state.isActive ? "ac-input button active" : "ac-input button";
     return (
-      <input type="button" className="ac-input button" id={this.props.inputKey} value={this.props.inputLabel} data-state-key={this.props.inputKey} data-current-state={this.state.isActive} onClick={(e) => this.handleClick(e)} disabled={this.props.disabled}/>
+      <input type="button" className={buttonClass} id={this.props.inputKey} value={this.props.inputLabel} data-state-key={this.props.inputKey} data-current-state={this.state.isActive} onClick={(e) => this.handleClick(e)} disabled={this.props.disabled}/>
     );
   }
 }
@@ -484,25 +484,18 @@ class AutoComposer extends React.Component {
     var stateObj = function() {
       var stateKey = this.target.dataset["stateKey"];
       var returnObj = {};
-      var debugMessage;
 
       if(this.target.type === "checkbox") {
         returnObj[stateKey] = this.target.checked;
-        debugMessage = '[handleChange()] stateKey=' + stateKey + ', this.target.value=' + this.target.value;
       } else if(this.target.type === "button") {
         returnObj[stateKey] = this.target.dataset["currentState"] === "true";
-        debugMessage = '[handleChange()] stateKey=' + stateKey + ', this.target.dataset[\'currentState\']' + this.target.dataset["currentState"];
       } else {
         returnObj[stateKey] = this.target.value;
 
         if(stateKey === "chordProgressionRaw") {
           returnObj["chordProgressionChanged"] = true;
         }
-
-        debugMessage = '[handleChange()] stateKey=' + stateKey + ', this.target.value=' + this.target.value;
       }
-
-      console.debug(debugMessage);
 
       return returnObj;
     }.bind(event)();
@@ -521,11 +514,7 @@ class AutoComposer extends React.Component {
 
     try {
       if(this.state.chordProgressionRaw == null || this.state.chordProgressionRaw == "") {
-        throw new AcInputException('Chord input appears to be empty!');
-      }
-
-      if(chordProgression.length < 2) {
-        throw new AcInputException('You need to enter more chords. Two chords in a row is a completely valid input.');
+        throw new AcInputException('Chord input is empty!');
       }
 
       chordProgression.forEach(function(currentChordInput) {
@@ -534,17 +523,20 @@ class AutoComposer extends React.Component {
         }
       });
 
+      if(chordProgression.length < 2) {
+        throw new AcInputException('You need to enter more chords. Two chords in a row is a completely valid input.');
+      }
+
       this.setState({hideError: true, hideOutput: false, allowMelodyGeneration: true});
     } catch(exc) {
-      var errorMsg = exc.message + " Error Type: [" + exc.name + "]";
-      this.setState({hideError: false, errorMessage: errorMsg});
+      console.warn("[AutoComposer.generateMelodies()] " + exc.message + "\nError Type = " + exc.name);
+      this.setState({hideError: false, errorMessage: exc.message});
     }
   }
 
   outputFinishCallback() {
     // Callback that runs when output panel is finished rendering.
     // Prevents melody generation until the user enters a new progression.
-    console.debug("[AutoComposer.outputFinishCallback()] done!");
     this.setState({allowMelodyGeneration: false, chordProgressionChanged: false});
   }
 
@@ -553,13 +545,13 @@ class AutoComposer extends React.Component {
 
     return (
       <div id="r-app-container" className="r-component">
-        <h2>Chord Progression</h2>
 
         <div id="wrapper-main-input">
           <div className="wrapper-textarea">
             <RjTextArea inputKey="chordProgressionRaw" value={this.state.chordProgressionRaw} placeholder={this.state.chordProgressionPlaceholder} onChange={this.handleChange} />
             <RjButton inputKey="generateMelodies" inputLabel="Generate Melodies" onClick={this.generateMelodies} />
           </div>
+
           <div className="wrapper-buttons">
             <RjToggleButton inputKey="hideHelp" inputLabel="Help/Info" initialState={this.state.hideHelp} onClickHandler={this.handleChange} />
             <RjToggleButton inputKey="hideControls" inputLabel="Settings" initialState={this.state.hideControls} onClickHandler={this.handleChange} disabled={this.state.controlsDisabled} />

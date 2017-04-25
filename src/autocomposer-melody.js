@@ -16,11 +16,11 @@ class AutoComposerMelody {
   */
   constructor(chordProgression, lowerLimit, upperLimit) {
     /** @type {string[]} */
-    this.chordProgression = chordProgression || AcData.INITIAL_PROGRESSION,
+    this.chordProgression = chordProgression || AcData.INITIAL_PROGRESSION;
     /** @type {string} */
-    this.lowerLimit = lowerLimit || AcData.DEFAULT_LOWER_LIMIT,
+    this.lowerLimit = lowerLimit || AcData.DEFAULT_LOWER_LIMIT;
     /** @type {string} */
-    this.upperLimit = upperLimit || AcData.DEFAULT_UPPER_LIMIT
+    this.upperLimit = upperLimit || AcData.DEFAULT_UPPER_LIMIT;
   }
 
     /**
@@ -185,7 +185,6 @@ class AutoComposerMelody {
           } else {
             returnList.push(newMelody);
           }
-
         });
       });
     } else {
@@ -200,7 +199,6 @@ class AutoComposerMelody {
     } else {
       // End of the chain.
       console.log("[AutoComposerMelody.getMelodiesCore()] Returning list of " + returnList.length + " melodies");
-      //console.log(JSON.stringify(returnList))
       return returnList;
     }
   }

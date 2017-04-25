@@ -45,9 +45,8 @@ class CalculationExploration {
 };
 
 var calc = new CalculationExploration();
-
 console.log("===== Music Calculation Exploration =====");
-console.log("Range is from Bb3 to B5\n\nAverage chord tones for");
+console.log("Range is from Db4 to G#5\n\nAverage chord tones for");
 console.log("- major triads: " + calc.getAverageChordTonesInRange("M", AcData.DEFAULT_LOWER_LIMIT, AcData.DEFAULT_UPPER_LIMIT));
 console.log("- minor triads: " + calc.getAverageChordTonesInRange("m", AcData.DEFAULT_LOWER_LIMIT, AcData.DEFAULT_UPPER_LIMIT));
 console.log("- maj7 chords: " + calc.getAverageChordTonesInRange("maj7", AcData.DEFAULT_LOWER_LIMIT, AcData.DEFAULT_UPPER_LIMIT));
@@ -73,4 +72,3 @@ console.log("- 12 pentads: " + Math.floor(Math.pow(chordTonesPentads, 12)));
 console.log("\nNote that this doesn't account for simple filtering rules.");
 
 var debugMessage3 = '';
-debugMessage3 += 

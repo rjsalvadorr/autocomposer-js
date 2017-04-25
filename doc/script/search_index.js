@@ -121,7 +121,7 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber116",
+    "test-file/test/autocomposer-melody.js.html#lineNumber115",
     "AutoComposerMelody #getMelodies should return less melodies if filters are on",
     "test"
   ],
@@ -534,9 +534,63 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/autocomposer-data.js~autocomposerdata#accompaniment_lower_limit",
+    "class/src/autocomposer-data.js~AutoComposerData.html#instance-member-ACCOMPANIMENT_LOWER_LIMIT",
+    "src/autocomposer-data.js~AutoComposerData#ACCOMPANIMENT_LOWER_LIMIT",
+    "member"
+  ],
+  [
+    "src/autocomposer-data.js~autocomposerdata#accompaniment_upper_limit",
+    "class/src/autocomposer-data.js~AutoComposerData.html#instance-member-ACCOMPANIMENT_UPPER_LIMIT",
+    "src/autocomposer-data.js~AutoComposerData#ACCOMPANIMENT_UPPER_LIMIT",
+    "member"
+  ],
+  [
+    "src/autocomposer-data.js~autocomposerdata#bass_lower_limit",
+    "class/src/autocomposer-data.js~AutoComposerData.html#instance-member-BASS_LOWER_LIMIT",
+    "src/autocomposer-data.js~AutoComposerData#BASS_LOWER_LIMIT",
+    "member"
+  ],
+  [
+    "src/autocomposer-data.js~autocomposerdata#bass_upper_limit",
+    "class/src/autocomposer-data.js~AutoComposerData.html#instance-member-BASS_UPPER_LIMIT",
+    "src/autocomposer-data.js~AutoComposerData#BASS_UPPER_LIMIT",
+    "member"
+  ],
+  [
     "src/autocomposer-data.js~autocomposerdata#chords_limit",
     "class/src/autocomposer-data.js~AutoComposerData.html#instance-member-CHORDS_LIMIT",
     "src/autocomposer-data.js~AutoComposerData#CHORDS_LIMIT",
+    "member"
+  ],
+  [
+    "src/autocomposer-data.js~autocomposerdata#default_lower_limit",
+    "class/src/autocomposer-data.js~AutoComposerData.html#instance-member-DEFAULT_LOWER_LIMIT",
+    "src/autocomposer-data.js~AutoComposerData#DEFAULT_LOWER_LIMIT",
+    "member"
+  ],
+  [
+    "src/autocomposer-data.js~autocomposerdata#default_upper_limit",
+    "class/src/autocomposer-data.js~AutoComposerData.html#instance-member-DEFAULT_UPPER_LIMIT",
+    "src/autocomposer-data.js~AutoComposerData#DEFAULT_UPPER_LIMIT",
+    "member"
+  ],
+  [
+    "src/autocomposer-data.js~autocomposerdata#initial_progression",
+    "class/src/autocomposer-data.js~AutoComposerData.html#instance-member-INITIAL_PROGRESSION",
+    "src/autocomposer-data.js~AutoComposerData#INITIAL_PROGRESSION",
+    "member"
+  ],
+  [
+    "src/autocomposer-data.js~autocomposerdata#num_generations_limit",
+    "class/src/autocomposer-data.js~AutoComposerData.html#instance-member-NUM_GENERATIONS_LIMIT",
+    "src/autocomposer-data.js~AutoComposerData#NUM_GENERATIONS_LIMIT",
+    "member"
+  ],
+  [
+    "src/autocomposer-data.js~autocomposerdata#num_melodies_limit",
+    "class/src/autocomposer-data.js~AutoComposerData.html#instance-member-NUM_MELODIES_LIMIT",
+    "src/autocomposer-data.js~AutoComposerData#NUM_MELODIES_LIMIT",
     "member"
   ],
   [
@@ -564,9 +618,45 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/autocomposer-melody.js~autocomposermelody#buildchordunit",
+    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-buildChordUnit",
+    "src/autocomposer-melody.js~AutoComposerMelody#buildChordUnit",
+    "method"
+  ],
+  [
+    "src/autocomposer-melody.js~autocomposermelody#buildchordunitlist",
+    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-buildChordUnitList",
+    "src/autocomposer-melody.js~AutoComposerMelody#buildChordUnitList",
+    "method"
+  ],
+  [
+    "src/autocomposer-melody.js~autocomposermelody#buildmelodyunit",
+    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-buildMelodyUnit",
+    "src/autocomposer-melody.js~AutoComposerMelody#buildMelodyUnit",
+    "method"
+  ],
+  [
+    "src/autocomposer-melody.js~autocomposermelody#buildmelodyunitlist",
+    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-buildMelodyUnitList",
+    "src/autocomposer-melody.js~AutoComposerMelody#buildMelodyUnitList",
+    "method"
+  ],
+  [
+    "src/autocomposer-melody.js~autocomposermelody#chordprogression",
+    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-member-chordProgression",
+    "src/autocomposer-melody.js~AutoComposerMelody#chordProgression",
+    "member"
+  ],
+  [
     "src/autocomposer-melody.js~autocomposermelody#constructor",
     "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-constructor-constructor",
     "src/autocomposer-melody.js~AutoComposerMelody#constructor",
+    "method"
+  ],
+  [
+    "src/autocomposer-melody.js~autocomposermelody#getallchordtones",
+    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-getAllChordTones",
+    "src/autocomposer-melody.js~AutoComposerMelody#getAllChordTones",
     "method"
   ],
   [
@@ -576,9 +666,21 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/autocomposer-melody.js~autocomposermelody#getlowestnoteinrange",
+    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-getLowestNoteInRange",
+    "src/autocomposer-melody.js~AutoComposerMelody#getLowestNoteInRange",
+    "method"
+  ],
+  [
     "src/autocomposer-melody.js~autocomposermelody#getmelodies",
     "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-getMelodies",
     "src/autocomposer-melody.js~AutoComposerMelody#getMelodies",
+    "method"
+  ],
+  [
+    "src/autocomposer-melody.js~autocomposermelody#getmelodiescore",
+    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-getMelodiesCore",
+    "src/autocomposer-melody.js~AutoComposerMelody#getMelodiesCore",
     "method"
   ],
   [
@@ -586,6 +688,18 @@ window.esdocSearchIndex = [
     "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-getRawMelodies",
     "src/autocomposer-melody.js~AutoComposerMelody#getRawMelodies",
     "method"
+  ],
+  [
+    "src/autocomposer-melody.js~autocomposermelody#lowerlimit",
+    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-member-lowerLimit",
+    "src/autocomposer-melody.js~AutoComposerMelody#lowerLimit",
+    "member"
+  ],
+  [
+    "src/autocomposer-melody.js~autocomposermelody#upperlimit",
+    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-member-upperLimit",
+    "src/autocomposer-melody.js~AutoComposerMelody#upperLimit",
+    "member"
   ],
   [
     "src/autocomposer-parser.js",
@@ -682,6 +796,18 @@ window.esdocSearchIndex = [
     "class/src/melody-unit.js~MelodyUnit.html#instance-member-contour",
     "src/melody-unit.js~MelodyUnit#contour",
     "member"
+  ],
+  [
+    "src/melody-unit.js~melodyunit#getrange",
+    "class/src/melody-unit.js~MelodyUnit.html#instance-method-getRange",
+    "src/melody-unit.js~MelodyUnit#getRange",
+    "method"
+  ],
+  [
+    "src/melody-unit.js~melodyunit#getsmoothness",
+    "class/src/melody-unit.js~MelodyUnit.html#instance-method-getSmoothness",
+    "src/melody-unit.js~MelodyUnit#getSmoothness",
+    "method"
   ],
   [
     "src/melody-unit.js~melodyunit#melodynotes",

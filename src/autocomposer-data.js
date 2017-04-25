@@ -9,17 +9,18 @@ class AutoComposerData {
   * Plain constructor.
   */
   constructor() {
-    this.DEFAULT_LOWER_LIMIT = "Bb3",
-    this.DEFAULT_UPPER_LIMIT = "B5",
+    this.DEFAULT_LOWER_LIMIT = "Db4";
+    this.DEFAULT_UPPER_LIMIT = "G#5";
 
-    this.ACCOMPANIMENT_LOWER_LIMIT = "G2",
-    this.ACCOMPANIMENT_UPPER_LIMIT = "A3",
+    this.ACCOMPANIMENT_LOWER_LIMIT = "Gb2";
+    this.ACCOMPANIMENT_UPPER_LIMIT = "C#4";
 
-    this.BASS_LOWER_LIMIT = "E1",
-    this.BASS_UPPER_LIMIT = "F2",
+    this.BASS_LOWER_LIMIT = "E1";
+    this.BASS_UPPER_LIMIT = "F2";
 
-    this.INITIAL_PROGRESSION = "G Em C D",
-    this.NUM_MELODIES_LIMIT = 100
+    this.INITIAL_PROGRESSION = "enter chords like \"G Em C\"";
+    this.NUM_MELODIES_LIMIT = 100; // Number of melodies that the user sees.
+    this.NUM_GENERATIONS_LIMIT = 100000; // Number of melody generation attempts that the program will make.
     this.CHORDS_LIMIT = 4;
   }
 

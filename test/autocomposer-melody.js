@@ -109,15 +109,15 @@ describe('AutoComposerMelody', function() {
       var chordProgression = ["Gm","Cm","D"];
       var melodyList = AutoComposerMelody.getAllMelodies(chordProgression);
 
-      assert.equal(melodyList.length, 252);
       assert.equal(typeof melodyList[0] === 'string', false);
     });
 
     it('should return less melodies if filters are on', function() {
       var chordProgression = ["Gm","Cm","D"];
+      var melodyListAll = AutoComposerMelody.getAllMelodies(chordProgression);
       var melodyList = AutoComposerMelody.getMelodies(chordProgression);
 
-      assert.equal(melodyList.length, AcData.NUM_MELODIES_LIMIT);
+      assert(melodyListAll.length > melodyList.length, "Filtered melody list is smaller than an unfiltered list");
       assert.equal(typeof melodyList[0] === 'string', false);
     });
 

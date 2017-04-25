@@ -34,16 +34,31 @@
   border-radius: 8px;
   height: 75px;
   margin-bottom: 10px;
+  background-color: #bbb;
+  border-color: #888;
+  border-width: 0 3px 3px 0;
+}
+.ac-input.button:hover,
+.ac-input.button:active {
+  border-color: #363636;
+  background-color: #969696;
+}
+.ac-input.button.active {
+  color: #fff;
+  border-width: 4px 0 0 4px;
+  border-style: inset;
+  border-color: #363636;
+  background-color: #4b4b4b;
 }
 body {
   background-color: #eee;
   font-family: 'Helvetica', 'Arial', sans-serif;
 }
 .r-component {
-  padding: 15px;
+  padding: 15px 0;
 }
 .autocomposer-panel {
-  padding: 15px;
+  padding: 15px 0;
 }
 .ac-input.textarea {
   resize: none;
