@@ -159,7 +159,6 @@ class OutputPanel extends React.Component {
           </td>
           <td>{melodyUnitList[i].smoothness}</td>
           <td>{melodyUnitList[i].range}</td>
-          <td>{melodyUnitList[i].contour}</td>
         </tr>
       );
     }
@@ -176,7 +175,6 @@ class OutputPanel extends React.Component {
             <th>Melody</th>
             <th>Smoothness</th>
             <th>Range</th>
-            <th>Contour</th>
           </tr>
         </thead>
         <tbody>

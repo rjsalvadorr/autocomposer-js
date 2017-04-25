@@ -20,6 +20,14 @@ class CalculationExploration {
   quick estimate for the number of melodies as a chord progression gets longer.
   */
   getAverageChordTonesInRange(chordType, lowerLimit, upperLimit) {
+    if(lowerLimit == null || typeof lowerLimit == 'undefined') {
+      lowerLimit = AcData.DEFAULT_LOWER_LIMIT
+    }
+    
+    if(upperLimit == null || typeof upperLimit == 'undefined') {
+      upperLimit = AcData.DEFAULT_UPPER_LIMIT
+    }
+
     var totalChordTones = 0, numChordTones, currentPitch;
     this.pitches.forEach(function(pitch) {
       currentPitch = pitch + chordType;
@@ -44,31 +52,4 @@ class CalculationExploration {
   }
 };
 
-var calc = new CalculationExploration();
-console.log("===== Music Calculation Exploration =====");
-console.log("Range is from Db4 to G#5\n\nAverage chord tones for");
-console.log("- major triads: " + calc.getAverageChordTonesInRange("M", AcData.DEFAULT_LOWER_LIMIT, AcData.DEFAULT_UPPER_LIMIT));
-console.log("- minor triads: " + calc.getAverageChordTonesInRange("m", AcData.DEFAULT_LOWER_LIMIT, AcData.DEFAULT_UPPER_LIMIT));
-console.log("- maj7 chords: " + calc.getAverageChordTonesInRange("maj7", AcData.DEFAULT_LOWER_LIMIT, AcData.DEFAULT_UPPER_LIMIT));
-console.log("- m7 chords: " + calc.getAverageChordTonesInRange("m7", AcData.DEFAULT_LOWER_LIMIT, AcData.DEFAULT_UPPER_LIMIT));
-console.log("- dominant chords: " + calc.getAverageChordTonesInRange("7", AcData.DEFAULT_LOWER_LIMIT, AcData.DEFAULT_UPPER_LIMIT));
-console.log("- maj9 chords: " + calc.getAverageChordTonesInRange("maj9", AcData.DEFAULT_LOWER_LIMIT, AcData.DEFAULT_UPPER_LIMIT))
-console.log("- m9 chords: " + calc.getAverageChordTonesInRange("m9", AcData.DEFAULT_LOWER_LIMIT, AcData.DEFAULT_UPPER_LIMIT));
-
-var chordTonesTriads = calc.getAverageChordTonesInRange("M", AcData.DEFAULT_LOWER_LIMIT, AcData.DEFAULT_UPPER_LIMIT);
-var chordTonesTetrads = calc.getAverageChordTonesInRange("maj7", AcData.DEFAULT_LOWER_LIMIT, AcData.DEFAULT_UPPER_LIMIT);
-var chordTonesPentads = calc.getAverageChordTonesInRange("maj9", AcData.DEFAULT_LOWER_LIMIT, AcData.DEFAULT_UPPER_LIMIT);
-
-console.log("\nNumber of possible melodies for");
-console.log("- 4 triads: " + Math.floor(Math.pow(chordTonesTriads, 4)));
-console.log("- 8 triads: " + Math.floor(Math.pow(chordTonesTriads, 8)));
-console.log("- 12 triads: " + Math.floor(Math.pow(chordTonesTriads, 12)));
-console.log("- 4 tetrads: " + Math.floor(Math.pow(chordTonesTetrads, 4)));
-console.log("- 8 tetrads: " + Math.floor(Math.pow(chordTonesTetrads, 8)));
-console.log("- 12 tetrads: " + Math.floor(Math.pow(chordTonesTetrads, 12)));
-console.log("- 4 pentads: " + Math.floor(Math.pow(chordTonesPentads, 4)));
-console.log("- 8 pentads: " + Math.floor(Math.pow(chordTonesPentads, 8)));
-console.log("- 12 pentads: " + Math.floor(Math.pow(chordTonesPentads, 12)));
-console.log("\nNote that this doesn't account for simple filtering rules.");
-
-var debugMessage3 = '';
+exports.CalculationExploration = new CalculationExploration();

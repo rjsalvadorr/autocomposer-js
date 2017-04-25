@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Sandbox</title>
+
+    <style>
+      body {
+        background-color: #ddd;
+        font-family: sans-serif;
+      }
+
+      code {
+        white-space: pre;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="main-title">Sandbox</h1>
+    <p>
+      Messing around with the music library, and testing out stuff on browsers.
+    </p>
+
+    <h2>Audio Playback</h2>
+    <p>Write the melodies in scientific notation, like <code>C4 Eb4 G4</code> </p>
+
+    <h3>Playing a Single Melody</h3>
+    <label for="solo-melody">Solo Melody</label>
+    <input type="text" id="solo-melody" name="solo-melody" value="C4 E4 G4"/><br>
+
+    <button id="button-play-solo" name="button-play">Play music!</button>
+
+    <h3>Playing Three Melodies</h3>
+    <label for="first-melody">Melody 1</label>
+    <input type="text" id="first-melody" name="first-melody" value="C4 E4 G4"/><br>
+
+    <label for="second-melody">Melody 1</label>
+    <input type="text" id="second-melody" name="second-melody" value="E3 C3 D3"/><br>
+
+    <label for="third-melody">Melody 1</label>
+    <input type="text" id="third-melody" name="third-melody" value="G2 A2 B2"/><br>
+
+    <button id="button-play" name="button-play">Play music!</button>
+
+    <h2>Calculations</h2>
+    <p>A few calculations that could help improve the AutoComposer.</p>
+    <div id="output-calculations"></div>
+
+    <script src="index.js"></script>
+  </body>
+</html>
