@@ -13,7 +13,7 @@ class BrowserPlayer {
     Soundfont.instrument(ac, 'clavinet', { soundfont: 'FluidR3_GM' }).then(function (clavinet) {
       clavinet.play('C4')
     })
-    */l
+    */
 
     // The first step is always create an instrument:
     Soundfont.instrument(ac, 'clavinet', { soundfont: 'FluidR3_GM' }).then(function (clavinet) {

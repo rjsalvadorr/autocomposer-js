@@ -48,14 +48,14 @@ $(document).ready(function(){
   });
 
   $('#button-play').click(function() {
-    var melody1 = $( "first-melody" ).val().split(" ");
-    var melody2 = $( "second-melody" ).val().split(" ");
-    var melody3 = $( "third-melody" ).val().split(" ");
+    var melody1 = $( "#first-melody" ).val().split(" ");
+    var melody2 = $( "#second-melody" ).val().split(" ");
+    var melody3 = $( "#third-melody" ).val().split(" ");
     player.playMelodyWithAccompaniment(melody1, melody2, melody3);
   });
 
-  $('#button-play').click(function() {
-    testPlayer.playSample();
-  })
+  // $('#button-play').click(function() {
+  //   testPlayer.playSample();
+  // })
 
 });

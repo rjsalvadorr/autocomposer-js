@@ -10,14 +10,18 @@
   "scripts": {
     "test": "mocha && esdoc",
     "build-dev": "browserify src/app-main.js -o dist/index.js -t [ babelify --presets [ react ] ] && stylus src/style.styl -o dist/style.css",
-    "build-prod": "browserify src/app-main.js -t [ babelify --presets [ react ] ] | uglifyjs -o dist/index.js && stylus src/style.styl -o dist/style.css"
+    "build-prod": "browserify src/app-main.js -t [ babelify --presets [ react ] ] | uglifyjs -o dist/index.js && stylus src/style.styl -o dist/style.css",
+    "build-sandbox": "browserify sandbox/raw.js -o sandbox/index.js"
   },
   "author": "RJ Salvador",
   "license": "ISC",
   "dependencies": {
     "jquery": "^3.2.1",
+    "midi-player-js": "^1.1.1",
+    "midi-writer-js": "^1.4.6",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "soundfont-player": "^0.10.5",
     "tonal": "^0.69.5",
     "tonal-chord": "^0.69.5",
     "tonal-note": "^0.69.5",

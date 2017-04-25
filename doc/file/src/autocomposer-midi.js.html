@@ -1,15 +1,60 @@
-var MidiWriter = require('midi-writer-js');
-var MidiPlayer = require('midi-player-js');
-var SoundfontPlayer = require('soundfont-player');
-var tonalNote = require('tonal-note');
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/autocomposer-midi.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <a data-ice="repoURL" href="https://github.com/rjsalvadorr/autocomposer-melody.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-data.js~AutoComposerData.html">AutoComposerData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-melody.js~AutoComposerMelody.html">AutoComposerMelody</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-midi.js~AutoComposerMidi.html">AutoComposerMidi</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-parser.js~AutoComposerParser.html">AutoComposerParser</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/chord-unit.js~ChordUnit.html">ChordUnit</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/melody-unit.js~MelodyUnit.html">MelodyUnit</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/autocomposer-midi.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">var MidiWriter = require(&apos;midi-writer-js&apos;);
+var MidiPlayer = require(&apos;midi-player-js&apos;);
+var SoundfontPlayer = require(&apos;soundfont-player&apos;);
+var tonalNote = require(&apos;tonal-note&apos;);
 
 /**
  * Class responsible for playing audio and generating MIDI files for users.
  */
 class AutoComposerMidi {
   constructor() {
-    this.INSTRUMENT_NAMES = ["violin", "acoustic_grand_piano", "acoustic_bass"];
-    this.NOTE_DURATION = "2";
+    this.INSTRUMENT_NAMES = [&quot;violin&quot;, &quot;acoustic_grand_piano&quot;, &quot;acoustic_bass&quot;];
+    this.NOTE_DURATION = &quot;2&quot;;
 
     this.instruments = {};
     this.player = null;
@@ -21,15 +66,15 @@ class AutoComposerMidi {
     this.audioContext = new AudioContext;
     // Added this flag to fix an issue where notes randomly play again after the track ends.
     // It only works for tracks that are all the same length. If we ever have to play tracks that have
-    // different lengths, we'll need a different solution.
+    // different lengths, we&apos;ll need a different solution.
     this.playbackLocked = true;
 
     // is this kind of scope hackery necessary?!
     var haxThis = this;
 
-    for(var i = 0; i < this.INSTRUMENT_NAMES.length; i++) {
+    for(var i = 0; i &lt; this.INSTRUMENT_NAMES.length; i++) {
       // initialize each instrument
-      Soundfont.instrument(this.audioContext, this.INSTRUMENT_NAMES[i], {soundfont: 'FluidR3_GM'}).then(function (sfInstrument) {
+      Soundfont.instrument(this.audioContext, this.INSTRUMENT_NAMES[i], {soundfont: &apos;FluidR3_GM&apos;}).then(function (sfInstrument) {
         console.log(sfInstrument);
         haxThis.instruments[sfInstrument.name] = sfInstrument;
         haxThis.instrumentInit++;
@@ -46,11 +91,11 @@ class AutoComposerMidi {
     // callback for MIDI events
     console.debug(event);
 
-    var instr1 = this.instruments["violin"];
-    var instr2 = this.instruments["acoustic_grand_piano"];
-    var instr3 = this.instruments["acoustic_bass"];
+    var instr1 = this.instruments[&quot;violin&quot;];
+    var instr2 = this.instruments[&quot;acoustic_grand_piano&quot;];
+    var instr3 = this.instruments[&quot;acoustic_bass&quot;];
 
-    if (!this.playbackLocked && event.name == 'Note on' && event.velocity > 0) {
+    if (!this.playbackLocked &amp;&amp; event.name == &apos;Note on&apos; &amp;&amp; event.velocity &gt; 0) {
         switch(event.track) {
           case 1:
             instr1.play(event.noteName, this.audioContext.currentTime, {gain: 3});
@@ -63,7 +108,7 @@ class AutoComposerMidi {
         }
     }
 
-    if (event.name == 'Note off') {
+    if (event.name == &apos;Note off&apos;) {
       switch(event.track) {
         case 1:
           instr1.stop();
@@ -76,7 +121,7 @@ class AutoComposerMidi {
       }
     }
 
-    if (event.name == "End of Track") {
+    if (event.name == &quot;End of Track&quot;) {
       this.playbackLocked = true;
     }
   }
@@ -87,9 +132,9 @@ class AutoComposerMidi {
       haxThis._midiCallback(event);
     });
     this.playbackLocked = false;
-    console.log("[AutoComposerMidi._initializePlayer()] Loading complete!");
+    console.log(&quot;[AutoComposerMidi._initializePlayer()] Loading complete!&quot;);
 
-    var loadEvent = new Event("midiPlayerReady");
+    var loadEvent = new Event(&quot;midiPlayerReady&quot;);
     document.body.dispatchEvent(loadEvent);
   }
 
@@ -103,7 +148,7 @@ class AutoComposerMidi {
     */
   _buildNoteMidi(numMidi, duration, wait) {
       if(!wait) {
-          wait = "0";
+          wait = &quot;0&quot;;
       }
       return new MidiWriter.NoteEvent({pitch: [numMidi], duration: duration, wait: wait, velocity: 100});
   }
@@ -118,7 +163,7 @@ class AutoComposerMidi {
     */
   _buildChordMidi(arrNumMidi, duration, wait) {
       if(!wait) {
-          wait = "0";
+          wait = &quot;0&quot;;
       }
       return new MidiWriter.NoteEvent({pitch: arrNumMidi, duration: duration, wait: wait, velocity: 100});
   }
@@ -131,7 +176,7 @@ class AutoComposerMidi {
   _buildMelodyTrack(arrMelody) {
     var returnTrack = new MidiWriter.Track();
 
-    for(var i = 0; i < arrMelody.length; i++) {
+    for(var i = 0; i &lt; arrMelody.length; i++) {
       var midiNumber = tonalNote.midi(arrMelody[i]);
       returnTrack.addEvent(this._buildNoteMidi(midiNumber, this.NOTE_DURATION));
     }
@@ -150,7 +195,7 @@ class AutoComposerMidi {
     tracks[0] = this._buildMelodyTrack(arrMelody);
 
     var write = new MidiWriter.Writer(tracks);
-    console.log("AutoComposerMidi.[getMidiSolo()] " + write.dataUri());
+    console.log(&quot;AutoComposerMidi.[getMidiSolo()] &quot; + write.dataUri());
 
     return write.dataUri();
   }
@@ -167,18 +212,18 @@ class AutoComposerMidi {
     var tracks, midiNumber;
 
     var melodyTrack = this._buildMelodyTrack(arrMelody);
-    melodyTrack.addInstrumentName("violin");
+    melodyTrack.addInstrumentName(&quot;violin&quot;);
 
     var accompanimentTrack = this._buildMelodyTrack(arrAcompanimentLine);
-    accompanimentTrack.addInstrumentName("acoustic_grand_piano");
+    accompanimentTrack.addInstrumentName(&quot;acoustic_grand_piano&quot;);
 
     var bassTrack = this._buildMelodyTrack(arrBassLine);
-    bassTrack.addInstrumentName("acoustic_bass");
+    bassTrack.addInstrumentName(&quot;acoustic_bass&quot;);
 
     tracks = [melodyTrack, accompanimentTrack, bassTrack];
 
     var write = new MidiWriter.Writer(tracks);
-    console.log("AutoComposerMidi.[getMidiSolo()] " + write.dataUri());
+    console.log(&quot;AutoComposerMidi.[getMidiSolo()] &quot; + write.dataUri());
 
     return write.dataUri();
   }
@@ -223,3 +268,20 @@ class AutoComposerMidi {
 }
 
 exports.AutoComposerMidi = AutoComposerMidi;
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.5.2)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

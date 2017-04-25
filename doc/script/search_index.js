@@ -12,6 +12,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "autocomposer-melody/src/autocomposer-midi.js~autocomposermidi",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html",
+    "<span>AutoComposerMidi</span> <span class=\"search-result-import-path\">autocomposer-melody/src/autocomposer-midi.js</span>",
+    "class"
+  ],
+  [
     "autocomposer-melody/src/autocomposer-parser.js~autocomposerparser",
     "class/src/autocomposer-parser.js~AutoComposerParser.html",
     "<span>AutoComposerParser</span> <span class=\"search-result-import-path\">autocomposer-melody/src/autocomposer-parser.js</span>",
@@ -700,6 +706,144 @@ window.esdocSearchIndex = [
     "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-member-upperLimit",
     "src/autocomposer-melody.js~AutoComposerMelody#upperLimit",
     "member"
+  ],
+  [
+    "src/autocomposer-midi.js",
+    "file/src/autocomposer-midi.js.html",
+    "src/autocomposer-midi.js",
+    "file"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#instrument_names",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-INSTRUMENT_NAMES",
+    "src/autocomposer-midi.js~AutoComposerMidi#INSTRUMENT_NAMES",
+    "member"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#note_duration",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-NOTE_DURATION",
+    "src/autocomposer-midi.js~AutoComposerMidi#NOTE_DURATION",
+    "member"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#_buildchordmidi",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_buildChordMidi",
+    "src/autocomposer-midi.js~AutoComposerMidi#_buildChordMidi",
+    "method"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#_buildmelodymidisolo",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_buildMelodyMidiSolo",
+    "src/autocomposer-midi.js~AutoComposerMidi#_buildMelodyMidiSolo",
+    "method"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#_buildmelodymidiwithaccompaniment",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_buildMelodyMidiWithAccompaniment",
+    "src/autocomposer-midi.js~AutoComposerMidi#_buildMelodyMidiWithAccompaniment",
+    "method"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#_buildmelodytrack",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_buildMelodyTrack",
+    "src/autocomposer-midi.js~AutoComposerMidi#_buildMelodyTrack",
+    "method"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#_buildnotemidi",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_buildNoteMidi",
+    "src/autocomposer-midi.js~AutoComposerMidi#_buildNoteMidi",
+    "method"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#_finishload",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_finishLoad",
+    "src/autocomposer-midi.js~AutoComposerMidi#_finishLoad",
+    "method"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#_midicallback",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_midiCallback",
+    "src/autocomposer-midi.js~AutoComposerMidi#_midiCallback",
+    "method"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#_playmelody",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_playMelody",
+    "src/autocomposer-midi.js~AutoComposerMidi#_playMelody",
+    "method"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#audiocontext",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-audioContext",
+    "src/autocomposer-midi.js~AutoComposerMidi#audioContext",
+    "member"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#constructor",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-constructor-constructor",
+    "src/autocomposer-midi.js~AutoComposerMidi#constructor",
+    "method"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#instrumentaccomp",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-instrumentAccomp",
+    "src/autocomposer-midi.js~AutoComposerMidi#instrumentAccomp",
+    "member"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#instrumentbass",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-instrumentBass",
+    "src/autocomposer-midi.js~AutoComposerMidi#instrumentBass",
+    "member"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#instrumentinit",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-instrumentInit",
+    "src/autocomposer-midi.js~AutoComposerMidi#instrumentInit",
+    "member"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#instrumentmelody",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-instrumentMelody",
+    "src/autocomposer-midi.js~AutoComposerMidi#instrumentMelody",
+    "member"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#instruments",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-instruments",
+    "src/autocomposer-midi.js~AutoComposerMidi#instruments",
+    "member"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#playmelodysolo",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-playMelodySolo",
+    "src/autocomposer-midi.js~AutoComposerMidi#playMelodySolo",
+    "method"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#playmelodywithaccompaniment",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-playMelodyWithAccompaniment",
+    "src/autocomposer-midi.js~AutoComposerMidi#playMelodyWithAccompaniment",
+    "method"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#playbacklocked",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-playbackLocked",
+    "src/autocomposer-midi.js~AutoComposerMidi#playbackLocked",
+    "member"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#player",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-player",
+    "src/autocomposer-midi.js~AutoComposerMidi#player",
+    "member"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#stopplayback",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-stopPlayback",
+    "src/autocomposer-midi.js~AutoComposerMidi#stopPlayback",
+    "method"
   ],
   [
     "src/autocomposer-parser.js",

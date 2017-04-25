@@ -19940,7 +19940,7 @@ class BrowserPlayer {
     Soundfont.instrument(ac, 'clavinet', { soundfont: 'FluidR3_GM' }).then(function (clavinet) {
       clavinet.play('C4')
     })
-    */l
+    */
 
     // The first step is always create an instrument:
     Soundfont.instrument(ac, 'clavinet', { soundfont: 'FluidR3_GM' }).then(function (clavinet) {
@@ -20081,15 +20081,15 @@ $(document).ready(function(){
   });
 
   $('#button-play').click(function() {
-    var melody1 = $( "first-melody" ).val().split(" ");
-    var melody2 = $( "second-melody" ).val().split(" ");
-    var melody3 = $( "third-melody" ).val().split(" ");
+    var melody1 = $( "#first-melody" ).val().split(" ");
+    var melody2 = $( "#second-melody" ).val().split(" ");
+    var melody3 = $( "#third-melody" ).val().split(" ");
     player.playMelodyWithAccompaniment(melody1, melody2, melody3);
   });
 
-  $('#button-play').click(function() {
-    testPlayer.playSample();
-  })
+  // $('#button-play').click(function() {
+  //   testPlayer.playSample();
+  // })
 
 });
 
@@ -20411,75 +20411,85 @@ var tonalNote = require('tonal-note');
  */
 class AutoComposerMidi {
   constructor() {
-    this.NUM_INSTRUMENTS = 3;
+    this.INSTRUMENT_NAMES = ["violin", "acoustic_grand_piano", "acoustic_bass"];
+    this.NOTE_DURATION = "2";
 
+    this.instruments = {};
     this.player = null;
     this.audioContext = null;
     this.instrumentInit = 0;
     this.instrumentMelody = null;
     this.instrumentAccomp = null;
     this.instrumentBass = null;
+    this.audioContext = new AudioContext;
+    // Added this flag to fix an issue where notes randomly play again after the track ends.
+    // It only works for tracks that are all the same length. If we ever have to play tracks that have
+    // different lengths, we'll need a different solution.
+    this.playbackLocked = true;
 
     // is this kind of scope hackery necessary?!
     var haxThis = this;
-    this.audioContext = new AudioContext;
 
-    this.instrumentMelody = Soundfont.instrument(this.audioContext, 'violin', {soundfont: 'FluidR3_GM'}).then(function (sfInstrument) {
-        haxThis._addInstrument();
-    });
-    this.instrumentAccomp = Soundfont.instrument(this.audioContext, 'acoustic_grand_piano', {soundfont: 'FluidR3_GM'}).then(function (sfInstrument) {
-        haxThis._addInstrument();
-    });
-    this.instrumentBass = Soundfont.instrument(this.audioContext, 'acoustic_bass', {soundfont: 'FluidR3_GM'}).then(function (sfInstrument) {
-        haxThis._addInstrument();
-    });
-  }
+    for(var i = 0; i < this.INSTRUMENT_NAMES.length; i++) {
+      // initialize each instrument
+      Soundfont.instrument(this.audioContext, this.INSTRUMENT_NAMES[i], {soundfont: 'FluidR3_GM'}).then(function (sfInstrument) {
+        console.log(sfInstrument);
+        haxThis.instruments[sfInstrument.name] = sfInstrument;
+        haxThis.instrumentInit++;
 
-  _addInstrument() {
-    this.instrumentInit++;
-    if(this.instrumentInit === this.NUM_INSTRUMENTS) {
-      this._initializePlayer();
+        if(haxThis.instrumentInit === haxThis.INSTRUMENT_NAMES.length) {
+          haxThis._finishLoad();
+        }
+      });
     }
+
   }
 
   _midiCallback(event) {
     // callback for MIDI events
     console.debug(event);
 
-    if (event.name == 'Note on' && event.velocity > 0) {
+    var instr1 = this.instruments["violin"];
+    var instr2 = this.instruments["acoustic_grand_piano"];
+    var instr3 = this.instruments["acoustic_bass"];
+
+    if (!this.playbackLocked && event.name == 'Note on' && event.velocity > 0) {
         switch(event.track) {
           case 1:
-            this.instrumentMelody.play(event.noteName, this.audioContext.currentTime, {gain: 4});
+            instr1.play(event.noteName, this.audioContext.currentTime, {gain: 3});
           case 2:
-            this.instrumentAccomp.play(event.noteName, this.audioContext.currentTime, {gain: 2});
+            instr2.play(event.noteName, this.audioContext.currentTime, {gain: 1});
           case 3:
-            this.instrumentBass.play(event.noteName, this.audioContext.currentTime, {gain: 3});
+            instr3.play(event.noteName, this.audioContext.currentTime, {gain: 2});
           default:
             // nothing!
         }
     }
+
     if (event.name == 'Note off') {
       switch(event.track) {
         case 1:
-          this.instrumentMelody.stop();
+          instr1.stop();
         case 2:
-          this.instrumentAccomp.stop();
+          instr2.stop();
         case 3:
-          this.instrumentBass.stop();
+          instr3.stop();
         default:
           // nothing!
       }
     }
-    instrumentInit++;
+
+    if (event.name == "End of Track") {
+      this.playbackLocked = true;
+    }
   }
 
-  _initializePlayer() {
-    var inst1 = this.instrumentMelody;
-    var inst2 = this.instrumentAccomp;
-    var inst3 = this.instrumentBass;
-
-    this.player = new MidiPlayer.Player(this._midiCallback);
-
+  _finishLoad() {
+    var haxThis = this;
+    this.player = new MidiPlayer.Player(function(event) {
+      haxThis._midiCallback(event);
+    });
+    this.playbackLocked = false;
     console.log("[AutoComposerMidi._initializePlayer()] Loading complete!");
 
     var loadEvent = new Event("midiPlayerReady");
@@ -20526,7 +20536,7 @@ class AutoComposerMidi {
 
     for(var i = 0; i < arrMelody.length; i++) {
       var midiNumber = tonalNote.midi(arrMelody[i]);
-      returnTrack.addEvent(this._buildNoteMidi(midiNumber, "1"));
+      returnTrack.addEvent(this._buildNoteMidi(midiNumber, this.NOTE_DURATION));
     }
 
     return returnTrack;
@@ -20556,19 +20566,19 @@ class AutoComposerMidi {
     * @param {string[]} arrBassLine - bass line
     * @return {string} - MIDI data, as a DataURI string.
     */
-  _buildMelodyMidiWithAccompaniment(arrMelody, arrAcompaniment, arrBass) {
+  _buildMelodyMidiWithAccompaniment(arrMelody, arrAcompanimentLine, arrBassLine) {
     var tracks, midiNumber;
 
-    melodyTrack = this._buildMelodyTrack(arrMelody);
+    var melodyTrack = this._buildMelodyTrack(arrMelody);
     melodyTrack.addInstrumentName("violin");
 
-    accompanimentTrack = this._buildMelodyTrack(arrAcompanimentLine);
+    var accompanimentTrack = this._buildMelodyTrack(arrAcompanimentLine);
     accompanimentTrack.addInstrumentName("acoustic_grand_piano");
 
-    bassTrack = this._buildMelodyTrack(arrBassLine);
+    var bassTrack = this._buildMelodyTrack(arrBassLine);
     bassTrack.addInstrumentName("acoustic_bass");
 
-    tracks = [melodyTrack, accompanimentTrack, arrBass];
+    tracks = [melodyTrack, accompanimentTrack, bassTrack];
 
     var write = new MidiWriter.Writer(tracks);
     console.log("AutoComposerMidi.[getMidiSolo()] " + write.dataUri());
@@ -20600,6 +20610,7 @@ class AutoComposerMidi {
     */
   _playMelody(strMidi) {
     this.stopPlayback();
+    this.playbackLocked = false;
     this.player.loadDataUri(strMidi);
     this.player.play();
   }
