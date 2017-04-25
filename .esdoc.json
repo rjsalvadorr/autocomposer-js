@@ -1,6 +1,6 @@
 {
   "source": "./src",
-  "destination": "./doc",
+  "destination": "./public/doc",
   "access": ["public", "private", "protected"],
   "plugins": [{"name": "esdoc-node"}],
   "test": {

@@ -19976,13 +19976,13 @@ exports.BrowserPlayer = new BrowserPlayer();
 },{"soundfont-player":24}],56:[function(require,module,exports){
 // For calculating big numbers, and possible ways to optimize the application.
 
-var AutoComposerData = require('../src/autocomposer-data');
+var AutoComposerData = require('../../src/autocomposer-data');
 var AcData = new AutoComposerData.AutoComposerData();
 
-var AutoComposerMelody = require('../src/autocomposer-melody');
+var AutoComposerMelody = require('../../src/autocomposer-melody');
 var AcMelody = new AutoComposerMelody.AutoComposerMelody();
 
-var AutoComposerParser = require('../src/autocomposer-parser');
+var AutoComposerParser = require('../../src/autocomposer-parser');
 var AcParser = new AutoComposerParser.AutoComposerParser();
 
 class CalculationExploration {
@@ -19999,7 +19999,7 @@ class CalculationExploration {
     if(lowerLimit == null || typeof lowerLimit == 'undefined') {
       lowerLimit = AcData.DEFAULT_LOWER_LIMIT
     }
-    
+
     if(upperLimit == null || typeof upperLimit == 'undefined') {
       upperLimit = AcData.DEFAULT_UPPER_LIMIT
     }
@@ -20030,7 +20030,7 @@ class CalculationExploration {
 
 exports.CalculationExploration = new CalculationExploration();
 
-},{"../src/autocomposer-data":58,"../src/autocomposer-melody":59,"../src/autocomposer-parser":61}],57:[function(require,module,exports){
+},{"../../src/autocomposer-data":58,"../../src/autocomposer-melody":59,"../../src/autocomposer-parser":61}],57:[function(require,module,exports){
 window.jQuery = window.$ = require("jquery");
 const CalculationExploration = require("./calculations");
 var calc = CalculationExploration.CalculationExploration;
@@ -20038,7 +20038,7 @@ var calc = CalculationExploration.CalculationExploration;
 const BrowserPlayer = require("./browser-player");
 var testPlayer = BrowserPlayer.BrowserPlayer;
 
-const AcMidi = require("../src/autocomposer-midi");
+const AcMidi = require("../../src/autocomposer-midi");
 var player = new AcMidi.AutoComposerMidi();
 
 var debugMessage1 = "Range is from Db4 to G#5\n\nAverage chord tones for";
@@ -20093,7 +20093,7 @@ $(document).ready(function(){
 
 });
 
-},{"../src/autocomposer-midi":60,"./browser-player":55,"./calculations":56,"jquery":11}],58:[function(require,module,exports){
+},{"../../src/autocomposer-midi":60,"./browser-player":55,"./calculations":56,"jquery":11}],58:[function(require,module,exports){
 var range = require('tonal-range');
 var chord = require('tonal-chord');
 

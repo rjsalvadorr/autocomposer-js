@@ -9,9 +9,12 @@
   },
   "scripts": {
     "test": "mocha && esdoc",
-    "build-dev": "browserify src/app-main.js -o dist/index.js -t [ babelify --presets [ react ] ] && stylus src/style.styl -o dist/style.css",
-    "build-prod": "browserify src/app-main.js -t [ babelify --presets [ react ] ] | uglifyjs -o dist/index.js && stylus src/style.styl -o dist/style.css",
-    "build-sandbox": "browserify sandbox/raw.js -o sandbox/index.js"
+    "compile-css": "stylus src/style.styl -o public/style.css",
+    "build-sandbox": "browserify public/test/raw.js -o public/test/index.js",
+    "build-dev": "browserify src/app-main.js -o dist/autocomposer-melody.js -t [ babelify --presets [ react ] ]",
+    "build-prod": "browserify src/app-main.js -t [ babelify --presets [ react ] ] | uglifyjs -o dist/autocomposer-melody.js",
+    "build-public": "browserify src/app-main.js -t [ babelify --presets [ react ] ] | uglifyjs -o public/autocomposer-melody.js && npm run compile-css",
+    "build-all": "npm test && npm run build-prod && npm run build-public && npm run build-sandbox"
   },
   "author": "RJ Salvador",
   "license": "ISC",

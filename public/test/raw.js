@@ -5,7 +5,7 @@ var calc = CalculationExploration.CalculationExploration;
 const BrowserPlayer = require("./browser-player");
 var testPlayer = BrowserPlayer.BrowserPlayer;
 
-const AcMidi = require("../src/autocomposer-midi");
+const AcMidi = require("../../src/autocomposer-midi");
 var player = new AcMidi.AutoComposerMidi();
 
 var debugMessage1 = "Range is from Db4 to G#5\n\nAverage chord tones for";
