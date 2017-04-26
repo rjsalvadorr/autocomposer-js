@@ -756,6 +756,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/autocomposer-midi.js~autocomposermidi#instrument_gain",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-INSTRUMENT_GAIN",
+    "src/autocomposer-midi.js~AutoComposerMidi#INSTRUMENT_GAIN",
+    "member"
+  ],
+  [
     "src/autocomposer-midi.js~autocomposermidi#instrument_names",
     "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-INSTRUMENT_NAMES",
     "src/autocomposer-midi.js~AutoComposerMidi#INSTRUMENT_NAMES",
@@ -832,6 +838,12 @@ window.esdocSearchIndex = [
     "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-constructor-constructor",
     "src/autocomposer-midi.js~AutoComposerMidi#constructor",
     "method"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#initialized",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-initialized",
+    "src/autocomposer-midi.js~AutoComposerMidi#initialized",
+    "member"
   ],
   [
     "src/autocomposer-midi.js~autocomposermidi#instrumentaccomp",

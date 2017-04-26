@@ -1,7 +1,7 @@
 {
-  "coverage": "68.83%",
-  "expectCount": 77,
-  "actualCount": 53,
+  "coverage": "69.62%",
+  "expectCount": 79,
+  "actualCount": 55,
   "files": {
     "src/autocomposer-data.js": {
       "expectCount": 14,
@@ -26,22 +26,22 @@
       "undocumentLines": []
     },
     "src/autocomposer-midi.js": {
-      "expectCount": 24,
-      "actualCount": 11,
+      "expectCount": 26,
+      "actualCount": 13,
       "undocumentLines": [
-        11,
         12,
-        84,
-        45,
-        16,
-        10,
-        19,
-        20,
+        11,
         17,
-        18,
-        14,
+        21,
+        10,
+        28,
+        24,
         25,
-        15
+        22,
+        23,
+        19,
+        32,
+        20
       ]
     },
     "src/autocomposer-parser.js": {

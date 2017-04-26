@@ -141,6 +141,7 @@ class OutputPanel extends React.Component {
 
     this.playMelodySolo = this.playMelodySolo.bind(this);
     this.playMelody = this.playMelody.bind(this);
+    this.stopPlayback = this.stopPlayback.bind(this);
   }
 
   playMelodySolo(event) {
@@ -163,6 +164,10 @@ class OutputPanel extends React.Component {
     var melody3 = melodiesData[2].split(&quot;,&quot;);
 
     AcMidi.playMelodyWithAccompaniment(melody1, melody2, melody3);
+  }
+
+  stopPlayback() {
+    AcMidi.stopPlayback();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -235,7 +240,8 @@ class OutputPanel extends React.Component {
         &lt;tr key={&quot;melody&quot; + i} className=&quot;ac-melody-row&quot;&gt;
           &lt;td&gt;
             &lt;RjButton inputKey=&quot;playMelodySolo&quot; inputLabel=&quot;Play Melody (Solo)&quot; dataPayload={melodyString} onClick={this.playMelodySolo} /&gt;
-            &lt;RjButton inputKey=&quot;playMelody&quot; inputLabel=&quot;Play Melody&quot; dataPayload={payloadString} onClick={this.playMelody} /&gt;
+            &lt;RjButton inputKey=&quot;playMelody&quot; inputLabel=&quot;Play Melody (Full)&quot; dataPayload={payloadString} onClick={this.playMelody} /&gt;
+            &lt;RjButton inputKey=&quot;stopPlayback&quot; inputLabel=&quot;Stop&quot; dataPayload={payloadString} onClick={this.stopPlayback} /&gt;
           &lt;/td&gt;
           &lt;td&gt;
             &lt;div className=&quot;vex-tabdiv&quot;&gt;
