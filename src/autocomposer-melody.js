@@ -2,8 +2,8 @@ var tonal = require('tonal');
 var ChordUnit = require('./chord-unit');
 var MelodyUnit = require('./melody-unit');
 
-var AutoComposerData = require('./autocomposer-data');
-var AcData = new AutoComposerData.AutoComposerData();
+var AutoComposerLogic = require('./autocomposer-logic');
+var AcLogic = new AutoComposerLogic.AutoComposerLogic();
 
 /**
  * Creates melodies from a given chord progression
@@ -16,11 +16,11 @@ class AutoComposerMelody {
   */
   constructor(chordProgression, lowerLimit, upperLimit) {
     /** @type {string[]} */
-    this.chordProgression = chordProgression || AcData.INITIAL_PROGRESSION;
+    this.chordProgression = chordProgression || AcLogic.INITIAL_PROGRESSION;
     /** @type {string} */
-    this.lowerLimit = lowerLimit || AcData.DEFAULT_LOWER_LIMIT;
+    this.lowerLimit = lowerLimit || AcLogic.DEFAULT_LOWER_LIMIT;
     /** @type {string} */
-    this.upperLimit = upperLimit || AcData.DEFAULT_UPPER_LIMIT;
+    this.upperLimit = upperLimit || AcLogic.DEFAULT_UPPER_LIMIT;
   }
 
     /**
@@ -73,7 +73,7 @@ class AutoComposerMelody {
       chordNotes = this._removePitchesFromChordTones([bassPitch, topPitch], chordNotes);
 
       for(var j = 0; j < chordNotes.length; j++) {
-        chordNotes[j] = this._getLowestNoteInRange(chordNotes[j], AcData.ACCOMPANIMENT_LOWER_LIMIT, AcData.ACCOMPANIMENT_UPPER_LIMIT);
+        chordNotes[j] = this._getLowestNoteInRange(chordNotes[j], AcLogic.ACCOMPANIMENT_LOWER_LIMIT, AcLogic.ACCOMPANIMENT_UPPER_LIMIT);
       }
       noteArray.push(chordNotes.join(" "));
     }
@@ -94,7 +94,7 @@ class AutoComposerMelody {
     for(var i = 0; i < melodyUnit.chordProgression.length; i++) {
       currentChord = melodyUnit.chordProgression[i];
       bassPitch = tonal.chord.parse(currentChord)["tonic"];
-      bassNote = this._getLowestNoteInRange(bassPitch, AcData.BASS_LOWER_LIMIT, AcData.BASS_UPPER_LIMIT);
+      bassNote = this._getLowestNoteInRange(bassPitch, AcLogic.BASS_LOWER_LIMIT, AcLogic.BASS_UPPER_LIMIT);
 
       noteArray.push(bassNote);
     }
@@ -246,7 +246,7 @@ class AutoComposerMelody {
           newMelody = currentMelody + " " + currentChordTone;
 
           if(options.filtered) {
-            if(AcData.filterMelodyRange(newMelody)) {
+            if(AcLogic.filterMelodyRange(newMelody)) {
               returnList.push(newMelody);
             }
           } else {
@@ -309,7 +309,7 @@ class AutoComposerMelody {
   getMelodies(chordProgression) {
     var chordUnitList = this.buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);
     var rawMelodies = this.getMelodiesCore(chordUnitList[0], null, {filtered: true});
-    var options = {sort: true, limit: AcData.NUM_MELODIES_LIMIT};
+    var options = {sort: true, limit: AcLogic.NUM_MELODIES_LIMIT};
 
     var melodyUnits = this.buildMelodyUnitList(chordProgression, rawMelodies, options);
 

@@ -2,14 +2,11 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const _ = require('underscore');
 
-var AutoComposerData = require('./autocomposer-data');
-var AcData = new AutoComposerData.AutoComposerData();
+var AutoComposerLogic = require('./autocomposer-logic');
+var AcLogic = new AutoComposerLogic.AutoComposerLogic();
 
 var AutoComposerMelody = require('./autocomposer-melody');
 var AcMelody = new AutoComposerMelody.AutoComposerMelody();
-
-var AutoComposerParser = require('./autocomposer-parser');
-var AcParser = new AutoComposerParser.AutoComposerParser();
 
 var acMidi = require('./autocomposer-midi');
 var AcMidi = new acMidi.AutoComposerMidi();
@@ -23,7 +20,7 @@ class HelpPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      chordArray: AcData.getChordDictionary(true)
+      chordArray: AcLogic.getChordDictionary(true)
     }
   }
 
@@ -530,7 +527,7 @@ class AutoComposer extends React.Component {
 
       chordProgressionRaw: "",
       chordProgressionChanged: false,
-      chordProgressionPlaceholder: AcData.INITIAL_PROGRESSION,
+      chordProgressionPlaceholder: AcLogic.INITIAL_PROGRESSION,
 
       errorMessage: "",
 
@@ -582,7 +579,7 @@ class AutoComposer extends React.Component {
       }
 
       chordProgression.forEach(function(currentChordInput) {
-        if(!AcParser.isValidText(currentChordInput)) {
+        if(!AcLogic.isValidText(currentChordInput)) {
           throw new AcInputException('Chord input \'' + currentChordInput + '\' is not formatted properly! You should check the chord dictionary in the Help! section.');
         }
       });

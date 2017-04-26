@@ -1,18 +1,18 @@
 var assert = require('assert');
 
-var AcData = require('../src/autocomposer-data');
-var AutoComposerData = new AcData.AutoComposerData();
+var AcLogic = require('../src/autocomposer-logic');
+var AutoComposerLogic = new AcLogic.AutoComposerLogic();
 
-describe('AutoComposerData', function() {
+describe('AutoComposerLogic', function() {
   describe('#filterMelodyRange', function() {
     it('should filter out melodies that have a range larger than an octave', function() {
       melodySmallRange = "C4 G4 A4";
       melodyOctaveRange = "C4 G4 C5";
       melodyBigRange = "C4 G4 D5";
 
-      assert.equal(AutoComposerData.filterMelodyRange(melodySmallRange), true);
-      assert.equal(AutoComposerData.filterMelodyRange(melodyOctaveRange), true);
-      assert.equal(AutoComposerData.filterMelodyRange(melodyBigRange), false);
+      assert.equal(AutoComposerLogic.filterMelodyRange(melodySmallRange), true);
+      assert.equal(AutoComposerLogic.filterMelodyRange(melodyOctaveRange), true);
+      assert.equal(AutoComposerLogic.filterMelodyRange(melodyBigRange), false);
     });
   });
 });

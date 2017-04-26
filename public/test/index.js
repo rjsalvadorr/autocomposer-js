@@ -19976,14 +19976,11 @@ exports.BrowserPlayer = new BrowserPlayer();
 },{"soundfont-player":24}],56:[function(require,module,exports){
 // For calculating big numbers, and possible ways to optimize the application.
 
-var AutoComposerData = require('../../src/autocomposer-data');
-var AcData = new AutoComposerData.AutoComposerData();
+var AutoComposerData = require('../../src/autocomposer-logic');
+var AcLogic = new AutoComposerData.AutoComposerData();
 
 var AutoComposerMelody = require('../../src/autocomposer-melody');
 var AcMelody = new AutoComposerMelody.AutoComposerMelody();
-
-var AutoComposerParser = require('../../src/autocomposer-parser');
-var AcParser = new AutoComposerParser.AutoComposerParser();
 
 class CalculationExploration {
   constructor() {
@@ -19997,11 +19994,11 @@ class CalculationExploration {
   */
   getAverageChordTonesInRange(chordType, lowerLimit, upperLimit) {
     if(lowerLimit == null || typeof lowerLimit == 'undefined') {
-      lowerLimit = AcData.DEFAULT_LOWER_LIMIT
+      lowerLimit = AcLogic.DEFAULT_LOWER_LIMIT
     }
 
     if(upperLimit == null || typeof upperLimit == 'undefined') {
-      upperLimit = AcData.DEFAULT_UPPER_LIMIT
+      upperLimit = AcLogic.DEFAULT_UPPER_LIMIT
     }
 
     var totalChordTones = 0, numChordTones, currentPitch;
@@ -20030,7 +20027,7 @@ class CalculationExploration {
 
 exports.CalculationExploration = new CalculationExploration();
 
-},{"../../src/autocomposer-data":58,"../../src/autocomposer-melody":59,"../../src/autocomposer-parser":61}],57:[function(require,module,exports){
+},{"../../src/autocomposer-logic":58,"../../src/autocomposer-melody":59}],57:[function(require,module,exports){
 window.jQuery = window.$ = require("jquery");
 const CalculationExploration = require("./calculations");
 var calc = CalculationExploration.CalculationExploration;
@@ -20096,11 +20093,12 @@ $(document).ready(function(){
 },{"../../src/autocomposer-midi":60,"./browser-player":55,"./calculations":56,"jquery":11}],58:[function(require,module,exports){
 var range = require('tonal-range');
 var chord = require('tonal-chord');
+var note = require('tonal-note');
 
 /**
  * Encapsulates data and musical logic to be used by the application
  */
-class AutoComposerData {
+class AutoComposerLogic {
   constructor() {
     this.DEFAULT_LOWER_LIMIT = "Db4";
     this.DEFAULT_UPPER_LIMIT = "G#5";
@@ -20138,18 +20136,68 @@ class AutoComposerData {
     return highest - lowest <= 12;
   }
 
+    /**
+    * Parses text, and determines if user input represents a valid note/chord.
+    * @param {string} input - value given by the user
+    * @return {boolean} - a true value means the string can be used by the rest of the program.
+    */
+  isValidText(input) {
+    var isChord = chord.isKnownChord(input) ? true : false;
+    var isNote = note.name(input) ? true : false;
+
+    return isChord || isNote;
+  }
+
+    /**
+    * Converts ASCII accidentals to Unicode accidentals in HTML
+    * @param {string} input - text with ASCII accidentals
+    * @return {string} - text with Unicode accidentals in HTML
+    */
+  convertAsciiAccidentalsToHtml(input) {
+    var out = input.replace(/([A-G0-9])b/g, '$1&#9837;');
+    out = out.replace(/([A-G0-9])#/g, '$1&#9839;');
+    out = out.replace(/([A-G0-9])o/g, '$1&‌deg;');
+
+    return out;
+  }
+
+    /**
+    * Converts ASCII accidentals to Unicode accidentals
+    * @param {string} input - text with ASCII accidentals
+    * @return {string} - text with Unicode accidentals
+    */
+  convertAsciiAccidentalsToText(input) {
+    var out = input.replace(/([A-G0-9])b/g, '$1♭');
+    out = out.replace(/([A-G0-9])#/g, '$1♯');
+    out = out.replace(/([A-G0-9])o/g, '$1°');
+
+    return out;
+  }
+
+    /**
+    * Converts Unicode accidentals to ASCII
+    * @param {string} input - text with Unicode accidentals
+    * @return {string} - text with ASCII accidentals
+    */
+  convertAccidentalsToAscii(input) {
+    var out = input.replace(/([A-G0-9])♭/g, '$1b');
+    out = out.replace(/([A-G0-9])♯/g, '$1#');
+    out = out.replace(/([A-G0-9])°/g, '$1o');
+
+    return out;
+  }
 
 };
 
-exports.AutoComposerData = AutoComposerData;
+exports.AutoComposerLogic = AutoComposerLogic;
 
-},{"tonal-chord":28,"tonal-range":49}],59:[function(require,module,exports){
+},{"tonal-chord":28,"tonal-note":38,"tonal-range":49}],59:[function(require,module,exports){
 var tonal = require('tonal');
 var ChordUnit = require('./chord-unit');
 var MelodyUnit = require('./melody-unit');
 
-var AutoComposerData = require('./autocomposer-data');
-var AcData = new AutoComposerData.AutoComposerData();
+var AutoComposerLogic = require('./autocomposer-logic');
+var AcLogic = new AutoComposerLogic.AutoComposerLogic();
 
 /**
  * Creates melodies from a given chord progression
@@ -20162,11 +20210,11 @@ class AutoComposerMelody {
   */
   constructor(chordProgression, lowerLimit, upperLimit) {
     /** @type {string[]} */
-    this.chordProgression = chordProgression || AcData.INITIAL_PROGRESSION;
+    this.chordProgression = chordProgression || AcLogic.INITIAL_PROGRESSION;
     /** @type {string} */
-    this.lowerLimit = lowerLimit || AcData.DEFAULT_LOWER_LIMIT;
+    this.lowerLimit = lowerLimit || AcLogic.DEFAULT_LOWER_LIMIT;
     /** @type {string} */
-    this.upperLimit = upperLimit || AcData.DEFAULT_UPPER_LIMIT;
+    this.upperLimit = upperLimit || AcLogic.DEFAULT_UPPER_LIMIT;
   }
 
     /**
@@ -20219,7 +20267,7 @@ class AutoComposerMelody {
       chordNotes = this._removePitchesFromChordTones([bassPitch, topPitch], chordNotes);
 
       for(var j = 0; j < chordNotes.length; j++) {
-        chordNotes[j] = this._getLowestNoteInRange(chordNotes[j], AcData.ACCOMPANIMENT_LOWER_LIMIT, AcData.ACCOMPANIMENT_UPPER_LIMIT);
+        chordNotes[j] = this._getLowestNoteInRange(chordNotes[j], AcLogic.ACCOMPANIMENT_LOWER_LIMIT, AcLogic.ACCOMPANIMENT_UPPER_LIMIT);
       }
       noteArray.push(chordNotes.join(" "));
     }
@@ -20240,7 +20288,7 @@ class AutoComposerMelody {
     for(var i = 0; i < melodyUnit.chordProgression.length; i++) {
       currentChord = melodyUnit.chordProgression[i];
       bassPitch = tonal.chord.parse(currentChord)["tonic"];
-      bassNote = this._getLowestNoteInRange(bassPitch, AcData.BASS_LOWER_LIMIT, AcData.BASS_UPPER_LIMIT);
+      bassNote = this._getLowestNoteInRange(bassPitch, AcLogic.BASS_LOWER_LIMIT, AcLogic.BASS_UPPER_LIMIT);
 
       noteArray.push(bassNote);
     }
@@ -20392,7 +20440,7 @@ class AutoComposerMelody {
           newMelody = currentMelody + " " + currentChordTone;
 
           if(options.filtered) {
-            if(AcData.filterMelodyRange(newMelody)) {
+            if(AcLogic.filterMelodyRange(newMelody)) {
               returnList.push(newMelody);
             }
           } else {
@@ -20455,7 +20503,7 @@ class AutoComposerMelody {
   getMelodies(chordProgression) {
     var chordUnitList = this.buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);
     var rawMelodies = this.getMelodiesCore(chordUnitList[0], null, {filtered: true});
-    var options = {sort: true, limit: AcData.NUM_MELODIES_LIMIT};
+    var options = {sort: true, limit: AcLogic.NUM_MELODIES_LIMIT};
 
     var melodyUnits = this.buildMelodyUnitList(chordProgression, rawMelodies, options);
 
@@ -20466,7 +20514,7 @@ class AutoComposerMelody {
 
 exports.AutoComposerMelody = AutoComposerMelody;
 
-},{"./autocomposer-data":58,"./chord-unit":62,"./melody-unit":63,"tonal":54}],60:[function(require,module,exports){
+},{"./autocomposer-logic":58,"./chord-unit":61,"./melody-unit":62,"tonal":54}],60:[function(require,module,exports){
 var MidiWriter = require('midi-writer-js');
 var MidiPlayer = require('midi-player-js');
 var SoundfontPlayer = require('soundfont-player');
@@ -20742,77 +20790,8 @@ class AutoComposerMidi {
 exports.AutoComposerMidi = AutoComposerMidi;
 
 },{"midi-player-js":12,"midi-writer-js":13,"soundfont-player":24,"tonal-note":38}],61:[function(require,module,exports){
-var chord = require('tonal-chord');
-var note = require('tonal-note');
-
-/**
- * Determines if user input represents a valid note/chord.
- * Also handles conversions between proper accidental signs and ASCII accidentals like "b" or "#".
- */
-class AutoComposerParser {
-  /**
-  * Plain constructor.
-  */
-  constructor() {
-      //
-  }
-    /**
-    * Parses text, and determines if user input represents a valid note/chord.
-    * @param {string} input - value given by the user
-    * @return {boolean} - a true value means the string can be used by the rest of the program.
-    */
-  isValidText(input) {
-    var isChord = chord.isKnownChord(input) ? true : false;
-    var isNote = note.name(input) ? true : false;
-
-    return isChord || isNote;
-  }
-
-    /**
-    * Converts ASCII accidentals to Unicode accidentals in HTML
-    * @param {string} input - text with ASCII accidentals
-    * @return {string} - text with Unicode accidentals in HTML
-    */
-  convertAsciiAccidentalsToHtml(input) {
-    var out = input.replace(/([A-G0-9])b/g, '$1&#9837;');
-    out = out.replace(/([A-G0-9])#/g, '$1&#9839;');
-    out = out.replace(/([A-G0-9])o/g, '$1&‌deg;');
-
-    return out;
-  }
-
-    /**
-    * Converts ASCII accidentals to Unicode accidentals
-    * @param {string} input - text with ASCII accidentals
-    * @return {string} - text with Unicode accidentals
-    */
-  convertAsciiAccidentalsToText(input) {
-    var out = input.replace(/([A-G0-9])b/g, '$1♭');
-    out = out.replace(/([A-G0-9])#/g, '$1♯');
-    out = out.replace(/([A-G0-9])o/g, '$1°');
-
-    return out;
-  }
-
-    /**
-    * Converts Unicode accidentals to ASCII
-    * @param {string} input - text with Unicode accidentals
-    * @return {string} - text with ASCII accidentals
-    */
-  convertAccidentalsToAscii(input) {
-    var out = input.replace(/([A-G0-9])♭/g, '$1b');
-    out = out.replace(/([A-G0-9])♯/g, '$1#');
-    out = out.replace(/([A-G0-9])°/g, '$1o');
-
-    return out;
-  }
-}
-
-exports.AutoComposerParser = AutoComposerParser;
-
-},{"tonal-chord":28,"tonal-note":38}],62:[function(require,module,exports){
-var AcData = require('../src/autocomposer-data');
-var AutoComposerData = new AcData.AutoComposerData();
+var AcLogic = require('../src/autocomposer-logic');
+var AutoComposerLogic = new AcLogic.AutoComposerLogic();
 
 /**
  * Represents some data built around a specific chord.
@@ -20843,7 +20822,7 @@ class ChordUnit {
 
 exports.ChordUnit = ChordUnit;
 
-},{"../src/autocomposer-data":58}],63:[function(require,module,exports){
+},{"../src/autocomposer-logic":58}],62:[function(require,module,exports){
 var range = require('tonal-range')
 
 /**

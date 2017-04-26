@@ -1,13 +1,10 @@
 // For calculating big numbers, and possible ways to optimize the application.
 
-var AutoComposerData = require('../../src/autocomposer-data');
-var AcData = new AutoComposerData.AutoComposerData();
+var AutoComposerData = require('../../src/autocomposer-logic');
+var AcLogic = new AutoComposerData.AutoComposerData();
 
 var AutoComposerMelody = require('../../src/autocomposer-melody');
 var AcMelody = new AutoComposerMelody.AutoComposerMelody();
-
-var AutoComposerParser = require('../../src/autocomposer-parser');
-var AcParser = new AutoComposerParser.AutoComposerParser();
 
 class CalculationExploration {
   constructor() {
@@ -21,11 +18,11 @@ class CalculationExploration {
   */
   getAverageChordTonesInRange(chordType, lowerLimit, upperLimit) {
     if(lowerLimit == null || typeof lowerLimit == 'undefined') {
-      lowerLimit = AcData.DEFAULT_LOWER_LIMIT
+      lowerLimit = AcLogic.DEFAULT_LOWER_LIMIT
     }
 
     if(upperLimit == null || typeof upperLimit == 'undefined') {
-      upperLimit = AcData.DEFAULT_UPPER_LIMIT
+      upperLimit = AcLogic.DEFAULT_UPPER_LIMIT
     }
 
     var totalChordTones = 0, numChordTones, currentPitch;

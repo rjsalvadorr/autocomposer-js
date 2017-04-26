@@ -1,8 +1,8 @@
 window.esdocSearchIndex = [
   [
-    "autocomposer-melody/src/autocomposer-data.js~autocomposerdata",
-    "class/src/autocomposer-data.js~AutoComposerData.html",
-    "<span>AutoComposerData</span> <span class=\"search-result-import-path\">autocomposer-melody/src/autocomposer-data.js</span>",
+    "autocomposer-melody/src/autocomposer-logic.js~autocomposerlogic",
+    "class/src/autocomposer-logic.js~AutoComposerLogic.html",
+    "<span>AutoComposerLogic</span> <span class=\"search-result-import-path\">autocomposer-melody/src/autocomposer-logic.js</span>",
     "class"
   ],
   [
@@ -15,12 +15,6 @@ window.esdocSearchIndex = [
     "autocomposer-melody/src/autocomposer-midi.js~autocomposermidi",
     "class/src/autocomposer-midi.js~AutoComposerMidi.html",
     "<span>AutoComposerMidi</span> <span class=\"search-result-import-path\">autocomposer-melody/src/autocomposer-midi.js</span>",
-    "class"
-  ],
-  [
-    "autocomposer-melody/src/autocomposer-parser.js~autocomposerparser",
-    "class/src/autocomposer-parser.js~AutoComposerParser.html",
-    "<span>AutoComposerParser</span> <span class=\"search-result-import-path\">autocomposer-melody/src/autocomposer-parser.js</span>",
     "class"
   ],
   [
@@ -37,20 +31,80 @@ window.esdocSearchIndex = [
   ],
   [
     "",
+    "test-file/test/autocomposer-parser.js.html#lineNumber6",
+    "AutoComposerLogic",
+    "test"
+  ],
+  [
+    "",
     "test-file/test/autocomposer-data.js.html#lineNumber6",
-    "AutoComposerData",
+    "AutoComposerLogic",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-parser.js.html#lineNumber38",
+    "AutoComposerLogic #convertAccidentalsToAscii",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-parser.js.html#lineNumber39",
+    "AutoComposerLogic #convertAccidentalsToAscii should convert Unicode accentals to ASCII versions",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-parser.js.html#lineNumber22",
+    "AutoComposerLogic #convertAsciiAccidentalsToHtml",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-parser.js.html#lineNumber23",
+    "AutoComposerLogic #convertAsciiAccidentalsToHtml should convert ASCII accidentals to Unicode HTML entities",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-parser.js.html#lineNumber30",
+    "AutoComposerLogic #convertAsciiAccidentalsToText",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-parser.js.html#lineNumber31",
+    "AutoComposerLogic #convertAsciiAccidentalsToText should convert ASCII accentals to Unicode versions",
     "test"
   ],
   [
     "",
     "test-file/test/autocomposer-data.js.html#lineNumber7",
-    "AutoComposerData #filterMelodyRange",
+    "AutoComposerLogic #filterMelodyRange",
     "test"
   ],
   [
     "",
     "test-file/test/autocomposer-data.js.html#lineNumber8",
-    "AutoComposerData #filterMelodyRange should filter out melodies that have a range larger than an octave",
+    "AutoComposerLogic #filterMelodyRange should filter out melodies that have a range larger than an octave",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-parser.js.html#lineNumber7",
+    "AutoComposerLogic #isValidText",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-parser.js.html#lineNumber15",
+    "AutoComposerLogic #isValidText should return false for non-chord inputs",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-parser.js.html#lineNumber8",
+    "AutoComposerLogic #isValidText should return true for chord inputs",
     "test"
   ],
   [
@@ -159,66 +213,6 @@ window.esdocSearchIndex = [
     "",
     "test-file/test/autocomposer-melody.js.html#lineNumber124",
     "AutoComposerMelody #getMelodies should return raw melodies as a string array",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber6",
-    "AutoComposerParser",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber38",
-    "AutoComposerParser #convertAccidentalsToAscii",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber39",
-    "AutoComposerParser #convertAccidentalsToAscii should convert Unicode accentals to ASCII versions",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber22",
-    "AutoComposerParser #convertAsciiAccidentalsToHtml",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber23",
-    "AutoComposerParser #convertAsciiAccidentalsToHtml should convert ASCII accidentals to Unicode HTML entities",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber30",
-    "AutoComposerParser #convertAsciiAccidentalsToText",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber31",
-    "AutoComposerParser #convertAsciiAccidentalsToText should convert ASCII accentals to Unicode versions",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber7",
-    "AutoComposerParser #isValidText",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber15",
-    "AutoComposerParser #isValidText should return false for non-chord inputs",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber8",
-    "AutoComposerParser #isValidText should return true for chord inputs",
     "test"
   ],
   [
@@ -558,87 +552,111 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/autocomposer-data.js",
-    "file/src/autocomposer-data.js.html",
-    "src/autocomposer-data.js",
+    "src/autocomposer-logic.js",
+    "file/src/autocomposer-logic.js.html",
+    "src/autocomposer-logic.js",
     "file"
   ],
   [
-    "src/autocomposer-data.js~autocomposerdata#accompaniment_lower_limit",
-    "class/src/autocomposer-data.js~AutoComposerData.html#instance-member-ACCOMPANIMENT_LOWER_LIMIT",
-    "src/autocomposer-data.js~AutoComposerData#ACCOMPANIMENT_LOWER_LIMIT",
+    "src/autocomposer-logic.js~autocomposerlogic#accompaniment_lower_limit",
+    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-member-ACCOMPANIMENT_LOWER_LIMIT",
+    "src/autocomposer-logic.js~AutoComposerLogic#ACCOMPANIMENT_LOWER_LIMIT",
     "member"
   ],
   [
-    "src/autocomposer-data.js~autocomposerdata#accompaniment_upper_limit",
-    "class/src/autocomposer-data.js~AutoComposerData.html#instance-member-ACCOMPANIMENT_UPPER_LIMIT",
-    "src/autocomposer-data.js~AutoComposerData#ACCOMPANIMENT_UPPER_LIMIT",
+    "src/autocomposer-logic.js~autocomposerlogic#accompaniment_upper_limit",
+    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-member-ACCOMPANIMENT_UPPER_LIMIT",
+    "src/autocomposer-logic.js~AutoComposerLogic#ACCOMPANIMENT_UPPER_LIMIT",
     "member"
   ],
   [
-    "src/autocomposer-data.js~autocomposerdata#bass_lower_limit",
-    "class/src/autocomposer-data.js~AutoComposerData.html#instance-member-BASS_LOWER_LIMIT",
-    "src/autocomposer-data.js~AutoComposerData#BASS_LOWER_LIMIT",
+    "src/autocomposer-logic.js~autocomposerlogic#bass_lower_limit",
+    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-member-BASS_LOWER_LIMIT",
+    "src/autocomposer-logic.js~AutoComposerLogic#BASS_LOWER_LIMIT",
     "member"
   ],
   [
-    "src/autocomposer-data.js~autocomposerdata#bass_upper_limit",
-    "class/src/autocomposer-data.js~AutoComposerData.html#instance-member-BASS_UPPER_LIMIT",
-    "src/autocomposer-data.js~AutoComposerData#BASS_UPPER_LIMIT",
+    "src/autocomposer-logic.js~autocomposerlogic#bass_upper_limit",
+    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-member-BASS_UPPER_LIMIT",
+    "src/autocomposer-logic.js~AutoComposerLogic#BASS_UPPER_LIMIT",
     "member"
   ],
   [
-    "src/autocomposer-data.js~autocomposerdata#chords_limit",
-    "class/src/autocomposer-data.js~AutoComposerData.html#instance-member-CHORDS_LIMIT",
-    "src/autocomposer-data.js~AutoComposerData#CHORDS_LIMIT",
+    "src/autocomposer-logic.js~autocomposerlogic#chords_limit",
+    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-member-CHORDS_LIMIT",
+    "src/autocomposer-logic.js~AutoComposerLogic#CHORDS_LIMIT",
     "member"
   ],
   [
-    "src/autocomposer-data.js~autocomposerdata#default_lower_limit",
-    "class/src/autocomposer-data.js~AutoComposerData.html#instance-member-DEFAULT_LOWER_LIMIT",
-    "src/autocomposer-data.js~AutoComposerData#DEFAULT_LOWER_LIMIT",
+    "src/autocomposer-logic.js~autocomposerlogic#default_lower_limit",
+    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-member-DEFAULT_LOWER_LIMIT",
+    "src/autocomposer-logic.js~AutoComposerLogic#DEFAULT_LOWER_LIMIT",
     "member"
   ],
   [
-    "src/autocomposer-data.js~autocomposerdata#default_upper_limit",
-    "class/src/autocomposer-data.js~AutoComposerData.html#instance-member-DEFAULT_UPPER_LIMIT",
-    "src/autocomposer-data.js~AutoComposerData#DEFAULT_UPPER_LIMIT",
+    "src/autocomposer-logic.js~autocomposerlogic#default_upper_limit",
+    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-member-DEFAULT_UPPER_LIMIT",
+    "src/autocomposer-logic.js~AutoComposerLogic#DEFAULT_UPPER_LIMIT",
     "member"
   ],
   [
-    "src/autocomposer-data.js~autocomposerdata#initial_progression",
-    "class/src/autocomposer-data.js~AutoComposerData.html#instance-member-INITIAL_PROGRESSION",
-    "src/autocomposer-data.js~AutoComposerData#INITIAL_PROGRESSION",
+    "src/autocomposer-logic.js~autocomposerlogic#initial_progression",
+    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-member-INITIAL_PROGRESSION",
+    "src/autocomposer-logic.js~AutoComposerLogic#INITIAL_PROGRESSION",
     "member"
   ],
   [
-    "src/autocomposer-data.js~autocomposerdata#num_generations_limit",
-    "class/src/autocomposer-data.js~AutoComposerData.html#instance-member-NUM_GENERATIONS_LIMIT",
-    "src/autocomposer-data.js~AutoComposerData#NUM_GENERATIONS_LIMIT",
+    "src/autocomposer-logic.js~autocomposerlogic#num_generations_limit",
+    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-member-NUM_GENERATIONS_LIMIT",
+    "src/autocomposer-logic.js~AutoComposerLogic#NUM_GENERATIONS_LIMIT",
     "member"
   ],
   [
-    "src/autocomposer-data.js~autocomposerdata#num_melodies_limit",
-    "class/src/autocomposer-data.js~AutoComposerData.html#instance-member-NUM_MELODIES_LIMIT",
-    "src/autocomposer-data.js~AutoComposerData#NUM_MELODIES_LIMIT",
+    "src/autocomposer-logic.js~autocomposerlogic#num_melodies_limit",
+    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-member-NUM_MELODIES_LIMIT",
+    "src/autocomposer-logic.js~AutoComposerLogic#NUM_MELODIES_LIMIT",
     "member"
   ],
   [
-    "src/autocomposer-data.js~autocomposerdata#constructor",
-    "class/src/autocomposer-data.js~AutoComposerData.html#instance-constructor-constructor",
-    "src/autocomposer-data.js~AutoComposerData#constructor",
+    "src/autocomposer-logic.js~autocomposerlogic#constructor",
+    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-constructor-constructor",
+    "src/autocomposer-logic.js~AutoComposerLogic#constructor",
     "method"
   ],
   [
-    "src/autocomposer-data.js~autocomposerdata#filtermelodyrange",
-    "class/src/autocomposer-data.js~AutoComposerData.html#instance-method-filterMelodyRange",
-    "src/autocomposer-data.js~AutoComposerData#filterMelodyRange",
+    "src/autocomposer-logic.js~autocomposerlogic#convertaccidentalstoascii",
+    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-method-convertAccidentalsToAscii",
+    "src/autocomposer-logic.js~AutoComposerLogic#convertAccidentalsToAscii",
     "method"
   ],
   [
-    "src/autocomposer-data.js~autocomposerdata#getchorddictionary",
-    "class/src/autocomposer-data.js~AutoComposerData.html#instance-method-getChordDictionary",
-    "src/autocomposer-data.js~AutoComposerData#getChordDictionary",
+    "src/autocomposer-logic.js~autocomposerlogic#convertasciiaccidentalstohtml",
+    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-method-convertAsciiAccidentalsToHtml",
+    "src/autocomposer-logic.js~AutoComposerLogic#convertAsciiAccidentalsToHtml",
+    "method"
+  ],
+  [
+    "src/autocomposer-logic.js~autocomposerlogic#convertasciiaccidentalstotext",
+    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-method-convertAsciiAccidentalsToText",
+    "src/autocomposer-logic.js~AutoComposerLogic#convertAsciiAccidentalsToText",
+    "method"
+  ],
+  [
+    "src/autocomposer-logic.js~autocomposerlogic#filtermelodyrange",
+    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-method-filterMelodyRange",
+    "src/autocomposer-logic.js~AutoComposerLogic#filterMelodyRange",
+    "method"
+  ],
+  [
+    "src/autocomposer-logic.js~autocomposerlogic#getchorddictionary",
+    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-method-getChordDictionary",
+    "src/autocomposer-logic.js~AutoComposerLogic#getChordDictionary",
+    "method"
+  ],
+  [
+    "src/autocomposer-logic.js~autocomposerlogic#isvalidtext",
+    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-method-isValidText",
+    "src/autocomposer-logic.js~AutoComposerLogic#isValidText",
     "method"
   ],
   [
@@ -903,42 +921,6 @@ window.esdocSearchIndex = [
     "src/autocomposer-midi.js~autocomposermidi#stopplayback",
     "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-stopPlayback",
     "src/autocomposer-midi.js~AutoComposerMidi#stopPlayback",
-    "method"
-  ],
-  [
-    "src/autocomposer-parser.js",
-    "file/src/autocomposer-parser.js.html",
-    "src/autocomposer-parser.js",
-    "file"
-  ],
-  [
-    "src/autocomposer-parser.js~autocomposerparser#constructor",
-    "class/src/autocomposer-parser.js~AutoComposerParser.html#instance-constructor-constructor",
-    "src/autocomposer-parser.js~AutoComposerParser#constructor",
-    "method"
-  ],
-  [
-    "src/autocomposer-parser.js~autocomposerparser#convertaccidentalstoascii",
-    "class/src/autocomposer-parser.js~AutoComposerParser.html#instance-method-convertAccidentalsToAscii",
-    "src/autocomposer-parser.js~AutoComposerParser#convertAccidentalsToAscii",
-    "method"
-  ],
-  [
-    "src/autocomposer-parser.js~autocomposerparser#convertasciiaccidentalstohtml",
-    "class/src/autocomposer-parser.js~AutoComposerParser.html#instance-method-convertAsciiAccidentalsToHtml",
-    "src/autocomposer-parser.js~AutoComposerParser#convertAsciiAccidentalsToHtml",
-    "method"
-  ],
-  [
-    "src/autocomposer-parser.js~autocomposerparser#convertasciiaccidentalstotext",
-    "class/src/autocomposer-parser.js~AutoComposerParser.html#instance-method-convertAsciiAccidentalsToText",
-    "src/autocomposer-parser.js~AutoComposerParser#convertAsciiAccidentalsToText",
-    "method"
-  ],
-  [
-    "src/autocomposer-parser.js~autocomposerparser#isvalidtext",
-    "class/src/autocomposer-parser.js~AutoComposerParser.html#instance-method-isValidText",
-    "src/autocomposer-parser.js~AutoComposerParser#isValidText",
     "method"
   ],
   [

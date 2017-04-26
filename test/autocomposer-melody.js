@@ -4,8 +4,8 @@ const _ = require('underscore');
 var AcMelody = require('../src/autocomposer-melody');
 var AutoComposerMelody = new AcMelody.AutoComposerMelody();
 
-var AutoComposerData = require('../src/autocomposer-data');
-var AcData = new AutoComposerData.AutoComposerData();
+var AutoComposerLogic = require('../src/autocomposer-logic');
+var AcLogic = new AutoComposerLogic.AutoComposerLogic();
 
 var TEST_CHORD_1 = "Gm7";
 var TEST_CHORD_2 = "Cm7";
