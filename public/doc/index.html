@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl">
-  <title data-ice="title">API Document</title>
+  <title data-ice="title">AutoComposer API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -43,12 +43,29 @@
 </nav>
 
 <div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="autocomposer-melody-">AutoComposer (Melody)</h1>
-<h2 id="what-is-this-">What is this?</h2>
+<p>The name is kinda lame, but it&apos;ll work for now...</p>
+<h2 id="overview">Overview</h2>
+<p>The AutoComposer creates small musical snippets that conform to the <em>best practices</em> of Western music theory. In its current form, it does this by writing a simple melody over a chord progression. It also has a few more tricks:</p>
+<ul>
+<li>Writes basic accompaniment for melodies.</li>
+<li>Can present generated melodies in the following formats:<ul>
+<li><strong>Musical score</strong></li>
+<li><strong>MIDI file</strong></li>
+<li><strong>Audio</strong> - the program play back the MIDI file thanks to the <em>Web MIDI API</em></li>
+</ul>
+</li>
+<li>Displays metadata about each generated melody.</li>
+</ul>
 <p>If you&apos;re a music nerd that frequently wonders about the melodic possibilities in a chord progression, this program can help you out.
 It visualizes various sequences of chord tones that fit in a chord progression, and ranks them by smoothness.
 In our case, smoothness is calculated as the sum of intervals between the notes of a melody.</p>
-<h2 id="but-why-">But why?</h2>
-<p>I&apos;m a wannabe composer that wants to use computers to help me understand and write music.</p>
+<h2 id="potential-uses">Potential Uses</h2>
+<ul>
+<li>Brainstorming when starting or continuing a musical composition.</li>
+<li>Exploring how melody and harmony work together.</li>
+</ul>
+<h2 id="more-info">More info</h2>
+<p>Check out the <a href="https://github.com/rjsalvadorr/autocomposer-melody/wiki">project wiki</a>, since that&apos;s updated more often than this file.</p>
 </div>
 </div>
 

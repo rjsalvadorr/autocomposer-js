@@ -1,4 +1,5 @@
 {
+  "title": "AutoComposer",
   "source": "./src",
   "destination": "./public/doc",
   "access": ["public", "private", "protected"],
