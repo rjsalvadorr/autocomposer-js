@@ -8,7 +8,7 @@ var testPlayer = BrowserPlayer.BrowserPlayer;
 const AcMidi = require("../../src/autocomposer-midi");
 var player = new AcMidi.AutoComposerMidi();
 
-var debugMessage1 = "Range is from Db4 to G#5\n\nAverage chord tones for";
+var debugMessage1 = "Range is from Db4 to G#5\n\nAverage chord tones in that range for:";
 debugMessage1 += "\nmajor triads: " + calc.getAverageChordTonesInRange("M");
 debugMessage1 += "\nminor triads: " + calc.getAverageChordTonesInRange("m");
 debugMessage1 += "\nmaj7 chords: " + calc.getAverageChordTonesInRange("maj7");
@@ -21,7 +21,7 @@ var chordTonesTriads = calc.getAverageChordTonesInRange("M");
 var chordTonesTetrads = calc.getAverageChordTonesInRange("maj7");
 var chordTonesPentads = calc.getAverageChordTonesInRange("maj9");
 
-var debugMessage2 = "\nNumber of possible melodies for";
+var debugMessage2 = "\nNumber of possible melodies for:";
 debugMessage2 += "\n~4 triads: " + Math.floor(Math.pow(chordTonesTriads, 4));
 debugMessage2 += "\n~8 triads: " + Math.floor(Math.pow(chordTonesTriads, 8));
 debugMessage2 += "\n~12 triads: " + Math.floor(Math.pow(chordTonesTriads, 12));

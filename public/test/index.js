@@ -20041,7 +20041,7 @@ var testPlayer = BrowserPlayer.BrowserPlayer;
 const AcMidi = require("../../src/autocomposer-midi");
 var player = new AcMidi.AutoComposerMidi();
 
-var debugMessage1 = "Range is from Db4 to G#5\n\nAverage chord tones for";
+var debugMessage1 = "Range is from Db4 to G#5\n\nAverage chord tones in that range for:";
 debugMessage1 += "\nmajor triads: " + calc.getAverageChordTonesInRange("M");
 debugMessage1 += "\nminor triads: " + calc.getAverageChordTonesInRange("m");
 debugMessage1 += "\nmaj7 chords: " + calc.getAverageChordTonesInRange("maj7");
@@ -20054,7 +20054,7 @@ var chordTonesTriads = calc.getAverageChordTonesInRange("M");
 var chordTonesTetrads = calc.getAverageChordTonesInRange("maj7");
 var chordTonesPentads = calc.getAverageChordTonesInRange("maj9");
 
-var debugMessage2 = "\nNumber of possible melodies for";
+var debugMessage2 = "\nNumber of possible melodies for:";
 debugMessage2 += "\n~4 triads: " + Math.floor(Math.pow(chordTonesTriads, 4));
 debugMessage2 += "\n~8 triads: " + Math.floor(Math.pow(chordTonesTriads, 8));
 debugMessage2 += "\n~12 triads: " + Math.floor(Math.pow(chordTonesTriads, 12));
@@ -20478,7 +20478,7 @@ var tonalNote = require('tonal-note');
 class AutoComposerMidi {
   constructor() {
     this.INSTRUMENT_NAMES = ["violin", "acoustic_grand_piano", "acoustic_bass"];
-    this.NOTE_DURATION = "2";
+    this.NOTE_DURATION = "1";
 
     this.instruments = {};
     this.player = null;
@@ -20522,11 +20522,11 @@ class AutoComposerMidi {
     if (!this.playbackLocked && event.name == 'Note on' && event.velocity > 0) {
         switch(event.track) {
           case 1:
-            instr1.play(event.noteName, this.audioContext.currentTime, {gain: 3});
+            instr1.play(event.noteName, this.audioContext.currentTime, {gain: 2});
           case 2:
             instr2.play(event.noteName, this.audioContext.currentTime, {gain: 1});
           case 3:
-            instr3.play(event.noteName, this.audioContext.currentTime, {gain: 2});
+            instr3.play(event.noteName, this.audioContext.currentTime, {gain: 1.5});
           default:
             // nothing!
         }
@@ -20678,7 +20678,7 @@ class AutoComposerMidi {
 
     /**
     * Plays the given melody.
-    * @param {string[]} strMidi - MIDI data, as a DataURI string.
+    * @param {string[]} melodySolo - solo melody (violin)
     */
   playMelodySolo(melodySolo) {
     var strMidi = this._buildMelodyMidiSolo(melodySolo);
@@ -20686,7 +20686,9 @@ class AutoComposerMidi {
   }
     /**
     * Plays the given melodies.
-    * @param {string[]} strMidi - MIDI data, as a DataURI string.
+    * @param {string[]} melodySolo - solo melody (violin)
+    * @param {string[]} melodyAccomp - accompaniment melody (piano)
+    * @param {string[]} melodyBass - bass melody (bass)
     */
   playMelodyWithAccompaniment(melodySolo, melodyAccomp, melodyBass) {
     var strMidi = this._buildMelodyMidiWithAccompaniment(melodySolo, melodyAccomp, melodyBass);

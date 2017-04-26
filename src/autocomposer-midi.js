@@ -9,7 +9,7 @@ var tonalNote = require('tonal-note');
 class AutoComposerMidi {
   constructor() {
     this.INSTRUMENT_NAMES = ["violin", "acoustic_grand_piano", "acoustic_bass"];
-    this.NOTE_DURATION = "2";
+    this.NOTE_DURATION = "1";
 
     this.instruments = {};
     this.player = null;
@@ -53,11 +53,11 @@ class AutoComposerMidi {
     if (!this.playbackLocked && event.name == 'Note on' && event.velocity > 0) {
         switch(event.track) {
           case 1:
-            instr1.play(event.noteName, this.audioContext.currentTime, {gain: 3});
+            instr1.play(event.noteName, this.audioContext.currentTime, {gain: 2});
           case 2:
             instr2.play(event.noteName, this.audioContext.currentTime, {gain: 1});
           case 3:
-            instr3.play(event.noteName, this.audioContext.currentTime, {gain: 2});
+            instr3.play(event.noteName, this.audioContext.currentTime, {gain: 1.5});
           default:
             // nothing!
         }
@@ -209,7 +209,7 @@ class AutoComposerMidi {
 
     /**
     * Plays the given melody.
-    * @param {string[]} strMidi - MIDI data, as a DataURI string.
+    * @param {string[]} melodySolo - solo melody (violin)
     */
   playMelodySolo(melodySolo) {
     var strMidi = this._buildMelodyMidiSolo(melodySolo);
@@ -217,7 +217,9 @@ class AutoComposerMidi {
   }
     /**
     * Plays the given melodies.
-    * @param {string[]} strMidi - MIDI data, as a DataURI string.
+    * @param {string[]} melodySolo - solo melody (violin)
+    * @param {string[]} melodyAccomp - accompaniment melody (piano)
+    * @param {string[]} melodyBass - bass melody (bass)
     */
   playMelodyWithAccompaniment(melodySolo, melodyAccomp, melodyBass) {
     var strMidi = this._buildMelodyMidiWithAccompaniment(melodySolo, melodyAccomp, melodyBass);

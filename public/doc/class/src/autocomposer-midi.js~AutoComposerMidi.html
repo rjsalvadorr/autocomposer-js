@@ -412,7 +412,7 @@
         <p>
           
           
-          <span data-ice="name"><span><a href="class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-playMelodySolo">playMelodySolo</a></span></span><span data-ice="signature">(strMidi: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span>)</span>
+          <span data-ice="name"><span><a href="class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-playMelodySolo">playMelodySolo</a></span></span><span data-ice="signature">(melodySolo: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span>)</span>
         </p>
       </div>
       <div>
@@ -440,7 +440,7 @@
         <p>
           
           
-          <span data-ice="name"><span><a href="class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-playMelodyWithAccompaniment">playMelodyWithAccompaniment</a></span></span><span data-ice="signature">(strMidi: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span>)</span>
+          <span data-ice="name"><span><a href="class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-playMelodyWithAccompaniment">playMelodyWithAccompaniment</a></span></span><span data-ice="signature">(melodySolo: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span>, melodyAccomp: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span>, melodyBass: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span>)</span>
         </p>
       </div>
       <div>
@@ -1236,7 +1236,7 @@
     
     
     
-    <span data-ice="name">playMelodySolo</span><span data-ice="signature">(strMidi: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span>)</span>
+    <span data-ice="name">playMelodySolo</span><span data-ice="signature">(melodySolo: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span>)</span>
     <span class="right-info">
       
       
@@ -1261,10 +1261,10 @@
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">strMidi</td>
+      <td data-ice="name" data-depth="0">melodySolo</td>
       <td data-ice="type"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>MIDI data, as a DataURI string.</p>
+      <td data-ice="description"><p>solo melody (violin)</p>
 </td>
     </tr>
 </tbody>
@@ -1297,11 +1297,11 @@
     
     
     
-    <span data-ice="name">playMelodyWithAccompaniment</span><span data-ice="signature">(strMidi: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span>)</span>
+    <span data-ice="name">playMelodyWithAccompaniment</span><span data-ice="signature">(melodySolo: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span>, melodyAccomp: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span>, melodyBass: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/autocomposer-midi.js.html#lineNumber222">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/autocomposer-midi.js.html#lineNumber224">source</a></span></span>
     </span>
   </h3>
 
@@ -1322,10 +1322,24 @@
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">strMidi</td>
+      <td data-ice="name" data-depth="0">melodySolo</td>
       <td data-ice="type"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>MIDI data, as a DataURI string.</p>
+      <td data-ice="description"><p>solo melody (violin)</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">melodyAccomp</td>
+      <td data-ice="type"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>accompaniment melody (piano)</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">melodyBass</td>
+      <td data-ice="type"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>bass melody (bass)</p>
 </td>
     </tr>
 </tbody>
@@ -1362,7 +1376,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/autocomposer-midi.js.html#lineNumber242">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/autocomposer-midi.js.html#lineNumber244">source</a></span></span>
     </span>
   </h3>
 
@@ -1994,7 +2008,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/autocomposer-midi.js.html#lineNumber232">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/autocomposer-midi.js.html#lineNumber234">source</a></span></span>
     </span>
   </h3>
 
