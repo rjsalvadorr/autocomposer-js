@@ -20661,20 +20661,19 @@ class AutoComposerMidi {
     tracks[0] = this._buildMelodyTrack(arrMelody);
 
     var write = new MidiWriter.Writer(tracks);
-    console.log("AutoComposerMidi.[getMidiSolo()] " + write.dataUri());
+    console.log("[AutoComposerMidi._buildMelodyMidiSolo()] " + write.dataUri());
 
     return write.dataUri();
   }
 
     /**
     * Gets the MIDI data for a given melody, with accompaniment.
-    * @private
     * @param {string[]} arrMelody - main melody
     * @param {string[]} arrAcompanimentLine - accompaniment line
     * @param {string[]} arrBassLine - bass line
     * @return {string} - MIDI data, as a DataURI string.
     */
-  _buildMelodyMidiWithAccompaniment(arrMelody, arrAcompanimentLine, arrBassLine) {
+  buildMelodyMidiWithAccompaniment(arrMelody, arrAcompanimentLine, arrBassLine) {
     var tracks, midiNumber;
 
     var melodyTrack = this._buildMelodyTrack(arrMelody);
@@ -20689,7 +20688,7 @@ class AutoComposerMidi {
     tracks = [melodyTrack, accompanimentTrack, bassTrack];
 
     var write = new MidiWriter.Writer(tracks);
-    console.log("AutoComposerMidi.[getMidiSolo()] " + write.dataUri());
+    console.log("[AutoComposerMidi.buildMelodyMidiWithAccompaniment()] " + write.dataUri());
 
     return write.dataUri();
   }
@@ -20709,7 +20708,7 @@ class AutoComposerMidi {
     * @param {string[]} melodyBass - bass melody (bass)
     */
   playMelodyWithAccompaniment(melodySolo, melodyAccomp, melodyBass) {
-    var strMidi = this._buildMelodyMidiWithAccompaniment(melodySolo, melodyAccomp, melodyBass);
+    var strMidi = this.buildMelodyMidiWithAccompaniment(melodySolo, melodyAccomp, melodyBass);
     this._playMelody(strMidi);
   }
 

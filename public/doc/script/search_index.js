@@ -792,12 +792,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/autocomposer-midi.js~autocomposermidi#_buildmelodymidiwithaccompaniment",
-    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_buildMelodyMidiWithAccompaniment",
-    "src/autocomposer-midi.js~AutoComposerMidi#_buildMelodyMidiWithAccompaniment",
-    "method"
-  ],
-  [
     "src/autocomposer-midi.js~autocomposermidi#_buildmelodytrack",
     "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_buildMelodyTrack",
     "src/autocomposer-midi.js~AutoComposerMidi#_buildMelodyTrack",
@@ -832,6 +826,12 @@ window.esdocSearchIndex = [
     "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-audioContext",
     "src/autocomposer-midi.js~AutoComposerMidi#audioContext",
     "member"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#buildmelodymidiwithaccompaniment",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-buildMelodyMidiWithAccompaniment",
+    "src/autocomposer-midi.js~AutoComposerMidi#buildMelodyMidiWithAccompaniment",
+    "method"
   ],
   [
     "src/autocomposer-midi.js~autocomposermidi#constructor",

@@ -97,6 +97,7 @@ class OutputPanel extends React.Component {
     this.playMelodySolo = this.playMelodySolo.bind(this);
     this.playMelody = this.playMelody.bind(this);
     this.stopPlayback = this.stopPlayback.bind(this);
+    this.downloadMidi = this.downloadMidi.bind(this);
   }
 
   playMelodySolo(event) {
@@ -123,6 +124,22 @@ class OutputPanel extends React.Component {
 
   stopPlayback() {
     AcMidi.stopPlayback();
+  }
+
+  downloadMidi(event) {
+    //download MIDI file
+    var melodyString = event.target.dataset["payload"];
+    var melodiesData = melodyString.split(";");
+
+    var melody1 = melodiesData[0].split(",");
+    var melody2 = melodiesData[1].split(",");
+    var melody3 = melodiesData[2].split(",");
+
+    var dataString = AcMidi.buildMelodyMidiWithAccompaniment(melody1, melody2, melody3);
+    var timestamp = new Date().valueOf().toString().slice(-8)
+
+    var fileName = "autocomposer-" + timestamp + "_" + melody1.join("-");
+    download(dataString, fileName, "audio/midi");
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -181,7 +198,7 @@ class OutputPanel extends React.Component {
   createMelodyRows() {
     var melodyUnitList = this.state.melodyUnitList;
     var melodyRows = [];
-    var melodyString, accompanimentString, basslineString, payloadString, arrPayload;
+    var melodyString, accompanimentString, basslineString, payloadString, arrPayload, midiFilename;
 
     for(var i = 0; i < melodyUnitList.length; i++) {
       melodyString = melodyUnitList[i].melodyNotes.join(",");
@@ -190,6 +207,7 @@ class OutputPanel extends React.Component {
 
       arrPayload = [melodyString, accompanimentString, basslineString];
       payloadString = arrPayload.join(";");
+      //midiFilename = melodyUnitList[i].chordProgression.replace(" ", "-") + "-melody" + i;
 
       melodyRows.push(
         <tr key={"melody" + i} className="ac-melody-row">
@@ -197,6 +215,7 @@ class OutputPanel extends React.Component {
             <RjButton inputKey="playMelodySolo" inputLabel="Play Melody (Solo)" dataPayload={melodyString} onClick={this.playMelodySolo} />
             <RjButton inputKey="playMelody" inputLabel="Play Melody (Full)" dataPayload={payloadString} onClick={this.playMelody} />
             <RjButton inputKey="stopPlayback" inputLabel="Stop" dataPayload={payloadString} onClick={this.stopPlayback} />
+            <RjButton inputKey="downloadMidi" inputLabel="Download MIDI" dataPayload={payloadString} onClick={this.downloadMidi} />
           </td>
           <td>
             <div className="vex-tabdiv">

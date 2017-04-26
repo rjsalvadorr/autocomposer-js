@@ -142,6 +142,7 @@ class OutputPanel extends React.Component {
     this.playMelodySolo = this.playMelodySolo.bind(this);
     this.playMelody = this.playMelody.bind(this);
     this.stopPlayback = this.stopPlayback.bind(this);
+    this.downloadMidi = this.downloadMidi.bind(this);
   }
 
   playMelodySolo(event) {
@@ -168,6 +169,22 @@ class OutputPanel extends React.Component {
 
   stopPlayback() {
     AcMidi.stopPlayback();
+  }
+
+  downloadMidi(event) {
+    //download MIDI file
+    var melodyString = event.target.dataset[&quot;payload&quot;];
+    var melodiesData = melodyString.split(&quot;;&quot;);
+
+    var melody1 = melodiesData[0].split(&quot;,&quot;);
+    var melody2 = melodiesData[1].split(&quot;,&quot;);
+    var melody3 = melodiesData[2].split(&quot;,&quot;);
+
+    var dataString = AcMidi.buildMelodyMidiWithAccompaniment(melody1, melody2, melody3);
+    var timestamp = new Date().valueOf().toString().slice(-8)
+
+    var fileName = &quot;autocomposer-&quot; + timestamp + &quot;_&quot; + melody1.join(&quot;-&quot;);
+    download(dataString, fileName, &quot;audio/midi&quot;);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -226,7 +243,7 @@ class OutputPanel extends React.Component {
   createMelodyRows() {
     var melodyUnitList = this.state.melodyUnitList;
     var melodyRows = [];
-    var melodyString, accompanimentString, basslineString, payloadString, arrPayload;
+    var melodyString, accompanimentString, basslineString, payloadString, arrPayload, midiFilename;
 
     for(var i = 0; i &lt; melodyUnitList.length; i++) {
       melodyString = melodyUnitList[i].melodyNotes.join(&quot;,&quot;);
@@ -235,6 +252,7 @@ class OutputPanel extends React.Component {
 
       arrPayload = [melodyString, accompanimentString, basslineString];
       payloadString = arrPayload.join(&quot;;&quot;);
+      //midiFilename = melodyUnitList[i].chordProgression.replace(&quot; &quot;, &quot;-&quot;) + &quot;-melody&quot; + i;
 
       melodyRows.push(
         &lt;tr key={&quot;melody&quot; + i} className=&quot;ac-melody-row&quot;&gt;
@@ -242,6 +260,7 @@ class OutputPanel extends React.Component {
             &lt;RjButton inputKey=&quot;playMelodySolo&quot; inputLabel=&quot;Play Melody (Solo)&quot; dataPayload={melodyString} onClick={this.playMelodySolo} /&gt;
             &lt;RjButton inputKey=&quot;playMelody&quot; inputLabel=&quot;Play Melody (Full)&quot; dataPayload={payloadString} onClick={this.playMelody} /&gt;
             &lt;RjButton inputKey=&quot;stopPlayback&quot; inputLabel=&quot;Stop&quot; dataPayload={payloadString} onClick={this.stopPlayback} /&gt;
+            &lt;RjButton inputKey=&quot;downloadMidi&quot; inputLabel=&quot;Download MIDI&quot; dataPayload={payloadString} onClick={this.downloadMidi} /&gt;
           &lt;/td&gt;
           &lt;td&gt;
             &lt;div className=&quot;vex-tabdiv&quot;&gt;
