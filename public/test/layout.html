@@ -5,29 +5,59 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>AutoComposer Layout Testing</title>
+    <title>AutoComposer</title>
     <link href="layout.css" rel="stylesheet">
   </head>
   <body>
     <div id="app-container" class="root-panel">
       <div id="main-control-panel" class="ac-panel static-height">
-        <h3>AutoComposer Layout Testing</h3>
-        <div class="panel-row">
-          <input id="chord-progression" type="text" class="ac-input text" placeholder="things go here">
-          <button name="button" class="ac-input button square right">Settings</button>
+        <h3>AutoComposer</h3>
+        <p>We can consider this the specs for HTML that React generates</p>
+        <div class="panel-row has-labels">
+          <div class="ac-control-wrapper">
+            <label class="ac-input-label" for="">Chord Progression</label>
+            <input id="chord-progression" type="text" class="ac-input text" placeholder="things go here">
+          </div>
+          <div class="ac-control-wrapper square">
+            <!--
+              if we know that this input has siblings with labels, a blank label should be paragraphs with a single space.
+            -->
+            <pclass="ac-input-label" > </p>
+            <button name="button" class="ac-input button">Settings</button>
+          </div>
         </div>
         <div class="panel-row">
-          <button name="button" class="ac-input button flex-md">Generate</button>
-          <input id="chord-progression" type="text" class="ac-output text" placeholder="things go here" readonly="true">
-          <button name="button" class="ac-input button square right">Help</button>
+          <div class="ac-control-wrapper flex-md">
+            <!--
+              if we know that this input has no siblings with labels, just omit the label tag.
+            -->
+            <button name="button" class="ac-input button">Generate</button>
+          </div>
+          <div class="ac-control-wrapper">
+            <input id="app-status" type="text" class="ac-output text" placeholder="app status goes here" readonly="true">
+          </div>
+          <div class="ac-control-wrapper square">
+            <button name="button" class="ac-input button">Help</button>
+          </div>
         </div>
       </div>
       <div id="melody-control-panel" class="ac-panel static-height">
         <div class="panel-row">
-          <button name="button" class="ac-input button">Play</button>
-          <button name="button" class="ac-input button flex-sm">Play (solo)</button>
-          <button name="button" class="ac-input button flex-sm">Stop</button>
-          <button name="button" class="ac-input button flex-sm">D/L</button>
+          <div class="ac-control-wrapper">
+            <!--
+              if we know that this input has no siblings with labels, just omit the label tag.
+            -->
+            <button name="button" class="ac-input button">Play</button>
+          </div>
+          <div class="ac-control-wrapper flex-md">
+            <button name="button" class="ac-input button">Play (solo)</button>
+          </div>
+          <div class="ac-control-wrapper flex-sm">
+            <button name="button" class="ac-input button">Stop</button>
+          </div>
+          <div class="ac-control-wrapper flex-sm">
+            <button name="button" class="ac-input button">D/L</button>
+          </div>
         </div>
       </div>
       <div id="output-panel" class="ac-panel">
