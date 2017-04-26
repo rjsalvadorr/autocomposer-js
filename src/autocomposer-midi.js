@@ -140,6 +140,30 @@ class AutoComposerMidi {
   }
 
     /**
+    * Builds a Track from a given chord.
+    * @private
+    * @param {string[]} arrChordNotes - chordNotes
+    * @return {Track} - a MidiWriter Track
+    */
+  _buildChordTrack(arrChordNotes) {
+    var notes, midiNumber, midiNumbers;
+    var returnTrack = new MidiWriter.Track();
+
+    for(var i = 0; i < arrChordNotes.length; i++) {
+      midiNumbers = [];
+      notes = arrChordNotes[i].split(" ");
+
+      notes.forEach(function(note){
+        midiNumbers.push(tonalNote.midi(note));
+      })
+
+      returnTrack.addEvent(this._buildChordMidi(midiNumbers, this.NOTE_DURATION));
+    }
+
+    return returnTrack;
+  }
+
+    /**
     * Gets the MIDI data for a given melody.
     * @private
     * @param {string[]} arrMelody - our melody

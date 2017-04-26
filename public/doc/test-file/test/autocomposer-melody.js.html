@@ -112,7 +112,7 @@ describe(&apos;AutoComposerMelody&apos;, function() {
         melodyNotes: melody1.split(&quot; &quot;),
         smoothness: 13,
         range: 8,
-        contour: &quot;&quot;
+        melodyString: melody1
       }
 
       exp2 = {
@@ -120,7 +120,7 @@ describe(&apos;AutoComposerMelody&apos;, function() {
         melodyNotes: melody2.split(&quot; &quot;),
         smoothness: 7,
         range: 7,
-        contour: &quot;&quot;
+        melodyString: melody2
       }
 
       result1 = AutoComposerMelody.buildMelodyUnit(chordProgression, melody1);
@@ -171,6 +171,32 @@ describe(&apos;AutoComposerMelody&apos;, function() {
       var melodyList = AutoComposerMelody.getRawMelodies(chordProgression);
 
       assert.equal(typeof melodyList[0] === &apos;string&apos;, true);
+    });
+  });
+
+  describe(&apos;#getBasicBassLine&apos;, function() {
+    it(&apos;should return a simple bassline for a melody&apos;, function() {
+      var chordProgression = [&quot;G&quot;, &quot;Em&quot;, &quot;C&quot;, &quot;D&quot;];
+      var melody = &quot;B3 G4 E4 F#4&quot;;
+      var melodyUnit = AutoComposerMelody.buildMelodyUnit(chordProgression, melody);
+
+      var resultBassline = AutoComposerMelody.getBasicBassLine(melodyUnit);
+      var expBassline = [&quot;G1&quot;, &quot;E1&quot;, &quot;C2&quot;, &quot;D2&quot;];
+
+      assert.deepEqual(resultBassline, expBassline);
+    });
+  });
+
+  describe(&apos;#getAccompaniment&apos;, function() {
+    it(&apos;should return a simple accompaniment for a melody&apos;, function() {
+      var chordProgression = [&quot;G&quot;, &quot;Em&quot;, &quot;C&quot;, &quot;D&quot;];
+      var melody = &quot;B3 G4 E4 F#4&quot;;
+      var expAccompaniment = [&quot;D3&quot;, &quot;B2&quot;, &quot;G2&quot;, &quot;A2&quot;];
+
+      var melodyUnit = AutoComposerMelody.buildMelodyUnit(chordProgression, melody);
+      var resultBassline = AutoComposerMelody.getAccompaniment(melodyUnit);
+
+      assert.deepEqual(resultBassline, expAccompaniment);
     });
   });
 });

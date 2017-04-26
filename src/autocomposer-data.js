@@ -5,9 +5,6 @@ var chord = require('tonal-chord');
  * Encapsulates data and musical logic to be used by the application
  */
 class AutoComposerData {
-  /**
-  * Plain constructor.
-  */
   constructor() {
     this.DEFAULT_LOWER_LIMIT = "Db4";
     this.DEFAULT_UPPER_LIMIT = "G#5";
@@ -44,6 +41,8 @@ class AutoComposerData {
 
     return highest - lowest <= 12;
   }
+
+
 };
 
 exports.AutoComposerData = AutoComposerData;

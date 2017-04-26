@@ -26,13 +26,80 @@ class AutoComposerMelody {
     /**
     * For a given note, find its lowest instance in the specified range.
     * @private
-    * @param {string} note - note (written in scientific notation)
-    * @param {string} upperLimit - note (written in scientific notation)
+    * @param {string} pitch - pitch class
     * @param {string} lowerLimit - note (written in scientific notation)
+    * @param {string} upperLimit - note (written in scientific notation)
     * @return {string[]} - an array of notes (written in scientific pitch)
     */
-  getLowestNoteInRange(note, upperLimit, lowerLimit) {
-    return [];
+  _getLowestNoteInRange(pitch, lowerLimit, upperLimit) {
+    var chordTonesInRange = tonal.range.pitchSet(pitch, [lowerLimit, upperLimit]);
+    return chordTonesInRange[0];
+  }
+
+    /**
+    * For a given array of chord tones, remove the specified pitches.
+    * @private
+    * @param {string[]} pitchArray - pitches to remove
+    * @param {string[]} chordTones - chord tones
+    * @return {string[]} - the remaining chord tones
+    */
+  _removePitchesFromChordTones(pitchArray, chordTones) {
+    var indexToRemove;
+    pitchArray.forEach(function(pitch) {
+      indexToRemove = chordTones.indexOf(pitch);
+      if (indexToRemove > -1) {
+        chordTones.splice(indexToRemove, 1);
+      }
+    });
+    return chordTones;
+  }
+
+    /**
+    * For a given MelodyUnit, get an accompaniment for it.
+    * @private
+    * @param {MelodyUnit} melodyUnit - melody that needs accompaniment
+    * @return {string[]} - array of strings, each representing one or more notes to play under each melodic note.
+    */
+  getAccompaniment(melodyUnit) {
+    // Omit root note, and maybe avoid doubling the top note as well.
+    var noteArray = [], chordNotes, currentChord, bassPitch, topPitch;
+
+    for(var i = 0; i < melodyUnit.chordProgression.length; i++) {
+      currentChord = melodyUnit.chordProgression[i];
+      bassPitch = tonal.chord.parse(currentChord)["tonic"];
+      topPitch =  tonal.note.pc(melodyUnit.melodyNotes[i]);
+
+      chordNotes = tonal.chord.notes(currentChord);
+      chordNotes = this._removePitchesFromChordTones([bassPitch, topPitch], chordNotes);
+
+      for(var j = 0; j < chordNotes.length; j++) {
+        chordNotes[j] = this._getLowestNoteInRange(chordNotes[j], AcData.ACCOMPANIMENT_LOWER_LIMIT, AcData.ACCOMPANIMENT_UPPER_LIMIT);
+      }
+      noteArray.push(chordNotes.join(" "));
+    }
+
+    return noteArray;
+  }
+
+    /**
+    * For a given MelodyUnit, return a basic bass line consisting only of root notes.
+    * @private
+    * @param {MelodyUnit} melodyUnit - melody that needs a bassline
+    * @return {string} - string representing a bassline.
+    */
+  getBasicBassLine(melodyUnit) {
+    var noteArray = [], currentChord, bassPitch, bassNote;
+
+    // return all the lowest root notes for the progression.
+    for(var i = 0; i < melodyUnit.chordProgression.length; i++) {
+      currentChord = melodyUnit.chordProgression[i];
+      bassPitch = tonal.chord.parse(currentChord)["tonic"];
+      bassNote = this._getLowestNoteInRange(bassPitch, AcData.BASS_LOWER_LIMIT, AcData.BASS_UPPER_LIMIT);
+
+      noteArray.push(bassNote);
+    }
+
+    return noteArray;
   }
 
     /**

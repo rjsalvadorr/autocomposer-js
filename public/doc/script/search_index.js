@@ -103,6 +103,18 @@ window.esdocSearchIndex = [
   ],
   [
     "",
+    "test-file/test/autocomposer-melody.js.html#lineNumber145",
+    "AutoComposerMelody #getAccompaniment",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-melody.js.html#lineNumber146",
+    "AutoComposerMelody #getAccompaniment should return a simple accompaniment for a melody",
+    "test"
+  ],
+  [
+    "",
     "test-file/test/autocomposer-melody.js.html#lineNumber21",
     "AutoComposerMelody #getAllChordTones",
     "test"
@@ -111,6 +123,18 @@ window.esdocSearchIndex = [
     "",
     "test-file/test/autocomposer-melody.js.html#lineNumber22",
     "AutoComposerMelody #getAllChordTones should return all chord tones in the range (inclusive)",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-melody.js.html#lineNumber132",
+    "AutoComposerMelody #getBasicBassLine",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-melody.js.html#lineNumber133",
+    "AutoComposerMelody #getBasicBassLine should return a simple bassline for a melody",
     "test"
   ],
   [
@@ -624,6 +648,18 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/autocomposer-melody.js~autocomposermelody#_getlowestnoteinrange",
+    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-_getLowestNoteInRange",
+    "src/autocomposer-melody.js~AutoComposerMelody#_getLowestNoteInRange",
+    "method"
+  ],
+  [
+    "src/autocomposer-melody.js~autocomposermelody#_removepitchesfromchordtones",
+    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-_removePitchesFromChordTones",
+    "src/autocomposer-melody.js~AutoComposerMelody#_removePitchesFromChordTones",
+    "method"
+  ],
+  [
     "src/autocomposer-melody.js~autocomposermelody#buildchordunit",
     "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-buildChordUnit",
     "src/autocomposer-melody.js~AutoComposerMelody#buildChordUnit",
@@ -660,6 +696,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/autocomposer-melody.js~autocomposermelody#getaccompaniment",
+    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-getAccompaniment",
+    "src/autocomposer-melody.js~AutoComposerMelody#getAccompaniment",
+    "method"
+  ],
+  [
     "src/autocomposer-melody.js~autocomposermelody#getallchordtones",
     "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-getAllChordTones",
     "src/autocomposer-melody.js~AutoComposerMelody#getAllChordTones",
@@ -672,9 +714,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/autocomposer-melody.js~autocomposermelody#getlowestnoteinrange",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-getLowestNoteInRange",
-    "src/autocomposer-melody.js~AutoComposerMelody#getLowestNoteInRange",
+    "src/autocomposer-melody.js~autocomposermelody#getbasicbassline",
+    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-getBasicBassLine",
+    "src/autocomposer-melody.js~AutoComposerMelody#getBasicBassLine",
     "method"
   ],
   [
@@ -729,6 +771,12 @@ window.esdocSearchIndex = [
     "src/autocomposer-midi.js~autocomposermidi#_buildchordmidi",
     "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_buildChordMidi",
     "src/autocomposer-midi.js~AutoComposerMidi#_buildChordMidi",
+    "method"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#_buildchordtrack",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_buildChordTrack",
+    "src/autocomposer-midi.js~AutoComposerMidi#_buildChordTrack",
     "method"
   ],
   [
@@ -936,12 +984,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/melody-unit.js~melodyunit#contour",
-    "class/src/melody-unit.js~MelodyUnit.html#instance-member-contour",
-    "src/melody-unit.js~MelodyUnit#contour",
-    "member"
-  ],
-  [
     "src/melody-unit.js~melodyunit#getrange",
     "class/src/melody-unit.js~MelodyUnit.html#instance-method-getRange",
     "src/melody-unit.js~MelodyUnit#getRange",
@@ -957,6 +999,12 @@ window.esdocSearchIndex = [
     "src/melody-unit.js~melodyunit#melodynotes",
     "class/src/melody-unit.js~MelodyUnit.html#instance-member-melodyNotes",
     "src/melody-unit.js~MelodyUnit#melodyNotes",
+    "member"
+  ],
+  [
+    "src/melody-unit.js~melodyunit#melodystring",
+    "class/src/melody-unit.js~MelodyUnit.html#instance-member-melodyString",
+    "src/melody-unit.js~MelodyUnit#melodyString",
     "member"
   ],
   [

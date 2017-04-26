@@ -67,7 +67,7 @@ describe('AutoComposerMelody', function() {
         melodyNotes: melody1.split(" "),
         smoothness: 13,
         range: 8,
-        contour: ""
+        melodyString: melody1
       }
 
       exp2 = {
@@ -75,7 +75,7 @@ describe('AutoComposerMelody', function() {
         melodyNotes: melody2.split(" "),
         smoothness: 7,
         range: 7,
-        contour: ""
+        melodyString: melody2
       }
 
       result1 = AutoComposerMelody.buildMelodyUnit(chordProgression, melody1);
@@ -126,6 +126,32 @@ describe('AutoComposerMelody', function() {
       var melodyList = AutoComposerMelody.getRawMelodies(chordProgression);
 
       assert.equal(typeof melodyList[0] === 'string', true);
+    });
+  });
+
+  describe('#getBasicBassLine', function() {
+    it('should return a simple bassline for a melody', function() {
+      var chordProgression = ["G", "Em", "C", "D"];
+      var melody = "B3 G4 E4 F#4";
+      var melodyUnit = AutoComposerMelody.buildMelodyUnit(chordProgression, melody);
+
+      var resultBassline = AutoComposerMelody.getBasicBassLine(melodyUnit);
+      var expBassline = ["G1", "E1", "C2", "D2"];
+
+      assert.deepEqual(resultBassline, expBassline);
+    });
+  });
+
+  describe('#getAccompaniment', function() {
+    it('should return a simple accompaniment for a melody', function() {
+      var chordProgression = ["G", "Em", "C", "D"];
+      var melody = "B3 G4 E4 F#4";
+      var expAccompaniment = ["D3", "B2", "G2", "A2"];
+
+      var melodyUnit = AutoComposerMelody.buildMelodyUnit(chordProgression, melody);
+      var resultBassline = AutoComposerMelody.getAccompaniment(melodyUnit);
+
+      assert.deepEqual(resultBassline, expAccompaniment);
     });
   });
 });

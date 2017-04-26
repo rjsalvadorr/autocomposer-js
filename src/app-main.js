@@ -11,6 +11,9 @@ var AcMelody = new AutoComposerMelody.AutoComposerMelody();
 var AutoComposerParser = require('./autocomposer-parser');
 var AcParser = new AutoComposerParser.AutoComposerParser();
 
+var acMidi = require('./autocomposer-midi');
+var AcMidi = new acMidi.AutoComposerMidi();
+
 function AcInputException(message) {
    this.message = message;
    this.name = 'AcInputException';
@@ -90,6 +93,31 @@ class OutputPanel extends React.Component {
     this.state = {
       melodyUnitList: null
     }
+
+    this.playMelodySolo = this.playMelodySolo.bind(this);
+    this.playMelody = this.playMelody.bind(this);
+  }
+
+  playMelodySolo(event) {
+    var melodyString = event.target.dataset["payload"];
+    console.debug(melodyString);
+    var melody = melodyString.split(",");
+
+    AcMidi.playMelodySolo(melody);
+  }
+
+  playMelody(event) {
+    // melodyString looks like:
+    // G5 F#5 G5;B2,A2,E3;E1 D2 C2
+    var melodyString = event.target.dataset["payload"];
+    var melodiesData = melodyString.split(";");
+    console.debug(melodyString);
+
+    var melody1 = melodiesData[0].split(",");
+    var melody2 = melodiesData[1].split(",");
+    var melody3 = melodiesData[2].split(",");
+
+    AcMidi.playMelodyWithAccompaniment(melody1, melody2, melody3);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -148,10 +176,22 @@ class OutputPanel extends React.Component {
   createMelodyRows() {
     var melodyUnitList = this.state.melodyUnitList;
     var melodyRows = [];
+    var melodyString, accompanimentString, basslineString, payloadString, arrPayload;
 
     for(var i = 0; i < melodyUnitList.length; i++) {
+      melodyString = melodyUnitList[i].melodyNotes.join(",");
+      accompanimentString = AcMelody.getAccompaniment(melodyUnitList[i]).join(",");
+      basslineString = AcMelody.getBasicBassLine(melodyUnitList[i]);
+
+      arrPayload = [melodyString, accompanimentString, basslineString];
+      payloadString = arrPayload.join(";");
+
       melodyRows.push(
         <tr key={"melody" + i} className="ac-melody-row">
+          <td>
+            <RjButton inputKey="playMelodySolo" inputLabel="Play Melody (Solo)" dataPayload={melodyString} onClick={this.playMelodySolo} />
+            <RjButton inputKey="playMelody" inputLabel="Play Melody" dataPayload={payloadString} onClick={this.playMelody} />
+          </td>
           <td>
             <div className="vex-tabdiv">
               {this.createVexTab(melodyUnitList[i].chordProgression, melodyUnitList[i].melodyNotes)}
@@ -172,6 +212,7 @@ class OutputPanel extends React.Component {
       <table id="ac-melody-output">
         <thead>
           <tr>
+            <th></th>
             <th>Melody</th>
             <th>Smoothness</th>
             <th>Range</th>
@@ -225,7 +266,7 @@ class RjButton extends React.Component {
     var buttonClass = this.props.isActive ? "ac-input button active" : "ac-input button";
 
     return (
-      <input type="button" className={buttonClass} id={this.props.inputKey} value={this.props.inputLabel} onClick={this.props.onClick} disabled={this.props.disabled}/>
+      <input type="button" className={buttonClass} id={this.props.inputKey} value={this.props.inputLabel} onClick={this.props.onClick} disabled={this.props.disabled} data-payload={this.props.dataPayload}/>
     );
   }
 }

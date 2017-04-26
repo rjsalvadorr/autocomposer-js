@@ -18,7 +18,7 @@ class MelodyUnit {
     /** @type {number} */
     this.range = this.getRange();
     /** @type {string} */
-    this.contour = "";
+    this.melodyString = this.melodyNotes.join(" ");
   }
 
     /**
