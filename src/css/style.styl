@@ -1,0 +1,37 @@
+// central stylesheet.
+
+bgBody = #dddddd
+textColor = #222222
+
+innerPadding = 15px
+
+@require "layout"
+
+body
+  background-color: bgBody
+  color: textColor
+  font-family: 'Helvetica', 'Arial', sans-serif
+
+.ac-input.textarea
+  resize: none
+  font-size: 2em
+
+#error-message
+  padding: 0.75vw
+  background-color: #D33
+  color: #300
+
+#chord-dictionary
+  text-align: center
+
+  li
+    font-family: monospace
+    background-color: #AAA
+    display: inline-block
+    padding: 8px
+    margin: 5px 15px
+    font-size: 1.2em
+
+@require "layout"
+@require "melodies-table"
+@require "details"

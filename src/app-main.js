@@ -43,7 +43,7 @@ class HelpPanel extends React.Component {
   render() {
     if(!this.props.isHidden) {
       return (
-        <div id="help-panel" className="autocomposer-panel">
+        <div id="help-panel" className="ac-panel output-panel">
           <h2>Help!</h2>
           <p>How to use this web app:</p>
           <ol>
@@ -250,7 +250,7 @@ class OutputPanel extends React.Component {
   render() {
     if(!this.props.isHidden) {
       return (
-        <div id="output-panel" className="autocomposer-panel">
+        <div id="output-panel" className="ac-panel output-panel">
           <h2>Melodies!</h2>
           {this.createMelodyTable()}
         </div>
@@ -288,7 +288,9 @@ class RjButton extends React.Component {
     var buttonClass = this.props.isActive ? "ac-input button active" : "ac-input button";
 
     return (
-      <input type="button" className={buttonClass} id={this.props.inputKey} value={this.props.inputLabel} onClick={this.props.onClick} disabled={this.props.disabled} data-payload={this.props.dataPayload}/>
+      <div className="ac-control-wrapper">
+        <input type="button" className={buttonClass} id={this.props.inputKey} value={this.props.inputLabel} onClick={this.props.onClick} disabled={this.props.disabled} data-payload={this.props.dataPayload}/>
+      </div>
     );
   }
 }
@@ -311,7 +313,9 @@ class RjToggleButton extends React.Component {
   render() {
     var buttonClass = this.state.isActive ? "ac-input button active" : "ac-input button";
     return (
-      <input type="button" className={buttonClass} id={this.props.inputKey} value={this.props.inputLabel} data-state-key={this.props.inputKey} data-current-state={this.state.isActive} onClick={(e) => this.handleClick(e)} disabled={this.props.disabled}/>
+      <div className="ac-control-wrapper">
+        <input type="button" className={buttonClass} id={this.props.inputKey} value={this.props.inputLabel} data-state-key={this.props.inputKey} data-current-state={this.state.isActive} onClick={(e) => this.handleClick(e)} disabled={this.props.disabled}/>
+      </div>
     );
   }
 }
@@ -321,8 +325,8 @@ class RjToggleButton extends React.Component {
 class RjTextField extends React.Component {
   render() {
     return (
-      <div>
-        <label htmlFor={this.props.inputKey}>{this.props.inputLabel}</label>
+      <div className="ac-control-wrapper">
+        <label className="ac-input-label" htmlFor={this.props.inputKey}>{this.props.inputLabel}</label>
         <input id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className="ac-input textfield" type="text" value={this.props.value} onChange={this.props.onChange} />
       </div>
     );
@@ -335,14 +339,16 @@ class RjTextArea extends React.Component {
   render() {
     if(this.props.inputLabel) {
       return (
-        <div>
-          <label htmlFor={this.props.inputKey}>{this.props.inputLabel}</label>
+        <div className="ac-control-wrapper">
+          <label className="ac-input-label" htmlFor={this.props.inputKey}>{this.props.inputLabel}</label>
           <textarea id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className="ac-input textarea" value={this.props.value} placeholder={this.props.placeholder} onChange={this.props.onChange} />
         </div>
       );
     } else {
       return (
-        <textarea id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className="ac-input textarea" value={this.props.value} placeholder={this.props.placeholder} onChange={this.props.onChange} />
+        <div className="ac-control-wrapper">
+          <textarea id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className="ac-input textarea" value={this.props.value} placeholder={this.props.placeholder} onChange={this.props.onChange} />
+        </div>
       );
     }
   }
@@ -353,9 +359,9 @@ class RjTextArea extends React.Component {
 class RjCheckbox extends React.Component {
   render() {
     return (
-      <div className="ac-input checkbox">
-        <label htmlFor={this.props.inputKey}>{this.props.inputLabel}</label>
-        <input id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} type="checkbox" checked={this.props.isChecked} onChange={this.props.onChange}/>
+      <div className="ac-control-wrapper">
+        <label className="ac-input-label" htmlFor={this.props.inputKey}>{this.props.inputLabel}</label>
+        <input id={this.props.inputKey} className="ac-input checkbox" name={this.props.inputKey} data-state-key={this.props.inputKey} type="checkbox" checked={this.props.isChecked} onChange={this.props.onChange}/>
       </div>
     );
   }
@@ -370,7 +376,11 @@ class RjRadioSet extends React.Component {
 
     for (var k in totalOptions) {
       if (totalOptions.hasOwnProperty(k)) {
-        items.push(<label key={"label-" + k} >{totalOptions[k]} <input key={k} id={this.props.inputKey} name={this.props.inputKey} className="ac-input radio" data-state-key={this.props.inputKey} type="radio" value={k}  onChange={this.props.onChange} /> </label>);
+        items.push(
+          <label key={"label-" + k} >{totalOptions[k]}
+            <input key={k} id={this.props.inputKey} name={this.props.inputKey} className="ac-input radio" data-state-key={this.props.inputKey} type="radio" value={k}  onChange={this.props.onChange} />
+          </label>
+        );
       }
     }
 
@@ -379,7 +389,7 @@ class RjRadioSet extends React.Component {
 
   render() {
     return(
-      <div className="ac-radioset">
+      <div className="ac-control-wrapper">
         <fieldset>
           <legend>{this.props.inputLabel}</legend>
           {this.createRadioItems()}
@@ -408,9 +418,9 @@ class RjSelect extends React.Component {
 
   render() {
     return(
-      <div className="ac-input select">
-        <label htmlFor={this.props.inputKey}>{this.props.inputLabel}</label>
-        <select id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} onChange={this.props.onChange}>
+      <div className="ac-control-wrapper">
+        <label htmlFor={this.props.inputKey} className="ac-input-label">{this.props.inputLabel}</label>
+        <select id={this.props.inputKey} className="ac-input select" name={this.props.inputKey} data-state-key={this.props.inputKey} onChange={this.props.onChange}>
           {this.createSelectItems()}
         </select>
       </div>
@@ -467,7 +477,7 @@ class ControlPanel extends React.Component {
 
       return (
 
-        <div className="r-component">
+        <div id="control-panel" className="ac-panel output-panel">
           <h2>Controls</h2>
 
           <RjTextField inputKey="text1" inputLabel="For text1" value={this.state.text1} onChange={this.handleChange} />
@@ -603,30 +613,35 @@ class AutoComposer extends React.Component {
 
   render() {
     var chordProgressionArray = this.state.chordProgressionRaw.split(" ");
-
+    // Assume that we have an empty body tag.
     return (
-      <div id="r-app-container" className="r-component">
+      <div id="app-container" className="root-panel">
+        <div id="main-control-panel" className="ac-panel static-height">
+          <h3>AutoComposer</h3>
 
-        <div id="wrapper-main-input">
-          <div className="wrapper-textarea">
+          <div className="panel-row has-labels">
             <RjTextArea inputKey="chordProgressionRaw" value={this.state.chordProgressionRaw} placeholder={this.state.chordProgressionPlaceholder} onChange={this.handleChange} />
             <RjButton inputKey="generateMelodies" inputLabel="Generate Melodies" onClick={this.generateMelodies} />
           </div>
 
-          <div className="wrapper-buttons">
+          <div className="panel-row">
             <RjToggleButton inputKey="hideHelp" inputLabel="Help/Info" initialState={this.state.hideHelp} onClickHandler={this.handleChange} />
             <RjToggleButton inputKey="hideControls" inputLabel="Settings" initialState={this.state.hideControls} onClickHandler={this.handleChange} disabled={this.state.controlsDisabled} />
           </div>
+
+          <ErrorMessage isHidden={this.state.hideError} errorMessage={this.state.errorMessage} />
+
+          <DebugPanel isHidden={!this.state.debugMode} debugData={JSON.stringify(this.state, null, 2)}/>
+        </div>
+        <div id="melody-control-panel" className="ac-panel static-height">
         </div>
 
-        <ErrorMessage isHidden={this.state.hideError} errorMessage={this.state.errorMessage} />
-
         <ControlPanel isHidden={this.state.hideControls} />
+
         <HelpPanel isHidden={this.state.hideHelp} />
 
         <OutputPanel isHidden={this.state.hideOutput} chordProgression={chordProgressionArray} allowMelodyGeneration={this.state.allowMelodyGeneration} outputCallback={this.outputFinishCallback}/>
 
-        <DebugPanel isHidden={!this.state.debugMode} debugData={JSON.stringify(this.state, null, 2)}/>
       </div>
     );
   }

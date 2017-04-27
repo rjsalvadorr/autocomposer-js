@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>AutoComposer, phase 01</title>
+    <link href="style.css" rel="stylesheet">
+  </head>
+  <body>
+    <h1 id="main-title">AutoComposer, phase 01</h1>
+    <p>
+      This is a prototype for a program that automatically writes music. Click the "Help" button to get started.<br>
+      For more info, check out the <a href="https://github.com/rjsalvadorr/autocomposer-melody/wiki" target="_blank">project wiki</a> and <a href="https://github.com/rjsalvadorr/autocomposer-melody" target="_blank">repository</a>
+      for the project.<br>
+      Also, feel free to check out the <a href="doc/index.html" target="_blank">documentation</a> and <a href="test/index.html" target="_blank">test page</a>.
+    </p>
+    <h2>Hiccups</h2>
+    <p>This is a work in progress, so you may spot some weird behaviour here and there. For the best experience:</p>
+    <ul>
+      <li>Use this on desktop. It's being developed and tested for Google Chrome right now.</li>
+      <li>
+        <p>
+          You'll want to keep the chord progressions short. According to my numbers from the
+          <a href="test/index.html" target="_blank">test page</a>, the app will attempt to generate around 390,000
+          melodies if you give it 8 three-note chords. If you give it 8 four-note chords, it'll try to generate around 3.7 million melodies.
+        </p>
+        <p>
+          What happens if you enter way too many chords? You'll just see your browser slow to a crawl. :)
+        </p>
+      </li>
+    </ul>
+
+    <div id="react-root"></div>
+
+    <script src="autocomposer-melody.js"></script>
+    <script src="vextab-div.js"></script>
+    <script src="download.js"></script>
+  </body>
+</html>

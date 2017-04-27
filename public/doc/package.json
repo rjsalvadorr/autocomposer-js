@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "mocha && esdoc",
-    "compile-css": "stylus src/style.styl -o public/style.css",
+    "compile-css": "stylus src/css/style.styl -o public/style.css",
     "build-sandbox": "browserify public/test/raw.js -o public/test/index.js",
     "build-dev": "browserify src/app-main.js -o dist/autocomposer-melody.js -t [ babelify --presets [ react ] ]",
     "build-prod": "browserify src/app-main.js -t [ babelify --presets [ react ] ] | uglifyjs -o dist/autocomposer-melody.js",

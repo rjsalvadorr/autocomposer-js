@@ -1,0 +1,26 @@
+// Fine details such as colours, box-shadow, text-shadow
+
+buttonBackground = #BBB
+buttonBorder = #888
+
+buttonBackgroundHover = darken(buttonBackground, 20%)
+buttonBackgroundActive = darken(buttonBackground, 60%)
+buttonBorderActive =  darken(buttonBorder, 60%)
+
+.ac-input.button
+  border-radius: 8px
+  background-color: buttonBackground
+  border-color: buttonBorder
+  border-width: 0 3px 3px 0
+
+  &:hover
+  &:active
+    border-color: buttonBorderActive
+    background-color: buttonBackgroundHover
+
+  &.active
+    color: #fff
+    border-width: 4px 0 0 4px
+    border-style: inset
+    border-color: buttonBorderActive
+    background-color: buttonBackgroundActive

@@ -1,68 +1,109 @@
-#wrapper-main-input {
+.root-panel {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowwrap;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.ac-panel {
+  padding: 10px 10px 0 10px;
+  border: 1px dashed #222;
+  flex: 10 1 auto;
+}
+.ac-panel.static-height {
+  flex: 0 1 auto;
+}
+.output-panel#help-panel {
+  z-index: 200;
+}
+.output-panel#control-panel {
+  z-index: 200;
+}
+.output-panel#output-panel {
+  z-index: 100;
+}
+.panel-row {
   display: flex;
   flex-wrap: nowrap;
-  flex-direction: row;
+  padding: 0 0 10px 0;
 }
-.wrapper-textarea {
-  width: 100%;
-  padding: 10px;
+.panel-row.has-labels {
+  padding: 0 0 10px 0;
 }
-.wrapper-textarea .ac-input.button,
-.wrapper-textarea .ac-input.textarea {
-  width: 100%;
+.ac-panel.output-panel {
+  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
-.wrapper-textarea .ac-input.textarea {
-  height: 75px;
-  vertical-align: top;
+.ac-control-wrapper {
+  display: inline-block;
+  padding: 0 5px;
   box-sizing: border-box;
-  margin-bottom: 10px;
-  padding: 10px;
-  font-size: 45px;
-  line-height: 45px;
+  flex-grow: 8;
 }
-.wrapper-textarea .ac-input.button {
-  font-size: 40px;
+.ac-control-wrapper:first-child {
+  padding-left: 0;
 }
-.wrapper-buttons {
-  width: 95px;
-  padding: 10px;
+.ac-control-wrapper:last-child {
+  padding-right: 0;
 }
-.wrapper-buttons .ac-input.button {
-  width: 75px;
+.ac-control-wrapper.square {
+  flex-grow: 0;
+  width: 100px;
 }
-.ac-input.button {
-  border-radius: 8px;
-  height: 75px;
-  margin-bottom: 10px;
-  background-color: #bbb;
-  border-color: #888;
-  border-width: 0 3px 3px 0;
+.ac-control-wrapper.flex-sm {
+  flex-grow: 2;
 }
-.ac-input.button:hover,
-.ac-input.button:active {
-  border-color: #363636;
-  background-color: #969696;
+.ac-control-wrapper.flex-md {
+  flex-grow: 4;
 }
-.ac-input.button.active {
-  color: #fff;
-  border-width: 4px 0 0 4px;
-  border-style: inset;
-  border-color: #363636;
-  background-color: #4b4b4b;
+.ac-control-wrapper.flex-lg {
+  flex-grow: 8;
+}
+.ac-control-wrapper .ac-input.text,
+.ac-control-wrapper .ac-output.text {
+  padding: 2px 6px;
+  font-size: 20px;
+}
+.ac-input,
+.ac-output {
+  width: 100%;
+  height: 40px;
+  box-sizing: border-box;
+}
+.ac-input-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding-left: 1px;
 }
 body {
-  background-color: #eee;
+  background-color: #ddd;
+  color: #222;
   font-family: 'Helvetica', 'Arial', sans-serif;
-}
-.r-component {
-  padding: 15px 0;
-}
-.autocomposer-panel {
-  padding: 15px 0;
 }
 .ac-input.textarea {
   resize: none;
   font-size: 2em;
+}
+#error-message {
+  padding: 0.75vw;
+  background-color: #d33;
+  color: #300;
+}
+#chord-dictionary {
+  text-align: center;
+}
+#chord-dictionary li {
+  font-family: monospace;
+  background-color: #aaa;
+  display: inline-block;
+  padding: 8px;
+  margin: 5px 15px;
+  font-size: 1.2em;
 }
 table#ac-melody-output {
   width: 100%;
@@ -80,21 +121,23 @@ table#ac-melody-output td {
   padding: 0.75vw;
 }
 .ac-melody-row {
-  background-color: #eee;
+  background-color: #ddd;
 }
-#error-message {
-  padding: 0.75vw;
-  background-color: #d33;
-  color: #300;
+.ac-input.button {
+  border-radius: 8px;
+  background-color: #bbb;
+  border-color: #888;
+  border-width: 0 3px 3px 0;
 }
-#chord-dictionary {
-  text-align: center;
+.ac-input.button:hover,
+.ac-input.button:active {
+  border-color: #363636;
+  background-color: #969696;
 }
-#chord-dictionary li {
-  font-family: monospace;
-  background-color: #aaa;
-  display: inline-block;
-  padding: 8px;
-  margin: 5px 15px;
-  font-size: 1.2em;
+.ac-input.button.active {
+  color: #fff;
+  border-width: 4px 0 0 4px;
+  border-style: inset;
+  border-color: #363636;
+  background-color: #4b4b4b;
 }
