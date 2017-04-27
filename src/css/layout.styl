@@ -6,8 +6,8 @@ inputHeight = 40px;
 
 .root-panel
   display: flex
-  flex-direction: column
-  flex-wrap: nowwrap
+  flex-direction: row
+  flex-wrap: nowrap
 
   position: fixed
   top: 0
@@ -15,13 +15,15 @@ inputHeight = 40px;
   left: 0
   right: 0
 
+  & > .ac-panel#main-control-panel
+    width: 40%
+  & > .ac-panel
+    width: 60%
+
 .ac-panel
   padding: 10px 10px 0 10px
   border: 1px dashed #222
   flex: 10 1 auto
-
-.ac-panel.static-height
-  flex: 0 1 auto
 
 // Hides the main output panel if the Help panel or Control panel is visible
 #control-panel + #output-panel

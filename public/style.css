@@ -1,20 +1,23 @@
 .root-panel {
   display: flex;
-  flex-direction: column;
-  flex-wrap: nowwrap;
+  flex-direction: row;
+  flex-wrap: nowrap;
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
 }
+.root-panel > .ac-panel#main-control-panel {
+  width: 40%;
+}
+.root-panel > .ac-panel {
+  width: 60%;
+}
 .ac-panel {
   padding: 10px 10px 0 10px;
   border: 1px dashed #222;
   flex: 10 1 auto;
-}
-.ac-panel.static-height {
-  flex: 0 1 auto;
 }
 #control-panel + #output-panel,
 #help-panel + #output-panel {
@@ -113,7 +116,7 @@ table#ac-melody-output thead {
 table#ac-melody-output th,
 table#ac-melody-output td {
   border: 1px #000 solid;
-  padding: 0.75vw;
+  padding: 0.5vw 0;
 }
 .ac-melody-row {
   background-color: #ddd;

@@ -157,10 +157,10 @@ class OutputPanel extends React.Component {
       melodyRows.push(
         <tr key={"melody" + i} className="ac-melody-row">
           <td>
-            <AcButton inputKey="playMelodySolo" inputLabel="Play Melody (Solo)" dataPayload={melodyString} onClick={this.playMelodySolo} />
-            <AcButton inputKey="playMelody" inputLabel="Play Melody (Full)" dataPayload={payloadString} onClick={this.playMelody} />
+            <AcButton inputKey="playMelodySolo" inputLabel="Play (Solo)" dataPayload={melodyString} onClick={this.playMelodySolo} />
+            <AcButton inputKey="playMelody" inputLabel="Play (Full)" dataPayload={payloadString} onClick={this.playMelody} />
             <AcButton inputKey="stopPlayback" inputLabel="Stop" dataPayload={payloadString} onClick={this.stopPlayback} />
-            <AcButton inputKey="downloadMidi" inputLabel="Download MIDI" dataPayload={payloadString} onClick={this.downloadMidi} />
+            <AcButton inputKey="downloadMidi" inputLabel="Get MIDI" dataPayload={payloadString} onClick={this.downloadMidi} />
           </td>
           <td>
             <div className="vex-tabdiv">
@@ -205,7 +205,10 @@ class OutputPanel extends React.Component {
         </div>
       );
     } else {
-      return null;
+      return (
+        <div id="output-panel" className="ac-panel output-panel">
+        </div>
+      );
     }
   }
 }
@@ -354,7 +357,7 @@ class AutoComposer extends React.Component {
     // Assume that we have an empty body tag.
     return (
       <div id="app-container" className="root-panel">
-        <div id="main-control-panel" className="ac-panel static-height">
+        <div id="main-control-panel" className="ac-panel">
           <h3>AutoComposer</h3>
 
           <div className="panel-row has-labels">
@@ -368,12 +371,13 @@ class AutoComposer extends React.Component {
             <AcToggleButton inputKey="showHelp" inputLabel="Help/Info" wrapperAddClass="square" initialState={this.state.showHelp} onClickHandler={this.callbackChangeState} />
           </div>
 
+          <div className="panel-row">
+            {/* Melody controls will go here */}
+          </div>
+
           <ErrorMessage isShown={this.state.showError} errorMessage={this.state.errorMessage} />
 
           <DebugPanel isHidden={!this.state.debugMode} debugData={JSON.stringify(this.state, null, 2)}/>
-        </div>
-        <div id="melody-control-panel" className="ac-panel static-height">
-          {/* Melody controls will go here eventually */}
         </div>
 
         <ControlPanel isShown={this.state.showControls} />

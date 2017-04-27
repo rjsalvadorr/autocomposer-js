@@ -212,10 +212,10 @@ class OutputPanel extends React.Component {
       melodyRows.push(
         &lt;tr key={&quot;melody&quot; + i} className=&quot;ac-melody-row&quot;&gt;
           &lt;td&gt;
-            &lt;AcButton inputKey=&quot;playMelodySolo&quot; inputLabel=&quot;Play Melody (Solo)&quot; dataPayload={melodyString} onClick={this.playMelodySolo} /&gt;
-            &lt;AcButton inputKey=&quot;playMelody&quot; inputLabel=&quot;Play Melody (Full)&quot; dataPayload={payloadString} onClick={this.playMelody} /&gt;
+            &lt;AcButton inputKey=&quot;playMelodySolo&quot; inputLabel=&quot;Play (Solo)&quot; dataPayload={melodyString} onClick={this.playMelodySolo} /&gt;
+            &lt;AcButton inputKey=&quot;playMelody&quot; inputLabel=&quot;Play (Full)&quot; dataPayload={payloadString} onClick={this.playMelody} /&gt;
             &lt;AcButton inputKey=&quot;stopPlayback&quot; inputLabel=&quot;Stop&quot; dataPayload={payloadString} onClick={this.stopPlayback} /&gt;
-            &lt;AcButton inputKey=&quot;downloadMidi&quot; inputLabel=&quot;Download MIDI&quot; dataPayload={payloadString} onClick={this.downloadMidi} /&gt;
+            &lt;AcButton inputKey=&quot;downloadMidi&quot; inputLabel=&quot;Get MIDI&quot; dataPayload={payloadString} onClick={this.downloadMidi} /&gt;
           &lt;/td&gt;
           &lt;td&gt;
             &lt;div className=&quot;vex-tabdiv&quot;&gt;
@@ -260,7 +260,10 @@ class OutputPanel extends React.Component {
         &lt;/div&gt;
       );
     } else {
-      return null;
+      return (
+        &lt;div id=&quot;output-panel&quot; className=&quot;ac-panel output-panel&quot;&gt;
+        &lt;/div&gt;
+      );
     }
   }
 }
@@ -409,7 +412,7 @@ class AutoComposer extends React.Component {
     // Assume that we have an empty body tag.
     return (
       &lt;div id=&quot;app-container&quot; className=&quot;root-panel&quot;&gt;
-        &lt;div id=&quot;main-control-panel&quot; className=&quot;ac-panel static-height&quot;&gt;
+        &lt;div id=&quot;main-control-panel&quot; className=&quot;ac-panel&quot;&gt;
           &lt;h3&gt;AutoComposer&lt;/h3&gt;
 
           &lt;div className=&quot;panel-row has-labels&quot;&gt;
@@ -423,12 +426,13 @@ class AutoComposer extends React.Component {
             &lt;AcToggleButton inputKey=&quot;showHelp&quot; inputLabel=&quot;Help/Info&quot; wrapperAddClass=&quot;square&quot; initialState={this.state.showHelp} onClickHandler={this.callbackChangeState} /&gt;
           &lt;/div&gt;
 
+          &lt;div className=&quot;panel-row&quot;&gt;
+            {/* Melody controls will go here */}
+          &lt;/div&gt;
+
           &lt;ErrorMessage isShown={this.state.showError} errorMessage={this.state.errorMessage} /&gt;
 
           &lt;DebugPanel isHidden={!this.state.debugMode} debugData={JSON.stringify(this.state, null, 2)}/&gt;
-        &lt;/div&gt;
-        &lt;div id=&quot;melody-control-panel&quot; className=&quot;ac-panel static-height&quot;&gt;
-          {/* Melody controls will go here eventually */}
         &lt;/div&gt;
 
         &lt;ControlPanel isShown={this.state.showControls} /&gt;
