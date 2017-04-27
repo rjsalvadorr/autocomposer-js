@@ -1,5 +1,47 @@
 window.esdocSearchIndex = [
   [
+    "autocomposer-melody/src/react/ac-button.js~acbutton",
+    "class/src/react/ac-button.js~AcButton.html",
+    "<span>AcButton</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/ac-button.js</span>",
+    "class"
+  ],
+  [
+    "autocomposer-melody/src/react/ac-checkbox.js~accheckbox",
+    "class/src/react/ac-checkbox.js~AcCheckbox.html",
+    "<span>AcCheckbox</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/ac-checkbox.js</span>",
+    "class"
+  ],
+  [
+    "autocomposer-melody/src/react/ac-radioset.js~acradioset",
+    "class/src/react/ac-radioset.js~AcRadioSet.html",
+    "<span>AcRadioSet</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/ac-radioset.js</span>",
+    "class"
+  ],
+  [
+    "autocomposer-melody/src/react/ac-select.js~acselect",
+    "class/src/react/ac-select.js~AcSelect.html",
+    "<span>AcSelect</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/ac-select.js</span>",
+    "class"
+  ],
+  [
+    "autocomposer-melody/src/react/ac-textarea.js~actextarea",
+    "class/src/react/ac-textarea.js~AcTextArea.html",
+    "<span>AcTextArea</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/ac-textarea.js</span>",
+    "class"
+  ],
+  [
+    "autocomposer-melody/src/react/ac-text-field.js~actextfield",
+    "class/src/react/ac-text-field.js~AcTextField.html",
+    "<span>AcTextField</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/ac-text-field.js</span>",
+    "class"
+  ],
+  [
+    "autocomposer-melody/src/react/ac-toggle-button.js~actogglebutton",
+    "class/src/react/ac-toggle-button.js~AcToggleButton.html",
+    "<span>AcToggleButton</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/ac-toggle-button.js</span>",
+    "class"
+  ],
+  [
     "autocomposer-melody/src/autocomposer-logic.js~autocomposerlogic",
     "class/src/autocomposer-logic.js~AutoComposerLogic.html",
     "<span>AutoComposerLogic</span> <span class=\"search-result-import-path\">autocomposer-melody/src/autocomposer-logic.js</span>",
@@ -24,6 +66,24 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "autocomposer-melody/src/react/debug-panel.js~debugpanel",
+    "class/src/react/debug-panel.js~DebugPanel.html",
+    "<span>DebugPanel</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/debug-panel.js</span>",
+    "class"
+  ],
+  [
+    "autocomposer-melody/src/react/error-message.js~errormessage",
+    "class/src/react/error-message.js~ErrorMessage.html",
+    "<span>ErrorMessage</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/error-message.js</span>",
+    "class"
+  ],
+  [
+    "autocomposer-melody/src/react/help-panel.js~helppanel",
+    "class/src/react/help-panel.js~HelpPanel.html",
+    "<span>HelpPanel</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/help-panel.js</span>",
+    "class"
+  ],
+  [
     "autocomposer-melody/src/melody-unit.js~melodyunit",
     "class/src/melody-unit.js~MelodyUnit.html",
     "<span>MelodyUnit</span> <span class=\"search-result-import-path\">autocomposer-melody/src/melody-unit.js</span>",
@@ -31,13 +91,13 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber6",
+    "test-file/test/autocomposer-data.js.html#lineNumber6",
     "AutoComposerLogic",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-data.js.html#lineNumber6",
+    "test-file/test/autocomposer-parser.js.html#lineNumber6",
     "AutoComposerLogic",
     "test"
   ],
@@ -1011,6 +1071,174 @@ window.esdocSearchIndex = [
     "src/melody-unit.js~melodyunit#smoothness",
     "class/src/melody-unit.js~MelodyUnit.html#instance-member-smoothness",
     "src/melody-unit.js~MelodyUnit#smoothness",
+    "member"
+  ],
+  [
+    "src/react/ac-button.js",
+    "file/src/react/ac-button.js.html",
+    "src/react/ac-button.js",
+    "file"
+  ],
+  [
+    "src/react/ac-button.js~acbutton#render",
+    "class/src/react/ac-button.js~AcButton.html#instance-method-render",
+    "src/react/ac-button.js~AcButton#render",
+    "method"
+  ],
+  [
+    "src/react/ac-checkbox.js",
+    "file/src/react/ac-checkbox.js.html",
+    "src/react/ac-checkbox.js",
+    "file"
+  ],
+  [
+    "src/react/ac-checkbox.js~accheckbox#render",
+    "class/src/react/ac-checkbox.js~AcCheckbox.html#instance-method-render",
+    "src/react/ac-checkbox.js~AcCheckbox#render",
+    "method"
+  ],
+  [
+    "src/react/ac-radioset.js",
+    "file/src/react/ac-radioset.js.html",
+    "src/react/ac-radioset.js",
+    "file"
+  ],
+  [
+    "src/react/ac-radioset.js~acradioset#createradioitems",
+    "class/src/react/ac-radioset.js~AcRadioSet.html#instance-method-createRadioItems",
+    "src/react/ac-radioset.js~AcRadioSet#createRadioItems",
+    "method"
+  ],
+  [
+    "src/react/ac-radioset.js~acradioset#render",
+    "class/src/react/ac-radioset.js~AcRadioSet.html#instance-method-render",
+    "src/react/ac-radioset.js~AcRadioSet#render",
+    "method"
+  ],
+  [
+    "src/react/ac-select.js",
+    "file/src/react/ac-select.js.html",
+    "src/react/ac-select.js",
+    "file"
+  ],
+  [
+    "src/react/ac-select.js~acselect#createselectitems",
+    "class/src/react/ac-select.js~AcSelect.html#instance-method-createSelectItems",
+    "src/react/ac-select.js~AcSelect#createSelectItems",
+    "method"
+  ],
+  [
+    "src/react/ac-select.js~acselect#render",
+    "class/src/react/ac-select.js~AcSelect.html#instance-method-render",
+    "src/react/ac-select.js~AcSelect#render",
+    "method"
+  ],
+  [
+    "src/react/ac-text-field.js",
+    "file/src/react/ac-text-field.js.html",
+    "src/react/ac-text-field.js",
+    "file"
+  ],
+  [
+    "src/react/ac-text-field.js~actextfield#render",
+    "class/src/react/ac-text-field.js~AcTextField.html#instance-method-render",
+    "src/react/ac-text-field.js~AcTextField#render",
+    "method"
+  ],
+  [
+    "src/react/ac-textarea.js",
+    "file/src/react/ac-textarea.js.html",
+    "src/react/ac-textarea.js",
+    "file"
+  ],
+  [
+    "src/react/ac-textarea.js~actextarea#render",
+    "class/src/react/ac-textarea.js~AcTextArea.html#instance-method-render",
+    "src/react/ac-textarea.js~AcTextArea#render",
+    "method"
+  ],
+  [
+    "src/react/ac-toggle-button.js",
+    "file/src/react/ac-toggle-button.js.html",
+    "src/react/ac-toggle-button.js",
+    "file"
+  ],
+  [
+    "src/react/ac-toggle-button.js~actogglebutton#constructor",
+    "class/src/react/ac-toggle-button.js~AcToggleButton.html#instance-constructor-constructor",
+    "src/react/ac-toggle-button.js~AcToggleButton#constructor",
+    "method"
+  ],
+  [
+    "src/react/ac-toggle-button.js~actogglebutton#handleclick",
+    "class/src/react/ac-toggle-button.js~AcToggleButton.html#instance-method-handleClick",
+    "src/react/ac-toggle-button.js~AcToggleButton#handleClick",
+    "method"
+  ],
+  [
+    "src/react/ac-toggle-button.js~actogglebutton#render",
+    "class/src/react/ac-toggle-button.js~AcToggleButton.html#instance-method-render",
+    "src/react/ac-toggle-button.js~AcToggleButton#render",
+    "method"
+  ],
+  [
+    "src/react/ac-toggle-button.js~actogglebutton#state",
+    "class/src/react/ac-toggle-button.js~AcToggleButton.html#instance-member-state",
+    "src/react/ac-toggle-button.js~AcToggleButton#state",
+    "member"
+  ],
+  [
+    "src/react/debug-panel.js",
+    "file/src/react/debug-panel.js.html",
+    "src/react/debug-panel.js",
+    "file"
+  ],
+  [
+    "src/react/debug-panel.js~debugpanel#render",
+    "class/src/react/debug-panel.js~DebugPanel.html#instance-method-render",
+    "src/react/debug-panel.js~DebugPanel#render",
+    "method"
+  ],
+  [
+    "src/react/error-message.js",
+    "file/src/react/error-message.js.html",
+    "src/react/error-message.js",
+    "file"
+  ],
+  [
+    "src/react/error-message.js~errormessage#render",
+    "class/src/react/error-message.js~ErrorMessage.html#instance-method-render",
+    "src/react/error-message.js~ErrorMessage#render",
+    "method"
+  ],
+  [
+    "src/react/help-panel.js",
+    "file/src/react/help-panel.js.html",
+    "src/react/help-panel.js",
+    "file"
+  ],
+  [
+    "src/react/help-panel.js~helppanel#buildchorddictionary",
+    "class/src/react/help-panel.js~HelpPanel.html#instance-method-buildChordDictionary",
+    "src/react/help-panel.js~HelpPanel#buildChordDictionary",
+    "method"
+  ],
+  [
+    "src/react/help-panel.js~helppanel#constructor",
+    "class/src/react/help-panel.js~HelpPanel.html#instance-constructor-constructor",
+    "src/react/help-panel.js~HelpPanel#constructor",
+    "method"
+  ],
+  [
+    "src/react/help-panel.js~helppanel#render",
+    "class/src/react/help-panel.js~HelpPanel.html#instance-method-render",
+    "src/react/help-panel.js~HelpPanel#render",
+    "method"
+  ],
+  [
+    "src/react/help-panel.js~helppanel#state",
+    "class/src/react/help-panel.js~HelpPanel.html#instance-member-state",
+    "src/react/help-panel.js~HelpPanel#state",
     "member"
   ],
   [

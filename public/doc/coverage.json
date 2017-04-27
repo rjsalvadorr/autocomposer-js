@@ -1,7 +1,7 @@
 {
-  "coverage": "68.83%",
-  "expectCount": 77,
-  "actualCount": 53,
+  "coverage": "60%",
+  "expectCount": 105,
+  "actualCount": 63,
   "files": {
     "src/autocomposer-logic.js": {
       "expectCount": 18,
@@ -17,6 +17,60 @@
         19,
         21,
         20,
+        9
+      ]
+    },
+    "src/react/ac-button.js": {
+      "expectCount": 2,
+      "actualCount": 1,
+      "undocumentLines": [
+        8
+      ]
+    },
+    "src/react/ac-checkbox.js": {
+      "expectCount": 2,
+      "actualCount": 1,
+      "undocumentLines": [
+        7
+      ]
+    },
+    "src/react/ac-radioset.js": {
+      "expectCount": 3,
+      "actualCount": 1,
+      "undocumentLines": [
+        7,
+        24
+      ]
+    },
+    "src/react/ac-select.js": {
+      "expectCount": 3,
+      "actualCount": 1,
+      "undocumentLines": [
+        7,
+        21
+      ]
+    },
+    "src/react/ac-textarea.js": {
+      "expectCount": 2,
+      "actualCount": 1,
+      "undocumentLines": [
+        7
+      ]
+    },
+    "src/react/ac-text-field.js": {
+      "expectCount": 2,
+      "actualCount": 1,
+      "undocumentLines": [
+        7
+      ]
+    },
+    "src/react/ac-toggle-button.js": {
+      "expectCount": 5,
+      "actualCount": 1,
+      "undocumentLines": [
+        7,
+        14,
+        19,
         9
       ]
     },
@@ -48,6 +102,30 @@
       "expectCount": 6,
       "actualCount": 6,
       "undocumentLines": []
+    },
+    "src/react/debug-panel.js": {
+      "expectCount": 2,
+      "actualCount": 1,
+      "undocumentLines": [
+        7
+      ]
+    },
+    "src/react/error-message.js": {
+      "expectCount": 2,
+      "actualCount": 1,
+      "undocumentLines": [
+        7
+      ]
+    },
+    "src/react/help-panel.js": {
+      "expectCount": 5,
+      "actualCount": 1,
+      "undocumentLines": [
+        16,
+        9,
+        32,
+        11
+      ]
     },
     "src/melody-unit.js": {
       "expectCount": 9,

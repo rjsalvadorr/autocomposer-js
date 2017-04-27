@@ -37,6 +37,16 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-midi.js~AutoComposerMidi.html">AutoComposerMidi</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/chord-unit.js~ChordUnit.html">ChordUnit</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/melody-unit.js~MelodyUnit.html">MelodyUnit</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">react</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/ac-button.js~AcButton.html">AcButton</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/ac-checkbox.js~AcCheckbox.html">AcCheckbox</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/ac-radioset.js~AcRadioSet.html">AcRadioSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/ac-select.js~AcSelect.html">AcSelect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/ac-text-field.js~AcTextField.html">AcTextField</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/ac-textarea.js~AcTextArea.html">AcTextArea</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/ac-toggle-button.js~AcToggleButton.html">AcToggleButton</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/debug-panel.js~DebugPanel.html">DebugPanel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/error-message.js~ErrorMessage.html">ErrorMessage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/help-panel.js~HelpPanel.html">HelpPanel</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -55,75 +65,21 @@ var AcMelody = new AutoComposerMelody.AutoComposerMelody();
 var acMidi = require(&apos;./autocomposer-midi&apos;);
 var AcMidi = new acMidi.AutoComposerMidi();
 
+var AcButton = require(&apos;./react/ac-button&apos;);
+var AcToggleButton = require(&apos;./react/ac-toggle-button&apos;);
+var AcTextField = require(&apos;./react/ac-text-field&apos;);
+var AcTextArea = require(&apos;./react/ac-textarea&apos;);
+var AcSelect = require(&apos;./react/ac-select&apos;);
+var AcRadioSet = require(&apos;./react/ac-radioset&apos;);
+var AcCheckbox = require(&apos;./react/ac-checkbox&apos;);
+var ErrorMessage = require(&apos;./react/error-message&apos;);
+
+var HelpPanel = require(&apos;./react/help-panel&apos;);
+var DebugPanel = require(&apos;./react/debug-panel&apos;);
+
 function AcInputException(message) {
    this.message = message;
    this.name = &apos;AcInputException&apos;;
-}
-
-class HelpPanel extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      chordArray: AcLogic.getChordDictionary(true)
-    }
-  }
-
-  buildChordDictionary() {
-    var dictionaryItems = [];
-    var ctr = 1;
-
-    this.state.chordArray.forEach(function(chordString) {
-      dictionaryItems.push(&lt;li key={&quot;chordType&quot; + ctr}&gt;{chordString}&lt;/li&gt;);
-      ctr++;
-    });
-
-    return(
-      &lt;ul id=&quot;chord-dictionary&quot;&gt;
-        {dictionaryItems}
-      &lt;/ul&gt;
-    );
-  }
-
-  render() {
-    if(!this.props.isHidden) {
-      return (
-        &lt;div id=&quot;help-content&quot; className=&quot;ac-panel output-panel&quot;&gt;
-          &lt;h2&gt;Help!&lt;/h2&gt;
-          &lt;p&gt;How to use this web app:&lt;/p&gt;
-          &lt;ol&gt;
-            &lt;li&gt;Enter a chord progression in the text box.&lt;/li&gt;
-            &lt;li&gt;Click the &quot;Generate Melodies&quot; button&lt;/li&gt;
-            &lt;li&gt;Squeal in delight, as the promised melodies are shown on the screen.&lt;/li&gt;
-          &lt;/ol&gt;
-
-          &lt;p&gt;Other pointers:&lt;/p&gt;
-          &lt;ul&gt;
-            &lt;li&gt;You can toggle the Help/Settings panel from the buttons to the right&lt;/li&gt;
-          &lt;/ul&gt;
-
-          &lt;h2&gt;Chord Dictionary&lt;/h2&gt;
-          &lt;p&gt;These are the chords you can use for this application:&lt;/p&gt;
-          {this.buildChordDictionary()}
-
-          &lt;h2&gt;Technical Info&lt;/h2&gt;
-          &lt;ul&gt;
-            &lt;li&gt;Default range is Db4 to G#5&lt;/li&gt;
-            &lt;li&gt;Smoothness = the distance between notes in the melody (in semitones), all added together&lt;/li&gt;
-            &lt;li&gt;Range = distance between the lowest note and the highest note (in semitones)&lt;/li&gt;
-          &lt;/ul&gt;
-
-          &lt;p&gt;Melodies are filtered/sorted by a few rules:&lt;/p&gt;
-          &lt;ul&gt;
-            &lt;li&gt;Range must be no greater than one octave&lt;/li&gt;
-            &lt;li&gt;Smoothest melodies are shown first&lt;/li&gt;
-            &lt;li&gt;Only the 100 smoothest melodies are shown&lt;/li&gt;
-          &lt;/ul&gt;
-        &lt;/div&gt;
-      );
-    } else {
-      return null;
-    }
-  }
 }
 
 
@@ -253,10 +209,10 @@ class OutputPanel extends React.Component {
       melodyRows.push(
         &lt;tr key={&quot;melody&quot; + i} className=&quot;ac-melody-row&quot;&gt;
           &lt;td&gt;
-            &lt;RjButton inputKey=&quot;playMelodySolo&quot; inputLabel=&quot;Play Melody (Solo)&quot; dataPayload={melodyString} onClick={this.playMelodySolo} /&gt;
-            &lt;RjButton inputKey=&quot;playMelody&quot; inputLabel=&quot;Play Melody (Full)&quot; dataPayload={payloadString} onClick={this.playMelody} /&gt;
-            &lt;RjButton inputKey=&quot;stopPlayback&quot; inputLabel=&quot;Stop&quot; dataPayload={payloadString} onClick={this.stopPlayback} /&gt;
-            &lt;RjButton inputKey=&quot;downloadMidi&quot; inputLabel=&quot;Download MIDI&quot; dataPayload={payloadString} onClick={this.downloadMidi} /&gt;
+            &lt;AcButton inputKey=&quot;playMelodySolo&quot; inputLabel=&quot;Play Melody (Solo)&quot; dataPayload={melodyString} onClick={this.playMelodySolo} /&gt;
+            &lt;AcButton inputKey=&quot;playMelody&quot; inputLabel=&quot;Play Melody (Full)&quot; dataPayload={payloadString} onClick={this.playMelody} /&gt;
+            &lt;AcButton inputKey=&quot;stopPlayback&quot; inputLabel=&quot;Stop&quot; dataPayload={payloadString} onClick={this.stopPlayback} /&gt;
+            &lt;AcButton inputKey=&quot;downloadMidi&quot; inputLabel=&quot;Download MIDI&quot; dataPayload={payloadString} onClick={this.downloadMidi} /&gt;
           &lt;/td&gt;
           &lt;td&gt;
             &lt;div className=&quot;vex-tabdiv&quot;&gt;
@@ -294,7 +250,7 @@ class OutputPanel extends React.Component {
   render() {
     if(!this.props.isHidden) {
       return (
-        &lt;div id=&quot;melodies-content&quot; className=&quot;ac-panel output-panel&quot;&gt;
+        &lt;div id=&quot;output-panel&quot; className=&quot;ac-panel output-panel&quot;&gt;
           &lt;h2&gt;Melodies!&lt;/h2&gt;
           {this.createMelodyTable()}
         &lt;/div&gt;
@@ -307,260 +263,15 @@ class OutputPanel extends React.Component {
 
 
 
-class DebugPanel extends React.Component {
-  render() {
-    if(!this.props.isHidden) {
-      return (
-        &lt;div id=&quot;r-debug-panel&quot; className=&quot;r-component&quot;&gt;
-          &lt;h3&gt;Debug Info&lt;/h3&gt;
-          &lt;pre&gt;
-            {this.props.debugData}
-          &lt;/pre&gt;
-        &lt;/div&gt;
-      );
-    } else {
-      return null;
-    }
-  }
-}
-
-
-
-class RjButton extends React.Component {
-  render() {
-    // This can have a status, passed in from the parent Component
-    var buttonClass = this.props.isActive ? &quot;ac-input button active&quot; : &quot;ac-input button&quot;;
-
-    return (
-      &lt;div className=&quot;ac-control-wrapper&quot;&gt;
-        &lt;input type=&quot;button&quot; className={buttonClass} id={this.props.inputKey} value={this.props.inputLabel} onClick={this.props.onClick} disabled={this.props.disabled} data-payload={this.props.dataPayload}/&gt;
-      &lt;/div&gt;
-    );
-  }
-}
-
-
-
-class RjToggleButton extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isActive: props.initialState === &quot;true&quot;
-    };
-  }
-
-  handleClick(e) {
-    this.setState({isActive: !this.state.isActive});
-    this.props.onClickHandler(e);
-  }
-
-  render() {
-    var buttonClass = this.state.isActive ? &quot;ac-input button active&quot; : &quot;ac-input button&quot;;
-    return (
-      &lt;div className=&quot;ac-control-wrapper&quot;&gt;
-        &lt;input type=&quot;button&quot; className={buttonClass} id={this.props.inputKey} value={this.props.inputLabel} data-state-key={this.props.inputKey} data-current-state={this.state.isActive} onClick={(e) =&gt; this.handleClick(e)} disabled={this.props.disabled}/&gt;
-      &lt;/div&gt;
-    );
-  }
-}
-
-
-
-class RjTextField extends React.Component {
-  render() {
-    return (
-      &lt;div className=&quot;ac-control-wrapper&quot;&gt;
-        &lt;label className=&quot;ac-input-label&quot; htmlFor={this.props.inputKey}&gt;{this.props.inputLabel}&lt;/label&gt;
-        &lt;input id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className=&quot;ac-input textfield&quot; type=&quot;text&quot; value={this.props.value} onChange={this.props.onChange} /&gt;
-      &lt;/div&gt;
-    );
-  }
-}
-
-
-
-class RjTextArea extends React.Component {
-  render() {
-    if(this.props.inputLabel) {
-      return (
-        &lt;div className=&quot;ac-control-wrapper&quot;&gt;
-          &lt;label className=&quot;ac-input-label&quot; htmlFor={this.props.inputKey}&gt;{this.props.inputLabel}&lt;/label&gt;
-          &lt;textarea id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className=&quot;ac-input textarea&quot; value={this.props.value} placeholder={this.props.placeholder} onChange={this.props.onChange} /&gt;
-        &lt;/div&gt;
-      );
-    } else {
-      return (
-        &lt;div className=&quot;ac-control-wrapper&quot;&gt;
-          &lt;textarea id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className=&quot;ac-input textarea&quot; value={this.props.value} placeholder={this.props.placeholder} onChange={this.props.onChange} /&gt;
-        &lt;/div&gt;
-      );
-    }
-  }
-}
-
-
-
-class RjCheckbox extends React.Component {
-  render() {
-    return (
-      &lt;div className=&quot;ac-control-wrapper&quot;&gt;
-        &lt;label className=&quot;ac-input-label&quot; htmlFor={this.props.inputKey}&gt;{this.props.inputLabel}&lt;/label&gt;
-        &lt;input id={this.props.inputKey} className=&quot;ac-input checkbox&quot; name={this.props.inputKey} data-state-key={this.props.inputKey} type=&quot;checkbox&quot; checked={this.props.isChecked} onChange={this.props.onChange}/&gt;
-      &lt;/div&gt;
-    );
-  }
-}
-
-
-
-class RjRadioSet extends React.Component {
-  createRadioItems() {
-    let items = [];
-    var totalOptions = this.props.options;
-
-    for (var k in totalOptions) {
-      if (totalOptions.hasOwnProperty(k)) {
-        items.push(
-          &lt;label key={&quot;label-&quot; + k} &gt;{totalOptions[k]}
-            &lt;input key={k} id={this.props.inputKey} name={this.props.inputKey} className=&quot;ac-input radio&quot; data-state-key={this.props.inputKey} type=&quot;radio&quot; value={k}  onChange={this.props.onChange} /&gt;
-          &lt;/label&gt;
-        );
-      }
-    }
-
-    return items;
-  }
-
-  render() {
-    return(
-      &lt;div className=&quot;ac-control-wrapper&quot;&gt;
-        &lt;fieldset&gt;
-          &lt;legend&gt;{this.props.inputLabel}&lt;/legend&gt;
-          {this.createRadioItems()}
-        &lt;/fieldset&gt;
-      &lt;/div&gt;
-    );
-  }
-}
-
-
-
-class RjSelect extends React.Component {
-  createSelectItems() {
-    let items = [];
-    var totalOptions = this.props.options;
-
-    for (var k in totalOptions) {
-      if (totalOptions.hasOwnProperty(k)) {
-        // alert(&quot;Key is &quot; + key + &quot;, value is&quot; + totalOptions[key]);
-        items.push(&lt;option key={k} value={k}&gt;{totalOptions[k]}&lt;/option&gt;);
-      }
-    }
-
-    return items;
-  }
-
-  render() {
-    return(
-      &lt;div className=&quot;ac-control-wrapper&quot;&gt;
-        &lt;label htmlFor={this.props.inputKey} className=&quot;ac-input-label&quot;&gt;{this.props.inputLabel}&lt;/label&gt;
-        &lt;select id={this.props.inputKey} className=&quot;ac-input select&quot; name={this.props.inputKey} data-state-key={this.props.inputKey} onChange={this.props.onChange}&gt;
-          {this.createSelectItems()}
-        &lt;/select&gt;
-      &lt;/div&gt;
-    );
-  }
-}
-
-
-
 class ControlPanel extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      text1: &apos;text one init&apos;,
-      text2: &apos;text two init&apos;,
-      chk1: true,
-      chk2: false,
-      hideDebug: false,
-      btn1: true
-    };
-
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  handleChange(event) {
-
-    var stateObj = function() {
-      var stateKey = this.target.dataset[&quot;stateKey&quot;];
-      var returnObj = {};
-
-      if(this.target.type === &quot;checkbox&quot;) {
-        returnObj[stateKey] = this.target.checked;
-      } else if(this.target.type === &quot;button&quot;) {
-        returnObj[stateKey] = this.target.dataset[&quot;currentState&quot;] === &quot;true&quot;;
-      } else {
-        returnObj[stateKey] = this.target.value;
-      }
-
-      console.debug(&apos;[handleChange] stateKey=&apos; + stateKey + &apos;, this.target.value=&apos; + this.target.value);
-
-      return returnObj;
-    }.bind(event)();
-
-    this.setState(stateObj);
+    // Removed state, since this object isn&apos;t being used.
   }
 
   render() {
-    if(!this.props.isHidden) {
-      var testSelectOptions = [];
-      testSelectOptions[&apos;opt1&apos;] = &apos;Something 1&apos;;
-      testSelectOptions[&apos;opt2&apos;] = &apos;Something 2&apos;;
-      testSelectOptions[&apos;opt3&apos;] = &apos;Something 3&apos;;
-      testSelectOptions[&apos;opt4&apos;] = &apos;Something 4&apos;;
-
-      return (
-
-        &lt;div className=&quot;ac-panel output-panel&quot;&gt;
-          &lt;h2&gt;Controls&lt;/h2&gt;
-
-          &lt;RjTextField inputKey=&quot;text1&quot; inputLabel=&quot;For text1&quot; value={this.state.text1} onChange={this.handleChange} /&gt;
-          &lt;RjTextField inputKey=&quot;text2&quot; inputLabel=&quot;For text2&quot; value={this.state.text2} onChange={this.handleChange} /&gt;
-
-          &lt;RjCheckbox inputKey=&quot;hideDebug&quot; inputLabel=&quot;Hide Debug Panel?&quot; isChecked={this.state.hideDebug} onChange={this.handleChange} /&gt;
-          &lt;RjCheckbox inputKey=&quot;chk1&quot; inputLabel=&quot;Testing chk1&quot; isChecked={this.state.chk1} onChange={this.handleChange} /&gt;
-
-          &lt;RjSelect inputKey=&quot;select1&quot; inputLabel=&quot;For select1&quot; value={this.state.select1} onChange={this.handleChange} options={testSelectOptions} /&gt;
-
-          &lt;RjRadioSet inputKey=&quot;rad1&quot; inputLabel=&quot;For rad1&quot; value={this.state.rad1} onChange={this.handleChange} options={testSelectOptions} /&gt;
-
-          &lt;RjToggleButton inputKey=&quot;btn1&quot; inputLabel=&quot;For btn1&quot; initialState={this.state.btn1} onClickHandler={this.handleChange} /&gt;
-
-          &lt;DebugPanel isHidden={this.state.hideDebug} debugData={JSON.stringify(this.state, null, 2)}/&gt;
-        &lt;/div&gt;
-      );
-    } else {
-      return null;
-    }
-  }
-}
-
-
-
-class ErrorMessage extends React.Component {
-  render() {
-    if(!this.props.isHidden) {
-      return(
-        &lt;div id=&quot;error-message&quot;&gt;
-          &lt;h2&gt;Error&lt;/h2&gt;
-          &lt;p&gt;
-            {this.props.errorMessage}
-          &lt;/p&gt;
-        &lt;/div&gt;
-      );
-    } else {
-      return null;
-    }
+    // The Control Panel isn&apos;t being used atm.
+    return null;
   }
 }
 
@@ -664,13 +375,13 @@ class AutoComposer extends React.Component {
           &lt;h3&gt;AutoComposer&lt;/h3&gt;
 
           &lt;div className=&quot;panel-row has-labels&quot;&gt;
-            &lt;RjTextArea inputKey=&quot;chordProgressionRaw&quot; value={this.state.chordProgressionRaw} placeholder={this.state.chordProgressionPlaceholder} onChange={this.handleChange} /&gt;
-            &lt;RjButton inputKey=&quot;generateMelodies&quot; inputLabel=&quot;Generate Melodies&quot; onClick={this.generateMelodies} /&gt;
+            &lt;AcTextArea inputKey=&quot;chordProgressionRaw&quot; value={this.state.chordProgressionRaw} placeholder={this.state.chordProgressionPlaceholder} onChange={this.handleChange} /&gt;
+            &lt;AcButton inputKey=&quot;generateMelodies&quot; inputLabel=&quot;Generate Melodies&quot; onClick={this.generateMelodies} /&gt;
           &lt;/div&gt;
 
           &lt;div className=&quot;panel-row&quot;&gt;
-            &lt;RjToggleButton inputKey=&quot;hideHelp&quot; inputLabel=&quot;Help/Info&quot; initialState={this.state.hideHelp} onClickHandler={this.handleChange} /&gt;
-            &lt;RjToggleButton inputKey=&quot;hideControls&quot; inputLabel=&quot;Settings&quot; initialState={this.state.hideControls} onClickHandler={this.handleChange} disabled={this.state.controlsDisabled} /&gt;
+            &lt;AcToggleButton inputKey=&quot;hideHelp&quot; inputLabel=&quot;Help/Info&quot; initialState={this.state.hideHelp} onClickHandler={this.handleChange} /&gt;
+            &lt;AcToggleButton inputKey=&quot;hideControls&quot; inputLabel=&quot;Settings&quot; initialState={this.state.hideControls} onClickHandler={this.handleChange} disabled={this.state.controlsDisabled} /&gt;
           &lt;/div&gt;
 
           &lt;ErrorMessage isHidden={this.state.hideError} errorMessage={this.state.errorMessage} /&gt;
