@@ -47,6 +47,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/debug-panel.js~DebugPanel.html">DebugPanel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/error-message.js~ErrorMessage.html">ErrorMessage</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/help-panel.js~HelpPanel.html">HelpPanel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/status-output.js~StatusOutput.html">StatusOutput</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -59,7 +60,7 @@
 */
 class ErrorMessage extends React.Component {
   render() {
-    if(!this.props.isHidden) {
+    if(this.props.isShown) {
       return(
         &lt;div id=&quot;error-message&quot;&gt;
           &lt;h2&gt;Error&lt;/h2&gt;

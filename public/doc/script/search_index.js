@@ -90,14 +90,20 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "autocomposer-melody/src/react/status-output.js~statusoutput",
+    "class/src/react/status-output.js~StatusOutput.html",
+    "<span>StatusOutput</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/status-output.js</span>",
+    "class"
+  ],
+  [
     "",
-    "test-file/test/autocomposer-data.js.html#lineNumber6",
+    "test-file/test/autocomposer-parser.js.html#lineNumber6",
     "AutoComposerLogic",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber6",
+    "test-file/test/autocomposer-data.js.html#lineNumber6",
     "AutoComposerLogic",
     "test"
   ],
@@ -1240,6 +1246,18 @@ window.esdocSearchIndex = [
     "class/src/react/help-panel.js~HelpPanel.html#instance-member-state",
     "src/react/help-panel.js~HelpPanel#state",
     "member"
+  ],
+  [
+    "src/react/status-output.js",
+    "file/src/react/status-output.js.html",
+    "src/react/status-output.js",
+    "file"
+  ],
+  [
+    "src/react/status-output.js~statusoutput#render",
+    "class/src/react/status-output.js~StatusOutput.html#instance-method-render",
+    "src/react/status-output.js~StatusOutput#render",
+    "method"
   ],
   [
     "test/autocomposer-data.js",

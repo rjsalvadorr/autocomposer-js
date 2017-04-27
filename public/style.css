@@ -16,14 +16,9 @@
 .ac-panel.static-height {
   flex: 0 1 auto;
 }
-.output-panel#help-panel {
-  z-index: 200;
-}
-.output-panel#control-panel {
-  z-index: 200;
-}
-.output-panel#output-panel {
-  z-index: 100;
+#control-panel + #output-panel,
+#help-panel + #output-panel {
+  display: none;
 }
 .panel-row {
   display: flex;

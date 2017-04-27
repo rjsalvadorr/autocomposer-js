@@ -30,7 +30,7 @@ class HelpPanel extends React.Component {
   }
 
   render() {
-    if(!this.props.isHidden) {
+    if(this.props.isShown) {
       return (
         <div id="help-panel" className="ac-panel output-panel">
           <h2>Help!</h2>

@@ -23,13 +23,10 @@ inputHeight = 40px;
 .ac-panel.static-height
   flex: 0 1 auto
 
-.output-panel
-  &#help-panel
-    z-index: 200
-  &#control-panel
-    z-index: 200
-  &#output-panel
-    z-index: 100
+// Hides the main output panel if the Help panel or Control panel is visible
+#control-panel + #output-panel
+#help-panel + #output-panel
+  display: none
 
 .panel-row
   display: flex

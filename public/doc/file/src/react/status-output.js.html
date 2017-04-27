@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/melody-unit.js | AutoComposer API Document</title>
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/react/status-output.js | AutoComposer API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -52,67 +52,24 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">src/melody-unit.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">var range = require(&apos;tonal-range&apos;)
+<div class="content" data-ice="content"><h1 data-ice="title">src/react/status-output.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">var React = require(&apos;react&apos;);
 
 /**
- * Represents a melody and associated metadata.
- */
-class MelodyUnit {
-    /**
-    * @param {string[]} chordProgression - array of chord symbols
-    * @param {string[]} melodyNotes - array of notes in the melody
-    */
-  constructor(chordProgression, melodyNotes) {
-  	/** @type {string[]} */
-    this.chordProgression = chordProgression;
-    /** @type {string[]} */
-    this.melodyNotes = melodyNotes;
-    /** @type {number} */
-    this.smoothness = this.getSmoothness();
-    /** @type {number} */
-    this.range = this.getRange();
-    /** @type {string} */
-    this.melodyString = this.melodyNotes.join(&quot; &quot;);
+* React Component representing a text input
+*/
+class StatusOutput extends React.Component {
+  render() {
+
+    return (
+      &lt;div className=&quot;ac-control-wrapper status-output&quot;&gt;
+        &lt;input id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className=&quot;ac-output text&quot; type=&quot;text&quot; value={this.props.value} readOnly=&quot;true&quot;/&gt;
+      &lt;/div&gt;
+    );
   }
-
-    /**
-    * Calculates the range of this melody.
-    * @private
-    * @return {number} - Range of the melody (in semitones)
-    */
-  getRange() {
-    var totalRange = range.numeric(this.melodyNotes);
-    var highest = Math.max.apply(null, totalRange);
-    var lowest = Math.min.apply(null, totalRange);
-
-    return highest - lowest;
-  }
-
-    /**
-    * Calculates the smoothness of this melody.
-    * @private
-    * @return {number} - Range of the melody (in semitones)
-    */
-  getSmoothness() {
-    var totalSmoothness = 0;
-    var subset, subRange, highest, lowest, distance;
-
-    for(var i = 2; i &lt;= this.melodyNotes.length; i++) {
-      subset = this.melodyNotes.slice(i - 2, i);
-      subRange = range.numeric(subset);
-      highest = Math.max.apply(null, subRange);
-      lowest = Math.min.apply(null, subRange);
-      distance = highest - lowest;
-      totalSmoothness += distance;
-    }
-
-    return totalSmoothness;
-  }
-
 }
 
-exports.MelodyUnit = MelodyUnit;
+module.exports = StatusOutput;
 </code></pre>
 
 </div>

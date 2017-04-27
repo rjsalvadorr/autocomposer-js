@@ -47,6 +47,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/debug-panel.js~DebugPanel.html">DebugPanel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/error-message.js~ErrorMessage.html">ErrorMessage</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/help-panel.js~HelpPanel.html">HelpPanel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/status-output.js~StatusOutput.html">StatusOutput</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -59,16 +60,18 @@
 */
 class AcTextArea extends React.Component {
   render() {
+    var wrapperClass = &quot;ac-control-wrapper &quot; + this.props.wrapperAddClass;
+
     if(this.props.inputLabel) {
       return (
-        &lt;div className=&quot;ac-control-wrapper&quot;&gt;
+        &lt;div className={wrapperClass}&gt;
           &lt;label className=&quot;ac-input-label&quot; htmlFor={this.props.inputKey}&gt;{this.props.inputLabel}&lt;/label&gt;
           &lt;textarea id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className=&quot;ac-input textarea&quot; value={this.props.value} placeholder={this.props.placeholder} onChange={this.props.onChange} /&gt;
         &lt;/div&gt;
       );
     } else {
       return (
-        &lt;div className=&quot;ac-control-wrapper&quot;&gt;
+        &lt;div className={wrapperClass}&gt;
           &lt;textarea id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className=&quot;ac-input textarea&quot; value={this.props.value} placeholder={this.props.placeholder} onChange={this.props.onChange} /&gt;
         &lt;/div&gt;
       );

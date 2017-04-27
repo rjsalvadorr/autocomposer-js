@@ -6,20 +6,32 @@ var React = require('react');
 class AcToggleButton extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       isActive: props.initialState === "true"
     };
+
+    console.debug("toggle constructor()");
   }
 
   handleClick(e) {
-    this.setState({isActive: !this.state.isActive});
-    this.props.onClickHandler(e);
+    console.debug("toggle handleClick()");
+    var newActive = !this.state.isActive;
+    this.setState({isActive: newActive});
+
+    this.props.onClickHandler(this.props.inputKey, newActive);
   }
 
   render() {
-    var buttonClass = this.state.isActive ? "ac-input button active" : "ac-input button";
+    console.debug("toggle render()");
+    var buttonClass = this.state.isActive ? "ac-input button active " : "ac-input button ";
+    buttonClass += this.props.addClass ? this.props.addClass: "";
+
+    var wrapperClass = "ac-control-wrapper ";
+    wrapperClass += this.props.wrapperAddClass ? this.props.wrapperAddClass: "";
+
     return (
-      <div className="ac-control-wrapper">
+      <div className={wrapperClass}>
         <input type="button" className={buttonClass} id={this.props.inputKey} value={this.props.inputLabel} data-state-key={this.props.inputKey} data-current-state={this.state.isActive} onClick={(e) => this.handleClick(e)} disabled={this.props.disabled}/>
       </div>
     );

@@ -47,6 +47,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/debug-panel.js~DebugPanel.html">DebugPanel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/error-message.js~ErrorMessage.html">ErrorMessage</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/help-panel.js~HelpPanel.html">HelpPanel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/status-output.js~StatusOutput.html">StatusOutput</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -54,7 +55,6 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/app-main.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">const React = require(&apos;react&apos;);
 const ReactDOM = require(&apos;react-dom&apos;);
-const _ = require(&apos;underscore&apos;);
 
 var AutoComposerLogic = require(&apos;./autocomposer-logic&apos;);
 var AcLogic = new AutoComposerLogic.AutoComposerLogic();
@@ -73,9 +73,12 @@ var AcSelect = require(&apos;./react/ac-select&apos;);
 var AcRadioSet = require(&apos;./react/ac-radioset&apos;);
 var AcCheckbox = require(&apos;./react/ac-checkbox&apos;);
 var ErrorMessage = require(&apos;./react/error-message&apos;);
+var StatusOutput = require(&apos;./react/status-output&apos;)
 
 var HelpPanel = require(&apos;./react/help-panel&apos;);
 var DebugPanel = require(&apos;./react/debug-panel&apos;);
+
+
 
 function AcInputException(message) {
    this.message = message;
@@ -230,6 +233,7 @@ class OutputPanel extends React.Component {
 
   createMelodyTable() {
     console.debug(&apos;[OutputPanel.createMelodyTable()] creating table...&apos;);
+
     return(
       &lt;table id=&quot;ac-melody-output&quot;&gt;
         &lt;thead&gt;
@@ -248,7 +252,7 @@ class OutputPanel extends React.Component {
   }
 
   render() {
-    if(!this.props.isHidden) {
+    if(this.props.isShown) {
       return (
         &lt;div id=&quot;output-panel&quot; className=&quot;ac-panel output-panel&quot;&gt;
           &lt;h2&gt;Melodies!&lt;/h2&gt;
@@ -271,7 +275,15 @@ class ControlPanel extends React.Component {
 
   render() {
     // The Control Panel isn&apos;t being used atm.
-    return null;
+    if(this.props.isShown) {
+      return (
+        &lt;div id=&quot;control-panel&quot; className=&quot;ac-panel output-panel&quot; style={styleObj}&gt;
+          // Nothing here!
+        &lt;/div&gt;
+      );
+    } else {
+      return null;
+    }
   }
 }
 
@@ -282,10 +294,10 @@ class AutoComposer extends React.Component {
     super(props);
 
     this.state = {
-      hideHelp: true,
-      hideControls: true,
-      hideOutput: true,
-      hideError: true,
+      showHelp: false,
+      showControls: false,
+      showOutput: false,
+      showError: false,
 
       debugMode: false,
       controlsDisabled: true, // While this is a mess, no need to show it.
@@ -304,9 +316,35 @@ class AutoComposer extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.generateMelodies = this.generateMelodies.bind(this);
     this.outputFinishCallback = this.outputFinishCallback.bind(this);
+    this.callbackChangeState = this.callbackChangeState.bind(this);
   }
 
+  /**
+  * Changes app state. Meant to be called from child components
+  * @param {string} stateKey - App state to change
+  * @param {number|string|Object} newState - Assigns this to the state
+  */
+  callbackChangeState(stateKey, newState) {
+    console.debug(&quot;app callbackChangeState()&quot;);
+
+    var stateObj = function() {
+      var returnObj = {};
+
+      returnObj[stateKey] = newState;
+
+      return returnObj;
+    }.bind(this)();
+
+    this.setState(stateObj);
+  }
+
+  /**
+  * Changes app state. Meant to be called from child components.
+  * Older function, compared to callbackChangeState()
+  * @param {Object} event - React event
+  */
   handleChange(event) {
+    console.debug(&quot;app handleChange()&quot;);
     var stateObj = function() {
       var stateKey = this.target.dataset[&quot;stateKey&quot;];
       var returnObj = {};
@@ -353,10 +391,10 @@ class AutoComposer extends React.Component {
         throw new AcInputException(&apos;You need to enter more chords. Two chords in a row is a completely valid input.&apos;);
       }
 
-      this.setState({hideError: true, hideOutput: false, allowMelodyGeneration: true});
+      this.setState({showError: false, showOutput: true, allowMelodyGeneration: true});
     } catch(exc) {
       console.warn(&quot;[AutoComposer.generateMelodies()] &quot; + exc.message + &quot;\nError Type = &quot; + exc.name);
-      this.setState({hideError: false, errorMessage: exc.message});
+      this.setState({showError: true, errorMessage: exc.message});
     }
   }
 
@@ -376,26 +414,28 @@ class AutoComposer extends React.Component {
 
           &lt;div className=&quot;panel-row has-labels&quot;&gt;
             &lt;AcTextArea inputKey=&quot;chordProgressionRaw&quot; value={this.state.chordProgressionRaw} placeholder={this.state.chordProgressionPlaceholder} onChange={this.handleChange} /&gt;
-            &lt;AcButton inputKey=&quot;generateMelodies&quot; inputLabel=&quot;Generate Melodies&quot; onClick={this.generateMelodies} /&gt;
+            &lt;AcToggleButton inputKey=&quot;showControls&quot; inputLabel=&quot;Settings&quot; wrapperAddClass=&quot;square&quot; initialState={this.state.showControls} onClickHandler={this.callbackChangeState} disabled={this.state.controlsDisabled} /&gt;
           &lt;/div&gt;
 
           &lt;div className=&quot;panel-row&quot;&gt;
-            &lt;AcToggleButton inputKey=&quot;hideHelp&quot; inputLabel=&quot;Help/Info&quot; initialState={this.state.hideHelp} onClickHandler={this.handleChange} /&gt;
-            &lt;AcToggleButton inputKey=&quot;hideControls&quot; inputLabel=&quot;Settings&quot; initialState={this.state.hideControls} onClickHandler={this.handleChange} disabled={this.state.controlsDisabled} /&gt;
+            &lt;AcButton inputKey=&quot;generateMelodies&quot; inputLabel=&quot;Generate Melodies&quot; onClick={this.generateMelodies} /&gt;
+            &lt;StatusOutput inputKey=&quot;status-output&quot; value=&quot;status output...&quot; /&gt;
+            &lt;AcToggleButton inputKey=&quot;showHelp&quot; inputLabel=&quot;Help/Info&quot; wrapperAddClass=&quot;square&quot; initialState={this.state.showHelp} onClickHandler={this.callbackChangeState} /&gt;
           &lt;/div&gt;
 
-          &lt;ErrorMessage isHidden={this.state.hideError} errorMessage={this.state.errorMessage} /&gt;
+          &lt;ErrorMessage isShown={this.state.showError} errorMessage={this.state.errorMessage} /&gt;
 
           &lt;DebugPanel isHidden={!this.state.debugMode} debugData={JSON.stringify(this.state, null, 2)}/&gt;
         &lt;/div&gt;
         &lt;div id=&quot;melody-control-panel&quot; className=&quot;ac-panel static-height&quot;&gt;
+          {/* Melody controls will go here eventually */}
         &lt;/div&gt;
 
-        &lt;ControlPanel isHidden={this.state.hideControls} /&gt;
+        &lt;ControlPanel isShown={this.state.showControls} /&gt;
 
-        &lt;HelpPanel isHidden={this.state.hideHelp} /&gt;
+        &lt;HelpPanel isShown={this.state.showHelp} /&gt;
 
-        &lt;OutputPanel isHidden={this.state.hideOutput} chordProgression={chordProgressionArray} allowMelodyGeneration={this.state.allowMelodyGeneration} outputCallback={this.outputFinishCallback}/&gt;
+        &lt;OutputPanel isShown={this.state.showOutput} chordProgression={chordProgressionArray} allowMelodyGeneration={this.state.allowMelodyGeneration} outputCallback={this.outputFinishCallback}/&gt;
 
       &lt;/div&gt;
     );

@@ -5,7 +5,7 @@ var React = require('react');
 */
 class ErrorMessage extends React.Component {
   render() {
-    if(!this.props.isHidden) {
+    if(this.props.isShown) {
       return(
         <div id="error-message">
           <h2>Error</h2>
