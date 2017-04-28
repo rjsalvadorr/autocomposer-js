@@ -1,6 +1,6 @@
 {
-  "coverage": "59.04%",
-  "expectCount": 105,
+  "coverage": "52.1%",
+  "expectCount": 119,
   "actualCount": 62,
   "files": {
     "src/autocomposer-logic.js": {
@@ -103,6 +103,15 @@
       "actualCount": 6,
       "undocumentLines": []
     },
+    "src/react/control-panel.js": {
+      "expectCount": 3,
+      "actualCount": 0,
+      "undocumentLines": [
+        3,
+        4,
+        9
+      ]
+    },
     "src/react/debug-panel.js": {
       "expectCount": 2,
       "actualCount": 1,
@@ -131,6 +140,23 @@
       "expectCount": 9,
       "actualCount": 9,
       "undocumentLines": []
+    },
+    "src/react/output-panel.js": {
+      "expectCount": 11,
+      "actualCount": 0,
+      "undocumentLines": [
+        8,
+        40,
+        32,
+        9,
+        76,
+        108,
+        45,
+        18,
+        128,
+        23,
+        11
+      ]
     },
     "src/react/status-output.js": {
       "expectCount": 2,

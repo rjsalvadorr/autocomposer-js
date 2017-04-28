@@ -49,7 +49,7 @@
 }
 .ac-control-wrapper.square {
   flex-grow: 0;
-  width: 130px;
+  width: 150px;
 }
 .ac-control-wrapper.flex-sm {
   flex-grow: 2;
@@ -71,12 +71,12 @@
 .ac-input,
 .ac-output {
   width: 100%;
-  min-height: 50px;
+  min-height: 60px;
   box-sizing: border-box;
 }
 .ac-input.double-height,
 .ac-output.double-height {
-  height: 100px;
+  height: 120px;
 }
 body {
   font-family: 'Helvetica', 'Arial', sans-serif;
@@ -87,7 +87,7 @@ body {
 }
 .ac-input.textarea,
 .ac-output.textarea {
-  font-size: 16px;
+  font-size: 24px;
 }
 .ac-input.button,
 .ac-output.button {
@@ -112,12 +112,14 @@ body {
   resize: none;
 }
 #main-control-panel {
-  background-color: #779;
+  color: #fff;
+  background-color: #555;
 }
 #status-output {
+  color: inherit;
   font-style: italic;
-  border: 1px solid #282835;
-  background-color: #4e4e68;
+  border: 1px solid #2a2a2a;
+  background-color: #484848;
 }
 #error-message {
   padding: 0.75vw;
@@ -149,33 +151,104 @@ table#ac-melody-output td {
   background-color: #ddd;
 }
 .ac-input.button {
+  color: #fff;
+  background-color: #999;
+  border-color: #7a7a7a;
+  outline: none !important;
   border-radius: 6px;
-  background-color: #bbb;
-  border-color: #969696;
   border-width: 0 3px 3px 0;
 }
 .ac-input.button:hover,
 .ac-input.button:active {
-  background-color: #969696;
+  background-color: #7a7a7a;
 }
 .ac-input.button:active {
-  border-color: #5e5e5e;
+  border-color: #676767;
+  background-color: #676767;
+}
+.ac-input.button.active {
+  border-color: #676767;
+  background-color: #676767;
+}
+.ac-input.button.disabled {
+  background-color: #7a7a7a !important;
+}
+.ac-input.button:active {
+  opacity: 0.8;
   border-width: 3px 0 0 3px;
   border-style: inset;
 }
 .ac-input.button.active {
-  color: #fff;
-  border-width: 4px 0 0 4px;
+  opacity: 0.8;
+  border-width: 3px 0 0 3px;
   border-style: inset;
-  border-color: #5e5e5e;
-  background-color: #5e5e5e;
 }
 .ac-input.button.disabled {
-  background-color: #a8a8a8 !important;
+  opacity: 0.66;
   border: none !important;
 }
 .ac-input.button i,
 .ac-input.button p,
 .ac-input.button span {
   vertical-align: middle;
+}
+.ac-input.button.green {
+  color: #fff;
+  background-color: #0fab0f;
+  border-color: #0c890c;
+}
+.ac-input.button.green:hover,
+.ac-input.button.green:active {
+  background-color: #0c890c;
+}
+.ac-input.button.green:active {
+  border-color: #0a730a;
+  background-color: #0a730a;
+}
+.ac-input.button.green.active {
+  border-color: #0a730a;
+  background-color: #0a730a;
+}
+.ac-input.button.green.disabled {
+  background-color: #0c890c !important;
+}
+.ac-input.button.blue {
+  color: #fff;
+  background-color: #381c93;
+  border-color: #2d1676;
+}
+.ac-input.button.blue:hover,
+.ac-input.button.blue:active {
+  background-color: #2d1676;
+}
+.ac-input.button.blue:active {
+  border-color: #261362;
+  background-color: #261362;
+}
+.ac-input.button.blue.active {
+  border-color: #261362;
+  background-color: #261362;
+}
+.ac-input.button.blue.disabled {
+  background-color: #2d1676 !important;
+}
+.ac-input.button.red {
+  color: #fff;
+  background-color: #d51212;
+  border-color: #aa0e0e;
+}
+.ac-input.button.red:hover,
+.ac-input.button.red:active {
+  background-color: #aa0e0e;
+}
+.ac-input.button.red:active {
+  border-color: #8f0c0c;
+  background-color: #8f0c0c;
+}
+.ac-input.button.red.active {
+  border-color: #8f0c0c;
+  background-color: #8f0c0c;
+}
+.ac-input.button.red.disabled {
+  background-color: #aa0e0e !important;
 }

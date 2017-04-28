@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">ErrorMessage | AutoComposer API Document</title>
+  <title data-ice="title">src/react/output-panel.js | AutoComposer API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -54,149 +54,153 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import ErrorMessage from &apos;<span><a href="file/src/react/error-message.js.html#lineNumber6">autocomposer-melody/src/react/error-message.js</a></span>&apos;</code></pre></div>
-  <span data-ice="access">public</span>
-  <span data-ice="kind">class</span>
-  
-  
-  
-  <span data-ice="source">| <span><a href="file/src/react/error-message.js.html#lineNumber6">source</a></span></span>
-</div>
+<div class="content" data-ice="content"><h1 data-ice="title">src/react/output-panel.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">var React = require(&apos;react&apos;);
 
-<div class="self-detail detail">
-  <h1 data-ice="name">ErrorMessage</h1>
+var AutoComposerMelody = require(&apos;../autocomposer-melody&apos;);
+var AcMelody = new AutoComposerMelody.AutoComposerMelody();
 
-  
+var AcButton = require(&apos;./ac-button&apos;);
 
-  
-  
-  <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span>React~React.Component</span> &#x2192; ErrorMessage</div></div>
-  
-  
-  
-  
-  
-  
+class OutputPanel extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      melodyUnitList: null
+    }
 
-  
-  
-  <div class="description" data-ice="description"><p>React Component representing an error message</p>
-</div>
-  
+    this.loadMelody = this.loadMelody.bind(this);
+  }
 
-  
+  loadMelody(event) {
+    // callback from the main app object
+    this.props.loadMelody(event);
+  }
 
-  
+  shouldComponentUpdate(nextProps, nextState) {
+    if(nextProps.allowMelodyGeneration) {
+      console.debug(&quot;[OutputPanel.shouldComponentUpdate()] Component is updating...&quot;);
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-  
+  componentWillReceiveProps(nextProps, nextState){
+    if(nextProps.allowMelodyGeneration) {
+      console.debug(&quot;[OutputPanel.componentWillReceiveProps()] Generating melodies...&quot;);
+      var chordProgression = this.props.chordProgression;
+      this.setState({melodyUnitList: AcMelody.getMelodies(chordProgression)});
+    }
+  }
 
-  
-</div>
+  componentDidUpdate() {
+    window.VexTabDiv.Div.start();
+    this.props.outputCallback();
+  }
 
+  createVexTab(arrChords, arrMelody) {
+    var vtString, pitchClass;
+    var vexTabText = &quot;options scale=0.9 space=5 font-size=13 font-face=Times\n&quot;;
+    vexTabText += &quot;tabstave\n&quot;;
+    vexTabText += &quot;notation=true tablature=false\n&quot;;
+    vexTabText += &quot;notes :w &quot;;
 
+    arrMelody.forEach(function(melodyNote) {
+      // Turns a note name like &quot;C#4&quot; into &quot;C#/4 |&quot;
+      // Or &quot;Bb4&quot; into &quot;B@/4 |&quot;
+      // VexTab notation sure is odd.
+      pitchClass = melodyNote.slice(0, -1);
+      pitchClass = pitchClass.replace(&quot;b&quot;, &quot;@&quot;);
 
+      vtString = pitchClass + &quot;/&quot;+ melodyNote.slice(-1) + &quot; &quot;;
+      vexTabText += vtString;
+    });
 
+    vexTabText = vexTabText.slice(0, -1) + &quot;\n&quot;;
+    vexTabText += &quot;text :w, &quot;;
 
-<div data-ice="methodSummary"><h2>Method Summary</h2><table class="summary" data-ice="summary">
-  <thead><tr><td data-ice="title" colspan="3">Public Methods</td></tr></thead>
-  <tbody>
-  
-  <tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          <span data-ice="name"><span><a href="class/src/react/error-message.js~ErrorMessage.html#instance-method-render">render</a></span></span><span data-ice="signature">(): <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-</tbody>
-</table>
-</div>
+    arrChords.forEach(function(chordSymbol) {
+      vtString = chordSymbol + &quot;, &quot;;
+      vexTabText += vtString;
+    });
 
+    vexTabText = vexTabText.slice(0, -2);
 
+    return vexTabText;
+  }
 
+  createMelodyRows() {
+    var melodyUnitList = this.state.melodyUnitList;
+    var melodyRows = [];
+    var melodyString, accompanimentString, basslineString, payloadString, arrPayload, midiFilename;
 
+    for(var i = 0; i &lt; melodyUnitList.length; i++) {
+      melodyString = melodyUnitList[i].melodyNotes.join(&quot;,&quot;);
+      accompanimentString = AcMelody.getAccompaniment(melodyUnitList[i]).join(&quot;,&quot;);
+      basslineString = AcMelody.getBasicBassLine(melodyUnitList[i]);
 
+      arrPayload = [melodyString, accompanimentString, basslineString];
+      payloadString = arrPayload.join(&quot;;&quot;);
 
+      melodyRows.push(
+        &lt;tr key={&quot;melody&quot; + i} className=&quot;ac-melody-row&quot;&gt;
+          &lt;td&gt;
+            &lt;AcButton inputKey=&quot;loadMelody&quot; inputLabel=&quot;Load Melody&quot; dataPayload={payloadString} onClick={this.loadMelody} /&gt;
+          &lt;/td&gt;
+          &lt;td&gt;
+            &lt;div className=&quot;vex-tabdiv&quot;&gt;
+              {this.createVexTab(melodyUnitList[i].chordProgression, melodyUnitList[i].melodyNotes)}
+            &lt;/div&gt;
+          &lt;/td&gt;
+          &lt;td&gt;{melodyUnitList[i].smoothness}&lt;/td&gt;
+          &lt;td&gt;{melodyUnitList[i].range}&lt;/td&gt;
+        &lt;/tr&gt;
+      );
+    }
 
-<div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
+    return melodyRows;
+  }
 
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-render">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    
-    <span data-ice="name">render</span><span data-ice="signature">(): <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/react/error-message.js.html#lineNumber7">source</a></span></span>
-    </span>
-  </h3>
+  createMelodyTable() {
+    console.debug(&apos;[OutputPanel.createMelodyTable()] creating table...&apos;);
 
-  
-  
-  
-  
+    return(
+      &lt;table id=&quot;ac-melody-output&quot;&gt;
+        &lt;thead&gt;
+          &lt;tr&gt;
+            &lt;th&gt;&lt;/th&gt;
+            &lt;th&gt;Melody&lt;/th&gt;
+            &lt;th&gt;Smoothness&lt;/th&gt;
+            &lt;th&gt;Range&lt;/th&gt;
+          &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+          {this.createMelodyRows()}
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    );
+  }
 
-  
+  render() {
+    if(this.props.isShown) {
+      return (
+        &lt;div id=&quot;output-panel&quot; className=&quot;ac-panel output-panel&quot;&gt;
+          {this.createMelodyTable()}
+        &lt;/div&gt;
+      );
+    } else {
+      return (
+        &lt;div id=&quot;output-panel&quot; className=&quot;ac-panel output-panel&quot;&gt;
+        &lt;/div&gt;
+      );
+    }
+  }
+}
 
-  <div data-ice="properties">
-</div>
+module.exports = OutputPanel;
+</code></pre>
 
-  <div class="return-params" data-ice="returnParams">
-    <h4>Return:</h4>
-    <table>
-      <tbody>
-        <tr>
-          <td class="return-type" data-ice="returnType"><span>*</span></td>
-          
-        </tr>
-      </tbody>
-    </table>
-    <div data-ice="returnProperties">
-</div>
-  </div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-</div>
 </div>
 
 <footer class="footer">

@@ -1,8 +1,10 @@
 // central stylesheet.
 
-bgBody = #dddddd
+bgBody = #DDD
 textColor = #222222
-controlPanelBackground = #779
+
+controlPanelTextColor = #FFF
+controlPanelBackground = #555
 
 innerPadding = 15px
 
@@ -17,12 +19,14 @@ body
   resize: none
 
 #main-control-panel
+  color: controlPanelTextColor
   background-color: controlPanelBackground
 
 #status-output
+  color: inherit
   font-style: italic
-  border: 1px solid darken(controlPanelBackground, 66%)
-  background-color: darken(controlPanelBackground, 33%)
+  border: 1px solid darken(controlPanelBackground, 50%)
+  background-color: darken(controlPanelBackground, 15%)
 
 #error-message
   padding: 0.75vw

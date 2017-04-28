@@ -66,6 +66,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "autocomposer-melody/src/react/control-panel.js~controlpanel",
+    "class/src/react/control-panel.js~ControlPanel.html",
+    "<span>ControlPanel</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/control-panel.js</span>",
+    "class"
+  ],
+  [
     "autocomposer-melody/src/react/debug-panel.js~debugpanel",
     "class/src/react/debug-panel.js~DebugPanel.html",
     "<span>DebugPanel</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/debug-panel.js</span>",
@@ -87,6 +93,12 @@ window.esdocSearchIndex = [
     "autocomposer-melody/src/melody-unit.js~melodyunit",
     "class/src/melody-unit.js~MelodyUnit.html",
     "<span>MelodyUnit</span> <span class=\"search-result-import-path\">autocomposer-melody/src/melody-unit.js</span>",
+    "class"
+  ],
+  [
+    "autocomposer-melody/src/react/output-panel.js~outputpanel",
+    "class/src/react/output-panel.js~OutputPanel.html",
+    "<span>OutputPanel</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/output-panel.js</span>",
     "class"
   ],
   [
@@ -1182,6 +1194,24 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/react/control-panel.js",
+    "file/src/react/control-panel.js.html",
+    "src/react/control-panel.js",
+    "file"
+  ],
+  [
+    "src/react/control-panel.js~controlpanel#constructor",
+    "class/src/react/control-panel.js~ControlPanel.html#instance-constructor-constructor",
+    "src/react/control-panel.js~ControlPanel#constructor",
+    "method"
+  ],
+  [
+    "src/react/control-panel.js~controlpanel#render",
+    "class/src/react/control-panel.js~ControlPanel.html#instance-method-render",
+    "src/react/control-panel.js~ControlPanel#render",
+    "method"
+  ],
+  [
     "src/react/debug-panel.js",
     "file/src/react/debug-panel.js.html",
     "src/react/debug-panel.js",
@@ -1233,6 +1263,72 @@ window.esdocSearchIndex = [
     "src/react/help-panel.js~helppanel#state",
     "class/src/react/help-panel.js~HelpPanel.html#instance-member-state",
     "src/react/help-panel.js~HelpPanel#state",
+    "member"
+  ],
+  [
+    "src/react/output-panel.js",
+    "file/src/react/output-panel.js.html",
+    "src/react/output-panel.js",
+    "file"
+  ],
+  [
+    "src/react/output-panel.js~outputpanel#componentdidupdate",
+    "class/src/react/output-panel.js~OutputPanel.html#instance-method-componentDidUpdate",
+    "src/react/output-panel.js~OutputPanel#componentDidUpdate",
+    "method"
+  ],
+  [
+    "src/react/output-panel.js~outputpanel#componentwillreceiveprops",
+    "class/src/react/output-panel.js~OutputPanel.html#instance-method-componentWillReceiveProps",
+    "src/react/output-panel.js~OutputPanel#componentWillReceiveProps",
+    "method"
+  ],
+  [
+    "src/react/output-panel.js~outputpanel#constructor",
+    "class/src/react/output-panel.js~OutputPanel.html#instance-constructor-constructor",
+    "src/react/output-panel.js~OutputPanel#constructor",
+    "method"
+  ],
+  [
+    "src/react/output-panel.js~outputpanel#createmelodyrows",
+    "class/src/react/output-panel.js~OutputPanel.html#instance-method-createMelodyRows",
+    "src/react/output-panel.js~OutputPanel#createMelodyRows",
+    "method"
+  ],
+  [
+    "src/react/output-panel.js~outputpanel#createmelodytable",
+    "class/src/react/output-panel.js~OutputPanel.html#instance-method-createMelodyTable",
+    "src/react/output-panel.js~OutputPanel#createMelodyTable",
+    "method"
+  ],
+  [
+    "src/react/output-panel.js~outputpanel#createvextab",
+    "class/src/react/output-panel.js~OutputPanel.html#instance-method-createVexTab",
+    "src/react/output-panel.js~OutputPanel#createVexTab",
+    "method"
+  ],
+  [
+    "src/react/output-panel.js~outputpanel#loadmelody",
+    "class/src/react/output-panel.js~OutputPanel.html#instance-method-loadMelody",
+    "src/react/output-panel.js~OutputPanel#loadMelody",
+    "method"
+  ],
+  [
+    "src/react/output-panel.js~outputpanel#render",
+    "class/src/react/output-panel.js~OutputPanel.html#instance-method-render",
+    "src/react/output-panel.js~OutputPanel#render",
+    "method"
+  ],
+  [
+    "src/react/output-panel.js~outputpanel#shouldcomponentupdate",
+    "class/src/react/output-panel.js~OutputPanel.html#instance-method-shouldComponentUpdate",
+    "src/react/output-panel.js~OutputPanel#shouldComponentUpdate",
+    "method"
+  ],
+  [
+    "src/react/output-panel.js~outputpanel#state",
+    "class/src/react/output-panel.js~OutputPanel.html#instance-member-state",
+    "src/react/output-panel.js~OutputPanel#state",
     "member"
   ],
   [

@@ -22,172 +22,14 @@ var StatusOutput = require('./react/status-output')
 
 var HelpPanel = require('./react/help-panel');
 var DebugPanel = require('./react/debug-panel');
+var OutputPanel = require('./react/output-panel');
+var ControlPanel = require('./react/control-panel');
 
 
 
 function AcInputException(message) {
    this.message = message;
    this.name = 'AcInputException';
-}
-
-
-
-class OutputPanel extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      melodyUnitList: null
-    }
-
-    this.loadMelody = this.loadMelody.bind(this);
-  }
-
-  loadMelody(event) {
-    // callback from the main app object
-    this.props.loadMelody(event);
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    if(nextProps.allowMelodyGeneration) {
-      console.debug("[OutputPanel.shouldComponentUpdate()] Component is updating...");
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  componentWillReceiveProps(nextProps, nextState){
-    if(nextProps.allowMelodyGeneration) {
-      console.debug("[OutputPanel.componentWillReceiveProps()] Generating melodies...");
-      var chordProgression = this.props.chordProgression;
-      this.setState({melodyUnitList: AcMelody.getMelodies(chordProgression)});
-    }
-  }
-
-  componentDidUpdate() {
-    window.VexTabDiv.Div.start();
-    this.props.outputCallback();
-  }
-
-  createVexTab(arrChords, arrMelody) {
-    var vtString, pitchClass;
-    var vexTabText = "options scale=0.9 space=5 font-size=13 font-face=Times\n";
-    vexTabText += "tabstave\n";
-    vexTabText += "notation=true tablature=false\n";
-    vexTabText += "notes :w ";
-
-    arrMelody.forEach(function(melodyNote) {
-      // Turns a note name like "C#4" into "C#/4 |"
-      // Or "Bb4" into "B@/4 |"
-      // VexTab notation sure is odd.
-      pitchClass = melodyNote.slice(0, -1);
-      pitchClass = pitchClass.replace("b", "@");
-
-      vtString = pitchClass + "/"+ melodyNote.slice(-1) + " ";
-      vexTabText += vtString;
-    });
-
-    vexTabText = vexTabText.slice(0, -1) + "\n";
-    vexTabText += "text :w, ";
-
-    arrChords.forEach(function(chordSymbol) {
-      vtString = chordSymbol + ", ";
-      vexTabText += vtString;
-    });
-
-    vexTabText = vexTabText.slice(0, -2);
-
-    return vexTabText;
-  }
-
-  createMelodyRows() {
-    var melodyUnitList = this.state.melodyUnitList;
-    var melodyRows = [];
-    var melodyString, accompanimentString, basslineString, payloadString, arrPayload, midiFilename;
-
-    for(var i = 0; i < melodyUnitList.length; i++) {
-      melodyString = melodyUnitList[i].melodyNotes.join(",");
-      accompanimentString = AcMelody.getAccompaniment(melodyUnitList[i]).join(",");
-      basslineString = AcMelody.getBasicBassLine(melodyUnitList[i]);
-
-      arrPayload = [melodyString, accompanimentString, basslineString];
-      payloadString = arrPayload.join(";");
-
-      melodyRows.push(
-        <tr key={"melody" + i} className="ac-melody-row">
-          <td>
-            <AcButton inputKey="loadMelody" inputLabel="Load Melody" dataPayload={payloadString} onClick={this.loadMelody} />
-          </td>
-          <td>
-            <div className="vex-tabdiv">
-              {this.createVexTab(melodyUnitList[i].chordProgression, melodyUnitList[i].melodyNotes)}
-            </div>
-          </td>
-          <td>{melodyUnitList[i].smoothness}</td>
-          <td>{melodyUnitList[i].range}</td>
-        </tr>
-      );
-    }
-
-    return melodyRows;
-  }
-
-  createMelodyTable() {
-    console.debug('[OutputPanel.createMelodyTable()] creating table...');
-
-    return(
-      <table id="ac-melody-output">
-        <thead>
-          <tr>
-            <th></th>
-            <th>Melody</th>
-            <th>Smoothness</th>
-            <th>Range</th>
-          </tr>
-        </thead>
-        <tbody>
-          {this.createMelodyRows()}
-        </tbody>
-      </table>
-    );
-  }
-
-  render() {
-    if(this.props.isShown) {
-      return (
-        <div id="output-panel" className="ac-panel output-panel">
-          {this.createMelodyTable()}
-        </div>
-      );
-    } else {
-      return (
-        <div id="output-panel" className="ac-panel output-panel">
-        </div>
-      );
-    }
-  }
-}
-
-
-
-class ControlPanel extends React.Component {
-  constructor(props) {
-    super(props);
-    // Removed state, since this object isn't being used.
-  }
-
-  render() {
-    // The Control Panel isn't being used atm.
-    if(this.props.isShown) {
-      return (
-        <div id="control-panel" className="ac-panel output-panel" style={styleObj}>
-          // Nothing here!
-        </div>
-      );
-    } else {
-      return null;
-    }
-  }
 }
 
 
@@ -210,20 +52,21 @@ class AutoComposer extends React.Component {
 
       chordProgressionRaw: "",
       chordProgressionChanged: false,
-      chordProgressionPlaceholder: AcLogic.INITIAL_PROGRESSION,
 
       errorMessage: "",
 
       // This becomes true whenever we have a chord progression change, and the correct button is clicked.
       // Returns to false after output finishes rendering
-      allowMelodyGeneration: ""
+      allowMelodyGeneration: "",
+      melodyLoaded: false
     };
 
     /**
     * @type {Object} - Data store. Any changes to this data store will not cause an update.
     */
     this.store = {
-      melodies: []
+      melodies: [],
+      chordProgressionPlaceholder: AcLogic.INITIAL_PROGRESSION,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -306,6 +149,7 @@ class AutoComposer extends React.Component {
 
     var melodies = [melody1, melody2, melody3];
     this.store.melodies = melodies;
+    this.setState({melodyLoaded: true})
   }
 
   /**
@@ -404,8 +248,8 @@ class AutoComposer extends React.Component {
           <h3>AutoComposer</h3>
 
           <div className="panel-row has-labels">
-            <AcTextArea inputKey="chordProgressionRaw" addClass="double-height" value={this.state.chordProgressionRaw} placeholder={this.state.chordProgressionPlaceholder} onChange={this.handleChange} />
-            <AcButton inputKey="generateMelodies" inputLabel="Generate!" wrapperAddClass="square" addClass="double-height" onClick={this.generateMelodies} />
+            <AcTextArea inputKey="chordProgressionRaw" addClass="double-height" value={this.state.chordProgressionRaw} placeholder={this.store.chordProgressionPlaceholder} onChange={this.handleChange} />
+            <AcButton inputKey="generateMelodies" inputLabel="Generate!" wrapperAddClass="square" addClass="double-height blue" onClick={this.generateMelodies} isActive={!this.state.chordProgressionChanged}/>
           </div>
 
           <div className="panel-row">
@@ -414,10 +258,10 @@ class AutoComposer extends React.Component {
           </div>
 
           <div className="panel-row">
-            <AcButton inputKey="generateMelodies" icon="play" wrapperAddClass="flex-lg" onClick={this.playMelody}/>
-            <AcButton inputKey="generateMelodies" icon="play" inputLabel=" (Solo)" wrapperAddClass="flex-sm" onClick={this.playMelodySolo}/>
-            <AcButton inputKey="generateMelodies" icon="stop" wrapperAddClass="flex-sm" onClick={this.stopMusic}/>
-            <AcButton inputKey="generateMelodies" icon="download" wrapperAddClass="flex-sm" onClick={this.downloadMidi}/>
+            <AcButton inputKey="generateMelodies" icon="play" addClass="green" wrapperAddClass="flex-lg" onClick={this.playMelody} disabled={!this.state.melodyLoaded}/>
+            <AcButton inputKey="generateMelodies" icon="play" addClass="green" inputLabel=" (Solo)" wrapperAddClass="flex-sm" onClick={this.playMelodySolo} disabled={!this.state.melodyLoaded}/>
+            <AcButton inputKey="generateMelodies" icon="stop" addClass="red" wrapperAddClass="flex-sm" onClick={this.stopMusic} disabled={!this.state.melodyLoaded}/>
+            <AcButton inputKey="generateMelodies" icon="download" wrapperAddClass="flex-sm" onClick={this.downloadMidi} disabled={!this.state.melodyLoaded}/>
           </div>
 
           <div className="panel-row">
@@ -439,7 +283,5 @@ class AutoComposer extends React.Component {
     );
   }
 }
-
-
 
 ReactDOM.render(<AutoComposer />, document.getElementById('react-root'));

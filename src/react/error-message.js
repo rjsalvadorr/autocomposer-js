@@ -8,9 +8,8 @@ class ErrorMessage extends React.Component {
     if(this.props.isShown) {
       return(
         <div id="error-message">
-          <h2>Error</h2>
           <p>
-            {this.props.errorMessage}
+            <strong>ERROR!</strong> {this.props.errorMessage}
           </p>
         </div>
       );

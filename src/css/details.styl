@@ -1,41 +1,77 @@
 // Fine details such as colours, box-shadow, text-shadow
 
-buttonBackground = #BBB
+buttonBackground = #999
+buttonBackgroundGreen = #0FAB0F
+buttonBackgroundRed = #D51212
+buttonBackgroundBlue = #381C93
 
-buttonBackgroundHover = darken(buttonBackground, 20%)
-buttonBackgroundActive = darken(buttonBackground, 50%)
+buttonTextColorLight = #FFF
+buttonTextColorDark = #222
 
-buttonBorder = darken(buttonBackground, 20%)
-buttonBorderActive =  darken(buttonBackground, 50%)
+buttonBorderSize = 3px
 
-.ac-input.button
-  border-radius: 6px
-  background-color: buttonBackground
-  border-color: buttonBorder
-  border-width: 0 3px 3px 0
+// using a given color, create the colors for various button states
+createButtonColors(bgColor, textColor)
+
+  // variables
+  borderColorActive = darken(bgColor, 33%)
+
+  //------------------------------
+
+  color: textColor
+  background-color: bgColor
+  border-color: darken(bgColor, 20%)
 
   &:hover
   &:active
-    background-color: buttonBackgroundHover
+    background-color: darken(bgColor, 20%)
 
   // Button is currently being clicked
   &:active
-    border-color: buttonBorderActive
-    border-width: 3px 0 0 3px
+    border-color: borderColorActive
+    background-color: darken(bgColor, 33%)
+
+  // Toggle buttons in an active state.
+  // Maybe you should rename this to avoid confusion.
+  &.active
+    border-color: borderColorActive
+    background-color: darken(bgColor, 33%)
+
+  &.disabled
+    background-color: darken(bgColor, 20%) !important
+
+
+.ac-input.button
+  createButtonColors(buttonBackground, buttonTextColorLight)
+
+  outline: none !important
+  border-radius: 6px
+  border-width: 0 buttonBorderSize buttonBorderSize 0
+
+  // Button is currently being clicked
+  &:active
+    opacity: 0.8
+    border-width: buttonBorderSize 0 0 buttonBorderSize
     border-style: inset
 
   // Toggle buttons in an active state.
   // Maybe you should rename this to avoid confusion.
   &.active
-    color: #fff
-    border-width: 4px 0 0 4px
+    opacity: 0.8
+    border-width: buttonBorderSize 0 0 buttonBorderSize
     border-style: inset
-    border-color: buttonBorderActive
-    background-color: buttonBackgroundActive
 
   &.disabled
-    background-color: darken(buttonBackground, 10%) !important
+    opacity: 0.66
     border: none !important
 
   i, p, span
     vertical-align: middle
+
+.ac-input.button
+  &.green
+    createButtonColors(buttonBackgroundGreen, buttonTextColorLight)
+  &.blue
+    createButtonColors(buttonBackgroundBlue, buttonTextColorLight)
+  &.red
+    createButtonColors(buttonBackgroundRed, buttonTextColorLight)
