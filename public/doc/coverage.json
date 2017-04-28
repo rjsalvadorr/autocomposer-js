@@ -1,7 +1,7 @@
 {
-  "coverage": "59.81%",
-  "expectCount": 107,
-  "actualCount": 64,
+  "coverage": "59.04%",
+  "expectCount": 105,
+  "actualCount": 62,
   "files": {
     "src/autocomposer-logic.js": {
       "expectCount": 16,
@@ -80,8 +80,8 @@
       "undocumentLines": []
     },
     "src/autocomposer-midi.js": {
-      "expectCount": 26,
-      "actualCount": 13,
+      "expectCount": 24,
+      "actualCount": 11,
       "undocumentLines": [
         12,
         11,

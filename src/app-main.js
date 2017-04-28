@@ -260,29 +260,47 @@ class AutoComposer extends React.Component {
       allowMelodyGeneration: ""
     };
 
+    /**
+    * @type {Object} - Data store. Any changes to this data store will not cause an update.
+    */
+    this.store = {
+      melodies: []
+    };
+
     this.handleChange = this.handleChange.bind(this);
     this.generateMelodies = this.generateMelodies.bind(this);
     this.outputFinishCallback = this.outputFinishCallback.bind(this);
     this.callbackChangeState = this.callbackChangeState.bind(this);
+    this.loadMusic = this.loadMusic.bind(this);
+
+    this.playMelody = this.playMelody.bind(this);
+    this.playMelodySolo = this.playMelodySolo.bind(this);
+    this.stopMusic = this.stopMusic.bind(this);
+    this.downloadMidi = this.downloadMidi.bind(this);
   }
 
   /**
   * Changes app state. Meant to be called from child components
   * @param {string} stateKey - App state to change
   * @param {number|string|Object} newState - Assigns this to the state
+  * @param {boolean} [useDataStore] - If true, the data store is changed instead of the state object.
   */
-  callbackChangeState(stateKey, newState) {
+  callbackChangeState(stateKey, newState, useDataStore) {
     console.debug("app callbackChangeState()");
 
-    var stateObj = function() {
-      var returnObj = {};
+    if(useDataStore) {
+      this.store[stateKey] = newState;
+    } else {
+      var stateObj = function() {
+        var returnObj = {};
 
-      returnObj[stateKey] = newState;
+        returnObj[stateKey] = newState;
 
-      return returnObj;
-    }.bind(this)();
+        return returnObj;
+      }.bind(this)();
 
-    this.setState(stateObj);
+      this.setState(stateObj);
+    }
   }
 
   /**
@@ -312,6 +330,19 @@ class AutoComposer extends React.Component {
     }.bind(event)();
 
     this.setState(stateObj);
+  }
+
+  loadMusic(event) {
+    console.debug("app loadMusic()");
+    var melodyString = event.target.dataset["payload"];
+    var melodiesData = melodyString.split(";");
+
+    var melody1 = melodiesData[0].split(",");
+    var melody2 = melodiesData[1].split(",");
+    var melody3 = melodiesData[2].split(",");
+
+    var melodies = [melody1, melody2, melody3];
+    this.store.melodies = melodies;
   }
 
   generateMelodies(event) {
@@ -345,6 +376,33 @@ class AutoComposer extends React.Component {
     }
   }
 
+  playMelody(event) {
+    if(this.store.melodies.length > 0) {
+      AcMidi.playMelodyWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);
+    }
+  }
+
+  playMelodySolo(event) {
+    if(this.store.melodies.length > 0) {
+      AcMidi.playMelodySolo(this.store.melodies[0]);
+    }
+  }
+
+  stopMusic(event) {
+    AcMidi.stopPlayback();
+  }
+
+  downloadMidi(event) {
+    if(this.store.melodies.length > 0) {
+      //download MIDI file
+      var dataString = AcMidi.buildMelodyMidiWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);
+      var timestamp = new Date().valueOf().toString().slice(-8)
+
+      var fileName = "autocomposer-" + timestamp + "_" + this.store.melodies[0].join("-");
+      download(dataString, fileName, "audio/midi");
+    }
+  }
+
   outputFinishCallback() {
     // Callback that runs when output panel is finished rendering.
     // Prevents melody generation until the user enters a new progression.
@@ -370,14 +428,15 @@ class AutoComposer extends React.Component {
           </div>
 
           <div className="panel-row">
-            <AcButton inputKey="generateMelodies" icon="play" wrapperAddClass="flex-lg"/>
-            <AcButton inputKey="generateMelodies" icon="play" inputLabel="(Solo)" wrapperAddClass="flex-sm"/>
-            <AcButton inputKey="generateMelodies" icon="stop" wrapperAddClass="flex-sm"/>
-            <AcButton inputKey="generateMelodies" icon="floppy-o" inputLabel="(MIDI)" wrapperAddClass="flex-sm"/>
+            <AcButton inputKey="generateMelodies" icon="play" wrapperAddClass="flex-lg" onClick={this.playMelody}/>
+            <AcButton inputKey="generateMelodies" icon="play" inputLabel="(Solo)" wrapperAddClass="flex-sm" onClick={this.playMelodySolo}/>
+            <AcButton inputKey="generateMelodies" icon="stop" wrapperAddClass="flex-sm" onClick={this.stopMusic}/>
+            <AcButton inputKey="generateMelodies" icon="floppy-o" inputLabel="(MIDI)" wrapperAddClass="flex-sm" onClick={this.downloadMidi}/>
           </div>
 
           <div className="panel-row">
             <StatusOutput inputKey="status-output" value="status output..." />
+            <AcButton inputKey="testButton" icon="meh-o" inputLabel="Test" wrapperAddClass="flex-lg" onClick={this.loadMusic} dataPayload="F4,F4,F4,E4;A2 C3,Ab2 C3 Eb3,Bb2 D3,Db3 G2;D2,F1,G1,A1" useDataStore="true"/>
           </div>
 
           <ErrorMessage isShown={this.state.showError} errorMessage={this.state.errorMessage} />

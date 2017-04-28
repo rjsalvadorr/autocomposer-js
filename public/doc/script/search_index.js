@@ -97,13 +97,13 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber6",
+    "test-file/test/autocomposer-data.js.html#lineNumber6",
     "AutoComposerLogic",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-data.js.html#lineNumber6",
+    "test-file/test/autocomposer-parser.js.html#lineNumber6",
     "AutoComposerLogic",
     "test"
   ],
@@ -846,33 +846,21 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/autocomposer-midi.js~autocomposermidi#_buildchordmidi",
-    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_buildChordMidi",
-    "src/autocomposer-midi.js~AutoComposerMidi#_buildChordMidi",
-    "method"
-  ],
-  [
-    "src/autocomposer-midi.js~autocomposermidi#_buildchordtrack",
-    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_buildChordTrack",
-    "src/autocomposer-midi.js~AutoComposerMidi#_buildChordTrack",
-    "method"
-  ],
-  [
     "src/autocomposer-midi.js~autocomposermidi#_buildmelodymidisolo",
     "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_buildMelodyMidiSolo",
     "src/autocomposer-midi.js~AutoComposerMidi#_buildMelodyMidiSolo",
     "method"
   ],
   [
-    "src/autocomposer-midi.js~autocomposermidi#_buildmelodytrack",
-    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_buildMelodyTrack",
-    "src/autocomposer-midi.js~AutoComposerMidi#_buildMelodyTrack",
+    "src/autocomposer-midi.js~autocomposermidi#_buildmidi",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_buildMidi",
+    "src/autocomposer-midi.js~AutoComposerMidi#_buildMidi",
     "method"
   ],
   [
-    "src/autocomposer-midi.js~autocomposermidi#_buildnotemidi",
-    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_buildNoteMidi",
-    "src/autocomposer-midi.js~AutoComposerMidi#_buildNoteMidi",
+    "src/autocomposer-midi.js~autocomposermidi#_buildtrack",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_buildTrack",
+    "src/autocomposer-midi.js~AutoComposerMidi#_buildTrack",
     "method"
   ],
   [

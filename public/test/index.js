@@ -20573,7 +20573,7 @@ class AutoComposerMidi {
     */
   _midiCallback(event) {
     // callback for MIDI events
-    console.debug(event);
+    // console.debug(event);
 
     var instr1 = this.instruments["violin"];
     var instr2 = this.instruments["acoustic_grand_piano"];
@@ -20635,49 +20635,18 @@ class AutoComposerMidi {
   }
 
     /**
-    * Builds MIDI info for a single note
-    * @private
-    * @param {number} numMidi - MIDI number for a pitch
-    * @param {number} duration - MIDI number for a pitch
-    * @param {number} wait
-    * @return {MidiWriter.NoteEvent} - ???
-    */
-  _buildNoteMidi(numMidi, duration, wait) {
-      if(!wait) {
-          wait = "0";
-      }
-      return new MidiWriter.NoteEvent({pitch: [numMidi], duration: duration, wait: wait, velocity: 100});
-  }
-
-    /**
-    * Builds MIDI info for a chord
+    * Builds MIDI info for a note or chord
     * @private
     * @param {number[]} arrNumMidi - MIDI numbers for a set of pitches
     * @param {number} duration - MIDI number for a pitch
     * @param {number} wait
     * @return {MidiWriter.NoteEvent} - ???
     */
-  _buildChordMidi(arrNumMidi, duration, wait) {
+  _buildMidi(arrNumMidi, duration, wait) {
       if(!wait) {
           wait = "0";
       }
       return new MidiWriter.NoteEvent({pitch: arrNumMidi, duration: duration, wait: wait, velocity: 100});
-  }
-    /**
-    * Builds a Track from a given melody.
-    * @private
-    * @param {string[]} arrMelody - our melody!
-    * @return {Track} - a MidiWriter Track
-    */
-  _buildMelodyTrack(arrMelody) {
-    var returnTrack = new MidiWriter.Track();
-
-    for(var i = 0; i < arrMelody.length; i++) {
-      var midiNumber = tonalNote.midi(arrMelody[i]);
-      returnTrack.addEvent(this._buildNoteMidi(midiNumber, this.NOTE_DURATION));
-    }
-
-    return returnTrack;
   }
 
     /**
@@ -20686,7 +20655,7 @@ class AutoComposerMidi {
     * @param {string[]} arrChordNotes - chordNotes
     * @return {Track} - a MidiWriter Track
     */
-  _buildChordTrack(arrChordNotes) {
+  _buildTrack(arrChordNotes) {
     var notes, midiNumber, midiNumbers;
     var returnTrack = new MidiWriter.Track();
 
@@ -20698,7 +20667,7 @@ class AutoComposerMidi {
         midiNumbers.push(tonalNote.midi(note));
       })
 
-      returnTrack.addEvent(this._buildChordMidi(midiNumbers, this.NOTE_DURATION));
+      returnTrack.addEvent(this._buildMidi(midiNumbers, this.NOTE_DURATION));
     }
 
     return returnTrack;
@@ -20712,7 +20681,8 @@ class AutoComposerMidi {
     */
   _buildMelodyMidiSolo(arrMelody) {
     var tracks = [], midiNumber;
-    tracks[0] = this._buildMelodyTrack(arrMelody);
+    //tracks[0] = this._buildMelodyTrack(arrMelody);
+    tracks[0] = this._buildTrack(arrMelody);
 
     var write = new MidiWriter.Writer(tracks);
     console.log("[AutoComposerMidi._buildMelodyMidiSolo()] " + write.dataUri());
@@ -20730,13 +20700,15 @@ class AutoComposerMidi {
   buildMelodyMidiWithAccompaniment(arrMelody, arrAcompanimentLine, arrBassLine) {
     var tracks, midiNumber;
 
-    var melodyTrack = this._buildMelodyTrack(arrMelody);
+    //var melodyTrack = this._buildMelodyTrack(arrMelody);
+    var melodyTrack = this._buildTrack(arrMelody);
     melodyTrack.addInstrumentName("violin");
 
-    var accompanimentTrack = this._buildChordTrack(arrAcompanimentLine);
+    var accompanimentTrack = this._buildTrack(arrAcompanimentLine);
     accompanimentTrack.addInstrumentName("acoustic_grand_piano");
 
-    var bassTrack = this._buildMelodyTrack(arrBassLine);
+    //var bassTrack = this._buildMelodyTrack(arrBassLine);
+    var bassTrack = this._buildTrack(arrBassLine);
     bassTrack.addInstrumentName("acoustic_bass");
 
     tracks = [melodyTrack, accompanimentTrack, bassTrack];
