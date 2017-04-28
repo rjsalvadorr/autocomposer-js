@@ -94,52 +94,12 @@ class OutputPanel extends React.Component {
       melodyUnitList: null
     }
 
-    this.playMelodySolo = this.playMelodySolo.bind(this);
-    this.playMelody = this.playMelody.bind(this);
-    this.stopPlayback = this.stopPlayback.bind(this);
-    this.downloadMidi = this.downloadMidi.bind(this);
+    this.loadMelody = this.loadMelody.bind(this);
   }
 
-  playMelodySolo(event) {
-    var melodyString = event.target.dataset[&quot;payload&quot;];
-    console.debug(melodyString);
-    var melody = melodyString.split(&quot;,&quot;);
-
-    AcMidi.playMelodySolo(melody);
-  }
-
-  playMelody(event) {
-    // melodyString looks like:
-    // G5 F#5 G5;B2,A2,E3;E1 D2 C2
-    var melodyString = event.target.dataset[&quot;payload&quot;];
-    var melodiesData = melodyString.split(&quot;;&quot;);
-    console.debug(melodyString);
-
-    var melody1 = melodiesData[0].split(&quot;,&quot;);
-    var melody2 = melodiesData[1].split(&quot;,&quot;);
-    var melody3 = melodiesData[2].split(&quot;,&quot;);
-
-    AcMidi.playMelodyWithAccompaniment(melody1, melody2, melody3);
-  }
-
-  stopPlayback() {
-    AcMidi.stopPlayback();
-  }
-
-  downloadMidi(event) {
-    //download MIDI file
-    var melodyString = event.target.dataset[&quot;payload&quot;];
-    var melodiesData = melodyString.split(&quot;;&quot;);
-
-    var melody1 = melodiesData[0].split(&quot;,&quot;);
-    var melody2 = melodiesData[1].split(&quot;,&quot;);
-    var melody3 = melodiesData[2].split(&quot;,&quot;);
-
-    var dataString = AcMidi.buildMelodyMidiWithAccompaniment(melody1, melody2, melody3);
-    var timestamp = new Date().valueOf().toString().slice(-8)
-
-    var fileName = &quot;autocomposer-&quot; + timestamp + &quot;_&quot; + melody1.join(&quot;-&quot;);
-    download(dataString, fileName, &quot;audio/midi&quot;);
+  loadMelody(event) {
+    // callback from the main app object
+    this.props.loadMelody(event);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -207,15 +167,11 @@ class OutputPanel extends React.Component {
 
       arrPayload = [melodyString, accompanimentString, basslineString];
       payloadString = arrPayload.join(&quot;;&quot;);
-      //midiFilename = melodyUnitList[i].chordProgression.replace(&quot; &quot;, &quot;-&quot;) + &quot;-melody&quot; + i;
 
       melodyRows.push(
         &lt;tr key={&quot;melody&quot; + i} className=&quot;ac-melody-row&quot;&gt;
           &lt;td&gt;
-            &lt;AcButton inputKey=&quot;playMelodySolo&quot; inputLabel=&quot;Play (Solo)&quot; dataPayload={melodyString} onClick={this.playMelodySolo} /&gt;
-            &lt;AcButton inputKey=&quot;playMelody&quot; inputLabel=&quot;Play (Full)&quot; dataPayload={payloadString} onClick={this.playMelody} /&gt;
-            &lt;AcButton inputKey=&quot;stopPlayback&quot; inputLabel=&quot;Stop&quot; dataPayload={payloadString} onClick={this.stopPlayback} /&gt;
-            &lt;AcButton inputKey=&quot;downloadMidi&quot; inputLabel=&quot;Get MIDI&quot; dataPayload={payloadString} onClick={this.downloadMidi} /&gt;
+            &lt;AcButton inputKey=&quot;loadMelody&quot; inputLabel=&quot;Load Melody&quot; dataPayload={payloadString} onClick={this.loadMelody} /&gt;
           &lt;/td&gt;
           &lt;td&gt;
             &lt;div className=&quot;vex-tabdiv&quot;&gt;
@@ -291,6 +247,9 @@ class ControlPanel extends React.Component {
 
 
 
+/**
+* The core React component for the web app.
+*/
 class AutoComposer extends React.Component {
   constructor(props) {
     super(props);
@@ -387,6 +346,10 @@ class AutoComposer extends React.Component {
     this.setState(stateObj);
   }
 
+  /**
+  * Loads melody data into the App. Meant to be used as a callback from the results table.
+  * @param {Object} event - React event
+  */
   loadMusic(event) {
     console.debug(&quot;app loadMusic()&quot;);
     var melodyString = event.target.dataset[&quot;payload&quot;];
@@ -400,6 +363,10 @@ class AutoComposer extends React.Component {
     this.store.melodies = melodies;
   }
 
+  /**
+  * Generates the melodies for the given chord progression.
+  * @param {Object} event - React event
+  */
   generateMelodies(event) {
     var chordProgression = this.state.chordProgressionRaw.trim().split(&quot; &quot;);
 
@@ -431,22 +398,38 @@ class AutoComposer extends React.Component {
     }
   }
 
+  /**
+  * Plays the loaded melody
+  * @param {Object} event - React event
+  */
   playMelody(event) {
     if(this.store.melodies.length &gt; 0) {
       AcMidi.playMelodyWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);
     }
   }
 
+  /**
+  * Plays the loaded melody by itself
+  * @param {Object} event - React event
+  */
   playMelodySolo(event) {
     if(this.store.melodies.length &gt; 0) {
       AcMidi.playMelodySolo(this.store.melodies[0]);
     }
   }
 
+  /**
+  * Stops all music currently playing.
+  * @param {Object} event - React event
+  */
   stopMusic(event) {
     AcMidi.stopPlayback();
   }
 
+  /**
+  * Creates and sends MIDI data to the user.
+  * @param {Object} event - React event
+  */
   downloadMidi(event) {
     if(this.store.melodies.length &gt; 0) {
       //download MIDI file
@@ -458,9 +441,12 @@ class AutoComposer extends React.Component {
     }
   }
 
+  /**
+  * Callback that runs when output panel is finished rendering.
+  * Prevents melody generation until the user enters a new progression.
+  * @param {Object} event - React event
+  */
   outputFinishCallback() {
-    // Callback that runs when output panel is finished rendering.
-    // Prevents melody generation until the user enters a new progression.
     this.setState({allowMelodyGeneration: false, chordProgressionChanged: false});
   }
 
@@ -491,7 +477,6 @@ class AutoComposer extends React.Component {
 
           &lt;div className=&quot;panel-row&quot;&gt;
             &lt;StatusOutput inputKey=&quot;status-output&quot; value=&quot;status output...&quot; /&gt;
-            &lt;AcButton inputKey=&quot;testButton&quot; icon=&quot;meh-o&quot; inputLabel=&quot;Test&quot; wrapperAddClass=&quot;flex-lg&quot; onClick={this.loadMusic} dataPayload=&quot;F4,F4,F4,E4;A2 C3,Ab2 C3 Eb3,Bb2 D3,Db3 G2;D2,F1,G1,A1&quot; useDataStore=&quot;true&quot;/&gt;
           &lt;/div&gt;
 
           &lt;ErrorMessage isShown={this.state.showError} errorMessage={this.state.errorMessage} /&gt;
@@ -503,7 +488,7 @@ class AutoComposer extends React.Component {
 
         &lt;HelpPanel isShown={this.state.showHelp} /&gt;
 
-        &lt;OutputPanel isShown={this.state.showOutput} chordProgression={chordProgressionArray} allowMelodyGeneration={this.state.allowMelodyGeneration} outputCallback={this.outputFinishCallback}/&gt;
+        &lt;OutputPanel isShown={this.state.showOutput} chordProgression={chordProgressionArray} allowMelodyGeneration={this.state.allowMelodyGeneration} outputCallback={this.outputFinishCallback} loadMelody={this.loadMusic} /&gt;
 
       &lt;/div&gt;
     );

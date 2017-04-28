@@ -39,52 +39,12 @@ class OutputPanel extends React.Component {
       melodyUnitList: null
     }
 
-    this.playMelodySolo = this.playMelodySolo.bind(this);
-    this.playMelody = this.playMelody.bind(this);
-    this.stopPlayback = this.stopPlayback.bind(this);
-    this.downloadMidi = this.downloadMidi.bind(this);
+    this.loadMelody = this.loadMelody.bind(this);
   }
 
-  playMelodySolo(event) {
-    var melodyString = event.target.dataset["payload"];
-    console.debug(melodyString);
-    var melody = melodyString.split(",");
-
-    AcMidi.playMelodySolo(melody);
-  }
-
-  playMelody(event) {
-    // melodyString looks like:
-    // G5 F#5 G5;B2,A2,E3;E1 D2 C2
-    var melodyString = event.target.dataset["payload"];
-    var melodiesData = melodyString.split(";");
-    console.debug(melodyString);
-
-    var melody1 = melodiesData[0].split(",");
-    var melody2 = melodiesData[1].split(",");
-    var melody3 = melodiesData[2].split(",");
-
-    AcMidi.playMelodyWithAccompaniment(melody1, melody2, melody3);
-  }
-
-  stopPlayback() {
-    AcMidi.stopPlayback();
-  }
-
-  downloadMidi(event) {
-    //download MIDI file
-    var melodyString = event.target.dataset["payload"];
-    var melodiesData = melodyString.split(";");
-
-    var melody1 = melodiesData[0].split(",");
-    var melody2 = melodiesData[1].split(",");
-    var melody3 = melodiesData[2].split(",");
-
-    var dataString = AcMidi.buildMelodyMidiWithAccompaniment(melody1, melody2, melody3);
-    var timestamp = new Date().valueOf().toString().slice(-8)
-
-    var fileName = "autocomposer-" + timestamp + "_" + melody1.join("-");
-    download(dataString, fileName, "audio/midi");
+  loadMelody(event) {
+    // callback from the main app object
+    this.props.loadMelody(event);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -152,15 +112,11 @@ class OutputPanel extends React.Component {
 
       arrPayload = [melodyString, accompanimentString, basslineString];
       payloadString = arrPayload.join(";");
-      //midiFilename = melodyUnitList[i].chordProgression.replace(" ", "-") + "-melody" + i;
 
       melodyRows.push(
         <tr key={"melody" + i} className="ac-melody-row">
           <td>
-            <AcButton inputKey="playMelodySolo" inputLabel="Play (Solo)" dataPayload={melodyString} onClick={this.playMelodySolo} />
-            <AcButton inputKey="playMelody" inputLabel="Play (Full)" dataPayload={payloadString} onClick={this.playMelody} />
-            <AcButton inputKey="stopPlayback" inputLabel="Stop" dataPayload={payloadString} onClick={this.stopPlayback} />
-            <AcButton inputKey="downloadMidi" inputLabel="Get MIDI" dataPayload={payloadString} onClick={this.downloadMidi} />
+            <AcButton inputKey="loadMelody" inputLabel="Load Melody" dataPayload={payloadString} onClick={this.loadMelody} />
           </td>
           <td>
             <div className="vex-tabdiv">
@@ -236,6 +192,9 @@ class ControlPanel extends React.Component {
 
 
 
+/**
+* The core React component for the web app.
+*/
 class AutoComposer extends React.Component {
   constructor(props) {
     super(props);
@@ -332,6 +291,10 @@ class AutoComposer extends React.Component {
     this.setState(stateObj);
   }
 
+  /**
+  * Loads melody data into the App. Meant to be used as a callback from the results table.
+  * @param {Object} event - React event
+  */
   loadMusic(event) {
     console.debug("app loadMusic()");
     var melodyString = event.target.dataset["payload"];
@@ -345,6 +308,10 @@ class AutoComposer extends React.Component {
     this.store.melodies = melodies;
   }
 
+  /**
+  * Generates the melodies for the given chord progression.
+  * @param {Object} event - React event
+  */
   generateMelodies(event) {
     var chordProgression = this.state.chordProgressionRaw.trim().split(" ");
 
@@ -376,22 +343,38 @@ class AutoComposer extends React.Component {
     }
   }
 
+  /**
+  * Plays the loaded melody
+  * @param {Object} event - React event
+  */
   playMelody(event) {
     if(this.store.melodies.length > 0) {
       AcMidi.playMelodyWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);
     }
   }
 
+  /**
+  * Plays the loaded melody by itself
+  * @param {Object} event - React event
+  */
   playMelodySolo(event) {
     if(this.store.melodies.length > 0) {
       AcMidi.playMelodySolo(this.store.melodies[0]);
     }
   }
 
+  /**
+  * Stops all music currently playing.
+  * @param {Object} event - React event
+  */
   stopMusic(event) {
     AcMidi.stopPlayback();
   }
 
+  /**
+  * Creates and sends MIDI data to the user.
+  * @param {Object} event - React event
+  */
   downloadMidi(event) {
     if(this.store.melodies.length > 0) {
       //download MIDI file
@@ -403,9 +386,12 @@ class AutoComposer extends React.Component {
     }
   }
 
+  /**
+  * Callback that runs when output panel is finished rendering.
+  * Prevents melody generation until the user enters a new progression.
+  * @param {Object} event - React event
+  */
   outputFinishCallback() {
-    // Callback that runs when output panel is finished rendering.
-    // Prevents melody generation until the user enters a new progression.
     this.setState({allowMelodyGeneration: false, chordProgressionChanged: false});
   }
 
@@ -436,7 +422,6 @@ class AutoComposer extends React.Component {
 
           <div className="panel-row">
             <StatusOutput inputKey="status-output" value="status output..." />
-            <AcButton inputKey="testButton" icon="meh-o" inputLabel="Test" wrapperAddClass="flex-lg" onClick={this.loadMusic} dataPayload="F4,F4,F4,E4;A2 C3,Ab2 C3 Eb3,Bb2 D3,Db3 G2;D2,F1,G1,A1" useDataStore="true"/>
           </div>
 
           <ErrorMessage isShown={this.state.showError} errorMessage={this.state.errorMessage} />
@@ -448,7 +433,7 @@ class AutoComposer extends React.Component {
 
         <HelpPanel isShown={this.state.showHelp} />
 
-        <OutputPanel isShown={this.state.showOutput} chordProgression={chordProgressionArray} allowMelodyGeneration={this.state.allowMelodyGeneration} outputCallback={this.outputFinishCallback}/>
+        <OutputPanel isShown={this.state.showOutput} chordProgression={chordProgressionArray} allowMelodyGeneration={this.state.allowMelodyGeneration} outputCallback={this.outputFinishCallback} loadMelody={this.loadMusic} />
 
       </div>
     );
