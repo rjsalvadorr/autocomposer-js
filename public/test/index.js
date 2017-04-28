@@ -20527,9 +20527,9 @@ class AutoComposerMidi {
   constructor() {
     this.INSTRUMENT_NAMES = ["violin", "acoustic_grand_piano", "acoustic_bass"];
     this.INSTRUMENT_GAIN = {
-      violin: 2,
+      violin: 1.75,
       acoustic_grand_piano: 1.5,
-      acoustic_bass: 1.75
+      acoustic_bass: 1.66
     }
     this.NOTE_DURATION = "1";
 
@@ -20583,10 +20583,13 @@ class AutoComposerMidi {
         switch(event.track) {
           case 1:
             instr1.play(event.noteName, this.audioContext.currentTime, {gain: this.INSTRUMENT_GAIN["violin"]});
+            break;
           case 2:
             instr2.play(event.noteName, this.audioContext.currentTime, {gain: this.INSTRUMENT_GAIN["acoustic_grand_piano"]});
+            break;
           case 3:
             instr3.play(event.noteName, this.audioContext.currentTime, {gain: this.INSTRUMENT_GAIN["acoustic_bass"]});
+            break;
           default:
             // nothing!
         }
@@ -20596,10 +20599,13 @@ class AutoComposerMidi {
       switch(event.track) {
         case 1:
           instr1.stop();
+          break;
         case 2:
           instr2.stop();
+          break;
         case 3:
           instr3.stop();
+          break;
         default:
           // nothing!
       }

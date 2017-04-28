@@ -3,7 +3,7 @@
     "__docId__": 0,
     "kind": "file",
     "name": "src/app-main.js",
-    "content": "const React = require('react');\r\nconst ReactDOM = require('react-dom');\r\n\r\nvar AutoComposerLogic = require('./autocomposer-logic');\r\nvar AcLogic = new AutoComposerLogic.AutoComposerLogic();\r\n\r\nvar AutoComposerMelody = require('./autocomposer-melody');\r\nvar AcMelody = new AutoComposerMelody.AutoComposerMelody();\r\n\r\nvar acMidi = require('./autocomposer-midi');\r\nvar AcMidi = new acMidi.AutoComposerMidi();\r\n\r\nvar AcButton = require('./react/ac-button');\r\nvar AcToggleButton = require('./react/ac-toggle-button');\r\nvar AcTextField = require('./react/ac-text-field');\r\nvar AcTextArea = require('./react/ac-textarea');\r\nvar AcSelect = require('./react/ac-select');\r\nvar AcRadioSet = require('./react/ac-radioset');\r\nvar AcCheckbox = require('./react/ac-checkbox');\r\nvar ErrorMessage = require('./react/error-message');\r\nvar StatusOutput = require('./react/status-output')\r\n\r\nvar HelpPanel = require('./react/help-panel');\r\nvar DebugPanel = require('./react/debug-panel');\r\n\r\n\r\n\r\nfunction AcInputException(message) {\r\n   this.message = message;\r\n   this.name = 'AcInputException';\r\n}\r\n\r\n\r\n\r\nclass OutputPanel extends React.Component {\r\n  constructor(props) {\r\n    super(props);\r\n    this.state = {\r\n      melodyUnitList: null\r\n    }\r\n\r\n    this.playMelodySolo = this.playMelodySolo.bind(this);\r\n    this.playMelody = this.playMelody.bind(this);\r\n    this.stopPlayback = this.stopPlayback.bind(this);\r\n    this.downloadMidi = this.downloadMidi.bind(this);\r\n  }\r\n\r\n  playMelodySolo(event) {\r\n    var melodyString = event.target.dataset[\"payload\"];\r\n    console.debug(melodyString);\r\n    var melody = melodyString.split(\",\");\r\n\r\n    AcMidi.playMelodySolo(melody);\r\n  }\r\n\r\n  playMelody(event) {\r\n    // melodyString looks like:\r\n    // G5 F#5 G5;B2,A2,E3;E1 D2 C2\r\n    var melodyString = event.target.dataset[\"payload\"];\r\n    var melodiesData = melodyString.split(\";\");\r\n    console.debug(melodyString);\r\n\r\n    var melody1 = melodiesData[0].split(\",\");\r\n    var melody2 = melodiesData[1].split(\",\");\r\n    var melody3 = melodiesData[2].split(\",\");\r\n\r\n    AcMidi.playMelodyWithAccompaniment(melody1, melody2, melody3);\r\n  }\r\n\r\n  stopPlayback() {\r\n    AcMidi.stopPlayback();\r\n  }\r\n\r\n  downloadMidi(event) {\r\n    //download MIDI file\r\n    var melodyString = event.target.dataset[\"payload\"];\r\n    var melodiesData = melodyString.split(\";\");\r\n\r\n    var melody1 = melodiesData[0].split(\",\");\r\n    var melody2 = melodiesData[1].split(\",\");\r\n    var melody3 = melodiesData[2].split(\",\");\r\n\r\n    var dataString = AcMidi.buildMelodyMidiWithAccompaniment(melody1, melody2, melody3);\r\n    var timestamp = new Date().valueOf().toString().slice(-8)\r\n\r\n    var fileName = \"autocomposer-\" + timestamp + \"_\" + melody1.join(\"-\");\r\n    download(dataString, fileName, \"audio/midi\");\r\n  }\r\n\r\n  shouldComponentUpdate(nextProps, nextState) {\r\n    if(nextProps.allowMelodyGeneration) {\r\n      console.debug(\"[OutputPanel.shouldComponentUpdate()] Component is updating...\");\r\n      return true;\r\n    } else {\r\n      return false;\r\n    }\r\n  }\r\n\r\n  componentWillReceiveProps(nextProps, nextState){\r\n    if(nextProps.allowMelodyGeneration) {\r\n      console.debug(\"[OutputPanel.componentWillReceiveProps()] Generating melodies...\");\r\n      var chordProgression = this.props.chordProgression;\r\n      this.setState({melodyUnitList: AcMelody.getMelodies(chordProgression)});\r\n    }\r\n  }\r\n\r\n  componentDidUpdate() {\r\n    window.VexTabDiv.Div.start();\r\n    this.props.outputCallback();\r\n  }\r\n\r\n  createVexTab(arrChords, arrMelody) {\r\n    var vtString, pitchClass;\r\n    var vexTabText = \"options scale=0.9 space=5 font-size=15 font-face=Times\\n\";\r\n    vexTabText += \"tabstave\\n\";\r\n    vexTabText += \"notation=true tablature=false\\n\";\r\n    vexTabText += \"notes :w \";\r\n\r\n    arrMelody.forEach(function(melodyNote) {\r\n      // Turns a note name like \"C#4\" into \"C#/4 |\"\r\n      // Or \"Bb4\" into \"B@/4 |\"\r\n      // VexTab notation sure is odd.\r\n      pitchClass = melodyNote.slice(0, -1);\r\n      pitchClass = pitchClass.replace(\"b\", \"@\");\r\n\r\n      vtString = pitchClass + \"/\"+ melodyNote.slice(-1) + \" \";\r\n      vexTabText += vtString;\r\n    });\r\n\r\n    vexTabText = vexTabText.slice(0, -1) + \"\\n\";\r\n    vexTabText += \"text :w, \";\r\n\r\n    arrChords.forEach(function(chordSymbol) {\r\n      vtString = chordSymbol + \", \";\r\n      vexTabText += vtString;\r\n    });\r\n\r\n    vexTabText = vexTabText.slice(0, -2);\r\n\r\n    return vexTabText;\r\n  }\r\n\r\n  createMelodyRows() {\r\n    var melodyUnitList = this.state.melodyUnitList;\r\n    var melodyRows = [];\r\n    var melodyString, accompanimentString, basslineString, payloadString, arrPayload, midiFilename;\r\n\r\n    for(var i = 0; i < melodyUnitList.length; i++) {\r\n      melodyString = melodyUnitList[i].melodyNotes.join(\",\");\r\n      accompanimentString = AcMelody.getAccompaniment(melodyUnitList[i]).join(\",\");\r\n      basslineString = AcMelody.getBasicBassLine(melodyUnitList[i]);\r\n\r\n      arrPayload = [melodyString, accompanimentString, basslineString];\r\n      payloadString = arrPayload.join(\";\");\r\n      //midiFilename = melodyUnitList[i].chordProgression.replace(\" \", \"-\") + \"-melody\" + i;\r\n\r\n      melodyRows.push(\r\n        <tr key={\"melody\" + i} className=\"ac-melody-row\">\r\n          <td>\r\n            <AcButton inputKey=\"playMelodySolo\" inputLabel=\"Play (Solo)\" dataPayload={melodyString} onClick={this.playMelodySolo} />\r\n            <AcButton inputKey=\"playMelody\" inputLabel=\"Play (Full)\" dataPayload={payloadString} onClick={this.playMelody} />\r\n            <AcButton inputKey=\"stopPlayback\" inputLabel=\"Stop\" dataPayload={payloadString} onClick={this.stopPlayback} />\r\n            <AcButton inputKey=\"downloadMidi\" inputLabel=\"Get MIDI\" dataPayload={payloadString} onClick={this.downloadMidi} />\r\n          </td>\r\n          <td>\r\n            <div className=\"vex-tabdiv\">\r\n              {this.createVexTab(melodyUnitList[i].chordProgression, melodyUnitList[i].melodyNotes)}\r\n            </div>\r\n          </td>\r\n          <td>{melodyUnitList[i].smoothness}</td>\r\n          <td>{melodyUnitList[i].range}</td>\r\n        </tr>\r\n      );\r\n    }\r\n\r\n    return melodyRows;\r\n  }\r\n\r\n  createMelodyTable() {\r\n    console.debug('[OutputPanel.createMelodyTable()] creating table...');\r\n\r\n    return(\r\n      <table id=\"ac-melody-output\">\r\n        <thead>\r\n          <tr>\r\n            <th></th>\r\n            <th>Melody</th>\r\n            <th>Smoothness</th>\r\n            <th>Range</th>\r\n          </tr>\r\n        </thead>\r\n        <tbody>\r\n          {this.createMelodyRows()}\r\n        </tbody>\r\n      </table>\r\n    );\r\n  }\r\n\r\n  render() {\r\n    if(this.props.isShown) {\r\n      return (\r\n        <div id=\"output-panel\" className=\"ac-panel output-panel\">\r\n          <h2>Melodies!</h2>\r\n          {this.createMelodyTable()}\r\n        </div>\r\n      );\r\n    } else {\r\n      return (\r\n        <div id=\"output-panel\" className=\"ac-panel output-panel\">\r\n        </div>\r\n      );\r\n    }\r\n  }\r\n}\r\n\r\n\r\n\r\nclass ControlPanel extends React.Component {\r\n  constructor(props) {\r\n    super(props);\r\n    // Removed state, since this object isn't being used.\r\n  }\r\n\r\n  render() {\r\n    // The Control Panel isn't being used atm.\r\n    if(this.props.isShown) {\r\n      return (\r\n        <div id=\"control-panel\" className=\"ac-panel output-panel\" style={styleObj}>\r\n          // Nothing here!\r\n        </div>\r\n      );\r\n    } else {\r\n      return null;\r\n    }\r\n  }\r\n}\r\n\r\n\r\n\r\nclass AutoComposer extends React.Component {\r\n  constructor(props) {\r\n    super(props);\r\n\r\n    this.state = {\r\n      showHelp: false,\r\n      showControls: false,\r\n      showOutput: false,\r\n      showError: false,\r\n\r\n      debugMode: false,\r\n      controlsDisabled: true, // While this is a mess, no need to show it.\r\n\r\n      chordProgressionRaw: \"\",\r\n      chordProgressionChanged: false,\r\n      chordProgressionPlaceholder: AcLogic.INITIAL_PROGRESSION,\r\n\r\n      errorMessage: \"\",\r\n\r\n      // This becomes true whenever we have a chord progression change, and the correct button is clicked.\r\n      // Returns to false after output finishes rendering\r\n      allowMelodyGeneration: \"\"\r\n    };\r\n\r\n    this.handleChange = this.handleChange.bind(this);\r\n    this.generateMelodies = this.generateMelodies.bind(this);\r\n    this.outputFinishCallback = this.outputFinishCallback.bind(this);\r\n    this.callbackChangeState = this.callbackChangeState.bind(this);\r\n  }\r\n\r\n  /**\r\n  * Changes app state. Meant to be called from child components\r\n  * @param {string} stateKey - App state to change\r\n  * @param {number|string|Object} newState - Assigns this to the state\r\n  */\r\n  callbackChangeState(stateKey, newState) {\r\n    console.debug(\"app callbackChangeState()\");\r\n\r\n    var stateObj = function() {\r\n      var returnObj = {};\r\n\r\n      returnObj[stateKey] = newState;\r\n\r\n      return returnObj;\r\n    }.bind(this)();\r\n\r\n    this.setState(stateObj);\r\n  }\r\n\r\n  /**\r\n  * Changes app state. Meant to be called from child components.\r\n  * Older function, compared to callbackChangeState()\r\n  * @param {Object} event - React event\r\n  */\r\n  handleChange(event) {\r\n    console.debug(\"app handleChange()\");\r\n    var stateObj = function() {\r\n      var stateKey = this.target.dataset[\"stateKey\"];\r\n      var returnObj = {};\r\n\r\n      if(this.target.type === \"checkbox\") {\r\n        returnObj[stateKey] = this.target.checked;\r\n      } else if(this.target.type === \"button\") {\r\n        returnObj[stateKey] = this.target.dataset[\"currentState\"] === \"true\";\r\n      } else {\r\n        returnObj[stateKey] = this.target.value;\r\n\r\n        if(stateKey === \"chordProgressionRaw\") {\r\n          returnObj[\"chordProgressionChanged\"] = true;\r\n        }\r\n      }\r\n\r\n      return returnObj;\r\n    }.bind(event)();\r\n\r\n    this.setState(stateObj);\r\n  }\r\n\r\n  generateMelodies(event) {\r\n    var chordProgression = this.state.chordProgressionRaw.trim().split(\" \");\r\n\r\n    if(!this.state.chordProgressionChanged) {\r\n      // Chord progression hasn't changed. No need to continue.\r\n      console.debug(\"[AutoComposer.generateMelodies()] Chord progression hasn't changed. No generation for you.\");\r\n      return;\r\n    }\r\n\r\n    try {\r\n      if(this.state.chordProgressionRaw == null || this.state.chordProgressionRaw == \"\") {\r\n        throw new AcInputException('Chord input is empty!');\r\n      }\r\n\r\n      chordProgression.forEach(function(currentChordInput) {\r\n        if(!AcLogic.isValidText(currentChordInput)) {\r\n          throw new AcInputException('Chord input \\'' + currentChordInput + '\\' is not formatted properly! You should check the chord dictionary in the Help! section.');\r\n        }\r\n      });\r\n\r\n      if(chordProgression.length < 2) {\r\n        throw new AcInputException('You need to enter more chords. Two chords in a row is a completely valid input.');\r\n      }\r\n\r\n      this.setState({showError: false, showOutput: true, allowMelodyGeneration: true});\r\n    } catch(exc) {\r\n      console.warn(\"[AutoComposer.generateMelodies()] \" + exc.message + \"\\nError Type = \" + exc.name);\r\n      this.setState({showError: true, errorMessage: exc.message});\r\n    }\r\n  }\r\n\r\n  outputFinishCallback() {\r\n    // Callback that runs when output panel is finished rendering.\r\n    // Prevents melody generation until the user enters a new progression.\r\n    this.setState({allowMelodyGeneration: false, chordProgressionChanged: false});\r\n  }\r\n\r\n  render() {\r\n    var chordProgressionArray = this.state.chordProgressionRaw.split(\" \");\r\n    // Assume that we have an empty body tag.\r\n    return (\r\n      <div id=\"app-container\" className=\"root-panel\">\r\n        <div id=\"main-control-panel\" className=\"ac-panel\">\r\n          <h3>AutoComposer</h3>\r\n\r\n          <div className=\"panel-row has-labels\">\r\n            <AcTextArea inputKey=\"chordProgressionRaw\" addClass=\"double-height\" value={this.state.chordProgressionRaw} placeholder={this.state.chordProgressionPlaceholder} onChange={this.handleChange} />\r\n            <AcButton inputKey=\"generateMelodies\" inputLabel=\"Generate!\" wrapperAddClass=\"square\" addClass=\"double-height\" onClick={this.generateMelodies} />\r\n          </div>\r\n\r\n          <div className=\"panel-row\">\r\n            <AcToggleButton inputKey=\"showControls\" inputLabel=\"Settings\" initialState={this.state.showControls} onClickHandler={this.callbackChangeState} disabled={this.state.controlsDisabled} />\r\n            <AcToggleButton inputKey=\"showHelp\" inputLabel=\"Help/Info\" initialState={this.state.showHelp} onClickHandler={this.callbackChangeState} />\r\n          </div>\r\n\r\n          <div className=\"panel-row\">\r\n            <AcButton inputKey=\"generateMelodies\" inputLabel=\"Play\" wrapperAddClass=\"flex-lg\"/>\r\n            <AcButton inputKey=\"generateMelodies\" inputLabel=\"Play (Solo)\" wrapperAddClass=\"flex-sm\"/>\r\n            <AcButton inputKey=\"generateMelodies\" inputLabel=\"Stop\" wrapperAddClass=\"flex-sm\"/>\r\n            <AcButton inputKey=\"generateMelodies\" inputLabel=\"Get MIDI\" wrapperAddClass=\"flex-sm\"/>\r\n          </div>\r\n\r\n          <div className=\"panel-row\">\r\n            <StatusOutput inputKey=\"status-output\" value=\"status output...\" />\r\n          </div>\r\n\r\n          <ErrorMessage isShown={this.state.showError} errorMessage={this.state.errorMessage} />\r\n\r\n          <DebugPanel isHidden={!this.state.debugMode} debugData={JSON.stringify(this.state, null, 2)}/>\r\n        </div>\r\n\r\n        <ControlPanel isShown={this.state.showControls} />\r\n\r\n        <HelpPanel isShown={this.state.showHelp} />\r\n\r\n        <OutputPanel isShown={this.state.showOutput} chordProgression={chordProgressionArray} allowMelodyGeneration={this.state.allowMelodyGeneration} outputCallback={this.outputFinishCallback}/>\r\n\r\n      </div>\r\n    );\r\n  }\r\n}\r\n\r\n\r\n\r\nReactDOM.render(<AutoComposer />, document.getElementById('react-root'));\r\n",
+    "content": "const React = require('react');\r\nconst ReactDOM = require('react-dom');\r\n\r\nvar AutoComposerLogic = require('./autocomposer-logic');\r\nvar AcLogic = new AutoComposerLogic.AutoComposerLogic();\r\n\r\nvar AutoComposerMelody = require('./autocomposer-melody');\r\nvar AcMelody = new AutoComposerMelody.AutoComposerMelody();\r\n\r\nvar acMidi = require('./autocomposer-midi');\r\nvar AcMidi = new acMidi.AutoComposerMidi();\r\n\r\nvar AcButton = require('./react/ac-button');\r\nvar AcToggleButton = require('./react/ac-toggle-button');\r\nvar AcTextField = require('./react/ac-text-field');\r\nvar AcTextArea = require('./react/ac-textarea');\r\nvar AcSelect = require('./react/ac-select');\r\nvar AcRadioSet = require('./react/ac-radioset');\r\nvar AcCheckbox = require('./react/ac-checkbox');\r\nvar ErrorMessage = require('./react/error-message');\r\nvar StatusOutput = require('./react/status-output')\r\n\r\nvar HelpPanel = require('./react/help-panel');\r\nvar DebugPanel = require('./react/debug-panel');\r\n\r\n\r\n\r\nfunction AcInputException(message) {\r\n   this.message = message;\r\n   this.name = 'AcInputException';\r\n}\r\n\r\n\r\n\r\nclass OutputPanel extends React.Component {\r\n  constructor(props) {\r\n    super(props);\r\n    this.state = {\r\n      melodyUnitList: null\r\n    }\r\n\r\n    this.playMelodySolo = this.playMelodySolo.bind(this);\r\n    this.playMelody = this.playMelody.bind(this);\r\n    this.stopPlayback = this.stopPlayback.bind(this);\r\n    this.downloadMidi = this.downloadMidi.bind(this);\r\n  }\r\n\r\n  playMelodySolo(event) {\r\n    var melodyString = event.target.dataset[\"payload\"];\r\n    console.debug(melodyString);\r\n    var melody = melodyString.split(\",\");\r\n\r\n    AcMidi.playMelodySolo(melody);\r\n  }\r\n\r\n  playMelody(event) {\r\n    // melodyString looks like:\r\n    // G5 F#5 G5;B2,A2,E3;E1 D2 C2\r\n    var melodyString = event.target.dataset[\"payload\"];\r\n    var melodiesData = melodyString.split(\";\");\r\n    console.debug(melodyString);\r\n\r\n    var melody1 = melodiesData[0].split(\",\");\r\n    var melody2 = melodiesData[1].split(\",\");\r\n    var melody3 = melodiesData[2].split(\",\");\r\n\r\n    AcMidi.playMelodyWithAccompaniment(melody1, melody2, melody3);\r\n  }\r\n\r\n  stopPlayback() {\r\n    AcMidi.stopPlayback();\r\n  }\r\n\r\n  downloadMidi(event) {\r\n    //download MIDI file\r\n    var melodyString = event.target.dataset[\"payload\"];\r\n    var melodiesData = melodyString.split(\";\");\r\n\r\n    var melody1 = melodiesData[0].split(\",\");\r\n    var melody2 = melodiesData[1].split(\",\");\r\n    var melody3 = melodiesData[2].split(\",\");\r\n\r\n    var dataString = AcMidi.buildMelodyMidiWithAccompaniment(melody1, melody2, melody3);\r\n    var timestamp = new Date().valueOf().toString().slice(-8)\r\n\r\n    var fileName = \"autocomposer-\" + timestamp + \"_\" + melody1.join(\"-\");\r\n    download(dataString, fileName, \"audio/midi\");\r\n  }\r\n\r\n  shouldComponentUpdate(nextProps, nextState) {\r\n    if(nextProps.allowMelodyGeneration) {\r\n      console.debug(\"[OutputPanel.shouldComponentUpdate()] Component is updating...\");\r\n      return true;\r\n    } else {\r\n      return false;\r\n    }\r\n  }\r\n\r\n  componentWillReceiveProps(nextProps, nextState){\r\n    if(nextProps.allowMelodyGeneration) {\r\n      console.debug(\"[OutputPanel.componentWillReceiveProps()] Generating melodies...\");\r\n      var chordProgression = this.props.chordProgression;\r\n      this.setState({melodyUnitList: AcMelody.getMelodies(chordProgression)});\r\n    }\r\n  }\r\n\r\n  componentDidUpdate() {\r\n    window.VexTabDiv.Div.start();\r\n    this.props.outputCallback();\r\n  }\r\n\r\n  createVexTab(arrChords, arrMelody) {\r\n    var vtString, pitchClass;\r\n    var vexTabText = \"options scale=0.9 space=5 font-size=13 font-face=Times\\n\";\r\n    vexTabText += \"tabstave\\n\";\r\n    vexTabText += \"notation=true tablature=false\\n\";\r\n    vexTabText += \"notes :w \";\r\n\r\n    arrMelody.forEach(function(melodyNote) {\r\n      // Turns a note name like \"C#4\" into \"C#/4 |\"\r\n      // Or \"Bb4\" into \"B@/4 |\"\r\n      // VexTab notation sure is odd.\r\n      pitchClass = melodyNote.slice(0, -1);\r\n      pitchClass = pitchClass.replace(\"b\", \"@\");\r\n\r\n      vtString = pitchClass + \"/\"+ melodyNote.slice(-1) + \" \";\r\n      vexTabText += vtString;\r\n    });\r\n\r\n    vexTabText = vexTabText.slice(0, -1) + \"\\n\";\r\n    vexTabText += \"text :w, \";\r\n\r\n    arrChords.forEach(function(chordSymbol) {\r\n      vtString = chordSymbol + \", \";\r\n      vexTabText += vtString;\r\n    });\r\n\r\n    vexTabText = vexTabText.slice(0, -2);\r\n\r\n    return vexTabText;\r\n  }\r\n\r\n  createMelodyRows() {\r\n    var melodyUnitList = this.state.melodyUnitList;\r\n    var melodyRows = [];\r\n    var melodyString, accompanimentString, basslineString, payloadString, arrPayload, midiFilename;\r\n\r\n    for(var i = 0; i < melodyUnitList.length; i++) {\r\n      melodyString = melodyUnitList[i].melodyNotes.join(\",\");\r\n      accompanimentString = AcMelody.getAccompaniment(melodyUnitList[i]).join(\",\");\r\n      basslineString = AcMelody.getBasicBassLine(melodyUnitList[i]);\r\n\r\n      arrPayload = [melodyString, accompanimentString, basslineString];\r\n      payloadString = arrPayload.join(\";\");\r\n      //midiFilename = melodyUnitList[i].chordProgression.replace(\" \", \"-\") + \"-melody\" + i;\r\n\r\n      melodyRows.push(\r\n        <tr key={\"melody\" + i} className=\"ac-melody-row\">\r\n          <td>\r\n            <AcButton inputKey=\"playMelodySolo\" inputLabel=\"Play (Solo)\" dataPayload={melodyString} onClick={this.playMelodySolo} />\r\n            <AcButton inputKey=\"playMelody\" inputLabel=\"Play (Full)\" dataPayload={payloadString} onClick={this.playMelody} />\r\n            <AcButton inputKey=\"stopPlayback\" inputLabel=\"Stop\" dataPayload={payloadString} onClick={this.stopPlayback} />\r\n            <AcButton inputKey=\"downloadMidi\" inputLabel=\"Get MIDI\" dataPayload={payloadString} onClick={this.downloadMidi} />\r\n          </td>\r\n          <td>\r\n            <div className=\"vex-tabdiv\">\r\n              {this.createVexTab(melodyUnitList[i].chordProgression, melodyUnitList[i].melodyNotes)}\r\n            </div>\r\n          </td>\r\n          <td>{melodyUnitList[i].smoothness}</td>\r\n          <td>{melodyUnitList[i].range}</td>\r\n        </tr>\r\n      );\r\n    }\r\n\r\n    return melodyRows;\r\n  }\r\n\r\n  createMelodyTable() {\r\n    console.debug('[OutputPanel.createMelodyTable()] creating table...');\r\n\r\n    return(\r\n      <table id=\"ac-melody-output\">\r\n        <thead>\r\n          <tr>\r\n            <th></th>\r\n            <th>Melody</th>\r\n            <th>Smoothness</th>\r\n            <th>Range</th>\r\n          </tr>\r\n        </thead>\r\n        <tbody>\r\n          {this.createMelodyRows()}\r\n        </tbody>\r\n      </table>\r\n    );\r\n  }\r\n\r\n  render() {\r\n    if(this.props.isShown) {\r\n      return (\r\n        <div id=\"output-panel\" className=\"ac-panel output-panel\">\r\n          {this.createMelodyTable()}\r\n        </div>\r\n      );\r\n    } else {\r\n      return (\r\n        <div id=\"output-panel\" className=\"ac-panel output-panel\">\r\n        </div>\r\n      );\r\n    }\r\n  }\r\n}\r\n\r\n\r\n\r\nclass ControlPanel extends React.Component {\r\n  constructor(props) {\r\n    super(props);\r\n    // Removed state, since this object isn't being used.\r\n  }\r\n\r\n  render() {\r\n    // The Control Panel isn't being used atm.\r\n    if(this.props.isShown) {\r\n      return (\r\n        <div id=\"control-panel\" className=\"ac-panel output-panel\" style={styleObj}>\r\n          // Nothing here!\r\n        </div>\r\n      );\r\n    } else {\r\n      return null;\r\n    }\r\n  }\r\n}\r\n\r\n\r\n\r\nclass AutoComposer extends React.Component {\r\n  constructor(props) {\r\n    super(props);\r\n\r\n    this.state = {\r\n      showHelp: false,\r\n      showControls: false,\r\n      showOutput: false,\r\n      showError: false,\r\n\r\n      debugMode: false,\r\n      controlsDisabled: true, // While this is a mess, no need to show it.\r\n\r\n      chordProgressionRaw: \"\",\r\n      chordProgressionChanged: false,\r\n      chordProgressionPlaceholder: AcLogic.INITIAL_PROGRESSION,\r\n\r\n      errorMessage: \"\",\r\n\r\n      // This becomes true whenever we have a chord progression change, and the correct button is clicked.\r\n      // Returns to false after output finishes rendering\r\n      allowMelodyGeneration: \"\"\r\n    };\r\n\r\n    this.handleChange = this.handleChange.bind(this);\r\n    this.generateMelodies = this.generateMelodies.bind(this);\r\n    this.outputFinishCallback = this.outputFinishCallback.bind(this);\r\n    this.callbackChangeState = this.callbackChangeState.bind(this);\r\n  }\r\n\r\n  /**\r\n  * Changes app state. Meant to be called from child components\r\n  * @param {string} stateKey - App state to change\r\n  * @param {number|string|Object} newState - Assigns this to the state\r\n  */\r\n  callbackChangeState(stateKey, newState) {\r\n    console.debug(\"app callbackChangeState()\");\r\n\r\n    var stateObj = function() {\r\n      var returnObj = {};\r\n\r\n      returnObj[stateKey] = newState;\r\n\r\n      return returnObj;\r\n    }.bind(this)();\r\n\r\n    this.setState(stateObj);\r\n  }\r\n\r\n  /**\r\n  * Changes app state. Meant to be called from child components.\r\n  * Older function, compared to callbackChangeState()\r\n  * @param {Object} event - React event\r\n  */\r\n  handleChange(event) {\r\n    console.debug(\"app handleChange()\");\r\n    var stateObj = function() {\r\n      var stateKey = this.target.dataset[\"stateKey\"];\r\n      var returnObj = {};\r\n\r\n      if(this.target.type === \"checkbox\") {\r\n        returnObj[stateKey] = this.target.checked;\r\n      } else if(this.target.type === \"button\") {\r\n        returnObj[stateKey] = this.target.dataset[\"currentState\"] === \"true\";\r\n      } else {\r\n        returnObj[stateKey] = this.target.value;\r\n\r\n        if(stateKey === \"chordProgressionRaw\") {\r\n          returnObj[\"chordProgressionChanged\"] = true;\r\n        }\r\n      }\r\n\r\n      return returnObj;\r\n    }.bind(event)();\r\n\r\n    this.setState(stateObj);\r\n  }\r\n\r\n  generateMelodies(event) {\r\n    var chordProgression = this.state.chordProgressionRaw.trim().split(\" \");\r\n\r\n    if(!this.state.chordProgressionChanged) {\r\n      // Chord progression hasn't changed. No need to continue.\r\n      console.debug(\"[AutoComposer.generateMelodies()] Chord progression hasn't changed. No generation for you.\");\r\n      return;\r\n    }\r\n\r\n    try {\r\n      if(this.state.chordProgressionRaw == null || this.state.chordProgressionRaw == \"\") {\r\n        throw new AcInputException('Chord input is empty!');\r\n      }\r\n\r\n      chordProgression.forEach(function(currentChordInput) {\r\n        if(!AcLogic.isValidText(currentChordInput)) {\r\n          throw new AcInputException('Chord input \\'' + currentChordInput + '\\' is not formatted properly! You should check the chord dictionary in the Help! section.');\r\n        }\r\n      });\r\n\r\n      if(chordProgression.length < 2) {\r\n        throw new AcInputException('You need to enter more chords. Two chords in a row is a completely valid input.');\r\n      }\r\n\r\n      this.setState({showError: false, showOutput: true, allowMelodyGeneration: true});\r\n    } catch(exc) {\r\n      console.warn(\"[AutoComposer.generateMelodies()] \" + exc.message + \"\\nError Type = \" + exc.name);\r\n      this.setState({showError: true, errorMessage: exc.message});\r\n    }\r\n  }\r\n\r\n  outputFinishCallback() {\r\n    // Callback that runs when output panel is finished rendering.\r\n    // Prevents melody generation until the user enters a new progression.\r\n    this.setState({allowMelodyGeneration: false, chordProgressionChanged: false});\r\n  }\r\n\r\n  render() {\r\n    var chordProgressionArray = this.state.chordProgressionRaw.split(\" \");\r\n    // Assume that we have an empty body tag.\r\n    return (\r\n      <div id=\"app-container\" className=\"root-panel\">\r\n        <div id=\"main-control-panel\" className=\"ac-panel\">\r\n          <h3>AutoComposer</h3>\r\n\r\n          <div className=\"panel-row has-labels\">\r\n            <AcTextArea inputKey=\"chordProgressionRaw\" addClass=\"double-height\" value={this.state.chordProgressionRaw} placeholder={this.state.chordProgressionPlaceholder} onChange={this.handleChange} />\r\n            <AcButton inputKey=\"generateMelodies\" inputLabel=\"Generate!\" wrapperAddClass=\"square\" addClass=\"double-height\" onClick={this.generateMelodies} />\r\n          </div>\r\n\r\n          <div className=\"panel-row\">\r\n            <AcToggleButton inputKey=\"showControls\" icon=\"cog\" initialState={this.state.showControls} onClickHandler={this.callbackChangeState} disabled={this.state.controlsDisabled} />\r\n            <AcToggleButton inputKey=\"showHelp\" icon=\"question\" initialState={this.state.showHelp} onClickHandler={this.callbackChangeState} />\r\n          </div>\r\n\r\n          <div className=\"panel-row\">\r\n            <AcButton inputKey=\"generateMelodies\" icon=\"play\" wrapperAddClass=\"flex-lg\"/>\r\n            <AcButton inputKey=\"generateMelodies\" icon=\"play\" inputLabel=\"(Solo)\" wrapperAddClass=\"flex-sm\"/>\r\n            <AcButton inputKey=\"generateMelodies\" icon=\"stop\" wrapperAddClass=\"flex-sm\"/>\r\n            <AcButton inputKey=\"generateMelodies\" icon=\"floppy-o\" inputLabel=\"(MIDI)\" wrapperAddClass=\"flex-sm\"/>\r\n          </div>\r\n\r\n          <div className=\"panel-row\">\r\n            <StatusOutput inputKey=\"status-output\" value=\"status output...\" />\r\n          </div>\r\n\r\n          <ErrorMessage isShown={this.state.showError} errorMessage={this.state.errorMessage} />\r\n\r\n          <DebugPanel isHidden={!this.state.debugMode} debugData={JSON.stringify(this.state, null, 2)}/>\r\n        </div>\r\n\r\n        <ControlPanel isShown={this.state.showControls} />\r\n\r\n        <HelpPanel isShown={this.state.showHelp} />\r\n\r\n        <OutputPanel isShown={this.state.showOutput} chordProgression={chordProgressionArray} allowMelodyGeneration={this.state.allowMelodyGeneration} outputCallback={this.outputFinishCallback}/>\r\n\r\n      </div>\r\n    );\r\n  }\r\n}\r\n\r\n\r\n\r\nReactDOM.render(<AutoComposer />, document.getElementById('react-root'));\r\n",
     "static": true,
     "longname": "src/app-main.js",
     "access": null,
@@ -1031,7 +1031,7 @@
     "importPath": "autocomposer-melody/src/app-main.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 218,
+    "lineNumber": 217,
     "undocument": true,
     "unknown": [
       {
@@ -1055,7 +1055,7 @@
     "longname": "src/app-main.js~ControlPanel#constructor",
     "access": null,
     "description": null,
-    "lineNumber": 219,
+    "lineNumber": 218,
     "undocument": true,
     "unknown": [
       {
@@ -1083,7 +1083,7 @@
     "longname": "src/app-main.js~ControlPanel#render",
     "access": null,
     "description": null,
-    "lineNumber": 224,
+    "lineNumber": 223,
     "undocument": true,
     "unknown": [
       {
@@ -1110,7 +1110,7 @@
     "importPath": "autocomposer-melody/src/app-main.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 240,
+    "lineNumber": 239,
     "undocument": true,
     "unknown": [
       {
@@ -1134,7 +1134,7 @@
     "longname": "src/app-main.js~AutoComposer#constructor",
     "access": null,
     "description": null,
-    "lineNumber": 241,
+    "lineNumber": 240,
     "undocument": true,
     "unknown": [
       {
@@ -1160,7 +1160,7 @@
     "longname": "src/app-main.js~AutoComposer#state",
     "access": null,
     "description": null,
-    "lineNumber": 244,
+    "lineNumber": 243,
     "undocument": true,
     "unknown": [
       {
@@ -1183,7 +1183,7 @@
     "longname": "src/app-main.js~AutoComposer#handleChange",
     "access": null,
     "description": null,
-    "lineNumber": 264,
+    "lineNumber": 263,
     "undocument": true,
     "unknown": [
       {
@@ -1206,7 +1206,7 @@
     "longname": "src/app-main.js~AutoComposer#generateMelodies",
     "access": null,
     "description": null,
-    "lineNumber": 265,
+    "lineNumber": 264,
     "undocument": true,
     "unknown": [
       {
@@ -1229,7 +1229,7 @@
     "longname": "src/app-main.js~AutoComposer#outputFinishCallback",
     "access": null,
     "description": null,
-    "lineNumber": 266,
+    "lineNumber": 265,
     "undocument": true,
     "unknown": [
       {
@@ -1252,7 +1252,7 @@
     "longname": "src/app-main.js~AutoComposer#callbackChangeState",
     "access": null,
     "description": null,
-    "lineNumber": 267,
+    "lineNumber": 266,
     "undocument": true,
     "unknown": [
       {
@@ -1277,7 +1277,7 @@
     "longname": "src/app-main.js~AutoComposer#callbackChangeState",
     "access": null,
     "description": "Changes app state. Meant to be called from child components",
-    "lineNumber": 275,
+    "lineNumber": 274,
     "params": [
       {
         "nullable": null,
@@ -1314,7 +1314,7 @@
     "longname": "src/app-main.js~AutoComposer#handleChange",
     "access": null,
     "description": "Changes app state. Meant to be called from child components.\nOlder function, compared to callbackChangeState()",
-    "lineNumber": 294,
+    "lineNumber": 293,
     "params": [
       {
         "nullable": null,
@@ -1339,7 +1339,7 @@
     "longname": "src/app-main.js~AutoComposer#generateMelodies",
     "access": null,
     "description": null,
-    "lineNumber": 318,
+    "lineNumber": 317,
     "undocument": true,
     "unknown": [
       {
@@ -1367,7 +1367,7 @@
     "longname": "src/app-main.js~AutoComposer#outputFinishCallback",
     "access": null,
     "description": null,
-    "lineNumber": 349,
+    "lineNumber": 348,
     "undocument": true,
     "unknown": [
       {
@@ -1388,7 +1388,7 @@
     "longname": "src/app-main.js~AutoComposer#render",
     "access": null,
     "description": null,
-    "lineNumber": 355,
+    "lineNumber": 354,
     "undocument": true,
     "unknown": [
       {
@@ -2770,7 +2770,7 @@
     "__docId__": 98,
     "kind": "file",
     "name": "src/autocomposer-midi.js",
-    "content": "var MidiWriter = require('midi-writer-js');\r\nvar MidiPlayer = require('midi-player-js');\r\nvar SoundfontPlayer = require('soundfont-player');\r\nvar tonalNote = require('tonal-note');\r\n\r\n/**\r\n * Class responsible for playing audio and generating MIDI files for users.\r\n */\r\nclass AutoComposerMidi {\r\n  constructor() {\r\n    this.INSTRUMENT_NAMES = [\"violin\", \"acoustic_grand_piano\", \"acoustic_bass\"];\r\n    this.INSTRUMENT_GAIN = {\r\n      violin: 2,\r\n      acoustic_grand_piano: 1.5,\r\n      acoustic_bass: 1.75\r\n    }\r\n    this.NOTE_DURATION = \"1\";\r\n\r\n    this.instruments = {};\r\n    this.player = null;\r\n    this.audioContext = null;\r\n    this.instrumentInit = 0;\r\n    this.instrumentMelody = null;\r\n    this.instrumentAccomp = null;\r\n    this.instrumentBass = null;\r\n    this.audioContext = new AudioContext;\r\n\r\n    this.initialized = false;\r\n    // Added this flag to fix an issue where notes randomly play again after the track ends.\r\n    // It only works for tracks that are all the same length. If we ever have to play tracks that have\r\n    // different lengths, we'll need a different solution.\r\n    this.playbackLocked = true;\r\n\r\n    // is this kind of scope hackery necessary?!\r\n    var haxThis = this;\r\n\r\n    for(var i = 0; i < this.INSTRUMENT_NAMES.length; i++) {\r\n      // initialize each instrument\r\n      Soundfont.instrument(this.audioContext, this.INSTRUMENT_NAMES[i], {soundfont: 'FluidR3_GM'}).then(function (sfInstrument) {\r\n        console.log(sfInstrument);\r\n        haxThis.instruments[sfInstrument.name] = sfInstrument;\r\n        haxThis.instrumentInit++;\r\n\r\n        if(haxThis.instrumentInit === haxThis.INSTRUMENT_NAMES.length) {\r\n          haxThis._finishLoad();\r\n        }\r\n      });\r\n    }\r\n\r\n  }\r\n\r\n    /**\r\n    * Triggers the note playing for all instruments. Called for every MIDI event in the app.\r\n    * @private\r\n    * @param {number} event - MIDI event\r\n    */\r\n  _midiCallback(event) {\r\n    // callback for MIDI events\r\n    console.debug(event);\r\n\r\n    var instr1 = this.instruments[\"violin\"];\r\n    var instr2 = this.instruments[\"acoustic_grand_piano\"];\r\n    var instr3 = this.instruments[\"acoustic_bass\"];\r\n\r\n    if (!this.playbackLocked && event.name == 'Note on' && event.velocity > 0) {\r\n        switch(event.track) {\r\n          case 1:\r\n            instr1.play(event.noteName, this.audioContext.currentTime, {gain: this.INSTRUMENT_GAIN[\"violin\"]});\r\n          case 2:\r\n            instr2.play(event.noteName, this.audioContext.currentTime, {gain: this.INSTRUMENT_GAIN[\"acoustic_grand_piano\"]});\r\n          case 3:\r\n            instr3.play(event.noteName, this.audioContext.currentTime, {gain: this.INSTRUMENT_GAIN[\"acoustic_bass\"]});\r\n          default:\r\n            // nothing!\r\n        }\r\n    }\r\n\r\n    if (event.name == 'Note off') {\r\n      switch(event.track) {\r\n        case 1:\r\n          instr1.stop();\r\n        case 2:\r\n          instr2.stop();\r\n        case 3:\r\n          instr3.stop();\r\n        default:\r\n          // nothing!\r\n      }\r\n    }\r\n\r\n    if (event.name == \"End of Track\") {\r\n      this.playbackLocked = true;\r\n    }\r\n  }\r\n\r\n    /**\r\n    * Completes the loading of this class. The \"midiPlayerReady\" eve\r\n    * @private\r\n    * @emits {midiPlayerReady} - Emits this event when the audio player successfully loads\r\n    */\r\n  _finishLoad() {\r\n    var haxThis = this;\r\n    this.player = new MidiPlayer.Player(function(event) {\r\n      haxThis._midiCallback(event);\r\n    });\r\n    this.initialized = true;\r\n    this.playbackLocked = false;\r\n    console.log(\"[AutoComposerMidi._initializePlayer()] Loading complete!\");\r\n\r\n    var loadEvent = new Event(\"midiPlayerReady\");\r\n    document.body.dispatchEvent(loadEvent);\r\n  }\r\n\r\n    /**\r\n    * Builds MIDI info for a single note\r\n    * @private\r\n    * @param {number} numMidi - MIDI number for a pitch\r\n    * @param {number} duration - MIDI number for a pitch\r\n    * @param {number} wait\r\n    * @return {MidiWriter.NoteEvent} - ???\r\n    */\r\n  _buildNoteMidi(numMidi, duration, wait) {\r\n      if(!wait) {\r\n          wait = \"0\";\r\n      }\r\n      return new MidiWriter.NoteEvent({pitch: [numMidi], duration: duration, wait: wait, velocity: 100});\r\n  }\r\n\r\n    /**\r\n    * Builds MIDI info for a chord\r\n    * @private\r\n    * @param {number[]} arrNumMidi - MIDI numbers for a set of pitches\r\n    * @param {number} duration - MIDI number for a pitch\r\n    * @param {number} wait\r\n    * @return {MidiWriter.NoteEvent} - ???\r\n    */\r\n  _buildChordMidi(arrNumMidi, duration, wait) {\r\n      if(!wait) {\r\n          wait = \"0\";\r\n      }\r\n      return new MidiWriter.NoteEvent({pitch: arrNumMidi, duration: duration, wait: wait, velocity: 100});\r\n  }\r\n    /**\r\n    * Builds a Track from a given melody.\r\n    * @private\r\n    * @param {string[]} arrMelody - our melody!\r\n    * @return {Track} - a MidiWriter Track\r\n    */\r\n  _buildMelodyTrack(arrMelody) {\r\n    var returnTrack = new MidiWriter.Track();\r\n\r\n    for(var i = 0; i < arrMelody.length; i++) {\r\n      var midiNumber = tonalNote.midi(arrMelody[i]);\r\n      returnTrack.addEvent(this._buildNoteMidi(midiNumber, this.NOTE_DURATION));\r\n    }\r\n\r\n    return returnTrack;\r\n  }\r\n\r\n    /**\r\n    * Builds a Track from a given chord.\r\n    * @private\r\n    * @param {string[]} arrChordNotes - chordNotes\r\n    * @return {Track} - a MidiWriter Track\r\n    */\r\n  _buildChordTrack(arrChordNotes) {\r\n    var notes, midiNumber, midiNumbers;\r\n    var returnTrack = new MidiWriter.Track();\r\n\r\n    for(var i = 0; i < arrChordNotes.length; i++) {\r\n      midiNumbers = [];\r\n      notes = arrChordNotes[i].split(\" \");\r\n\r\n      notes.forEach(function(note){\r\n        midiNumbers.push(tonalNote.midi(note));\r\n      })\r\n\r\n      returnTrack.addEvent(this._buildChordMidi(midiNumbers, this.NOTE_DURATION));\r\n    }\r\n\r\n    return returnTrack;\r\n  }\r\n\r\n    /**\r\n    * Gets the MIDI data for a given melody.\r\n    * @private\r\n    * @param {string[]} arrMelody - our melody\r\n    * @return {string} - MIDI data, as a DataURI string\r\n    */\r\n  _buildMelodyMidiSolo(arrMelody) {\r\n    var tracks = [], midiNumber;\r\n    tracks[0] = this._buildMelodyTrack(arrMelody);\r\n\r\n    var write = new MidiWriter.Writer(tracks);\r\n    console.log(\"[AutoComposerMidi._buildMelodyMidiSolo()] \" + write.dataUri());\r\n\r\n    return write.dataUri();\r\n  }\r\n\r\n    /**\r\n    * Gets the MIDI data for a given melody, with accompaniment.\r\n    * @param {string[]} arrMelody - main melody\r\n    * @param {string[]} arrAcompanimentLine - accompaniment line\r\n    * @param {string[]} arrBassLine - bass line\r\n    * @return {string} - MIDI data, as a DataURI string.\r\n    */\r\n  buildMelodyMidiWithAccompaniment(arrMelody, arrAcompanimentLine, arrBassLine) {\r\n    var tracks, midiNumber;\r\n\r\n    var melodyTrack = this._buildMelodyTrack(arrMelody);\r\n    melodyTrack.addInstrumentName(\"violin\");\r\n\r\n    var accompanimentTrack = this._buildChordTrack(arrAcompanimentLine);\r\n    accompanimentTrack.addInstrumentName(\"acoustic_grand_piano\");\r\n\r\n    var bassTrack = this._buildMelodyTrack(arrBassLine);\r\n    bassTrack.addInstrumentName(\"acoustic_bass\");\r\n\r\n    tracks = [melodyTrack, accompanimentTrack, bassTrack];\r\n\r\n    var write = new MidiWriter.Writer(tracks);\r\n    console.log(\"[AutoComposerMidi.buildMelodyMidiWithAccompaniment()] \" + write.dataUri());\r\n\r\n    return write.dataUri();\r\n  }\r\n\r\n    /**\r\n    * Plays the given melody.\r\n    * @param {string[]} melodySolo - solo melody (violin)\r\n    */\r\n  playMelodySolo(melodySolo) {\r\n    var strMidi = this._buildMelodyMidiSolo(melodySolo);\r\n    this._playMelody(strMidi);\r\n  }\r\n    /**\r\n    * Plays the given melodies.\r\n    * @param {string[]} melodySolo - solo melody (violin)\r\n    * @param {string[]} melodyAccomp - accompaniment melody (piano)\r\n    * @param {string[]} melodyBass - bass melody (bass)\r\n    */\r\n  playMelodyWithAccompaniment(melodySolo, melodyAccomp, melodyBass) {\r\n    var strMidi = this.buildMelodyMidiWithAccompaniment(melodySolo, melodyAccomp, melodyBass);\r\n    this._playMelody(strMidi);\r\n  }\r\n\r\n    /**\r\n    * Actually plays the given melody\r\n    * @private\r\n    * @param {string} strMidi - MIDI data, as a DataURI string.\r\n    */\r\n  _playMelody(strMidi) {\r\n    if(this.initialized) {\r\n      this.stopPlayback();\r\n      this.playbackLocked = false;\r\n      this.player.loadDataUri(strMidi);\r\n      this.player.play();\r\n    } else {\r\n      console.debug(\"[AutoComposerMidi._playMelody()] Player isn't initialized yet...\");\r\n    }\r\n  }\r\n\r\n    /**\r\n    * Stops all playback\r\n    */\r\n  stopPlayback() {\r\n    this.instruments[\"violin\"].stop();\r\n    this.instruments[\"acoustic_grand_piano\"].stop();\r\n    this.instruments[\"acoustic_bass\"].stop();\r\n    this.player.stop();\r\n  }\r\n}\r\n\r\nexports.AutoComposerMidi = AutoComposerMidi;\r\n",
+    "content": "var MidiWriter = require('midi-writer-js');\r\nvar MidiPlayer = require('midi-player-js');\r\nvar SoundfontPlayer = require('soundfont-player');\r\nvar tonalNote = require('tonal-note');\r\n\r\n/**\r\n * Class responsible for playing audio and generating MIDI files for users.\r\n */\r\nclass AutoComposerMidi {\r\n  constructor() {\r\n    this.INSTRUMENT_NAMES = [\"violin\", \"acoustic_grand_piano\", \"acoustic_bass\"];\r\n    this.INSTRUMENT_GAIN = {\r\n      violin: 1.75,\r\n      acoustic_grand_piano: 1.5,\r\n      acoustic_bass: 1.66\r\n    }\r\n    this.NOTE_DURATION = \"1\";\r\n\r\n    this.instruments = {};\r\n    this.player = null;\r\n    this.audioContext = null;\r\n    this.instrumentInit = 0;\r\n    this.instrumentMelody = null;\r\n    this.instrumentAccomp = null;\r\n    this.instrumentBass = null;\r\n    this.audioContext = new AudioContext;\r\n\r\n    this.initialized = false;\r\n    // Added this flag to fix an issue where notes randomly play again after the track ends.\r\n    // It only works for tracks that are all the same length. If we ever have to play tracks that have\r\n    // different lengths, we'll need a different solution.\r\n    this.playbackLocked = true;\r\n\r\n    // is this kind of scope hackery necessary?!\r\n    var haxThis = this;\r\n\r\n    for(var i = 0; i < this.INSTRUMENT_NAMES.length; i++) {\r\n      // initialize each instrument\r\n      Soundfont.instrument(this.audioContext, this.INSTRUMENT_NAMES[i], {soundfont: 'FluidR3_GM'}).then(function (sfInstrument) {\r\n        console.log(sfInstrument);\r\n        haxThis.instruments[sfInstrument.name] = sfInstrument;\r\n        haxThis.instrumentInit++;\r\n\r\n        if(haxThis.instrumentInit === haxThis.INSTRUMENT_NAMES.length) {\r\n          haxThis._finishLoad();\r\n        }\r\n      });\r\n    }\r\n\r\n  }\r\n\r\n    /**\r\n    * Triggers the note playing for all instruments. Called for every MIDI event in the app.\r\n    * @private\r\n    * @param {number} event - MIDI event\r\n    */\r\n  _midiCallback(event) {\r\n    // callback for MIDI events\r\n    console.debug(event);\r\n\r\n    var instr1 = this.instruments[\"violin\"];\r\n    var instr2 = this.instruments[\"acoustic_grand_piano\"];\r\n    var instr3 = this.instruments[\"acoustic_bass\"];\r\n\r\n    if (!this.playbackLocked && event.name == 'Note on' && event.velocity > 0) {\r\n        switch(event.track) {\r\n          case 1:\r\n            instr1.play(event.noteName, this.audioContext.currentTime, {gain: this.INSTRUMENT_GAIN[\"violin\"]});\r\n            break;\r\n          case 2:\r\n            instr2.play(event.noteName, this.audioContext.currentTime, {gain: this.INSTRUMENT_GAIN[\"acoustic_grand_piano\"]});\r\n            break;\r\n          case 3:\r\n            instr3.play(event.noteName, this.audioContext.currentTime, {gain: this.INSTRUMENT_GAIN[\"acoustic_bass\"]});\r\n            break;\r\n          default:\r\n            // nothing!\r\n        }\r\n    }\r\n\r\n    if (event.name == 'Note off') {\r\n      switch(event.track) {\r\n        case 1:\r\n          instr1.stop();\r\n          break;\r\n        case 2:\r\n          instr2.stop();\r\n          break;\r\n        case 3:\r\n          instr3.stop();\r\n          break;\r\n        default:\r\n          // nothing!\r\n      }\r\n    }\r\n\r\n    if (event.name == \"End of Track\") {\r\n      this.playbackLocked = true;\r\n    }\r\n  }\r\n\r\n    /**\r\n    * Completes the loading of this class. The \"midiPlayerReady\" eve\r\n    * @private\r\n    * @emits {midiPlayerReady} - Emits this event when the audio player successfully loads\r\n    */\r\n  _finishLoad() {\r\n    var haxThis = this;\r\n    this.player = new MidiPlayer.Player(function(event) {\r\n      haxThis._midiCallback(event);\r\n    });\r\n    this.initialized = true;\r\n    this.playbackLocked = false;\r\n    console.log(\"[AutoComposerMidi._initializePlayer()] Loading complete!\");\r\n\r\n    var loadEvent = new Event(\"midiPlayerReady\");\r\n    document.body.dispatchEvent(loadEvent);\r\n  }\r\n\r\n    /**\r\n    * Builds MIDI info for a single note\r\n    * @private\r\n    * @param {number} numMidi - MIDI number for a pitch\r\n    * @param {number} duration - MIDI number for a pitch\r\n    * @param {number} wait\r\n    * @return {MidiWriter.NoteEvent} - ???\r\n    */\r\n  _buildNoteMidi(numMidi, duration, wait) {\r\n      if(!wait) {\r\n          wait = \"0\";\r\n      }\r\n      return new MidiWriter.NoteEvent({pitch: [numMidi], duration: duration, wait: wait, velocity: 100});\r\n  }\r\n\r\n    /**\r\n    * Builds MIDI info for a chord\r\n    * @private\r\n    * @param {number[]} arrNumMidi - MIDI numbers for a set of pitches\r\n    * @param {number} duration - MIDI number for a pitch\r\n    * @param {number} wait\r\n    * @return {MidiWriter.NoteEvent} - ???\r\n    */\r\n  _buildChordMidi(arrNumMidi, duration, wait) {\r\n      if(!wait) {\r\n          wait = \"0\";\r\n      }\r\n      return new MidiWriter.NoteEvent({pitch: arrNumMidi, duration: duration, wait: wait, velocity: 100});\r\n  }\r\n    /**\r\n    * Builds a Track from a given melody.\r\n    * @private\r\n    * @param {string[]} arrMelody - our melody!\r\n    * @return {Track} - a MidiWriter Track\r\n    */\r\n  _buildMelodyTrack(arrMelody) {\r\n    var returnTrack = new MidiWriter.Track();\r\n\r\n    for(var i = 0; i < arrMelody.length; i++) {\r\n      var midiNumber = tonalNote.midi(arrMelody[i]);\r\n      returnTrack.addEvent(this._buildNoteMidi(midiNumber, this.NOTE_DURATION));\r\n    }\r\n\r\n    return returnTrack;\r\n  }\r\n\r\n    /**\r\n    * Builds a Track from a given chord.\r\n    * @private\r\n    * @param {string[]} arrChordNotes - chordNotes\r\n    * @return {Track} - a MidiWriter Track\r\n    */\r\n  _buildChordTrack(arrChordNotes) {\r\n    var notes, midiNumber, midiNumbers;\r\n    var returnTrack = new MidiWriter.Track();\r\n\r\n    for(var i = 0; i < arrChordNotes.length; i++) {\r\n      midiNumbers = [];\r\n      notes = arrChordNotes[i].split(\" \");\r\n\r\n      notes.forEach(function(note){\r\n        midiNumbers.push(tonalNote.midi(note));\r\n      })\r\n\r\n      returnTrack.addEvent(this._buildChordMidi(midiNumbers, this.NOTE_DURATION));\r\n    }\r\n\r\n    return returnTrack;\r\n  }\r\n\r\n    /**\r\n    * Gets the MIDI data for a given melody.\r\n    * @private\r\n    * @param {string[]} arrMelody - our melody\r\n    * @return {string} - MIDI data, as a DataURI string\r\n    */\r\n  _buildMelodyMidiSolo(arrMelody) {\r\n    var tracks = [], midiNumber;\r\n    tracks[0] = this._buildMelodyTrack(arrMelody);\r\n\r\n    var write = new MidiWriter.Writer(tracks);\r\n    console.log(\"[AutoComposerMidi._buildMelodyMidiSolo()] \" + write.dataUri());\r\n\r\n    return write.dataUri();\r\n  }\r\n\r\n    /**\r\n    * Gets the MIDI data for a given melody, with accompaniment.\r\n    * @param {string[]} arrMelody - main melody\r\n    * @param {string[]} arrAcompanimentLine - accompaniment line\r\n    * @param {string[]} arrBassLine - bass line\r\n    * @return {string} - MIDI data, as a DataURI string.\r\n    */\r\n  buildMelodyMidiWithAccompaniment(arrMelody, arrAcompanimentLine, arrBassLine) {\r\n    var tracks, midiNumber;\r\n\r\n    var melodyTrack = this._buildMelodyTrack(arrMelody);\r\n    melodyTrack.addInstrumentName(\"violin\");\r\n\r\n    var accompanimentTrack = this._buildChordTrack(arrAcompanimentLine);\r\n    accompanimentTrack.addInstrumentName(\"acoustic_grand_piano\");\r\n\r\n    var bassTrack = this._buildMelodyTrack(arrBassLine);\r\n    bassTrack.addInstrumentName(\"acoustic_bass\");\r\n\r\n    tracks = [melodyTrack, accompanimentTrack, bassTrack];\r\n\r\n    var write = new MidiWriter.Writer(tracks);\r\n    console.log(\"[AutoComposerMidi.buildMelodyMidiWithAccompaniment()] \" + write.dataUri());\r\n\r\n    return write.dataUri();\r\n  }\r\n\r\n    /**\r\n    * Plays the given melody.\r\n    * @param {string[]} melodySolo - solo melody (violin)\r\n    */\r\n  playMelodySolo(melodySolo) {\r\n    var strMidi = this._buildMelodyMidiSolo(melodySolo);\r\n    this._playMelody(strMidi);\r\n  }\r\n    /**\r\n    * Plays the given melodies.\r\n    * @param {string[]} melodySolo - solo melody (violin)\r\n    * @param {string[]} melodyAccomp - accompaniment melody (piano)\r\n    * @param {string[]} melodyBass - bass melody (bass)\r\n    */\r\n  playMelodyWithAccompaniment(melodySolo, melodyAccomp, melodyBass) {\r\n    var strMidi = this.buildMelodyMidiWithAccompaniment(melodySolo, melodyAccomp, melodyBass);\r\n    this._playMelody(strMidi);\r\n  }\r\n\r\n    /**\r\n    * Actually plays the given melody\r\n    * @private\r\n    * @param {string} strMidi - MIDI data, as a DataURI string.\r\n    */\r\n  _playMelody(strMidi) {\r\n    if(this.initialized) {\r\n      this.stopPlayback();\r\n      this.playbackLocked = false;\r\n      this.player.loadDataUri(strMidi);\r\n      this.player.play();\r\n    } else {\r\n      console.debug(\"[AutoComposerMidi._playMelody()] Player isn't initialized yet...\");\r\n    }\r\n  }\r\n\r\n    /**\r\n    * Stops all playback\r\n    */\r\n  stopPlayback() {\r\n    this.instruments[\"violin\"].stop();\r\n    this.instruments[\"acoustic_grand_piano\"].stop();\r\n    this.instruments[\"acoustic_bass\"].stop();\r\n    this.player.stop();\r\n  }\r\n}\r\n\r\nexports.AutoComposerMidi = AutoComposerMidi;\r\n",
     "static": true,
     "longname": "src/autocomposer-midi.js",
     "access": null,
@@ -3250,7 +3250,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#playbackLocked",
     "access": null,
     "description": null,
-    "lineNumber": 92,
+    "lineNumber": 98,
     "undocument": true,
     "unknown": [
       {
@@ -3275,7 +3275,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#_finishLoad",
     "access": "private",
     "description": "Completes the loading of this class. The \"midiPlayerReady\" eve",
-    "lineNumber": 101,
+    "lineNumber": 107,
     "params": [],
     "emits": [
       {
@@ -3295,7 +3295,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#player",
     "access": null,
     "description": null,
-    "lineNumber": 103,
+    "lineNumber": 109,
     "undocument": true,
     "unknown": [
       {
@@ -3318,7 +3318,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 106,
+    "lineNumber": 112,
     "undocument": true,
     "unknown": [
       {
@@ -3341,7 +3341,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#playbackLocked",
     "access": null,
     "description": null,
-    "lineNumber": 107,
+    "lineNumber": 113,
     "undocument": true,
     "unknown": [
       {
@@ -3366,7 +3366,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#_buildNoteMidi",
     "access": "private",
     "description": "Builds MIDI info for a single note",
-    "lineNumber": 122,
+    "lineNumber": 128,
     "params": [
       {
         "nullable": null,
@@ -3419,7 +3419,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#_buildChordMidi",
     "access": "private",
     "description": "Builds MIDI info for a chord",
-    "lineNumber": 137,
+    "lineNumber": 143,
     "params": [
       {
         "nullable": null,
@@ -3472,7 +3472,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#_buildMelodyTrack",
     "access": "private",
     "description": "Builds a Track from a given melody.",
-    "lineNumber": 149,
+    "lineNumber": 155,
     "params": [
       {
         "nullable": null,
@@ -3505,7 +3505,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#_buildChordTrack",
     "access": "private",
     "description": "Builds a Track from a given chord.",
-    "lineNumber": 166,
+    "lineNumber": 172,
     "params": [
       {
         "nullable": null,
@@ -3538,7 +3538,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#_buildMelodyMidiSolo",
     "access": "private",
     "description": "Gets the MIDI data for a given melody.",
-    "lineNumber": 190,
+    "lineNumber": 196,
     "params": [
       {
         "nullable": null,
@@ -3571,7 +3571,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#buildMelodyMidiWithAccompaniment",
     "access": null,
     "description": "Gets the MIDI data for a given melody, with accompaniment.",
-    "lineNumber": 207,
+    "lineNumber": 213,
     "params": [
       {
         "nullable": null,
@@ -3624,7 +3624,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#playMelodySolo",
     "access": null,
     "description": "Plays the given melody.",
-    "lineNumber": 231,
+    "lineNumber": 237,
     "params": [
       {
         "nullable": null,
@@ -3649,7 +3649,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#playMelodyWithAccompaniment",
     "access": null,
     "description": "Plays the given melodies.",
-    "lineNumber": 241,
+    "lineNumber": 247,
     "params": [
       {
         "nullable": null,
@@ -3694,7 +3694,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#_playMelody",
     "access": "private",
     "description": "Actually plays the given melody",
-    "lineNumber": 251,
+    "lineNumber": 257,
     "params": [
       {
         "nullable": null,
@@ -3717,7 +3717,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#playbackLocked",
     "access": null,
     "description": null,
-    "lineNumber": 254,
+    "lineNumber": 260,
     "undocument": true,
     "unknown": [
       {
@@ -3742,7 +3742,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#stopPlayback",
     "access": null,
     "description": "Stops all playback",
-    "lineNumber": 265,
+    "lineNumber": 271,
     "params": []
   },
   {
@@ -4180,7 +4180,7 @@
     "__docId__": 155,
     "kind": "file",
     "name": "src/react/ac-button.js",
-    "content": "var React = require('react');\r\n\r\n\r\n/**\r\n* React Component representing a simple button\r\n*/\r\nclass AcButton extends React.Component {\r\n  render() {\r\n    // This can have a status, passed in from the parent Component\r\n    var buttonClass = this.props.isActive ? \"ac-input button active \" : \"ac-input button \";\r\n    buttonClass += this.props.addClass ? this.props.addClass: \"\";\r\n\r\n    var wrapperClass = \"ac-control-wrapper \";\r\n    wrapperClass += this.props.wrapperAddClass ? this.props.wrapperAddClass: \"\";\r\n\r\n    return (\r\n      <div className={wrapperClass}>\r\n        <input type=\"button\" className={buttonClass} id={this.props.inputKey} value={this.props.inputLabel} onClick={this.props.onClick} disabled={this.props.disabled} data-payload={this.props.dataPayload}/>\r\n      </div>\r\n    );\r\n  }\r\n}\r\n\r\nmodule.exports = AcButton;\r\n",
+    "content": "var React = require('react');\r\n\r\n/**\r\n* React Component representing a simple button\r\n*/\r\nclass AcButton extends React.Component {\r\n  getIconElement() {\r\n    if(this.props.icon) {\r\n      var iconClass = \"fa fa-\" + this.props.icon;\r\n      return <i className={iconClass}></i>\r\n    } else {\r\n      return \"\";\r\n    }\r\n  }\r\n\r\n  render() {\r\n    // This can have a status, passed in from the parent Component\r\n    var buttonClass = this.props.isActive ? \"ac-input button active \" : \"ac-input button\";\r\n    buttonClass += this.props.addClass ? \" \" + this.props.addClass: \"\";\r\n    buttonClass += this.props.disabled ? \" disabled\" : \"\";\r\n\r\n    var wrapperClass = \"ac-control-wrapper\";\r\n    wrapperClass += this.props.wrapperAddClass ? \" \" + this.props.wrapperAddClass: \"\";\r\n\r\n    return (\r\n      <div className={wrapperClass}>\r\n        <button className={buttonClass} id={this.props.inputKey} onClick={this.props.onClick} disabled={this.props.disabled} data-payload={this.props.dataPayload}>\r\n          {this.getIconElement()} {this.props.inputLabel}\r\n        </button>\r\n      </div>\r\n    );\r\n  }\r\n}\r\n\r\nmodule.exports = AcButton;\r\n",
     "static": true,
     "longname": "src/react/ac-button.js",
     "access": null,
@@ -4225,7 +4225,7 @@
     "importPath": "autocomposer-melody/src/react/ac-button.js",
     "importStyle": "AcButton",
     "description": "React Component representing a simple button",
-    "lineNumber": 7,
+    "lineNumber": 6,
     "interface": false,
     "extends": [
       "React~React.Component"
@@ -4233,6 +4233,32 @@
   },
   {
     "__docId__": 158,
+    "kind": "method",
+    "name": "getIconElement",
+    "memberof": "src/react/ac-button.js~AcButton",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/react/ac-button.js~AcButton#getIconElement",
+    "access": null,
+    "description": null,
+    "lineNumber": 7,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "params": [],
+    "return": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "__docId__": 159,
     "kind": "method",
     "name": "render",
     "memberof": "src/react/ac-button.js~AcButton",
@@ -4242,7 +4268,7 @@
     "longname": "src/react/ac-button.js~AcButton#render",
     "access": null,
     "description": null,
-    "lineNumber": 8,
+    "lineNumber": 16,
     "undocument": true,
     "unknown": [
       {
@@ -4258,7 +4284,7 @@
     }
   },
   {
-    "__docId__": 159,
+    "__docId__": 160,
     "kind": "file",
     "name": "src/react/ac-checkbox.js",
     "content": "var React = require('react');\r\n\r\n/**\r\n* React Component representing a checkbox\r\n*/\r\nclass AcCheckbox extends React.Component {\r\n  render() {\r\n    return (\r\n      <div className=\"ac-control-wrapper\">\r\n        <label className=\"ac-input-label\" htmlFor={this.props.inputKey}>{this.props.inputLabel}</label>\r\n        <input id={this.props.inputKey} className=\"ac-input checkbox\" name={this.props.inputKey} data-state-key={this.props.inputKey} type=\"checkbox\" checked={this.props.isChecked} onChange={this.props.onChange}/>\r\n      </div>\r\n    );\r\n  }\r\n}\r\n\r\nmodule.exports = AcCheckbox;\r\n",
@@ -4269,7 +4295,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 160,
+    "__docId__": 161,
     "kind": "variable",
     "name": "React",
     "memberof": "src/react/ac-checkbox.js",
@@ -4295,7 +4321,7 @@
     }
   },
   {
-    "__docId__": 161,
+    "__docId__": 162,
     "kind": "class",
     "name": "AcCheckbox",
     "memberof": "src/react/ac-checkbox.js",
@@ -4313,7 +4339,7 @@
     ]
   },
   {
-    "__docId__": 162,
+    "__docId__": 163,
     "kind": "method",
     "name": "render",
     "memberof": "src/react/ac-checkbox.js~AcCheckbox",
@@ -4339,7 +4365,7 @@
     }
   },
   {
-    "__docId__": 163,
+    "__docId__": 164,
     "kind": "file",
     "name": "src/react/ac-radioset.js",
     "content": "var React = require('react');\r\n\r\n/**\r\n* React Component representing a set of radio buttons\r\n*/\r\nclass AcRadioSet extends React.Component {\r\n  createRadioItems() {\r\n    let items = [];\r\n    var totalOptions = this.props.options;\r\n\r\n    for (var k in totalOptions) {\r\n      if (totalOptions.hasOwnProperty(k)) {\r\n        items.push(\r\n          <label key={\"label-\" + k} >{totalOptions[k]}\r\n            <input key={k} id={this.props.inputKey} name={this.props.inputKey} className=\"ac-input radio\" data-state-key={this.props.inputKey} type=\"radio\" value={k}  onChange={this.props.onChange} />\r\n          </label>\r\n        );\r\n      }\r\n    }\r\n\r\n    return items;\r\n  }\r\n\r\n  render() {\r\n    return(\r\n      <div className=\"ac-control-wrapper\">\r\n        <fieldset>\r\n          <legend>{this.props.inputLabel}</legend>\r\n          {this.createRadioItems()}\r\n        </fieldset>\r\n      </div>\r\n    );\r\n  }\r\n}\r\n\r\nmodule.exports = AcRadioSet;\r\n",
@@ -4350,7 +4376,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 164,
+    "__docId__": 165,
     "kind": "variable",
     "name": "React",
     "memberof": "src/react/ac-radioset.js",
@@ -4376,7 +4402,7 @@
     }
   },
   {
-    "__docId__": 165,
+    "__docId__": 166,
     "kind": "class",
     "name": "AcRadioSet",
     "memberof": "src/react/ac-radioset.js",
@@ -4394,7 +4420,7 @@
     ]
   },
   {
-    "__docId__": 166,
+    "__docId__": 167,
     "kind": "method",
     "name": "createRadioItems",
     "memberof": "src/react/ac-radioset.js~AcRadioSet",
@@ -4420,7 +4446,7 @@
     }
   },
   {
-    "__docId__": 167,
+    "__docId__": 168,
     "kind": "method",
     "name": "render",
     "memberof": "src/react/ac-radioset.js~AcRadioSet",
@@ -4446,7 +4472,7 @@
     }
   },
   {
-    "__docId__": 168,
+    "__docId__": 169,
     "kind": "file",
     "name": "src/react/ac-select.js",
     "content": "var React = require('react');\r\n\r\n/**\r\n* React Component representing a drop-down selec\r\n*/\r\nclass AcSelect extends React.Component {\r\n  createSelectItems() {\r\n    let items = [];\r\n    var totalOptions = this.props.options;\r\n\r\n    for (var k in totalOptions) {\r\n      if (totalOptions.hasOwnProperty(k)) {\r\n        // alert(\"Key is \" + key + \", value is\" + totalOptions[key]);\r\n        items.push(<option key={k} value={k}>{totalOptions[k]}</option>);\r\n      }\r\n    }\r\n\r\n    return items;\r\n  }\r\n\r\n  render() {\r\n    return(\r\n      <div className=\"ac-control-wrapper\">\r\n        <label htmlFor={this.props.inputKey} className=\"ac-input-label\">{this.props.inputLabel}</label>\r\n        <select id={this.props.inputKey} className=\"ac-input select\" name={this.props.inputKey} data-state-key={this.props.inputKey} onChange={this.props.onChange}>\r\n          {this.createSelectItems()}\r\n        </select>\r\n      </div>\r\n    );\r\n  }\r\n}\r\n\r\nmodule.exports = AcSelect;\r\n",
@@ -4457,7 +4483,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 169,
+    "__docId__": 170,
     "kind": "variable",
     "name": "React",
     "memberof": "src/react/ac-select.js",
@@ -4483,7 +4509,7 @@
     }
   },
   {
-    "__docId__": 170,
+    "__docId__": 171,
     "kind": "class",
     "name": "AcSelect",
     "memberof": "src/react/ac-select.js",
@@ -4501,7 +4527,7 @@
     ]
   },
   {
-    "__docId__": 171,
+    "__docId__": 172,
     "kind": "method",
     "name": "createSelectItems",
     "memberof": "src/react/ac-select.js~AcSelect",
@@ -4527,7 +4553,7 @@
     }
   },
   {
-    "__docId__": 172,
+    "__docId__": 173,
     "kind": "method",
     "name": "render",
     "memberof": "src/react/ac-select.js~AcSelect",
@@ -4553,7 +4579,7 @@
     }
   },
   {
-    "__docId__": 173,
+    "__docId__": 174,
     "kind": "file",
     "name": "src/react/ac-text-field.js",
     "content": "var React = require('react');\r\n\r\n/**\r\n* React Component representing a text input\r\n*/\r\nclass AcTextField extends React.Component {\r\n  render() {\r\n    var wrapperClass = \"ac-control-wrapper \" + this.props.wrapperAddClass;\r\n\r\n    return (\r\n      <div className={wrapperClass}>\r\n        <label className=\"ac-input-label\" htmlFor={this.props.inputKey}>{this.props.inputLabel}</label>\r\n        <input id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className=\"ac-input text\" type=\"text\" value={this.props.value} onChange={this.props.onChange} />\r\n      </div>\r\n    );\r\n  }\r\n}\r\n\r\nmodule.exports = AcTextField;\r\n",
@@ -4564,7 +4590,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 174,
+    "__docId__": 175,
     "kind": "variable",
     "name": "React",
     "memberof": "src/react/ac-text-field.js",
@@ -4590,7 +4616,7 @@
     }
   },
   {
-    "__docId__": 175,
+    "__docId__": 176,
     "kind": "class",
     "name": "AcTextField",
     "memberof": "src/react/ac-text-field.js",
@@ -4608,7 +4634,7 @@
     ]
   },
   {
-    "__docId__": 176,
+    "__docId__": 177,
     "kind": "method",
     "name": "render",
     "memberof": "src/react/ac-text-field.js~AcTextField",
@@ -4634,7 +4660,7 @@
     }
   },
   {
-    "__docId__": 177,
+    "__docId__": 178,
     "kind": "file",
     "name": "src/react/ac-textarea.js",
     "content": "var React = require('react');\r\n\r\n/**\r\n* React Component representing a text area\r\n*/\r\nclass AcTextArea extends React.Component {\r\n  render() {\r\n    var wrapperClass = \"ac-control-wrapper \";\r\n    wrapperClass += this.props.wrapperAddClass ? this.props.wrapperAddClass : \"\";\r\n\r\n    var inputClass = \"ac-input textarea \";\r\n    inputClass += this.props.addClass ? this.props.addClass : \"\";\r\n\r\n    if(this.props.inputLabel) {\r\n      return (\r\n        <div className={wrapperClass}>\r\n          <label className=\"ac-input-label\" htmlFor={this.props.inputKey}>{this.props.inputLabel}</label>\r\n          <textarea id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className={inputClass} value={this.props.value} placeholder={this.props.placeholder} onChange={this.props.onChange} />\r\n        </div>\r\n      );\r\n    } else {\r\n      return (\r\n        <div className={wrapperClass}>\r\n          <textarea id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className={inputClass} value={this.props.value} placeholder={this.props.placeholder} onChange={this.props.onChange} />\r\n        </div>\r\n      );\r\n    }\r\n  }\r\n}\r\n\r\nmodule.exports = AcTextArea;\r\n",
@@ -4645,7 +4671,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 178,
+    "__docId__": 179,
     "kind": "variable",
     "name": "React",
     "memberof": "src/react/ac-textarea.js",
@@ -4671,7 +4697,7 @@
     }
   },
   {
-    "__docId__": 179,
+    "__docId__": 180,
     "kind": "class",
     "name": "AcTextArea",
     "memberof": "src/react/ac-textarea.js",
@@ -4689,7 +4715,7 @@
     ]
   },
   {
-    "__docId__": 180,
+    "__docId__": 181,
     "kind": "method",
     "name": "render",
     "memberof": "src/react/ac-textarea.js~AcTextArea",
@@ -4715,10 +4741,10 @@
     }
   },
   {
-    "__docId__": 181,
+    "__docId__": 182,
     "kind": "file",
     "name": "src/react/ac-toggle-button.js",
-    "content": "var React = require('react');\r\n\r\n/**\r\n* React Component representing a toggle button\r\n*/\r\nclass AcToggleButton extends React.Component {\r\n  constructor(props) {\r\n    super(props);\r\n\r\n    this.state = {\r\n      isActive: props.initialState === \"true\"\r\n    };\r\n\r\n    console.debug(\"toggle constructor()\");\r\n  }\r\n\r\n  handleClick(e) {\r\n    console.debug(\"toggle handleClick()\");\r\n    var newActive = !this.state.isActive;\r\n    this.setState({isActive: newActive});\r\n\r\n    this.props.onClickHandler(this.props.inputKey, newActive);\r\n  }\r\n\r\n  render() {\r\n    console.debug(\"toggle render()\");\r\n    var buttonClass = this.state.isActive ? \"ac-input button active \" : \"ac-input button \";\r\n    buttonClass += this.props.addClass ? this.props.addClass: \"\";\r\n\r\n    var wrapperClass = \"ac-control-wrapper \";\r\n    wrapperClass += this.props.wrapperAddClass ? this.props.wrapperAddClass: \"\";\r\n\r\n    return (\r\n      <div className={wrapperClass}>\r\n        <input type=\"button\" className={buttonClass} id={this.props.inputKey} value={this.props.inputLabel} data-state-key={this.props.inputKey} data-current-state={this.state.isActive} onClick={(e) => this.handleClick(e)} disabled={this.props.disabled}/>\r\n      </div>\r\n    );\r\n  }\r\n}\r\n\r\nmodule.exports = AcToggleButton;\r\n",
+    "content": "var React = require('react');\r\n\r\n/**\r\n* React Component representing a toggle button\r\n*/\r\nclass AcToggleButton extends React.Component {\r\n  constructor(props) {\r\n    super(props);\r\n\r\n    this.state = {\r\n      isActive: props.initialState === \"true\"\r\n    };\r\n\r\n    console.debug(\"toggle constructor()\");\r\n  }\r\n\r\n  handleClick(e) {\r\n    console.debug(\"toggle handleClick()\");\r\n    var newActive = !this.state.isActive;\r\n    this.setState({isActive: newActive});\r\n\r\n    this.props.onClickHandler(this.props.inputKey, newActive);\r\n  }\r\n\r\n  getIconElement() {\r\n    if(this.props.icon) {\r\n      var iconClass = \"fa fa-\" + this.props.icon;\r\n      return <i className={iconClass}></i>\r\n    } else {\r\n      return \"\";\r\n    }\r\n  }\r\n\r\n  render() {\r\n    console.debug(\"toggle render()\");\r\n    var buttonClass = this.state.isActive ? \"ac-input button active \" : \"ac-input button\";\r\n    buttonClass += this.props.addClass ? \" \" + this.props.addClass: \"\";\r\n    buttonClass += this.props.disabled ? \" disabled\" : \"\";\r\n\r\n    var wrapperClass = \"ac-control-wrapper\";\r\n    wrapperClass += this.props.wrapperAddClass ? \" \" + this.props.wrapperAddClass: \"\";\r\n\r\n    return (\r\n      <div className={wrapperClass}>\r\n        <button className={buttonClass} id={this.props.inputKey} data-state-key={this.props.inputKey} data-current-state={this.state.isActive} onClick={(e) => this.handleClick(e)} disabled={this.props.disabled}>\r\n          {this.getIconElement()} {this.props.inputLabel}\r\n        </button>\r\n      </div>\r\n    );\r\n  }\r\n}\r\n\r\nmodule.exports = AcToggleButton;\r\n",
     "static": true,
     "longname": "src/react/ac-toggle-button.js",
     "access": null,
@@ -4726,7 +4752,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 182,
+    "__docId__": 183,
     "kind": "variable",
     "name": "React",
     "memberof": "src/react/ac-toggle-button.js",
@@ -4752,7 +4778,7 @@
     }
   },
   {
-    "__docId__": 183,
+    "__docId__": 184,
     "kind": "class",
     "name": "AcToggleButton",
     "memberof": "src/react/ac-toggle-button.js",
@@ -4770,7 +4796,7 @@
     ]
   },
   {
-    "__docId__": 184,
+    "__docId__": 185,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/react/ac-toggle-button.js~AcToggleButton",
@@ -4798,7 +4824,7 @@
     ]
   },
   {
-    "__docId__": 185,
+    "__docId__": 186,
     "kind": "member",
     "name": "state",
     "memberof": "src/react/ac-toggle-button.js~AcToggleButton",
@@ -4821,7 +4847,7 @@
     }
   },
   {
-    "__docId__": 186,
+    "__docId__": 187,
     "kind": "method",
     "name": "handleClick",
     "memberof": "src/react/ac-toggle-button.js~AcToggleButton",
@@ -4849,7 +4875,33 @@
     ]
   },
   {
-    "__docId__": 187,
+    "__docId__": 188,
+    "kind": "method",
+    "name": "getIconElement",
+    "memberof": "src/react/ac-toggle-button.js~AcToggleButton",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/react/ac-toggle-button.js~AcToggleButton#getIconElement",
+    "access": null,
+    "description": null,
+    "lineNumber": 25,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "params": [],
+    "return": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "__docId__": 189,
     "kind": "method",
     "name": "render",
     "memberof": "src/react/ac-toggle-button.js~AcToggleButton",
@@ -4859,7 +4911,7 @@
     "longname": "src/react/ac-toggle-button.js~AcToggleButton#render",
     "access": null,
     "description": null,
-    "lineNumber": 25,
+    "lineNumber": 34,
     "undocument": true,
     "unknown": [
       {
@@ -4875,7 +4927,7 @@
     }
   },
   {
-    "__docId__": 188,
+    "__docId__": 190,
     "kind": "file",
     "name": "src/react/debug-panel.js",
     "content": "var React = require('react');\r\n\r\n/**\r\n* React Component representing a debug panel. Renders text in monospace\r\n*/\r\nclass DebugPanel extends React.Component {\r\n  render() {\r\n    if(!this.props.isHidden) {\r\n      return (\r\n        <div id=\"debug-panel\" className=\"ac-panel\">\r\n          <h3>Debug Info</h3>\r\n          <pre>\r\n            {this.props.debugData}\r\n          </pre>\r\n        </div>\r\n      );\r\n    } else {\r\n      return null;\r\n    }\r\n  }\r\n}\r\n\r\nmodule.exports = DebugPanel;\r\n",
@@ -4886,7 +4938,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 189,
+    "__docId__": 191,
     "kind": "variable",
     "name": "React",
     "memberof": "src/react/debug-panel.js",
@@ -4912,7 +4964,7 @@
     }
   },
   {
-    "__docId__": 190,
+    "__docId__": 192,
     "kind": "class",
     "name": "DebugPanel",
     "memberof": "src/react/debug-panel.js",
@@ -4930,7 +4982,7 @@
     ]
   },
   {
-    "__docId__": 191,
+    "__docId__": 193,
     "kind": "method",
     "name": "render",
     "memberof": "src/react/debug-panel.js~DebugPanel",
@@ -4956,7 +5008,7 @@
     }
   },
   {
-    "__docId__": 192,
+    "__docId__": 194,
     "kind": "file",
     "name": "src/react/error-message.js",
     "content": "var React = require('react');\r\n\r\n/**\r\n* React Component representing an error message\r\n*/\r\nclass ErrorMessage extends React.Component {\r\n  render() {\r\n    if(this.props.isShown) {\r\n      return(\r\n        <div id=\"error-message\">\r\n          <h2>Error</h2>\r\n          <p>\r\n            {this.props.errorMessage}\r\n          </p>\r\n        </div>\r\n      );\r\n    } else {\r\n      return null;\r\n    }\r\n  }\r\n}\r\n\r\nmodule.exports = ErrorMessage;\r\n",
@@ -4967,7 +5019,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 193,
+    "__docId__": 195,
     "kind": "variable",
     "name": "React",
     "memberof": "src/react/error-message.js",
@@ -4993,7 +5045,7 @@
     }
   },
   {
-    "__docId__": 194,
+    "__docId__": 196,
     "kind": "class",
     "name": "ErrorMessage",
     "memberof": "src/react/error-message.js",
@@ -5011,7 +5063,7 @@
     ]
   },
   {
-    "__docId__": 195,
+    "__docId__": 197,
     "kind": "method",
     "name": "render",
     "memberof": "src/react/error-message.js~ErrorMessage",
@@ -5037,7 +5089,7 @@
     }
   },
   {
-    "__docId__": 196,
+    "__docId__": 198,
     "kind": "file",
     "name": "src/react/help-panel.js",
     "content": "var React = require('react');\r\nvar AutoComposerLogic = require('../autocomposer-logic');\r\nvar AcLogic = new AutoComposerLogic.AutoComposerLogic();\r\n\r\n/**\r\n* React Component representing the Help/Info Panel\r\n*/\r\nclass HelpPanel extends React.Component {\r\n  constructor(props) {\r\n    super(props);\r\n    this.state = {\r\n      chordArray: AcLogic.getChordDictionary(true)\r\n    }\r\n  }\r\n\r\n  buildChordDictionary() {\r\n    var dictionaryItems = [];\r\n    var ctr = 1;\r\n\r\n    this.state.chordArray.forEach(function(chordString) {\r\n      dictionaryItems.push(<li key={\"chordType\" + ctr}>{chordString}</li>);\r\n      ctr++;\r\n    });\r\n\r\n    return(\r\n      <ul id=\"chord-dictionary\">\r\n        {dictionaryItems}\r\n      </ul>\r\n    );\r\n  }\r\n\r\n  render() {\r\n    if(this.props.isShown) {\r\n      return (\r\n        <div id=\"help-panel\" className=\"ac-panel output-panel\">\r\n          <h2>Help!</h2>\r\n          <p>How to use this web app:</p>\r\n          <ol>\r\n            <li>Enter a chord progression in the text box.</li>\r\n            <li>Click the \"Generate Melodies\" button</li>\r\n            <li>Squeal in delight, as the promised melodies are shown on the screen.</li>\r\n          </ol>\r\n\r\n          <p>Other pointers:</p>\r\n          <ul>\r\n            <li>You can toggle the Help/Settings panel from the buttons to the right</li>\r\n          </ul>\r\n\r\n          <h2>Chord Dictionary</h2>\r\n          <p>These are the chords you can use for this application:</p>\r\n          {this.buildChordDictionary()}\r\n\r\n          <h2>Technical Info</h2>\r\n          <ul>\r\n            <li>Default range is Db4 to G#5</li>\r\n            <li>Smoothness = the distance between notes in the melody (in semitones), all added together</li>\r\n            <li>Range = distance between the lowest note and the highest note (in semitones)</li>\r\n          </ul>\r\n\r\n          <p>Melodies are filtered/sorted by a few rules:</p>\r\n          <ul>\r\n            <li>Range must be no greater than one octave</li>\r\n            <li>Smoothest melodies are shown first</li>\r\n            <li>Only the 100 smoothest melodies are shown</li>\r\n          </ul>\r\n        </div>\r\n      );\r\n    } else {\r\n      return null;\r\n    }\r\n  }\r\n}\r\n\r\nmodule.exports = HelpPanel;\r\n",
@@ -5048,7 +5100,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 197,
+    "__docId__": 199,
     "kind": "variable",
     "name": "React",
     "memberof": "src/react/help-panel.js",
@@ -5074,7 +5126,7 @@
     }
   },
   {
-    "__docId__": 198,
+    "__docId__": 200,
     "kind": "variable",
     "name": "AutoComposerLogic",
     "memberof": "src/react/help-panel.js",
@@ -5100,7 +5152,7 @@
     }
   },
   {
-    "__docId__": 199,
+    "__docId__": 201,
     "kind": "variable",
     "name": "AcLogic",
     "memberof": "src/react/help-panel.js",
@@ -5126,7 +5178,7 @@
     }
   },
   {
-    "__docId__": 200,
+    "__docId__": 202,
     "kind": "class",
     "name": "HelpPanel",
     "memberof": "src/react/help-panel.js",
@@ -5144,7 +5196,7 @@
     ]
   },
   {
-    "__docId__": 201,
+    "__docId__": 203,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/react/help-panel.js~HelpPanel",
@@ -5172,7 +5224,7 @@
     ]
   },
   {
-    "__docId__": 202,
+    "__docId__": 204,
     "kind": "member",
     "name": "state",
     "memberof": "src/react/help-panel.js~HelpPanel",
@@ -5195,7 +5247,7 @@
     }
   },
   {
-    "__docId__": 203,
+    "__docId__": 205,
     "kind": "method",
     "name": "buildChordDictionary",
     "memberof": "src/react/help-panel.js~HelpPanel",
@@ -5221,7 +5273,7 @@
     }
   },
   {
-    "__docId__": 204,
+    "__docId__": 206,
     "kind": "method",
     "name": "render",
     "memberof": "src/react/help-panel.js~HelpPanel",
@@ -5247,7 +5299,7 @@
     }
   },
   {
-    "__docId__": 205,
+    "__docId__": 207,
     "kind": "file",
     "name": "src/react/status-output.js",
     "content": "var React = require('react');\r\n\r\n/**\r\n* React Component representing a text input\r\n*/\r\nclass StatusOutput extends React.Component {\r\n  render() {\r\n\r\n    return (\r\n      <div className=\"ac-control-wrapper status-output\">\r\n        <input id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className=\"ac-output text\" type=\"text\" value={this.props.value} readOnly=\"true\"/>\r\n      </div>\r\n    );\r\n  }\r\n}\r\n\r\nmodule.exports = StatusOutput;\r\n",
@@ -5258,7 +5310,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 206,
+    "__docId__": 208,
     "kind": "variable",
     "name": "React",
     "memberof": "src/react/status-output.js",
@@ -5284,7 +5336,7 @@
     }
   },
   {
-    "__docId__": 207,
+    "__docId__": 209,
     "kind": "class",
     "name": "StatusOutput",
     "memberof": "src/react/status-output.js",
@@ -5302,7 +5354,7 @@
     ]
   },
   {
-    "__docId__": 208,
+    "__docId__": 210,
     "kind": "method",
     "name": "render",
     "memberof": "src/react/status-output.js~StatusOutput",
@@ -5328,7 +5380,7 @@
     }
   },
   {
-    "__docId__": 210,
+    "__docId__": 212,
     "kind": "external",
     "name": "Infinity",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
@@ -5340,7 +5392,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 211,
+    "__docId__": 213,
     "kind": "external",
     "name": "NaN",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
@@ -5352,7 +5404,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 212,
+    "__docId__": 214,
     "kind": "external",
     "name": "undefined",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
@@ -5364,7 +5416,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 213,
+    "__docId__": 215,
     "kind": "external",
     "name": "null",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
@@ -5376,7 +5428,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 214,
+    "__docId__": 216,
     "kind": "external",
     "name": "Object",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
@@ -5388,7 +5440,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 215,
+    "__docId__": 217,
     "kind": "external",
     "name": "object",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
@@ -5400,7 +5452,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 216,
+    "__docId__": 218,
     "kind": "external",
     "name": "Function",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
@@ -5412,7 +5464,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 217,
+    "__docId__": 219,
     "kind": "external",
     "name": "function",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
@@ -5424,7 +5476,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 218,
+    "__docId__": 220,
     "kind": "external",
     "name": "Boolean",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
@@ -5436,7 +5488,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 219,
+    "__docId__": 221,
     "kind": "external",
     "name": "boolean",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
@@ -5448,7 +5500,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 220,
+    "__docId__": 222,
     "kind": "external",
     "name": "Symbol",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
@@ -5460,7 +5512,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 221,
+    "__docId__": 223,
     "kind": "external",
     "name": "Error",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
@@ -5472,7 +5524,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 222,
+    "__docId__": 224,
     "kind": "external",
     "name": "EvalError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
@@ -5484,7 +5536,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 223,
+    "__docId__": 225,
     "kind": "external",
     "name": "InternalError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
@@ -5496,7 +5548,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 224,
+    "__docId__": 226,
     "kind": "external",
     "name": "RangeError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
@@ -5508,7 +5560,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 225,
+    "__docId__": 227,
     "kind": "external",
     "name": "ReferenceError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
@@ -5520,7 +5572,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 226,
+    "__docId__": 228,
     "kind": "external",
     "name": "SyntaxError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
@@ -5532,7 +5584,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 227,
+    "__docId__": 229,
     "kind": "external",
     "name": "TypeError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
@@ -5544,7 +5596,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 228,
+    "__docId__": 230,
     "kind": "external",
     "name": "URIError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
@@ -5556,7 +5608,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 229,
+    "__docId__": 231,
     "kind": "external",
     "name": "Number",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
@@ -5568,7 +5620,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 230,
+    "__docId__": 232,
     "kind": "external",
     "name": "number",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
@@ -5580,7 +5632,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 231,
+    "__docId__": 233,
     "kind": "external",
     "name": "Date",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
@@ -5592,7 +5644,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 232,
+    "__docId__": 234,
     "kind": "external",
     "name": "String",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
@@ -5604,7 +5656,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 233,
+    "__docId__": 235,
     "kind": "external",
     "name": "string",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
@@ -5616,7 +5668,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 234,
+    "__docId__": 236,
     "kind": "external",
     "name": "RegExp",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
@@ -5628,7 +5680,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 235,
+    "__docId__": 237,
     "kind": "external",
     "name": "Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
@@ -5640,7 +5692,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 236,
+    "__docId__": 238,
     "kind": "external",
     "name": "Int8Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
@@ -5652,7 +5704,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 237,
+    "__docId__": 239,
     "kind": "external",
     "name": "Uint8Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
@@ -5664,7 +5716,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 238,
+    "__docId__": 240,
     "kind": "external",
     "name": "Uint8ClampedArray",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
@@ -5676,7 +5728,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 239,
+    "__docId__": 241,
     "kind": "external",
     "name": "Int16Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
@@ -5688,7 +5740,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 240,
+    "__docId__": 242,
     "kind": "external",
     "name": "Uint16Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
@@ -5700,7 +5752,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 241,
+    "__docId__": 243,
     "kind": "external",
     "name": "Int32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
@@ -5712,7 +5764,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 242,
+    "__docId__": 244,
     "kind": "external",
     "name": "Uint32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
@@ -5724,7 +5776,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 243,
+    "__docId__": 245,
     "kind": "external",
     "name": "Float32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
@@ -5736,7 +5788,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 244,
+    "__docId__": 246,
     "kind": "external",
     "name": "Float64Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
@@ -5748,7 +5800,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 245,
+    "__docId__": 247,
     "kind": "external",
     "name": "Map",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
@@ -5760,7 +5812,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 246,
+    "__docId__": 248,
     "kind": "external",
     "name": "Set",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
@@ -5772,7 +5824,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 247,
+    "__docId__": 249,
     "kind": "external",
     "name": "WeakMap",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
@@ -5784,7 +5836,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 248,
+    "__docId__": 250,
     "kind": "external",
     "name": "WeakSet",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
@@ -5796,7 +5848,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 249,
+    "__docId__": 251,
     "kind": "external",
     "name": "ArrayBuffer",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
@@ -5808,7 +5860,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 250,
+    "__docId__": 252,
     "kind": "external",
     "name": "DataView",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
@@ -5820,7 +5872,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 251,
+    "__docId__": 253,
     "kind": "external",
     "name": "JSON",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
@@ -5832,7 +5884,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 252,
+    "__docId__": 254,
     "kind": "external",
     "name": "Promise",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
@@ -5844,7 +5896,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 253,
+    "__docId__": 255,
     "kind": "external",
     "name": "Generator",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
@@ -5856,7 +5908,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 254,
+    "__docId__": 256,
     "kind": "external",
     "name": "GeneratorFunction",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
@@ -5868,7 +5920,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 255,
+    "__docId__": 257,
     "kind": "external",
     "name": "Reflect",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
@@ -5880,7 +5932,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 256,
+    "__docId__": 258,
     "kind": "external",
     "name": "Proxy",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
@@ -5893,7 +5945,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 258,
+    "__docId__": 260,
     "kind": "external",
     "name": "CanvasRenderingContext2D",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D",
@@ -5905,7 +5957,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 259,
+    "__docId__": 261,
     "kind": "external",
     "name": "DocumentFragment",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment",
@@ -5917,7 +5969,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 260,
+    "__docId__": 262,
     "kind": "external",
     "name": "Element",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Element",
@@ -5929,7 +5981,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 261,
+    "__docId__": 263,
     "kind": "external",
     "name": "Event",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Event",
@@ -5941,7 +5993,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 262,
+    "__docId__": 264,
     "kind": "external",
     "name": "Node",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Node",
@@ -5953,7 +6005,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 263,
+    "__docId__": 265,
     "kind": "external",
     "name": "NodeList",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/NodeList",
@@ -5965,7 +6017,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 264,
+    "__docId__": 266,
     "kind": "external",
     "name": "XMLHttpRequest",
     "externalLink": "https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest",
@@ -5977,7 +6029,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 265,
+    "__docId__": 267,
     "kind": "external",
     "name": "AudioContext",
     "externalLink": "https://developer.mozilla.org/en/docs/Web/API/AudioContext",
@@ -5990,7 +6042,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 266,
+    "__docId__": 268,
     "kind": "testFile",
     "name": "test/autocomposer-data.js",
     "content": "var assert = require('assert');\r\n\r\nvar AcLogic = require('../src/autocomposer-logic');\r\nvar AutoComposerLogic = new AcLogic.AutoComposerLogic();\r\n\r\ndescribe('AutoComposerLogic', function() {\r\n  describe('#filterMelodyRange', function() {\r\n    it('should filter out melodies that have a range larger than an octave', function() {\r\n      melodySmallRange = \"C4 G4 A4\";\r\n      melodyOctaveRange = \"C4 G4 C5\";\r\n      melodyBigRange = \"C4 G4 D5\";\r\n\r\n      assert.equal(AutoComposerLogic.filterMelodyRange(melodySmallRange), true);\r\n      assert.equal(AutoComposerLogic.filterMelodyRange(melodyOctaveRange), true);\r\n      assert.equal(AutoComposerLogic.filterMelodyRange(melodyBigRange), false);\r\n    });\r\n  });\r\n});\r\n",
@@ -6001,7 +6053,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 267,
+    "__docId__": 269,
     "kind": "testDescribe",
     "name": "describe0",
     "testId": 0,
@@ -6014,7 +6066,7 @@
     "lineNumber": 6
   },
   {
-    "__docId__": 268,
+    "__docId__": 270,
     "kind": "testDescribe",
     "name": "describe1",
     "testId": 1,
@@ -6027,7 +6079,7 @@
     "lineNumber": 7
   },
   {
-    "__docId__": 269,
+    "__docId__": 271,
     "kind": "testIt",
     "name": "it2",
     "testId": 2,
@@ -6040,7 +6092,7 @@
     "lineNumber": 8
   },
   {
-    "__docId__": 270,
+    "__docId__": 272,
     "kind": "testFile",
     "name": "test/autocomposer-melody.js",
     "content": "var assert = require('assert');\r\nconst _ = require('underscore');\r\n\r\nvar AcMelody = require('../src/autocomposer-melody');\r\nvar AutoComposerMelody = new AcMelody.AutoComposerMelody();\r\n\r\nvar AutoComposerLogic = require('../src/autocomposer-logic');\r\nvar AcLogic = new AutoComposerLogic.AutoComposerLogic();\r\n\r\nvar TEST_CHORD_1 = \"Gm7\";\r\nvar TEST_CHORD_2 = \"Cm7\";\r\nvar TEST_CHORD_3 = \"D7\";\r\n\r\nvar TEST_LOWER_LIMIT_1 = \"Bb3\";\r\nvar TEST_UPPER_LIMIT_1 = \"G#4\";\r\n\r\nvar TEST_LOWER_LIMIT_2 = \"Ab4\";\r\nvar TEST_UPPER_LIMIT_2 = \"B5\";\r\n\r\ndescribe('AutoComposerMelody', function() {\r\n  describe('#getAllChordTones', function() {\r\n    it('should return all chord tones in the range (inclusive)', function() {\r\n      expectedTones1 = [\"Bb3\", \"D4\", \"F4\", \"G4\"];\r\n      expectedTones2 = [\"A4\", \"C5\", \"D5\", \"F#5\", \"A5\"];\r\n\r\n      resultTones1 = AutoComposerMelody.getAllChordTones(TEST_CHORD_1, TEST_LOWER_LIMIT_1, TEST_UPPER_LIMIT_1);\r\n      resultTones2 = AutoComposerMelody.getAllChordTones(TEST_CHORD_3, TEST_LOWER_LIMIT_2, TEST_UPPER_LIMIT_2);\r\n\r\n      assert.deepEqual(resultTones1, expectedTones1);\r\n      assert.deepEqual(resultTones2, expectedTones2);\r\n    });\r\n  });\r\n\r\n  describe('#buildChordUnitList', function() {\r\n    it('should return a list of ChordUnits for a given progression', function() {\r\n      var expChordUnit3 = {\r\n        chord: \"D7\",\r\n        chordTones: [\"A4\", \"C5\", \"D5\", \"F#5\", \"A5\"],\r\n      };\r\n      var expChordUnit2 = {\r\n        chord: \"Cm7\",\r\n        chordTones: [\"Bb4\", \"C5\", \"Eb5\", \"G5\", \"Bb5\"],\r\n      };\r\n      var expChordUnit1 = {\r\n        chord: \"Gm7\",\r\n        chordTones: [\"Bb4\", \"D5\", \"F5\", \"G5\", \"Bb5\"],\r\n      };\r\n\r\n      var expectedArray = [expChordUnit1, expChordUnit2, expChordUnit3];\r\n      var chordProgression = [\"Gm7\",\"Cm7\",\"D7\"];\r\n      var chordUnitList = AutoComposerMelody.buildChordUnitList(chordProgression, TEST_LOWER_LIMIT_2, TEST_UPPER_LIMIT_2);\r\n\r\n      assert.deepEqual(chordUnitList[0].chordTones, expectedArray[0].chordTones);\r\n      assert.deepEqual(chordUnitList[1].chordTones, expectedArray[1].chordTones);\r\n      assert.deepEqual(chordUnitList[2].chordTones, expectedArray[2].chordTones);\r\n    });\r\n  });\r\n\r\n  describe('#buildMelodyUnit', function() {\r\n    it('should build a melody unit with metadata for each raw melody', function() {\r\n      var chordProgression = [\"G\", \"Em\", \"C\", \"D\"];\r\n      var melody1 = \"B3 G4 E4 F#4\";\r\n      var melody2 = \"G4 B4 C5 D5\";\r\n\r\n      exp1 = {\r\n        chordProgression: chordProgression,\r\n        melodyNotes: melody1.split(\" \"),\r\n        smoothness: 13,\r\n        range: 8,\r\n        melodyString: melody1\r\n      }\r\n\r\n      exp2 = {\r\n        chordProgression: chordProgression,\r\n        melodyNotes: melody2.split(\" \"),\r\n        smoothness: 7,\r\n        range: 7,\r\n        melodyString: melody2\r\n      }\r\n\r\n      result1 = AutoComposerMelody.buildMelodyUnit(chordProgression, melody1);\r\n      result2 = AutoComposerMelody.buildMelodyUnit(chordProgression, melody2);\r\n\r\n      assert.deepEqual(result1, exp1);\r\n      assert.deepEqual(result2, exp2);\r\n    });\r\n  });\r\n\r\n  describe('#buildMelodyUnitList', function() {\r\n    var chordProgression = [\"G\", \"Em\", \"C\", \"D\"];\r\n    var melodies = [\"B3 G4 E4 F#4\", \"G4 B4 C5 D5\", \"G4 G4 G4 F#4\", \"G5 G5 G5 A5\"];\r\n\r\n    it('should sort the output if specified', function() {\r\n      resultSorted = AutoComposerMelody.buildMelodyUnitList(chordProgression, melodies, {sort: true});\r\n\r\n      assert(resultSorted[0].smoothness < resultSorted[3].smoothness);\r\n    });\r\n\r\n    it('should limit the output if specified', function() {\r\n      var numLimit = 2;\r\n      result = AutoComposerMelody.buildMelodyUnitList(chordProgression, melodies, {limit: numLimit});\r\n\r\n      assert.equal(result.length, numLimit);\r\n    });\r\n  });\r\n\r\n  describe('#getMelodies', function() {\r\n    it('should return a list of melodies for a given progression', function() {\r\n      var chordProgression = [\"Gm\",\"Cm\",\"D\"];\r\n      var melodyList = AutoComposerMelody.getAllMelodies(chordProgression);\r\n\r\n      assert.equal(typeof melodyList[0] === 'string', false);\r\n    });\r\n\r\n    it('should return less melodies if filters are on', function() {\r\n      var chordProgression = [\"Gm\",\"Cm\",\"D\"];\r\n      var melodyListAll = AutoComposerMelody.getAllMelodies(chordProgression);\r\n      var melodyList = AutoComposerMelody.getMelodies(chordProgression);\r\n\r\n      assert(melodyListAll.length > melodyList.length, \"Filtered melody list is smaller than an unfiltered list\");\r\n      assert.equal(typeof melodyList[0] === 'string', false);\r\n    });\r\n\r\n    it('should return raw melodies as a string array', function() {\r\n      var chordProgression = [\"Gm\",\"Cm\",\"D\"];\r\n      var melodyList = AutoComposerMelody.getRawMelodies(chordProgression);\r\n\r\n      assert.equal(typeof melodyList[0] === 'string', true);\r\n    });\r\n  });\r\n\r\n  describe('#getBasicBassLine', function() {\r\n    it('should return a simple bassline for a melody', function() {\r\n      var chordProgression = [\"G\", \"Em\", \"C\", \"D\"];\r\n      var melody = \"B3 G4 E4 F#4\";\r\n      var melodyUnit = AutoComposerMelody.buildMelodyUnit(chordProgression, melody);\r\n\r\n      var resultBassline = AutoComposerMelody.getBasicBassLine(melodyUnit);\r\n      var expBassline = [\"G1\", \"E1\", \"C2\", \"D2\"];\r\n\r\n      assert.deepEqual(resultBassline, expBassline);\r\n    });\r\n  });\r\n\r\n  describe('#getAccompaniment', function() {\r\n    it('should return a simple accompaniment for a melody', function() {\r\n      var chordProgression = [\"G\", \"Em\", \"C\", \"D\"];\r\n      var melody = \"B3 G4 E4 F#4\";\r\n      var expAccompaniment = [\"D3\", \"B2\", \"G2\", \"A2\"];\r\n\r\n      var melodyUnit = AutoComposerMelody.buildMelodyUnit(chordProgression, melody);\r\n      var resultBassline = AutoComposerMelody.getAccompaniment(melodyUnit);\r\n\r\n      assert.deepEqual(resultBassline, expAccompaniment);\r\n    });\r\n  });\r\n});\r\n",
@@ -6051,7 +6103,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 271,
+    "__docId__": 273,
     "kind": "testDescribe",
     "name": "describe3",
     "testId": 3,
@@ -6064,7 +6116,7 @@
     "lineNumber": 20
   },
   {
-    "__docId__": 272,
+    "__docId__": 274,
     "kind": "testDescribe",
     "name": "describe4",
     "testId": 4,
@@ -6077,7 +6129,7 @@
     "lineNumber": 21
   },
   {
-    "__docId__": 273,
+    "__docId__": 275,
     "kind": "testIt",
     "name": "it5",
     "testId": 5,
@@ -6090,7 +6142,7 @@
     "lineNumber": 22
   },
   {
-    "__docId__": 274,
+    "__docId__": 276,
     "kind": "testDescribe",
     "name": "describe6",
     "testId": 6,
@@ -6103,7 +6155,7 @@
     "lineNumber": 34
   },
   {
-    "__docId__": 275,
+    "__docId__": 277,
     "kind": "testIt",
     "name": "it7",
     "testId": 7,
@@ -6116,7 +6168,7 @@
     "lineNumber": 35
   },
   {
-    "__docId__": 276,
+    "__docId__": 278,
     "kind": "testDescribe",
     "name": "describe8",
     "testId": 8,
@@ -6129,7 +6181,7 @@
     "lineNumber": 59
   },
   {
-    "__docId__": 277,
+    "__docId__": 279,
     "kind": "testIt",
     "name": "it9",
     "testId": 9,
@@ -6142,7 +6194,7 @@
     "lineNumber": 60
   },
   {
-    "__docId__": 278,
+    "__docId__": 280,
     "kind": "testDescribe",
     "name": "describe10",
     "testId": 10,
@@ -6155,7 +6207,7 @@
     "lineNumber": 89
   },
   {
-    "__docId__": 279,
+    "__docId__": 281,
     "kind": "testIt",
     "name": "it11",
     "testId": 11,
@@ -6168,7 +6220,7 @@
     "lineNumber": 93
   },
   {
-    "__docId__": 280,
+    "__docId__": 282,
     "kind": "testIt",
     "name": "it12",
     "testId": 12,
@@ -6181,7 +6233,7 @@
     "lineNumber": 99
   },
   {
-    "__docId__": 281,
+    "__docId__": 283,
     "kind": "testDescribe",
     "name": "describe13",
     "testId": 13,
@@ -6194,7 +6246,7 @@
     "lineNumber": 107
   },
   {
-    "__docId__": 282,
+    "__docId__": 284,
     "kind": "testIt",
     "name": "it14",
     "testId": 14,
@@ -6207,7 +6259,7 @@
     "lineNumber": 108
   },
   {
-    "__docId__": 283,
+    "__docId__": 285,
     "kind": "testIt",
     "name": "it15",
     "testId": 15,
@@ -6220,7 +6272,7 @@
     "lineNumber": 115
   },
   {
-    "__docId__": 284,
+    "__docId__": 286,
     "kind": "testIt",
     "name": "it16",
     "testId": 16,
@@ -6233,7 +6285,7 @@
     "lineNumber": 124
   },
   {
-    "__docId__": 285,
+    "__docId__": 287,
     "kind": "testDescribe",
     "name": "describe17",
     "testId": 17,
@@ -6246,7 +6298,7 @@
     "lineNumber": 132
   },
   {
-    "__docId__": 286,
+    "__docId__": 288,
     "kind": "testIt",
     "name": "it18",
     "testId": 18,
@@ -6259,7 +6311,7 @@
     "lineNumber": 133
   },
   {
-    "__docId__": 287,
+    "__docId__": 289,
     "kind": "testDescribe",
     "name": "describe19",
     "testId": 19,
@@ -6272,7 +6324,7 @@
     "lineNumber": 145
   },
   {
-    "__docId__": 288,
+    "__docId__": 290,
     "kind": "testIt",
     "name": "it20",
     "testId": 20,
@@ -6285,7 +6337,7 @@
     "lineNumber": 146
   },
   {
-    "__docId__": 289,
+    "__docId__": 291,
     "kind": "testFile",
     "name": "test/autocomposer-parser.js",
     "content": "var assert = require('assert');\r\n\r\nvar AcParser = require('../src/autocomposer-logic.js');\r\nvar AutoComposerLogic = new AcParser.AutoComposerLogic();\r\n\r\ndescribe('AutoComposerLogic', function() {\r\n  describe('#isValidText', function() {\r\n    it('should return true for chord inputs', function() {\r\n      assert.equal(AutoComposerLogic.isValidText('Gm7'), true);\r\n      assert.equal(AutoComposerLogic.isValidText('C'), true);\r\n      assert.equal(AutoComposerLogic.isValidText('D7'), true);\r\n      assert.equal(AutoComposerLogic.isValidText('A#m7b5'), true);\r\n    });\r\n\r\n    it('should return false for non-chord inputs', function() {\r\n      assert.equal(AutoComposerLogic.isValidText('H2'), false);\r\n      assert.equal(AutoComposerLogic.isValidText('456456'), false);\r\n      assert.equal(AutoComposerLogic.isValidText('Something really silly'), false);\r\n    });\r\n  });\r\n\r\n  describe('#convertAsciiAccidentalsToHtml', function() {\r\n    it('should convert ASCII accidentals to Unicode HTML entities', function() {\r\n      assert.equal(AutoComposerLogic.convertAsciiAccidentalsToHtml('Bb'), 'B&#9837;');\r\n      assert.equal(AutoComposerLogic.convertAsciiAccidentalsToHtml('C#'), 'C&#9839;');\r\n      assert.equal(AutoComposerLogic.convertAsciiAccidentalsToHtml('Fo'), 'F&‌deg;');\r\n    });\r\n  });\r\n\r\n  describe('#convertAsciiAccidentalsToText', function() {\r\n    it('should convert ASCII accentals to Unicode versions', function() {\r\n      assert.equal(AutoComposerLogic.convertAsciiAccidentalsToText('Bb'), 'B♭');\r\n      assert.equal(AutoComposerLogic.convertAsciiAccidentalsToText('C#'), 'C♯');\r\n      assert.equal(AutoComposerLogic.convertAsciiAccidentalsToText('Fo'), 'F°');\r\n    });\r\n  });\r\n\r\n  describe('#convertAccidentalsToAscii', function() {\r\n    it('should convert Unicode accentals to ASCII versions', function() {\r\n      assert.equal(AutoComposerLogic.convertAccidentalsToAscii('B♭'), 'Bb');\r\n      assert.equal(AutoComposerLogic.convertAccidentalsToAscii('C♯'), 'C#');\r\n      assert.equal(AutoComposerLogic.convertAccidentalsToAscii('F°'), 'Fo');\r\n    });\r\n  });\r\n});\r\n",
@@ -6296,7 +6348,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 290,
+    "__docId__": 292,
     "kind": "testDescribe",
     "name": "describe21",
     "testId": 21,
@@ -6309,7 +6361,7 @@
     "lineNumber": 6
   },
   {
-    "__docId__": 291,
+    "__docId__": 293,
     "kind": "testDescribe",
     "name": "describe22",
     "testId": 22,
@@ -6322,7 +6374,7 @@
     "lineNumber": 7
   },
   {
-    "__docId__": 292,
+    "__docId__": 294,
     "kind": "testIt",
     "name": "it23",
     "testId": 23,
@@ -6335,7 +6387,7 @@
     "lineNumber": 8
   },
   {
-    "__docId__": 293,
+    "__docId__": 295,
     "kind": "testIt",
     "name": "it24",
     "testId": 24,
@@ -6348,7 +6400,7 @@
     "lineNumber": 15
   },
   {
-    "__docId__": 294,
+    "__docId__": 296,
     "kind": "testDescribe",
     "name": "describe25",
     "testId": 25,
@@ -6361,7 +6413,7 @@
     "lineNumber": 22
   },
   {
-    "__docId__": 295,
+    "__docId__": 297,
     "kind": "testIt",
     "name": "it26",
     "testId": 26,
@@ -6374,7 +6426,7 @@
     "lineNumber": 23
   },
   {
-    "__docId__": 296,
+    "__docId__": 298,
     "kind": "testDescribe",
     "name": "describe27",
     "testId": 27,
@@ -6387,7 +6439,7 @@
     "lineNumber": 30
   },
   {
-    "__docId__": 297,
+    "__docId__": 299,
     "kind": "testIt",
     "name": "it28",
     "testId": 28,
@@ -6400,7 +6452,7 @@
     "lineNumber": 31
   },
   {
-    "__docId__": 298,
+    "__docId__": 300,
     "kind": "testDescribe",
     "name": "describe29",
     "testId": 29,
@@ -6413,7 +6465,7 @@
     "lineNumber": 38
   },
   {
-    "__docId__": 299,
+    "__docId__": 301,
     "kind": "testIt",
     "name": "it30",
     "testId": 30,

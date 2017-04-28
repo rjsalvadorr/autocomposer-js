@@ -97,13 +97,13 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/autocomposer-data.js.html#lineNumber6",
+    "test-file/test/autocomposer-parser.js.html#lineNumber6",
     "AutoComposerLogic",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber6",
+    "test-file/test/autocomposer-data.js.html#lineNumber6",
     "AutoComposerLogic",
     "test"
   ],
@@ -1074,6 +1074,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/react/ac-button.js~acbutton#geticonelement",
+    "class/src/react/ac-button.js~AcButton.html#instance-method-getIconElement",
+    "src/react/ac-button.js~AcButton#getIconElement",
+    "method"
+  ],
+  [
     "src/react/ac-button.js~acbutton#render",
     "class/src/react/ac-button.js~AcButton.html#instance-method-render",
     "src/react/ac-button.js~AcButton#render",
@@ -1161,6 +1167,12 @@ window.esdocSearchIndex = [
     "src/react/ac-toggle-button.js~actogglebutton#constructor",
     "class/src/react/ac-toggle-button.js~AcToggleButton.html#instance-constructor-constructor",
     "src/react/ac-toggle-button.js~AcToggleButton#constructor",
+    "method"
+  ],
+  [
+    "src/react/ac-toggle-button.js~actogglebutton#geticonelement",
+    "class/src/react/ac-toggle-button.js~AcToggleButton.html#instance-method-getIconElement",
+    "src/react/ac-toggle-button.js~AcToggleButton#getIconElement",
     "method"
   ],
   [

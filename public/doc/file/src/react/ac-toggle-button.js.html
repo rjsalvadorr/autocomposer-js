@@ -77,17 +77,29 @@ class AcToggleButton extends React.Component {
     this.props.onClickHandler(this.props.inputKey, newActive);
   }
 
+  getIconElement() {
+    if(this.props.icon) {
+      var iconClass = &quot;fa fa-&quot; + this.props.icon;
+      return &lt;i className={iconClass}&gt;&lt;/i&gt;
+    } else {
+      return &quot;&quot;;
+    }
+  }
+
   render() {
     console.debug(&quot;toggle render()&quot;);
-    var buttonClass = this.state.isActive ? &quot;ac-input button active &quot; : &quot;ac-input button &quot;;
-    buttonClass += this.props.addClass ? this.props.addClass: &quot;&quot;;
+    var buttonClass = this.state.isActive ? &quot;ac-input button active &quot; : &quot;ac-input button&quot;;
+    buttonClass += this.props.addClass ? &quot; &quot; + this.props.addClass: &quot;&quot;;
+    buttonClass += this.props.disabled ? &quot; disabled&quot; : &quot;&quot;;
 
-    var wrapperClass = &quot;ac-control-wrapper &quot;;
-    wrapperClass += this.props.wrapperAddClass ? this.props.wrapperAddClass: &quot;&quot;;
+    var wrapperClass = &quot;ac-control-wrapper&quot;;
+    wrapperClass += this.props.wrapperAddClass ? &quot; &quot; + this.props.wrapperAddClass: &quot;&quot;;
 
     return (
       &lt;div className={wrapperClass}&gt;
-        &lt;input type=&quot;button&quot; className={buttonClass} id={this.props.inputKey} value={this.props.inputLabel} data-state-key={this.props.inputKey} data-current-state={this.state.isActive} onClick={(e) =&gt; this.handleClick(e)} disabled={this.props.disabled}/&gt;
+        &lt;button className={buttonClass} id={this.props.inputKey} data-state-key={this.props.inputKey} data-current-state={this.state.isActive} onClick={(e) =&gt; this.handleClick(e)} disabled={this.props.disabled}&gt;
+          {this.getIconElement()} {this.props.inputLabel}
+        &lt;/button&gt;
       &lt;/div&gt;
     );
   }

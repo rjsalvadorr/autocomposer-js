@@ -166,7 +166,7 @@ class OutputPanel extends React.Component {
 
   createVexTab(arrChords, arrMelody) {
     var vtString, pitchClass;
-    var vexTabText = &quot;options scale=0.9 space=5 font-size=15 font-face=Times\n&quot;;
+    var vexTabText = &quot;options scale=0.9 space=5 font-size=13 font-face=Times\n&quot;;
     vexTabText += &quot;tabstave\n&quot;;
     vexTabText += &quot;notation=true tablature=false\n&quot;;
     vexTabText += &quot;notes :w &quot;;
@@ -255,7 +255,6 @@ class OutputPanel extends React.Component {
     if(this.props.isShown) {
       return (
         &lt;div id=&quot;output-panel&quot; className=&quot;ac-panel output-panel&quot;&gt;
-          &lt;h2&gt;Melodies!&lt;/h2&gt;
           {this.createMelodyTable()}
         &lt;/div&gt;
       );
@@ -421,15 +420,15 @@ class AutoComposer extends React.Component {
           &lt;/div&gt;
 
           &lt;div className=&quot;panel-row&quot;&gt;
-            &lt;AcToggleButton inputKey=&quot;showControls&quot; inputLabel=&quot;Settings&quot; initialState={this.state.showControls} onClickHandler={this.callbackChangeState} disabled={this.state.controlsDisabled} /&gt;
-            &lt;AcToggleButton inputKey=&quot;showHelp&quot; inputLabel=&quot;Help/Info&quot; initialState={this.state.showHelp} onClickHandler={this.callbackChangeState} /&gt;
+            &lt;AcToggleButton inputKey=&quot;showControls&quot; icon=&quot;cog&quot; initialState={this.state.showControls} onClickHandler={this.callbackChangeState} disabled={this.state.controlsDisabled} /&gt;
+            &lt;AcToggleButton inputKey=&quot;showHelp&quot; icon=&quot;question&quot; initialState={this.state.showHelp} onClickHandler={this.callbackChangeState} /&gt;
           &lt;/div&gt;
 
           &lt;div className=&quot;panel-row&quot;&gt;
-            &lt;AcButton inputKey=&quot;generateMelodies&quot; inputLabel=&quot;Play&quot; wrapperAddClass=&quot;flex-lg&quot;/&gt;
-            &lt;AcButton inputKey=&quot;generateMelodies&quot; inputLabel=&quot;Play (Solo)&quot; wrapperAddClass=&quot;flex-sm&quot;/&gt;
-            &lt;AcButton inputKey=&quot;generateMelodies&quot; inputLabel=&quot;Stop&quot; wrapperAddClass=&quot;flex-sm&quot;/&gt;
-            &lt;AcButton inputKey=&quot;generateMelodies&quot; inputLabel=&quot;Get MIDI&quot; wrapperAddClass=&quot;flex-sm&quot;/&gt;
+            &lt;AcButton inputKey=&quot;generateMelodies&quot; icon=&quot;play&quot; wrapperAddClass=&quot;flex-lg&quot;/&gt;
+            &lt;AcButton inputKey=&quot;generateMelodies&quot; icon=&quot;play&quot; inputLabel=&quot;(Solo)&quot; wrapperAddClass=&quot;flex-sm&quot;/&gt;
+            &lt;AcButton inputKey=&quot;generateMelodies&quot; icon=&quot;stop&quot; wrapperAddClass=&quot;flex-sm&quot;/&gt;
+            &lt;AcButton inputKey=&quot;generateMelodies&quot; icon=&quot;floppy-o&quot; inputLabel=&quot;(MIDI)&quot; wrapperAddClass=&quot;flex-sm&quot;/&gt;
           &lt;/div&gt;
 
           &lt;div className=&quot;panel-row&quot;&gt;

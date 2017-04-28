@@ -49,7 +49,7 @@
 }
 .ac-control-wrapper.square {
   flex-grow: 0;
-  width: 100px;
+  width: 120px;
 }
 .ac-control-wrapper.flex-sm {
   flex-grow: 2;
@@ -71,12 +71,12 @@
 .ac-input,
 .ac-output {
   width: 100%;
-  min-height: 40px;
+  min-height: 50px;
   box-sizing: border-box;
 }
 .ac-input.double-height,
 .ac-output.double-height {
-  height: 80px;
+  height: 100px;
 }
 body {
   font-family: 'Helvetica', 'Arial', sans-serif;
@@ -131,8 +131,6 @@ body {
 table#ac-melody-output {
   width: 100%;
   text-align: center;
-  border: 1px #000 solid;
-  border-collapse: collapse;
 }
 table#ac-melody-output thead {
   background-color: #006;
@@ -140,7 +138,6 @@ table#ac-melody-output thead {
 }
 table#ac-melody-output th,
 table#ac-melody-output td {
-  border: 1px #000 solid;
   padding: 0.5vw 0;
 }
 .ac-melody-row {
@@ -167,4 +164,8 @@ table#ac-melody-output td {
   border-style: inset;
   border-color: #5e5e5e;
   background-color: #5e5e5e;
+}
+.ac-input.button.disabled {
+  background-color: #a8a8a8 !important;
+  border: none !important;
 }

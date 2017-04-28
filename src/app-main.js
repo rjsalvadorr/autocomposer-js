@@ -111,7 +111,7 @@ class OutputPanel extends React.Component {
 
   createVexTab(arrChords, arrMelody) {
     var vtString, pitchClass;
-    var vexTabText = "options scale=0.9 space=5 font-size=15 font-face=Times\n";
+    var vexTabText = "options scale=0.9 space=5 font-size=13 font-face=Times\n";
     vexTabText += "tabstave\n";
     vexTabText += "notation=true tablature=false\n";
     vexTabText += "notes :w ";
@@ -200,7 +200,6 @@ class OutputPanel extends React.Component {
     if(this.props.isShown) {
       return (
         <div id="output-panel" className="ac-panel output-panel">
-          <h2>Melodies!</h2>
           {this.createMelodyTable()}
         </div>
       );
@@ -366,15 +365,15 @@ class AutoComposer extends React.Component {
           </div>
 
           <div className="panel-row">
-            <AcToggleButton inputKey="showControls" inputLabel="Settings" initialState={this.state.showControls} onClickHandler={this.callbackChangeState} disabled={this.state.controlsDisabled} />
-            <AcToggleButton inputKey="showHelp" inputLabel="Help/Info" initialState={this.state.showHelp} onClickHandler={this.callbackChangeState} />
+            <AcToggleButton inputKey="showControls" icon="cog" initialState={this.state.showControls} onClickHandler={this.callbackChangeState} disabled={this.state.controlsDisabled} />
+            <AcToggleButton inputKey="showHelp" icon="question" initialState={this.state.showHelp} onClickHandler={this.callbackChangeState} />
           </div>
 
           <div className="panel-row">
-            <AcButton inputKey="generateMelodies" inputLabel="Play" wrapperAddClass="flex-lg"/>
-            <AcButton inputKey="generateMelodies" inputLabel="Play (Solo)" wrapperAddClass="flex-sm"/>
-            <AcButton inputKey="generateMelodies" inputLabel="Stop" wrapperAddClass="flex-sm"/>
-            <AcButton inputKey="generateMelodies" inputLabel="Get MIDI" wrapperAddClass="flex-sm"/>
+            <AcButton inputKey="generateMelodies" icon="play" wrapperAddClass="flex-lg"/>
+            <AcButton inputKey="generateMelodies" icon="play" inputLabel="(Solo)" wrapperAddClass="flex-sm"/>
+            <AcButton inputKey="generateMelodies" icon="stop" wrapperAddClass="flex-sm"/>
+            <AcButton inputKey="generateMelodies" icon="floppy-o" inputLabel="(MIDI)" wrapperAddClass="flex-sm"/>
           </div>
 
           <div className="panel-row">
