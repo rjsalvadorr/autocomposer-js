@@ -60,19 +60,23 @@
 */
 class AcTextArea extends React.Component {
   render() {
-    var wrapperClass = &quot;ac-control-wrapper &quot; + this.props.wrapperAddClass;
+    var wrapperClass = &quot;ac-control-wrapper &quot;;
+    wrapperClass += this.props.wrapperAddClass ? this.props.wrapperAddClass : &quot;&quot;;
+
+    var inputClass = &quot;ac-input textarea &quot;;
+    inputClass += this.props.addClass ? this.props.addClass : &quot;&quot;;
 
     if(this.props.inputLabel) {
       return (
         &lt;div className={wrapperClass}&gt;
           &lt;label className=&quot;ac-input-label&quot; htmlFor={this.props.inputKey}&gt;{this.props.inputLabel}&lt;/label&gt;
-          &lt;textarea id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className=&quot;ac-input textarea&quot; value={this.props.value} placeholder={this.props.placeholder} onChange={this.props.onChange} /&gt;
+          &lt;textarea id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className={inputClass} value={this.props.value} placeholder={this.props.placeholder} onChange={this.props.onChange} /&gt;
         &lt;/div&gt;
       );
     } else {
       return (
         &lt;div className={wrapperClass}&gt;
-          &lt;textarea id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className=&quot;ac-input textarea&quot; value={this.props.value} placeholder={this.props.placeholder} onChange={this.props.onChange} /&gt;
+          &lt;textarea id={this.props.inputKey} name={this.props.inputKey} data-state-key={this.props.inputKey} className={inputClass} value={this.props.value} placeholder={this.props.placeholder} onChange={this.props.onChange} /&gt;
         &lt;/div&gt;
       );
     }

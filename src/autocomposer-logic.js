@@ -16,7 +16,7 @@ class AutoComposerLogic {
     this.BASS_LOWER_LIMIT = "E1";
     this.BASS_UPPER_LIMIT = "F2";
 
-    this.INITIAL_PROGRESSION = "enter chords like \"G Em C\"";
+    this.INITIAL_PROGRESSION = "G Em C D",
     this.NUM_MELODIES_LIMIT = 100; // Number of melodies that the user sees.
     this.NUM_GENERATIONS_LIMIT = 100000; // Number of melody generation attempts that the program will make.
     this.CHORDS_LIMIT = 4;

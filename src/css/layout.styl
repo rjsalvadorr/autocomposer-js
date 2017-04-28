@@ -2,7 +2,11 @@
 // Stuff like display, position, height, margin, padding
 
 layoutPadding = 10px
-inputHeight = 40px;
+inputHeight = 40px
+
+controlPanelWidth = 40%
+
+outputPanelWidth = 100% - controlPanelWidth
 
 .root-panel
   display: flex
@@ -16,13 +20,12 @@ inputHeight = 40px;
   right: 0
 
   & > .ac-panel#main-control-panel
-    width: 40%
+    width: controlPanelWidth
   & > .ac-panel
-    width: 60%
+    width: outputPanelWidth
 
 .ac-panel
-  padding: 10px 10px 0 10px
-  border: 1px dashed #222
+  padding: layoutPadding layoutPadding 0 layoutPadding
   flex: 10 1 auto
 
 // Hides the main output panel if the Help panel or Control panel is visible
@@ -33,10 +36,10 @@ inputHeight = 40px;
 .panel-row
   display: flex
   flex-wrap: nowrap
-  padding: 0 0 10px 0
+  padding: 0 0 layoutPadding 0
 
 .panel-row.has-labels
-  padding: 0 0 10px 0
+  padding: 0 0 layoutPadding 0
 
 
 .ac-panel.output-panel
@@ -71,19 +74,18 @@ inputHeight = 40px;
   &.flex-lg
     flex-grow: 8
 
-  .ac-input.text,
-  .ac-output.text
-    padding: 2px 6px
-    font-size: 20px
+  .ac-input
+  .ac-output
+    &.text
+      padding: 2px 6px
+    &.textarea
+      padding: 0 2px
 
-.ac-input,
+.ac-input
 .ac-output
   width: 100%
-  height: inputHeight
+  min-height: inputHeight
   box-sizing: border-box
 
-.ac-input-label
-  font-size: 12px
-  text-transform: uppercase
-  letter-spacing: 2px
-  padding-left: 1px
+  &.double-height
+    height: inputHeight * 2

@@ -97,13 +97,13 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber6",
+    "test-file/test/autocomposer-data.js.html#lineNumber6",
     "AutoComposerLogic",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-data.js.html#lineNumber6",
+    "test-file/test/autocomposer-parser.js.html#lineNumber6",
     "AutoComposerLogic",
     "test"
   ],
@@ -666,21 +666,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/autocomposer-logic.js~autocomposerlogic#initial_progression",
-    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-member-INITIAL_PROGRESSION",
-    "src/autocomposer-logic.js~AutoComposerLogic#INITIAL_PROGRESSION",
-    "member"
-  ],
-  [
     "src/autocomposer-logic.js~autocomposerlogic#num_generations_limit",
     "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-member-NUM_GENERATIONS_LIMIT",
     "src/autocomposer-logic.js~AutoComposerLogic#NUM_GENERATIONS_LIMIT",
-    "member"
-  ],
-  [
-    "src/autocomposer-logic.js~autocomposerlogic#num_melodies_limit",
-    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-member-NUM_MELODIES_LIMIT",
-    "src/autocomposer-logic.js~AutoComposerLogic#NUM_MELODIES_LIMIT",
     "member"
   ],
   [

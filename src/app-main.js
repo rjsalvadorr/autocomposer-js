@@ -123,19 +123,19 @@ class OutputPanel extends React.Component {
       pitchClass = melodyNote.slice(0, -1);
       pitchClass = pitchClass.replace("b", "@");
 
-      vtString = pitchClass + "/"+ melodyNote.slice(-1) + " | ";
+      vtString = pitchClass + "/"+ melodyNote.slice(-1) + " ";
       vexTabText += vtString;
     });
 
-    vexTabText = vexTabText.slice(0, - 3) + "\n";
+    vexTabText = vexTabText.slice(0, -1) + "\n";
     vexTabText += "text :w, ";
 
     arrChords.forEach(function(chordSymbol) {
-      vtString = chordSymbol + ", |, ";
+      vtString = chordSymbol + ", ";
       vexTabText += vtString;
     });
 
-    vexTabText = vexTabText.slice(0, - 5);
+    vexTabText = vexTabText.slice(0, -2);
 
     return vexTabText;
   }
@@ -361,18 +361,24 @@ class AutoComposer extends React.Component {
           <h3>AutoComposer</h3>
 
           <div className="panel-row has-labels">
-            <AcTextArea inputKey="chordProgressionRaw" value={this.state.chordProgressionRaw} placeholder={this.state.chordProgressionPlaceholder} onChange={this.handleChange} />
-            <AcToggleButton inputKey="showControls" inputLabel="Settings" wrapperAddClass="square" initialState={this.state.showControls} onClickHandler={this.callbackChangeState} disabled={this.state.controlsDisabled} />
+            <AcTextArea inputKey="chordProgressionRaw" addClass="double-height" value={this.state.chordProgressionRaw} placeholder={this.state.chordProgressionPlaceholder} onChange={this.handleChange} />
+            <AcButton inputKey="generateMelodies" inputLabel="Generate!" wrapperAddClass="square" addClass="double-height" onClick={this.generateMelodies} />
           </div>
 
           <div className="panel-row">
-            <AcButton inputKey="generateMelodies" inputLabel="Generate Melodies" onClick={this.generateMelodies} />
+            <AcToggleButton inputKey="showControls" inputLabel="Settings" initialState={this.state.showControls} onClickHandler={this.callbackChangeState} disabled={this.state.controlsDisabled} />
+            <AcToggleButton inputKey="showHelp" inputLabel="Help/Info" initialState={this.state.showHelp} onClickHandler={this.callbackChangeState} />
+          </div>
+
+          <div className="panel-row">
+            <AcButton inputKey="generateMelodies" inputLabel="Play" wrapperAddClass="flex-lg"/>
+            <AcButton inputKey="generateMelodies" inputLabel="Play (Solo)" wrapperAddClass="flex-sm"/>
+            <AcButton inputKey="generateMelodies" inputLabel="Stop" wrapperAddClass="flex-sm"/>
+            <AcButton inputKey="generateMelodies" inputLabel="Get MIDI" wrapperAddClass="flex-sm"/>
+          </div>
+
+          <div className="panel-row">
             <StatusOutput inputKey="status-output" value="status output..." />
-            <AcToggleButton inputKey="showHelp" inputLabel="Help/Info" wrapperAddClass="square" initialState={this.state.showHelp} onClickHandler={this.callbackChangeState} />
-          </div>
-
-          <div className="panel-row">
-            {/* Melody controls will go here */}
           </div>
 
           <ErrorMessage isShown={this.state.showError} errorMessage={this.state.errorMessage} />

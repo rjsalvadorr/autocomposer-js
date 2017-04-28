@@ -178,19 +178,19 @@ class OutputPanel extends React.Component {
       pitchClass = melodyNote.slice(0, -1);
       pitchClass = pitchClass.replace(&quot;b&quot;, &quot;@&quot;);
 
-      vtString = pitchClass + &quot;/&quot;+ melodyNote.slice(-1) + &quot; | &quot;;
+      vtString = pitchClass + &quot;/&quot;+ melodyNote.slice(-1) + &quot; &quot;;
       vexTabText += vtString;
     });
 
-    vexTabText = vexTabText.slice(0, - 3) + &quot;\n&quot;;
+    vexTabText = vexTabText.slice(0, -1) + &quot;\n&quot;;
     vexTabText += &quot;text :w, &quot;;
 
     arrChords.forEach(function(chordSymbol) {
-      vtString = chordSymbol + &quot;, |, &quot;;
+      vtString = chordSymbol + &quot;, &quot;;
       vexTabText += vtString;
     });
 
-    vexTabText = vexTabText.slice(0, - 5);
+    vexTabText = vexTabText.slice(0, -2);
 
     return vexTabText;
   }
@@ -416,18 +416,24 @@ class AutoComposer extends React.Component {
           &lt;h3&gt;AutoComposer&lt;/h3&gt;
 
           &lt;div className=&quot;panel-row has-labels&quot;&gt;
-            &lt;AcTextArea inputKey=&quot;chordProgressionRaw&quot; value={this.state.chordProgressionRaw} placeholder={this.state.chordProgressionPlaceholder} onChange={this.handleChange} /&gt;
-            &lt;AcToggleButton inputKey=&quot;showControls&quot; inputLabel=&quot;Settings&quot; wrapperAddClass=&quot;square&quot; initialState={this.state.showControls} onClickHandler={this.callbackChangeState} disabled={this.state.controlsDisabled} /&gt;
+            &lt;AcTextArea inputKey=&quot;chordProgressionRaw&quot; addClass=&quot;double-height&quot; value={this.state.chordProgressionRaw} placeholder={this.state.chordProgressionPlaceholder} onChange={this.handleChange} /&gt;
+            &lt;AcButton inputKey=&quot;generateMelodies&quot; inputLabel=&quot;Generate!&quot; wrapperAddClass=&quot;square&quot; addClass=&quot;double-height&quot; onClick={this.generateMelodies} /&gt;
           &lt;/div&gt;
 
           &lt;div className=&quot;panel-row&quot;&gt;
-            &lt;AcButton inputKey=&quot;generateMelodies&quot; inputLabel=&quot;Generate Melodies&quot; onClick={this.generateMelodies} /&gt;
+            &lt;AcToggleButton inputKey=&quot;showControls&quot; inputLabel=&quot;Settings&quot; initialState={this.state.showControls} onClickHandler={this.callbackChangeState} disabled={this.state.controlsDisabled} /&gt;
+            &lt;AcToggleButton inputKey=&quot;showHelp&quot; inputLabel=&quot;Help/Info&quot; initialState={this.state.showHelp} onClickHandler={this.callbackChangeState} /&gt;
+          &lt;/div&gt;
+
+          &lt;div className=&quot;panel-row&quot;&gt;
+            &lt;AcButton inputKey=&quot;generateMelodies&quot; inputLabel=&quot;Play&quot; wrapperAddClass=&quot;flex-lg&quot;/&gt;
+            &lt;AcButton inputKey=&quot;generateMelodies&quot; inputLabel=&quot;Play (Solo)&quot; wrapperAddClass=&quot;flex-sm&quot;/&gt;
+            &lt;AcButton inputKey=&quot;generateMelodies&quot; inputLabel=&quot;Stop&quot; wrapperAddClass=&quot;flex-sm&quot;/&gt;
+            &lt;AcButton inputKey=&quot;generateMelodies&quot; inputLabel=&quot;Get MIDI&quot; wrapperAddClass=&quot;flex-sm&quot;/&gt;
+          &lt;/div&gt;
+
+          &lt;div className=&quot;panel-row&quot;&gt;
             &lt;StatusOutput inputKey=&quot;status-output&quot; value=&quot;status output...&quot; /&gt;
-            &lt;AcToggleButton inputKey=&quot;showHelp&quot; inputLabel=&quot;Help/Info&quot; wrapperAddClass=&quot;square&quot; initialState={this.state.showHelp} onClickHandler={this.callbackChangeState} /&gt;
-          &lt;/div&gt;
-
-          &lt;div className=&quot;panel-row&quot;&gt;
-            {/* Melody controls will go here */}
           &lt;/div&gt;
 
           &lt;ErrorMessage isShown={this.state.showError} errorMessage={this.state.errorMessage} /&gt;

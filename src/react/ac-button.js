@@ -7,7 +7,7 @@ var React = require('react');
 class AcButton extends React.Component {
   render() {
     // This can have a status, passed in from the parent Component
-    var buttonClass = this.props.isActive ? "ac-input button active" : "ac-input button";
+    var buttonClass = this.props.isActive ? "ac-input button active " : "ac-input button ";
     buttonClass += this.props.addClass ? this.props.addClass: "";
 
     var wrapperClass = "ac-control-wrapper ";

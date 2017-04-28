@@ -1,23 +1,31 @@
 // Fine details such as colours, box-shadow, text-shadow
 
 buttonBackground = #BBB
-buttonBorder = #888
 
 buttonBackgroundHover = darken(buttonBackground, 20%)
-buttonBackgroundActive = darken(buttonBackground, 60%)
-buttonBorderActive =  darken(buttonBorder, 60%)
+buttonBackgroundActive = darken(buttonBackground, 50%)
+
+buttonBorder = darken(buttonBackground, 20%)
+buttonBorderActive =  darken(buttonBackground, 50%)
 
 .ac-input.button
-  border-radius: 8px
+  border-radius: 6px
   background-color: buttonBackground
   border-color: buttonBorder
   border-width: 0 3px 3px 0
 
   &:hover
   &:active
-    border-color: buttonBorderActive
     background-color: buttonBackgroundHover
 
+  // Button is currently being clicked
+  &:active
+    border-color: buttonBorderActive
+    border-width: 3px 0 0 3px
+    border-style: inset
+
+  // Toggle buttons in an active state.
+  // Maybe you should rename this to avoid confusion.
   &.active
     color: #fff
     border-width: 4px 0 0 4px

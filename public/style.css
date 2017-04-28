@@ -16,7 +16,6 @@
 }
 .ac-panel {
   padding: 10px 10px 0 10px;
-  border: 1px dashed #222;
   flex: 10 1 auto;
 }
 #control-panel + #output-panel,
@@ -64,13 +63,31 @@
 .ac-control-wrapper .ac-input.text,
 .ac-control-wrapper .ac-output.text {
   padding: 2px 6px;
-  font-size: 20px;
+}
+.ac-control-wrapper .ac-input.textarea,
+.ac-control-wrapper .ac-output.textarea {
+  padding: 0 2px;
 }
 .ac-input,
 .ac-output {
   width: 100%;
-  height: 40px;
+  min-height: 40px;
   box-sizing: border-box;
+}
+.ac-input.double-height,
+.ac-output.double-height {
+  height: 80px;
+}
+body {
+  font-family: 'Helvetica', 'Arial', sans-serif;
+}
+.ac-input.text,
+.ac-output.text {
+  font-size: 16px;
+}
+.ac-input.textarea,
+.ac-output.textarea {
+  font-size: 16px;
 }
 .ac-input-label {
   font-size: 12px;
@@ -78,14 +95,24 @@
   letter-spacing: 2px;
   padding-left: 1px;
 }
+#chord-dictionary li {
+  font-family: monospace;
+  font-size: 16px;
+}
 body {
   background-color: #ddd;
   color: #222;
-  font-family: 'Helvetica', 'Arial', sans-serif;
 }
 .ac-input.textarea {
   resize: none;
-  font-size: 2em;
+}
+#main-control-panel {
+  background-color: #779;
+}
+#status-output {
+  font-style: italic;
+  border: 1px solid #282835;
+  background-color: #4e4e68;
 }
 #error-message {
   padding: 0.75vw;
@@ -96,12 +123,10 @@ body {
   text-align: center;
 }
 #chord-dictionary li {
-  font-family: monospace;
   background-color: #aaa;
   display: inline-block;
   padding: 8px;
   margin: 5px 15px;
-  font-size: 1.2em;
 }
 table#ac-melody-output {
   width: 100%;
@@ -122,20 +147,24 @@ table#ac-melody-output td {
   background-color: #ddd;
 }
 .ac-input.button {
-  border-radius: 8px;
+  border-radius: 6px;
   background-color: #bbb;
-  border-color: #888;
+  border-color: #969696;
   border-width: 0 3px 3px 0;
 }
 .ac-input.button:hover,
 .ac-input.button:active {
-  border-color: #363636;
   background-color: #969696;
+}
+.ac-input.button:active {
+  border-color: #5e5e5e;
+  border-width: 3px 0 0 3px;
+  border-style: inset;
 }
 .ac-input.button.active {
   color: #fff;
   border-width: 4px 0 0 4px;
   border-style: inset;
-  border-color: #363636;
-  background-color: #4b4b4b;
+  border-color: #5e5e5e;
+  background-color: #5e5e5e;
 }
