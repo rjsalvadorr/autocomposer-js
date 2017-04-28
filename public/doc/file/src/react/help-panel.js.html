@@ -85,20 +85,33 @@ class HelpPanel extends React.Component {
   }
 
   render() {
+    var lowestPitch = AcLogic.DEFAULT_LOWER_LIMIT;
+    var highestPitch = AcLogic.DEFAULT_UPPER_LIMIT;
+
+    var lowestPitchAccomp = AcLogic.ACCOMPANIMENT_LOWER_LIMIT;
+    var highestPitchAccomp = AcLogic.ACCOMPANIMENT_UPPER_LIMIT;
+
+    var lowestPitchBass = AcLogic.BASS_LOWER_LIMIT;
+    var highestPitchBass = AcLogic.BASS_UPPER_LIMIT;
+
     if(this.props.isShown) {
       return (
         &lt;div id=&quot;help-panel&quot; className=&quot;ac-panel output-panel&quot;&gt;
           &lt;h2&gt;Help!&lt;/h2&gt;
           &lt;p&gt;How to use this web app:&lt;/p&gt;
+
           &lt;ol&gt;
             &lt;li&gt;Enter a chord progression in the text box.&lt;/li&gt;
-            &lt;li&gt;Click the &quot;Generate Melodies&quot; button&lt;/li&gt;
+            &lt;li&gt;Click the &lt;strong&gt;Generate!&lt;/strong&gt; button.&lt;/li&gt;
             &lt;li&gt;Squeal in delight, as the promised melodies are shown on the screen.&lt;/li&gt;
+            &lt;li&gt;Load a melody.&lt;/li&gt;
+            &lt;li&gt;Hit the &lt;i className=&quot;fa fa-play&quot;&gt;&lt;/i&gt; button!&lt;/li&gt;
           &lt;/ol&gt;
 
-          &lt;p&gt;Other pointers:&lt;/p&gt;
+          &lt;p&gt;Other features:&lt;/p&gt;
+
           &lt;ul&gt;
-            &lt;li&gt;You can toggle the Help/Settings panel from the buttons to the right&lt;/li&gt;
+            &lt;li&gt;You can download the loaded music by clicking the &lt;i className=&quot;fa fa-download&quot;&gt;&lt;/i&gt; button. The melody will be saved as a MIDI file, containing the generated melody and accompaniment.&lt;/li&gt;
           &lt;/ul&gt;
 
           &lt;h2&gt;Chord Dictionary&lt;/h2&gt;
@@ -107,9 +120,18 @@ class HelpPanel extends React.Component {
 
           &lt;h2&gt;Technical Info&lt;/h2&gt;
           &lt;ul&gt;
-            &lt;li&gt;Default range is Db4 to G#5&lt;/li&gt;
             &lt;li&gt;Smoothness = the distance between notes in the melody (in semitones), all added together&lt;/li&gt;
             &lt;li&gt;Range = distance between the lowest note and the highest note (in semitones)&lt;/li&gt;
+            &lt;li&gt;The MIDI instruments for the voices are:
+              &lt;ul&gt;
+                &lt;li&gt;Violin&lt;/li&gt;
+                &lt;li&gt;Piano&lt;/li&gt;
+                &lt;li&gt;Bass (plucked)&lt;/li&gt;
+              &lt;/ul&gt;
+            &lt;/li&gt;
+            &lt;li&gt;Melody range is {lowestPitch} to {highestPitch}&lt;/li&gt;
+            &lt;li&gt;Accompaniment range is {lowestPitchAccomp} to {highestPitch}&lt;/li&gt;
+            &lt;li&gt;Bass range is {lowestPitchBass} to {highestPitchBass}&lt;/li&gt;
           &lt;/ul&gt;
 
           &lt;p&gt;Melodies are filtered/sorted by a few rules:&lt;/p&gt;

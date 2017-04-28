@@ -6,7 +6,7 @@ var React = require('react');
 class AcButton extends React.Component {
   getIconElement() {
     if(this.props.icon) {
-      var iconClass = "fa fa-" + this.props.icon;
+      var iconClass = "fa fa-2x fa-" + this.props.icon;
       return <i className={iconClass}></i>
     } else {
       return "";

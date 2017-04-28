@@ -15,7 +15,7 @@
   width: 60%;
 }
 .ac-panel {
-  padding: 10px 10px 0 10px;
+  padding: 15px 15px 0 15px;
   flex: 10 1 auto;
 }
 #control-panel + #output-panel,
@@ -25,10 +25,10 @@
 .panel-row {
   display: flex;
   flex-wrap: nowrap;
-  padding: 0 0 10px 0;
+  padding: 0 0 15px 0;
 }
 .panel-row.has-labels {
-  padding: 0 0 10px 0;
+  padding: 0 0 15px 0;
 }
 .ac-panel.output-panel {
   overflow: scroll;
@@ -37,7 +37,7 @@
 }
 .ac-control-wrapper {
   display: inline-block;
-  padding: 0 5px;
+  padding: 0 7.5px;
   box-sizing: border-box;
   flex-grow: 8;
 }
@@ -49,7 +49,7 @@
 }
 .ac-control-wrapper.square {
   flex-grow: 0;
-  width: 120px;
+  width: 130px;
 }
 .ac-control-wrapper.flex-sm {
   flex-grow: 2;
@@ -88,6 +88,11 @@ body {
 .ac-input.textarea,
 .ac-output.textarea {
   font-size: 16px;
+}
+.ac-input.button,
+.ac-output.button {
+  font-size: 16px;
+  font-weight: bold;
 }
 .ac-input-label {
   font-size: 12px;
@@ -168,4 +173,9 @@ table#ac-melody-output td {
 .ac-input.button.disabled {
   background-color: #a8a8a8 !important;
   border: none !important;
+}
+.ac-input.button i,
+.ac-input.button p,
+.ac-input.button span {
+  vertical-align: middle;
 }

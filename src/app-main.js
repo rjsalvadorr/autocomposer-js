@@ -415,9 +415,9 @@ class AutoComposer extends React.Component {
 
           <div className="panel-row">
             <AcButton inputKey="generateMelodies" icon="play" wrapperAddClass="flex-lg" onClick={this.playMelody}/>
-            <AcButton inputKey="generateMelodies" icon="play" inputLabel="(Solo)" wrapperAddClass="flex-sm" onClick={this.playMelodySolo}/>
+            <AcButton inputKey="generateMelodies" icon="play" inputLabel=" (Solo)" wrapperAddClass="flex-sm" onClick={this.playMelodySolo}/>
             <AcButton inputKey="generateMelodies" icon="stop" wrapperAddClass="flex-sm" onClick={this.stopMusic}/>
-            <AcButton inputKey="generateMelodies" icon="floppy-o" inputLabel="(MIDI)" wrapperAddClass="flex-sm" onClick={this.downloadMidi}/>
+            <AcButton inputKey="generateMelodies" icon="download" wrapperAddClass="flex-sm" onClick={this.downloadMidi}/>
           </div>
 
           <div className="panel-row">
