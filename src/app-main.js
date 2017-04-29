@@ -141,7 +141,7 @@ class AutoComposer extends React.Component {
   */
   loadMusic(event) {
     console.debug("app loadMusic()");
-    var melodyString = event.target.dataset["payload"];
+    var melodyString = event.currentTarget.dataset["payload"];
     var melodiesData = melodyString.split(";");
 
     var melody1 = melodiesData[0].split(",");
@@ -150,9 +150,10 @@ class AutoComposer extends React.Component {
 
     var melodies = [melody1, melody2, melody3];
     this.store.melodies = melodies;
-    this.setState({melodyLoaded: true})
+    this.setState({melodyLoaded: true});
 
-    this._sendStatusUpdate("Melody loaded");
+    var newSelectionEvent = new Event("newSelection");
+    document.body.dispatchEvent(newSelectionEvent);
   }
 
   /**
@@ -249,16 +250,25 @@ class AutoComposer extends React.Component {
     return (
       <div id="app-container" className="root-panel">
         <div id="main-control-panel" className="ac-panel">
-          <h3>AutoComposer</h3>
+
+          <div className="panel-row">
+            <div className="ac-control-wrapper flex-lg">
+              <h1>AutoComposer</h1>
+            </div>
+            <AcToggleButton inputKey="showHelp" icon="question" wrapperAddClass="flex-sm" initialState={this.state.showHelp} onClickHandler={this.callbackChangeState} />
+            <AcToggleButton inputKey="showControls" icon="cog" wrapperAddClass="flex-sm" initialState={this.state.showControls} onClickHandler={this.callbackChangeState} disabled={this.state.controlsDisabled} />
+          </div>
+
+          <div className="panel-row">
+            <p>
+              This is a prototype for a program that automatically writes music. Click the <i className="fa fa-question"></i> button to get started.
+              For more info, check out the <a href="https://github.com/rjsalvadorr/autocomposer-melody/wiki" target="_blank">project wiki</a> and <a href="https://github.com/rjsalvadorr/autocomposer-melody" target="_blank">repository</a>.
+            </p>
+          </div>
 
           <div className="panel-row has-labels">
             <AcTextArea inputKey="chordProgressionRaw" addClass="double-height" value={this.state.chordProgressionRaw} placeholder={this.store.chordProgressionPlaceholder} onChange={this.handleChange} />
             <AcButton inputKey="generateMelodies" inputLabel="Generate!" wrapperAddClass="square" addClass="double-height blue" onClick={this.generateMelodies} isActive={!this.state.chordProgressionChanged}/>
-          </div>
-
-          <div className="panel-row">
-            <AcToggleButton inputKey="showControls" icon="cog" initialState={this.state.showControls} onClickHandler={this.callbackChangeState} disabled={this.state.controlsDisabled} />
-            <AcToggleButton inputKey="showHelp" icon="question" initialState={this.state.showHelp} onClickHandler={this.callbackChangeState} />
           </div>
 
           <div className="panel-row">

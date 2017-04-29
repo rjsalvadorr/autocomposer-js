@@ -47,6 +47,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/control-panel.js~ControlPanel.html">ControlPanel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/debug-panel.js~DebugPanel.html">DebugPanel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/help-panel.js~HelpPanel.html">HelpPanel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/melody-row.js~MelodyRow.html">MelodyRow</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/output-panel.js~OutputPanel.html">OutputPanel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/status-output.js~StatusOutput.html">StatusOutput</a></span></span></li>
 </ul>
@@ -197,7 +198,7 @@ class AutoComposer extends React.Component {
   */
   loadMusic(event) {
     console.debug(&quot;app loadMusic()&quot;);
-    var melodyString = event.target.dataset[&quot;payload&quot;];
+    var melodyString = event.currentTarget.dataset[&quot;payload&quot;];
     var melodiesData = melodyString.split(&quot;;&quot;);
 
     var melody1 = melodiesData[0].split(&quot;,&quot;);
@@ -206,9 +207,10 @@ class AutoComposer extends React.Component {
 
     var melodies = [melody1, melody2, melody3];
     this.store.melodies = melodies;
-    this.setState({melodyLoaded: true})
+    this.setState({melodyLoaded: true});
 
-    this._sendStatusUpdate(&quot;Melody loaded&quot;);
+    var newSelectionEvent = new Event(&quot;newSelection&quot;);
+    document.body.dispatchEvent(newSelectionEvent);
   }
 
   /**
@@ -305,16 +307,25 @@ class AutoComposer extends React.Component {
     return (
       &lt;div id=&quot;app-container&quot; className=&quot;root-panel&quot;&gt;
         &lt;div id=&quot;main-control-panel&quot; className=&quot;ac-panel&quot;&gt;
-          &lt;h3&gt;AutoComposer&lt;/h3&gt;
+
+          &lt;div className=&quot;panel-row&quot;&gt;
+            &lt;div className=&quot;ac-control-wrapper flex-lg&quot;&gt;
+              &lt;h1&gt;AutoComposer&lt;/h1&gt;
+            &lt;/div&gt;
+            &lt;AcToggleButton inputKey=&quot;showHelp&quot; icon=&quot;question&quot; wrapperAddClass=&quot;flex-sm&quot; initialState={this.state.showHelp} onClickHandler={this.callbackChangeState} /&gt;
+            &lt;AcToggleButton inputKey=&quot;showControls&quot; icon=&quot;cog&quot; wrapperAddClass=&quot;flex-sm&quot; initialState={this.state.showControls} onClickHandler={this.callbackChangeState} disabled={this.state.controlsDisabled} /&gt;
+          &lt;/div&gt;
+
+          &lt;div className=&quot;panel-row&quot;&gt;
+            &lt;p&gt;
+              This is a prototype for a program that automatically writes music. Click the &lt;i className=&quot;fa fa-question&quot;&gt;&lt;/i&gt; button to get started.
+              For more info, check out the &lt;a href=&quot;https://github.com/rjsalvadorr/autocomposer-melody/wiki&quot; target=&quot;_blank&quot;&gt;project wiki&lt;/a&gt; and &lt;a href=&quot;https://github.com/rjsalvadorr/autocomposer-melody&quot; target=&quot;_blank&quot;&gt;repository&lt;/a&gt;.
+            &lt;/p&gt;
+          &lt;/div&gt;
 
           &lt;div className=&quot;panel-row has-labels&quot;&gt;
             &lt;AcTextArea inputKey=&quot;chordProgressionRaw&quot; addClass=&quot;double-height&quot; value={this.state.chordProgressionRaw} placeholder={this.store.chordProgressionPlaceholder} onChange={this.handleChange} /&gt;
             &lt;AcButton inputKey=&quot;generateMelodies&quot; inputLabel=&quot;Generate!&quot; wrapperAddClass=&quot;square&quot; addClass=&quot;double-height blue&quot; onClick={this.generateMelodies} isActive={!this.state.chordProgressionChanged}/&gt;
-          &lt;/div&gt;
-
-          &lt;div className=&quot;panel-row&quot;&gt;
-            &lt;AcToggleButton inputKey=&quot;showControls&quot; icon=&quot;cog&quot; initialState={this.state.showControls} onClickHandler={this.callbackChangeState} disabled={this.state.controlsDisabled} /&gt;
-            &lt;AcToggleButton inputKey=&quot;showHelp&quot; icon=&quot;question&quot; initialState={this.state.showHelp} onClickHandler={this.callbackChangeState} /&gt;
           &lt;/div&gt;
 
           &lt;div className=&quot;panel-row&quot;&gt;

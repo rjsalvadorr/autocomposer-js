@@ -84,6 +84,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "autocomposer-melody/src/react/melody-row.js~melodyrow",
+    "class/src/react/melody-row.js~MelodyRow.html",
+    "<span>MelodyRow</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/melody-row.js</span>",
+    "class"
+  ],
+  [
     "autocomposer-melody/src/melody-unit.js~melodyunit",
     "class/src/melody-unit.js~MelodyUnit.html",
     "<span>MelodyUnit</span> <span class=\"search-result-import-path\">autocomposer-melody/src/melody-unit.js</span>",
@@ -1236,6 +1242,54 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/react/melody-row.js",
+    "file/src/react/melody-row.js.html",
+    "src/react/melody-row.js",
+    "file"
+  ],
+  [
+    "src/react/melody-row.js~melodyrow#clickhandler",
+    "class/src/react/melody-row.js~MelodyRow.html#instance-method-clickHandler",
+    "src/react/melody-row.js~MelodyRow#clickHandler",
+    "method"
+  ],
+  [
+    "src/react/melody-row.js~melodyrow#constructor",
+    "class/src/react/melody-row.js~MelodyRow.html#instance-constructor-constructor",
+    "src/react/melody-row.js~MelodyRow#constructor",
+    "method"
+  ],
+  [
+    "src/react/melody-row.js~melodyrow#createvextab",
+    "class/src/react/melody-row.js~MelodyRow.html#instance-method-createVexTab",
+    "src/react/melody-row.js~MelodyRow#createVexTab",
+    "method"
+  ],
+  [
+    "src/react/melody-row.js~melodyrow#isclicked",
+    "class/src/react/melody-row.js~MelodyRow.html#instance-member-isClicked",
+    "src/react/melody-row.js~MelodyRow#isClicked",
+    "member"
+  ],
+  [
+    "src/react/melody-row.js~melodyrow#render",
+    "class/src/react/melody-row.js~MelodyRow.html#instance-method-render",
+    "src/react/melody-row.js~MelodyRow#render",
+    "method"
+  ],
+  [
+    "src/react/melody-row.js~melodyrow#selectioneventhandler",
+    "class/src/react/melody-row.js~MelodyRow.html#instance-method-selectionEventHandler",
+    "src/react/melody-row.js~MelodyRow#selectionEventHandler",
+    "method"
+  ],
+  [
+    "src/react/melody-row.js~melodyrow#state",
+    "class/src/react/melody-row.js~MelodyRow.html#instance-member-state",
+    "src/react/melody-row.js~MelodyRow#state",
+    "member"
+  ],
+  [
     "src/react/output-panel.js",
     "file/src/react/output-panel.js.html",
     "src/react/output-panel.js",
@@ -1263,18 +1317,6 @@ window.esdocSearchIndex = [
     "src/react/output-panel.js~outputpanel#createmelodyrows",
     "class/src/react/output-panel.js~OutputPanel.html#instance-method-createMelodyRows",
     "src/react/output-panel.js~OutputPanel#createMelodyRows",
-    "method"
-  ],
-  [
-    "src/react/output-panel.js~outputpanel#createmelodytable",
-    "class/src/react/output-panel.js~OutputPanel.html#instance-method-createMelodyTable",
-    "src/react/output-panel.js~OutputPanel#createMelodyTable",
-    "method"
-  ],
-  [
-    "src/react/output-panel.js~outputpanel#createvextab",
-    "class/src/react/output-panel.js~OutputPanel.html#instance-method-createVexTab",
-    "src/react/output-panel.js~OutputPanel#createVexTab",
     "method"
   ],
   [

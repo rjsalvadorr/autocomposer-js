@@ -1,7 +1,7 @@
 {
-  "coverage": "52.5%",
-  "expectCount": 120,
-  "actualCount": 63,
+  "coverage": "52.38%",
+  "expectCount": 126,
+  "actualCount": 66,
   "files": {
     "src/autocomposer-logic.js": {
       "expectCount": 16,
@@ -128,6 +128,17 @@
         11
       ]
     },
+    "src/react/melody-row.js": {
+      "expectCount": 8,
+      "actualCount": 3,
+      "undocumentLines": [
+        7,
+        45,
+        76,
+        32,
+        10
+      ]
+    },
     "src/melody-unit.js": {
       "expectCount": 9,
       "actualCount": 9,
@@ -144,20 +155,18 @@
       ]
     },
     "src/react/output-panel.js": {
-      "expectCount": 11,
+      "expectCount": 9,
       "actualCount": 0,
       "undocumentLines": [
-        8,
-        40,
-        32,
         9,
-        76,
-        108,
-        45,
-        18,
-        128,
-        23,
-        11
+        41,
+        33,
+        10,
+        46,
+        19,
+        70,
+        24,
+        12
       ]
     }
   }

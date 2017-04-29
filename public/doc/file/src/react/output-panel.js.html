@@ -47,6 +47,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/control-panel.js~ControlPanel.html">ControlPanel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/debug-panel.js~DebugPanel.html">DebugPanel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/help-panel.js~HelpPanel.html">HelpPanel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/melody-row.js~MelodyRow.html">MelodyRow</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/output-panel.js~OutputPanel.html">OutputPanel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/status-output.js~StatusOutput.html">StatusOutput</a></span></span></li>
 </ul>
@@ -59,6 +60,7 @@
 var AutoComposerMelody = require(&apos;../autocomposer-melody&apos;);
 var AcMelody = new AutoComposerMelody.AutoComposerMelody();
 
+var MelodyRow = require(&apos;./melody-row&apos;);
 var AcButton = require(&apos;./ac-button&apos;);
 
 class OutputPanel extends React.Component {
@@ -98,41 +100,10 @@ class OutputPanel extends React.Component {
     this.props.outputCallback();
   }
 
-  createVexTab(arrChords, arrMelody) {
-    var vtString, pitchClass;
-    var vexTabText = &quot;options scale=0.9 space=5 font-size=13 font-face=Times\n&quot;;
-    vexTabText += &quot;tabstave\n&quot;;
-    vexTabText += &quot;notation=true tablature=false\n&quot;;
-    vexTabText += &quot;notes :w &quot;;
-
-    arrMelody.forEach(function(melodyNote) {
-      // Turns a note name like &quot;C#4&quot; into &quot;C#/4 |&quot;
-      // Or &quot;Bb4&quot; into &quot;B@/4 |&quot;
-      // VexTab notation sure is odd.
-      pitchClass = melodyNote.slice(0, -1);
-      pitchClass = pitchClass.replace(&quot;b&quot;, &quot;@&quot;);
-
-      vtString = pitchClass + &quot;/&quot;+ melodyNote.slice(-1) + &quot; &quot;;
-      vexTabText += vtString;
-    });
-
-    vexTabText = vexTabText.slice(0, -1) + &quot;\n&quot;;
-    vexTabText += &quot;text :w, &quot;;
-
-    arrChords.forEach(function(chordSymbol) {
-      vtString = chordSymbol + &quot;, &quot;;
-      vexTabText += vtString;
-    });
-
-    vexTabText = vexTabText.slice(0, -2);
-
-    return vexTabText;
-  }
-
   createMelodyRows() {
     var melodyUnitList = this.state.melodyUnitList;
     var melodyRows = [];
-    var melodyString, accompanimentString, basslineString, payloadString, arrPayload, midiFilename;
+    var melodyString, accompanimentString, basslineString, payloadString, arrPayload, rawProgression, rawNotes;
 
     for(var i = 0; i &lt; melodyUnitList.length; i++) {
       melodyString = melodyUnitList[i].melodyNotes.join(&quot;,&quot;);
@@ -142,50 +113,35 @@ class OutputPanel extends React.Component {
       arrPayload = [melodyString, accompanimentString, basslineString];
       payloadString = arrPayload.join(&quot;;&quot;);
 
+      rawProgression = melodyUnitList[i].chordProgression;
+      rawNotes = melodyUnitList[i].melodyNotes;
+
       melodyRows.push(
-        &lt;tr key={&quot;melody&quot; + i} className=&quot;ac-melody-row&quot;&gt;
-          &lt;td&gt;
-            &lt;AcButton inputKey=&quot;loadMelody&quot; inputLabel=&quot;Load Melody&quot; dataPayload={payloadString} onClick={this.loadMelody} /&gt;
-          &lt;/td&gt;
-          &lt;td&gt;
-            &lt;div className=&quot;vex-tabdiv&quot;&gt;
-              {this.createVexTab(melodyUnitList[i].chordProgression, melodyUnitList[i].melodyNotes)}
-            &lt;/div&gt;
-          &lt;/td&gt;
-          &lt;td&gt;{melodyUnitList[i].smoothness}&lt;/td&gt;
-          &lt;td&gt;{melodyUnitList[i].range}&lt;/td&gt;
-        &lt;/tr&gt;
+        &lt;MelodyRow key={&quot;m-row-&quot; + i} onClickHandler={this.props.loadMelody} dataPayload={payloadString} chordProgression={rawProgression}  melodyNotes={rawNotes} smoothness={melodyUnitList[i].smoothness} range={melodyUnitList[i].range}/&gt;
       );
     }
 
     return melodyRows;
   }
 
-  createMelodyTable() {
-    console.debug(&apos;[OutputPanel.createMelodyTable()] creating table...&apos;);
-
-    return(
-      &lt;table id=&quot;ac-melody-output&quot;&gt;
-        &lt;thead&gt;
-          &lt;tr&gt;
-            &lt;th&gt;&lt;/th&gt;
-            &lt;th&gt;Melody&lt;/th&gt;
-            &lt;th&gt;Smoothness&lt;/th&gt;
-            &lt;th&gt;Range&lt;/th&gt;
-          &lt;/tr&gt;
-        &lt;/thead&gt;
-        &lt;tbody&gt;
-          {this.createMelodyRows()}
-        &lt;/tbody&gt;
-      &lt;/table&gt;
-    );
-  }
-
   render() {
     if(this.props.isShown) {
+      console.debug(&apos;[OutputPanel.render()] creating table...&apos;);
+
       return (
         &lt;div id=&quot;output-panel&quot; className=&quot;ac-panel output-panel&quot;&gt;
-          {this.createMelodyTable()}
+          &lt;table id=&quot;ac-melody-output&quot;&gt;
+            &lt;thead&gt;
+              &lt;tr&gt;
+                &lt;th&gt;Melody&lt;/th&gt;
+                &lt;th&gt;Smoothness&lt;/th&gt;
+                &lt;th&gt;Range&lt;/th&gt;
+              &lt;/tr&gt;
+            &lt;/thead&gt;
+            &lt;tbody&gt;
+              {this.createMelodyRows()}
+            &lt;/tbody&gt;
+          &lt;/table&gt;
         &lt;/div&gt;
       );
     } else {

@@ -5,6 +5,7 @@ labelFontSize = 12px
 chordDictionaryFontSize = 16px
 
 errorColor = #E88
+mainLinkColor = #BBF
 
 body
   font-family: 'Helvetica', 'Arial', sans-serif
@@ -24,6 +25,15 @@ body
   text-transform: uppercase
   letter-spacing: 2px
   padding-left: 1px
+
+
+#main-control-panel a
+  color: mainLinkColor
+  text-decoration: none
+
+  &:hover
+  &:active
+    color: lighten(mainLinkColor, 20%)
 
 #chord-dictionary li
   font-family: monospace

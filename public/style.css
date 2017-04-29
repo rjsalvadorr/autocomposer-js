@@ -34,6 +34,10 @@
   overflow: scroll;
   overflow-y: scroll;
   overflow-x: hidden;
+  padding: 0;
+}
+.ac-panel.output-panel .panel-spacer {
+  padding: 15px;
 }
 .ac-control-wrapper {
   display: inline-block;
@@ -100,6 +104,14 @@ body {
   letter-spacing: 2px;
   padding-left: 1px;
 }
+#main-control-panel a {
+  color: #bbf;
+  text-decoration: none;
+}
+#main-control-panel a:hover,
+#main-control-panel a:active {
+  color: #c9c9ff;
+}
 #chord-dictionary li {
   font-family: monospace;
   font-size: 16px;
@@ -117,6 +129,9 @@ body {
 body {
   background-color: #ddd;
   color: #222;
+}
+p {
+  margin-top: 0;
 }
 .ac-input.textarea {
   resize: none;
@@ -159,6 +174,9 @@ table#ac-melody-output td {
 }
 .ac-melody-row {
   background-color: #ddd;
+}
+.ac-melody-row.selected {
+  background-color: #dfd;
 }
 .ac-input.button {
   color: #fff;
