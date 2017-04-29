@@ -17,7 +17,6 @@ var AcTextArea = require('./react/ac-textarea');
 var AcSelect = require('./react/ac-select');
 var AcRadioSet = require('./react/ac-radioset');
 var AcCheckbox = require('./react/ac-checkbox');
-var ErrorMessage = require('./react/error-message');
 var StatusOutput = require('./react/status-output')
 
 var HelpPanel = require('./react/help-panel');
@@ -45,15 +44,12 @@ class AutoComposer extends React.Component {
       showHelp: false,
       showControls: false,
       showOutput: false,
-      showError: false,
 
       debugMode: false,
       controlsDisabled: true, // While this is a mess, no need to show it.
 
       chordProgressionRaw: "",
       chordProgressionChanged: false,
-
-      errorMessage: "",
 
       // This becomes true whenever we have a chord progression change, and the correct button is clicked.
       // Returns to false after output finishes rendering
@@ -79,6 +75,11 @@ class AutoComposer extends React.Component {
     this.playMelodySolo = this.playMelodySolo.bind(this);
     this.stopMusic = this.stopMusic.bind(this);
     this.downloadMidi = this.downloadMidi.bind(this);
+  }
+
+  _sendStatusUpdate(message) {
+    var updateEvent = new CustomEvent('statusUpdate', {detail: message});
+    document.body.dispatchEvent(updateEvent);
   }
 
   /**
@@ -150,6 +151,8 @@ class AutoComposer extends React.Component {
     var melodies = [melody1, melody2, melody3];
     this.store.melodies = melodies;
     this.setState({melodyLoaded: true})
+
+    this._sendStatusUpdate("Melody loaded");
   }
 
   /**
@@ -180,10 +183,11 @@ class AutoComposer extends React.Component {
         throw new AcInputException('You need to enter more chords. Two chords in a row is a completely valid input.');
       }
 
-      this.setState({showError: false, showOutput: true, allowMelodyGeneration: true});
+      this._sendStatusUpdate("Generating melodies...");
+      this.setState({showOutput: true, allowMelodyGeneration: true});
     } catch(exc) {
       console.warn("[AutoComposer.generateMelodies()] " + exc.message + "\nError Type = " + exc.name);
-      this.setState({showError: true, errorMessage: exc.message});
+      this._sendStatusUpdate("[ERROR] " + exc.message);
     }
   }
 
@@ -267,8 +271,6 @@ class AutoComposer extends React.Component {
           <div className="panel-row">
             <StatusOutput inputKey="status-output" value="status output..." />
           </div>
-
-          <ErrorMessage isShown={this.state.showError} errorMessage={this.state.errorMessage} />
 
           <DebugPanel isHidden={!this.state.debugMode} debugData={JSON.stringify(this.state, null, 2)}/>
         </div>

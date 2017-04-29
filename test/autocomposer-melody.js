@@ -4,6 +4,10 @@ const _ = require('underscore');
 var AcMelody = require('../src/autocomposer-melody');
 var AutoComposerMelody = new AcMelody.AutoComposerMelody();
 
+AutoComposerMelody._sendStatusUpdate = function() {
+  // Overriding this function with nothing since it contains browser code.
+}
+
 var AutoComposerLogic = require('../src/autocomposer-logic');
 var AcLogic = new AutoComposerLogic.AutoComposerLogic();
 

@@ -17,12 +17,9 @@ class AutoComposerMidi {
     this.NOTE_DURATION = "1";
 
     this.instruments = {};
-    this.player = null;
-    this.audioContext = null;
     this.instrumentInit = 0;
-    this.instrumentMelody = null;
-    this.instrumentAccomp = null;
-    this.instrumentBass = null;
+
+    this.player = null;
     this.audioContext = new AudioContext;
 
     this.initialized = false;
@@ -111,10 +108,9 @@ class AutoComposerMidi {
     });
     this.initialized = true;
     this.playbackLocked = false;
-    console.log("[AutoComposerMidi._initializePlayer()] Loading complete!");
 
-    var loadEvent = new Event("midiPlayerReady");
-    document.body.dispatchEvent(loadEvent);
+    var updateEvent = new CustomEvent('statusUpdate', {detail: "MIDI player is loaded"});
+    document.body.dispatchEvent(updateEvent);
   }
 
     /**

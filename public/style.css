@@ -104,6 +104,16 @@ body {
   font-family: monospace;
   font-size: 16px;
 }
+#status-output.ac-output .line {
+  opacity: 0.33;
+}
+#status-output.ac-output .first {
+  opacity: 1;
+}
+#status-output.ac-output .hasError {
+  color: #e88;
+  font-weight: bold;
+}
 body {
   background-color: #ddd;
   color: #222;

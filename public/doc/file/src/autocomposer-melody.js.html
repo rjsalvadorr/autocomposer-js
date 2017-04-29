@@ -46,7 +46,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/ac-toggle-button.js~AcToggleButton.html">AcToggleButton</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/control-panel.js~ControlPanel.html">ControlPanel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/debug-panel.js~DebugPanel.html">DebugPanel</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/error-message.js~ErrorMessage.html">ErrorMessage</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/help-panel.js~HelpPanel.html">HelpPanel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/output-panel.js~OutputPanel.html">OutputPanel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/status-output.js~StatusOutput.html">StatusOutput</a></span></span></li>
@@ -78,6 +77,11 @@ class AutoComposerMelody {
     this.lowerLimit = lowerLimit || AcLogic.DEFAULT_LOWER_LIMIT;
     /** @type {string} */
     this.upperLimit = upperLimit || AcLogic.DEFAULT_UPPER_LIMIT;
+  }
+
+  _sendStatusUpdate(message) {
+    var updateEvent = new CustomEvent(&apos;statusUpdate&apos;, {detail: message});
+    document.body.dispatchEvent(updateEvent);
   }
 
     /**
@@ -322,7 +326,7 @@ class AutoComposerMelody {
       return this.getMelodiesCore(chordUnit.nextChordUnit, returnList, options);
     } else {
       // End of the chain.
-      console.log(&quot;[AutoComposerMelody.getMelodiesCore()] Returning list of &quot; + returnList.length + &quot; melodies&quot;);
+      this._sendStatusUpdate(&quot;Generated &quot;+ returnList.length + &quot; melodies&quot;);
       return returnList;
     }
   }

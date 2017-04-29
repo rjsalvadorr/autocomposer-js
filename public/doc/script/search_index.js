@@ -78,12 +78,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "autocomposer-melody/src/react/error-message.js~errormessage",
-    "class/src/react/error-message.js~ErrorMessage.html",
-    "<span>ErrorMessage</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/error-message.js</span>",
-    "class"
-  ],
-  [
     "autocomposer-melody/src/react/help-panel.js~helppanel",
     "class/src/react/help-panel.js~HelpPanel.html",
     "<span>HelpPanel</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/help-panel.js</span>",
@@ -187,109 +181,109 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber20",
+    "test-file/test/autocomposer-melody.js.html#lineNumber24",
     "AutoComposerMelody",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber34",
+    "test-file/test/autocomposer-melody.js.html#lineNumber38",
     "AutoComposerMelody #buildChordUnitList",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber35",
+    "test-file/test/autocomposer-melody.js.html#lineNumber39",
     "AutoComposerMelody #buildChordUnitList should return a list of ChordUnits for a given progression",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber59",
+    "test-file/test/autocomposer-melody.js.html#lineNumber63",
     "AutoComposerMelody #buildMelodyUnit",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber60",
+    "test-file/test/autocomposer-melody.js.html#lineNumber64",
     "AutoComposerMelody #buildMelodyUnit should build a melody unit with metadata for each raw melody",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber89",
+    "test-file/test/autocomposer-melody.js.html#lineNumber93",
     "AutoComposerMelody #buildMelodyUnitList",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber99",
+    "test-file/test/autocomposer-melody.js.html#lineNumber103",
     "AutoComposerMelody #buildMelodyUnitList should limit the output if specified",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber93",
+    "test-file/test/autocomposer-melody.js.html#lineNumber97",
     "AutoComposerMelody #buildMelodyUnitList should sort the output if specified",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber145",
+    "test-file/test/autocomposer-melody.js.html#lineNumber149",
     "AutoComposerMelody #getAccompaniment",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber146",
+    "test-file/test/autocomposer-melody.js.html#lineNumber150",
     "AutoComposerMelody #getAccompaniment should return a simple accompaniment for a melody",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber21",
+    "test-file/test/autocomposer-melody.js.html#lineNumber25",
     "AutoComposerMelody #getAllChordTones",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber22",
+    "test-file/test/autocomposer-melody.js.html#lineNumber26",
     "AutoComposerMelody #getAllChordTones should return all chord tones in the range (inclusive)",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber132",
+    "test-file/test/autocomposer-melody.js.html#lineNumber136",
     "AutoComposerMelody #getBasicBassLine",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber133",
+    "test-file/test/autocomposer-melody.js.html#lineNumber137",
     "AutoComposerMelody #getBasicBassLine should return a simple bassline for a melody",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber107",
+    "test-file/test/autocomposer-melody.js.html#lineNumber111",
     "AutoComposerMelody #getMelodies",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber108",
+    "test-file/test/autocomposer-melody.js.html#lineNumber112",
     "AutoComposerMelody #getMelodies should return a list of melodies for a given progression",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber115",
+    "test-file/test/autocomposer-melody.js.html#lineNumber119",
     "AutoComposerMelody #getMelodies should return less melodies if filters are on",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber124",
+    "test-file/test/autocomposer-melody.js.html#lineNumber128",
     "AutoComposerMelody #getMelodies should return raw melodies as a string array",
     "test"
   ],
@@ -744,6 +738,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/autocomposer-melody.js~autocomposermelody#_sendstatusupdate",
+    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-_sendStatusUpdate",
+    "src/autocomposer-melody.js~AutoComposerMelody#_sendStatusUpdate",
+    "method"
+  ],
+  [
     "src/autocomposer-melody.js~autocomposermelody#buildchordunit",
     "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-buildChordUnit",
     "src/autocomposer-melody.js~AutoComposerMelody#buildChordUnit",
@@ -918,27 +918,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/autocomposer-midi.js~autocomposermidi#instrumentaccomp",
-    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-instrumentAccomp",
-    "src/autocomposer-midi.js~AutoComposerMidi#instrumentAccomp",
-    "member"
-  ],
-  [
-    "src/autocomposer-midi.js~autocomposermidi#instrumentbass",
-    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-instrumentBass",
-    "src/autocomposer-midi.js~AutoComposerMidi#instrumentBass",
-    "member"
-  ],
-  [
     "src/autocomposer-midi.js~autocomposermidi#instrumentinit",
     "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-instrumentInit",
     "src/autocomposer-midi.js~AutoComposerMidi#instrumentInit",
-    "member"
-  ],
-  [
-    "src/autocomposer-midi.js~autocomposermidi#instrumentmelody",
-    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-instrumentMelody",
-    "src/autocomposer-midi.js~AutoComposerMidi#instrumentMelody",
     "member"
   ],
   [
@@ -1224,18 +1206,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/react/error-message.js",
-    "file/src/react/error-message.js.html",
-    "src/react/error-message.js",
-    "file"
-  ],
-  [
-    "src/react/error-message.js~errormessage#render",
-    "class/src/react/error-message.js~ErrorMessage.html#instance-method-render",
-    "src/react/error-message.js~ErrorMessage#render",
-    "method"
-  ],
-  [
     "src/react/help-panel.js",
     "file/src/react/help-panel.js.html",
     "src/react/help-panel.js",
@@ -1338,9 +1308,39 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/react/status-output.js~statusoutput#num_messages",
+    "class/src/react/status-output.js~StatusOutput.html#instance-member-NUM_MESSAGES",
+    "src/react/status-output.js~StatusOutput#NUM_MESSAGES",
+    "member"
+  ],
+  [
+    "src/react/status-output.js~statusoutput#buildstatusoutput",
+    "class/src/react/status-output.js~StatusOutput.html#instance-method-buildStatusOutput",
+    "src/react/status-output.js~StatusOutput#buildStatusOutput",
+    "method"
+  ],
+  [
+    "src/react/status-output.js~statusoutput#constructor",
+    "class/src/react/status-output.js~StatusOutput.html#instance-constructor-constructor",
+    "src/react/status-output.js~StatusOutput#constructor",
+    "method"
+  ],
+  [
     "src/react/status-output.js~statusoutput#render",
     "class/src/react/status-output.js~StatusOutput.html#instance-method-render",
     "src/react/status-output.js~StatusOutput#render",
+    "method"
+  ],
+  [
+    "src/react/status-output.js~statusoutput#state",
+    "class/src/react/status-output.js~StatusOutput.html#instance-member-state",
+    "src/react/status-output.js~StatusOutput#state",
+    "member"
+  ],
+  [
+    "src/react/status-output.js~statusoutput#statuseventhandler",
+    "class/src/react/status-output.js~StatusOutput.html#instance-method-statusEventHandler",
+    "src/react/status-output.js~StatusOutput#statusEventHandler",
     "method"
   ],
   [

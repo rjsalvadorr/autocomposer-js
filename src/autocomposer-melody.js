@@ -23,6 +23,11 @@ class AutoComposerMelody {
     this.upperLimit = upperLimit || AcLogic.DEFAULT_UPPER_LIMIT;
   }
 
+  _sendStatusUpdate(message) {
+    var updateEvent = new CustomEvent('statusUpdate', {detail: message});
+    document.body.dispatchEvent(updateEvent);
+  }
+
     /**
     * For a given note, find its lowest instance in the specified range.
     * @private
@@ -265,7 +270,7 @@ class AutoComposerMelody {
       return this.getMelodiesCore(chordUnit.nextChordUnit, returnList, options);
     } else {
       // End of the chain.
-      console.log("[AutoComposerMelody.getMelodiesCore()] Returning list of " + returnList.length + " melodies");
+      this._sendStatusUpdate("Generated "+ returnList.length + " melodies");
       return returnList;
     }
   }

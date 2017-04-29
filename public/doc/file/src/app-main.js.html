@@ -46,7 +46,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/ac-toggle-button.js~AcToggleButton.html">AcToggleButton</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/control-panel.js~ControlPanel.html">ControlPanel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/debug-panel.js~DebugPanel.html">DebugPanel</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/error-message.js~ErrorMessage.html">ErrorMessage</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/help-panel.js~HelpPanel.html">HelpPanel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/output-panel.js~OutputPanel.html">OutputPanel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/status-output.js~StatusOutput.html">StatusOutput</a></span></span></li>
@@ -74,7 +73,6 @@ var AcTextArea = require(&apos;./react/ac-textarea&apos;);
 var AcSelect = require(&apos;./react/ac-select&apos;);
 var AcRadioSet = require(&apos;./react/ac-radioset&apos;);
 var AcCheckbox = require(&apos;./react/ac-checkbox&apos;);
-var ErrorMessage = require(&apos;./react/error-message&apos;);
 var StatusOutput = require(&apos;./react/status-output&apos;)
 
 var HelpPanel = require(&apos;./react/help-panel&apos;);
@@ -102,15 +100,12 @@ class AutoComposer extends React.Component {
       showHelp: false,
       showControls: false,
       showOutput: false,
-      showError: false,
 
       debugMode: false,
       controlsDisabled: true, // While this is a mess, no need to show it.
 
       chordProgressionRaw: &quot;&quot;,
       chordProgressionChanged: false,
-
-      errorMessage: &quot;&quot;,
 
       // This becomes true whenever we have a chord progression change, and the correct button is clicked.
       // Returns to false after output finishes rendering
@@ -136,6 +131,11 @@ class AutoComposer extends React.Component {
     this.playMelodySolo = this.playMelodySolo.bind(this);
     this.stopMusic = this.stopMusic.bind(this);
     this.downloadMidi = this.downloadMidi.bind(this);
+  }
+
+  _sendStatusUpdate(message) {
+    var updateEvent = new CustomEvent(&apos;statusUpdate&apos;, {detail: message});
+    document.body.dispatchEvent(updateEvent);
   }
 
   /**
@@ -207,6 +207,8 @@ class AutoComposer extends React.Component {
     var melodies = [melody1, melody2, melody3];
     this.store.melodies = melodies;
     this.setState({melodyLoaded: true})
+
+    this._sendStatusUpdate(&quot;Melody loaded&quot;);
   }
 
   /**
@@ -237,10 +239,11 @@ class AutoComposer extends React.Component {
         throw new AcInputException(&apos;You need to enter more chords. Two chords in a row is a completely valid input.&apos;);
       }
 
-      this.setState({showError: false, showOutput: true, allowMelodyGeneration: true});
+      this._sendStatusUpdate(&quot;Generating melodies...&quot;);
+      this.setState({showOutput: true, allowMelodyGeneration: true});
     } catch(exc) {
       console.warn(&quot;[AutoComposer.generateMelodies()] &quot; + exc.message + &quot;\nError Type = &quot; + exc.name);
-      this.setState({showError: true, errorMessage: exc.message});
+      this._sendStatusUpdate(&quot;[ERROR] &quot; + exc.message);
     }
   }
 
@@ -324,8 +327,6 @@ class AutoComposer extends React.Component {
           &lt;div className=&quot;panel-row&quot;&gt;
             &lt;StatusOutput inputKey=&quot;status-output&quot; value=&quot;status output...&quot; /&gt;
           &lt;/div&gt;
-
-          &lt;ErrorMessage isShown={this.state.showError} errorMessage={this.state.errorMessage} /&gt;
 
           &lt;DebugPanel isHidden={!this.state.debugMode} debugData={JSON.stringify(this.state, null, 2)}/&gt;
         &lt;/div&gt;

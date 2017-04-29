@@ -4,6 +4,8 @@ inputFontSize = 16px
 labelFontSize = 12px
 chordDictionaryFontSize = 16px
 
+errorColor = #E88
+
 body
   font-family: 'Helvetica', 'Arial', sans-serif
 
@@ -26,3 +28,14 @@ body
 #chord-dictionary li
   font-family: monospace
   font-size: chordDictionaryFontSize
+
+#status-output.ac-output
+  .line
+    opacity: 0.33
+
+  .first
+    opacity: 1
+
+  .hasError
+    color: errorColor
+    font-weight: bold

@@ -46,7 +46,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/ac-toggle-button.js~AcToggleButton.html">AcToggleButton</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/control-panel.js~ControlPanel.html">ControlPanel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/debug-panel.js~DebugPanel.html">DebugPanel</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/error-message.js~ErrorMessage.html">ErrorMessage</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/help-panel.js~HelpPanel.html">HelpPanel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/output-panel.js~OutputPanel.html">OutputPanel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/status-output.js~StatusOutput.html">StatusOutput</a></span></span></li>
@@ -74,12 +73,9 @@ class AutoComposerMidi {
     this.NOTE_DURATION = &quot;1&quot;;
 
     this.instruments = {};
-    this.player = null;
-    this.audioContext = null;
     this.instrumentInit = 0;
-    this.instrumentMelody = null;
-    this.instrumentAccomp = null;
-    this.instrumentBass = null;
+
+    this.player = null;
     this.audioContext = new AudioContext;
 
     this.initialized = false;
@@ -168,10 +164,9 @@ class AutoComposerMidi {
     });
     this.initialized = true;
     this.playbackLocked = false;
-    console.log(&quot;[AutoComposerMidi._initializePlayer()] Loading complete!&quot;);
 
-    var loadEvent = new Event(&quot;midiPlayerReady&quot;);
-    document.body.dispatchEvent(loadEvent);
+    var updateEvent = new CustomEvent(&apos;statusUpdate&apos;, {detail: &quot;MIDI player is loaded&quot;});
+    document.body.dispatchEvent(updateEvent);
   }
 
     /**
