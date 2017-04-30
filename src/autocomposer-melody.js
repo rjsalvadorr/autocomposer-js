@@ -190,8 +190,6 @@ class AutoComposerMelody {
         melodyUnits.splice(options.limit);
       }
     }
-
-    console.log("[AutoComposerMelody.buildMelodyUnitList()] Returning list of " + melodyUnits.length + " melodies");
     return melodyUnits;
   }
 
@@ -241,21 +239,56 @@ class AutoComposerMelody {
   getMelodiesCore(chordUnit, melodyList, options) {
     var returnList = [];
     var chordTones = chordUnit.chordTones;
-    var rawMelody, newMelody;
-    var haxThis = this;
+    var rawMelody, newMelody, melodyArray, lastNote, noteDistance;
+    var lastTwoNotes, isNotRepetitive, timestamp, continueMelody, haxThis = this;
 
     if(melodyList) {
       // We're somewhere along the middle of the chain.
       melodyList.forEach(function(currentMelody) {
         chordTones.forEach(function(currentChordTone) {
-          newMelody = currentMelody + " " + currentChordTone;
+          continueMelody = true;
 
-          if(options.filtered) {
-            if(AcLogic.filterMelodyRange(newMelody)) {
-              returnList.push(newMelody);
+          if(melodyList.length > 10000) {
+            timestamp = new Date().valueOf().toString().slice(-4);
+            if(timestamp % 5 === 0) {
+              // Randomly skips generation every now and then.
+              // Removes 20% of results?
+              continueMelody = false;
             }
           } else {
-            returnList.push(newMelody);
+            continueMelody = true;
+          }
+
+          if(continueMelody) {
+            if(options.filtered) {
+
+              // check the distance of the last note and the new chord tone
+              // if it's more than an octave, skip this.
+              melodyArray = currentMelody.split(" ");
+              lastNote = melodyArray[melodyArray.length - 1];
+              noteDistance = Math.abs(tonal.note.midi(lastNote) - tonal.note.midi(currentChordTone));
+
+              // check if melody is too repetitive. For our purposes, three of the same notes in a row
+              // would be too repetitive.
+              if(melodyArray.length >= 2) {
+                lastTwoNotes = melodyArray.slice(-2);
+                if(lastTwoNotes[0] === lastTwoNotes[1] && lastTwoNotes[1] === currentChordTone) {
+                  isNotRepetitive = false;
+                } else {
+                  isNotRepetitive = true;
+                }
+              } else {
+                isNotRepetitive = true;
+              }
+
+              if(noteDistance <= 12 && isNotRepetitive) {
+                newMelody = currentMelody + " " + currentChordTone;
+                returnList.push(newMelody);
+              }
+            } else {
+              newMelody = currentMelody + " " + currentChordTone;
+              returnList.push(newMelody);
+            }
           }
         });
       });
@@ -270,7 +303,11 @@ class AutoComposerMelody {
       return this.getMelodiesCore(chordUnit.nextChordUnit, returnList, options);
     } else {
       // End of the chain.
-      this._sendStatusUpdate("Generated "+ returnList.length + " melodies");
+      if(options.filtered && returnList.length > AcLogic.NUM_MELODIES_LIMIT) {
+        this._sendStatusUpdate("Generated  " + returnList.length + " melodies. Creating list of " + AcLogic.NUM_MELODIES_LIMIT + "...");
+      } else {
+        this._sendStatusUpdate("Generated  " + returnList.length + " melodies.");
+      }
       return returnList;
     }
   }

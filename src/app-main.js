@@ -1,5 +1,6 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
+const moment = require('moment');
 
 var AutoComposerLogic = require('./autocomposer-logic');
 var AcLogic = new AutoComposerLogic.AutoComposerLogic();
@@ -89,8 +90,6 @@ class AutoComposer extends React.Component {
   * @param {boolean} [useDataStore] - If true, the data store is changed instead of the state object.
   */
   callbackChangeState(stateKey, newState, useDataStore) {
-    console.debug("app callbackChangeState()");
-
     if(useDataStore) {
       this.store[stateKey] = newState;
     } else {
@@ -112,7 +111,6 @@ class AutoComposer extends React.Component {
   * @param {Object} event - React event
   */
   handleChange(event) {
-    console.debug("app handleChange()");
     var stateObj = function() {
       var stateKey = this.target.dataset["stateKey"];
       var returnObj = {};
@@ -140,7 +138,6 @@ class AutoComposer extends React.Component {
   * @param {Object} event - React event
   */
   loadMusic(event) {
-    console.debug("app loadMusic()");
     var melodyString = event.currentTarget.dataset["payload"];
     var melodiesData = melodyString.split(";");
 
@@ -232,9 +229,8 @@ class AutoComposer extends React.Component {
     if(this.store.melodies.length > 0) {
       //download MIDI file
       var dataString = AcMidi.buildMelodyMidiWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);
-      var timestamp = new Date().valueOf().toString().slice(-8)
-
-      var fileName = "autocomposer-" + timestamp + "_" + this.store.melodies[0].join("-");
+      var timestamp = moment().format("YYMMDDHHmmss");
+      var fileName = "autocomposer_" + timestamp + "_" + this.state.chordProgressionRaw.replace(/\s+/g, "-");
       download(dataString, fileName, "audio/midi");
     }
   }

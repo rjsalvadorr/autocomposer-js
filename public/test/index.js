@@ -20135,7 +20135,7 @@ class AutoComposerLogic {
 
     return highest - lowest <= 12;
   }
-
+  
     /**
     * Parses text, and determines if user input represents a valid note/chord.
     * @param {string} input - value given by the user
@@ -20384,8 +20384,6 @@ class AutoComposerMelody {
         melodyUnits.splice(options.limit);
       }
     }
-
-    console.log("[AutoComposerMelody.buildMelodyUnitList()] Returning list of " + melodyUnits.length + " melodies");
     return melodyUnits;
   }
 
@@ -20435,21 +20433,56 @@ class AutoComposerMelody {
   getMelodiesCore(chordUnit, melodyList, options) {
     var returnList = [];
     var chordTones = chordUnit.chordTones;
-    var rawMelody, newMelody;
-    var haxThis = this;
+    var rawMelody, newMelody, melodyArray, lastNote, noteDistance;
+    var lastTwoNotes, isNotRepetitive, timestamp, continueMelody, haxThis = this;
 
     if(melodyList) {
       // We're somewhere along the middle of the chain.
       melodyList.forEach(function(currentMelody) {
         chordTones.forEach(function(currentChordTone) {
-          newMelody = currentMelody + " " + currentChordTone;
+          continueMelody = true;
 
-          if(options.filtered) {
-            if(AcLogic.filterMelodyRange(newMelody)) {
-              returnList.push(newMelody);
+          if(melodyList.length > 10000) {
+            timestamp = new Date().valueOf().toString().slice(-4);
+            if(timestamp % 5 === 0) {
+              // Randomly skips generation every now and then.
+              // Removes 20% of results?
+              continueMelody = false;
             }
           } else {
-            returnList.push(newMelody);
+            continueMelody = true;
+          }
+
+          if(continueMelody) {
+            if(options.filtered) {
+
+              // check the distance of the last note and the new chord tone
+              // if it's more than an octave, skip this.
+              melodyArray = currentMelody.split(" ");
+              lastNote = melodyArray[melodyArray.length - 1];
+              noteDistance = Math.abs(tonal.note.midi(lastNote) - tonal.note.midi(currentChordTone));
+
+              // check if melody is too repetitive. For our purposes, three of the same notes in a row
+              // would be too repetitive.
+              if(melodyArray.length >= 2) {
+                lastTwoNotes = melodyArray.slice(-2);
+                if(lastTwoNotes[0] === lastTwoNotes[1] && lastTwoNotes[1] === currentChordTone) {
+                  isNotRepetitive = false;
+                } else {
+                  isNotRepetitive = true;
+                }
+              } else {
+                isNotRepetitive = true;
+              }
+
+              if(noteDistance <= 12 && isNotRepetitive) {
+                newMelody = currentMelody + " " + currentChordTone;
+                returnList.push(newMelody);
+              }
+            } else {
+              newMelody = currentMelody + " " + currentChordTone;
+              returnList.push(newMelody);
+            }
           }
         });
       });
@@ -20464,7 +20497,11 @@ class AutoComposerMelody {
       return this.getMelodiesCore(chordUnit.nextChordUnit, returnList, options);
     } else {
       // End of the chain.
-      this._sendStatusUpdate("Generated "+ returnList.length + " melodies");
+      if(options.filtered && returnList.length > AcLogic.NUM_MELODIES_LIMIT) {
+        this._sendStatusUpdate("Generated  " + returnList.length + " melodies. Creating list of " + AcLogic.NUM_MELODIES_LIMIT + "...");
+      } else {
+        this._sendStatusUpdate("Generated  " + returnList.length + " melodies.");
+      }
       return returnList;
     }
   }
@@ -20532,9 +20569,9 @@ class AutoComposerMidi {
   constructor() {
     this.INSTRUMENT_NAMES = ["violin", "acoustic_grand_piano", "acoustic_bass"];
     this.INSTRUMENT_GAIN = {
-      violin: 1.75,
-      acoustic_grand_piano: 1.5,
-      acoustic_bass: 1.66
+      violin: 1.7,
+      acoustic_grand_piano: 1.6,
+      acoustic_bass: 1.65
     }
     this.NOTE_DURATION = "1";
 
@@ -20556,7 +20593,6 @@ class AutoComposerMidi {
     for(var i = 0; i < this.INSTRUMENT_NAMES.length; i++) {
       // initialize each instrument
       Soundfont.instrument(this.audioContext, this.INSTRUMENT_NAMES[i], {soundfont: 'FluidR3_GM'}).then(function (sfInstrument) {
-        console.log(sfInstrument);
         haxThis.instruments[sfInstrument.name] = sfInstrument;
         haxThis.instrumentInit++;
 
@@ -20575,8 +20611,6 @@ class AutoComposerMidi {
     */
   _midiCallback(event) {
     // callback for MIDI events
-    // console.debug(event);
-
     var instr1 = this.instruments["violin"];
     var instr2 = this.instruments["acoustic_grand_piano"];
     var instr3 = this.instruments["acoustic_bass"];
@@ -20631,7 +20665,7 @@ class AutoComposerMidi {
     this.initialized = true;
     this.playbackLocked = false;
 
-    var updateEvent = new CustomEvent('statusUpdate', {detail: "MIDI player is loaded"});
+    var updateEvent = new CustomEvent('statusUpdate', {detail: "MIDI player is loaded!"});
     document.body.dispatchEvent(updateEvent);
   }
 
@@ -20686,7 +20720,6 @@ class AutoComposerMidi {
     tracks[0] = this._buildTrack(arrMelody);
 
     var write = new MidiWriter.Writer(tracks);
-    console.log("[AutoComposerMidi._buildMelodyMidiSolo()] " + write.dataUri());
 
     return write.dataUri();
   }
@@ -20715,7 +20748,6 @@ class AutoComposerMidi {
     tracks = [melodyTrack, accompanimentTrack, bassTrack];
 
     var write = new MidiWriter.Writer(tracks);
-    console.log("[AutoComposerMidi.buildMelodyMidiWithAccompaniment()] " + write.dataUri());
 
     return write.dataUri();
   }
@@ -20751,7 +20783,7 @@ class AutoComposerMidi {
       this.player.loadDataUri(strMidi);
       this.player.play();
     } else {
-      console.debug("[AutoComposerMidi._playMelody()] Player isn't initialized yet...");
+      console.warn("[AutoComposerMidi._playMelody()] Player isn't initialized yet...");
     }
   }
 

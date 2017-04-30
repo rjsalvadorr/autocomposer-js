@@ -67,9 +67,9 @@ class AutoComposerMidi {
   constructor() {
     this.INSTRUMENT_NAMES = [&quot;violin&quot;, &quot;acoustic_grand_piano&quot;, &quot;acoustic_bass&quot;];
     this.INSTRUMENT_GAIN = {
-      violin: 1.75,
-      acoustic_grand_piano: 1.5,
-      acoustic_bass: 1.66
+      violin: 1.7,
+      acoustic_grand_piano: 1.6,
+      acoustic_bass: 1.65
     }
     this.NOTE_DURATION = &quot;1&quot;;
 
@@ -91,7 +91,6 @@ class AutoComposerMidi {
     for(var i = 0; i &lt; this.INSTRUMENT_NAMES.length; i++) {
       // initialize each instrument
       Soundfont.instrument(this.audioContext, this.INSTRUMENT_NAMES[i], {soundfont: &apos;FluidR3_GM&apos;}).then(function (sfInstrument) {
-        console.log(sfInstrument);
         haxThis.instruments[sfInstrument.name] = sfInstrument;
         haxThis.instrumentInit++;
 
@@ -110,8 +109,6 @@ class AutoComposerMidi {
     */
   _midiCallback(event) {
     // callback for MIDI events
-    // console.debug(event);
-
     var instr1 = this.instruments[&quot;violin&quot;];
     var instr2 = this.instruments[&quot;acoustic_grand_piano&quot;];
     var instr3 = this.instruments[&quot;acoustic_bass&quot;];
@@ -166,7 +163,7 @@ class AutoComposerMidi {
     this.initialized = true;
     this.playbackLocked = false;
 
-    var updateEvent = new CustomEvent(&apos;statusUpdate&apos;, {detail: &quot;MIDI player is loaded&quot;});
+    var updateEvent = new CustomEvent(&apos;statusUpdate&apos;, {detail: &quot;MIDI player is loaded!&quot;});
     document.body.dispatchEvent(updateEvent);
   }
 
@@ -221,7 +218,6 @@ class AutoComposerMidi {
     tracks[0] = this._buildTrack(arrMelody);
 
     var write = new MidiWriter.Writer(tracks);
-    console.log(&quot;[AutoComposerMidi._buildMelodyMidiSolo()] &quot; + write.dataUri());
 
     return write.dataUri();
   }
@@ -250,7 +246,6 @@ class AutoComposerMidi {
     tracks = [melodyTrack, accompanimentTrack, bassTrack];
 
     var write = new MidiWriter.Writer(tracks);
-    console.log(&quot;[AutoComposerMidi.buildMelodyMidiWithAccompaniment()] &quot; + write.dataUri());
 
     return write.dataUri();
   }
@@ -286,7 +281,7 @@ class AutoComposerMidi {
       this.player.loadDataUri(strMidi);
       this.player.play();
     } else {
-      console.debug(&quot;[AutoComposerMidi._playMelody()] Player isn&apos;t initialized yet...&quot;);
+      console.warn(&quot;[AutoComposerMidi._playMelody()] Player isn&apos;t initialized yet...&quot;);
     }
   }
 

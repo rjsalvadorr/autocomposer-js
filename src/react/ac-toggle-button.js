@@ -10,18 +10,13 @@ class AcToggleButton extends React.Component {
     this.state = {
       isActive: props.initialState === "true"
     };
-
-    console.debug("toggle constructor()");
   }
 
   handleClick(e) {
-    console.debug("toggle handleClick()");
-
     var activeState = this.state.isActive;
     if(typeof this.props.isActive !== "undefined" && this.props.isActive !== null) {
       // isActive property overrides actual button state.
       activeState = this.props.isActive;
-      console.debug("toggle handleClick(), activeState=" + activeState);
     }
 
     var newActive = !activeState;
@@ -41,12 +36,10 @@ class AcToggleButton extends React.Component {
   }
 
   render() {
-    console.debug("toggle render()");
     var activeState = this.state.isActive;
     if(typeof this.props.isActive !== "undefined" && this.props.isActive !== null) {
       // isActive property overrides actual button state.
       activeState = this.props.isActive;
-      console.debug("toggle render(), activeState=" + activeState);
     }
 
     var buttonClass = activeState ? "ac-input button active " : "ac-input button";

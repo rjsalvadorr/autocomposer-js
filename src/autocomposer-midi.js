@@ -10,9 +10,9 @@ class AutoComposerMidi {
   constructor() {
     this.INSTRUMENT_NAMES = ["violin", "acoustic_grand_piano", "acoustic_bass"];
     this.INSTRUMENT_GAIN = {
-      violin: 1.75,
-      acoustic_grand_piano: 1.5,
-      acoustic_bass: 1.66
+      violin: 1.7,
+      acoustic_grand_piano: 1.6,
+      acoustic_bass: 1.65
     }
     this.NOTE_DURATION = "1";
 
@@ -34,7 +34,6 @@ class AutoComposerMidi {
     for(var i = 0; i < this.INSTRUMENT_NAMES.length; i++) {
       // initialize each instrument
       Soundfont.instrument(this.audioContext, this.INSTRUMENT_NAMES[i], {soundfont: 'FluidR3_GM'}).then(function (sfInstrument) {
-        console.log(sfInstrument);
         haxThis.instruments[sfInstrument.name] = sfInstrument;
         haxThis.instrumentInit++;
 
@@ -53,8 +52,6 @@ class AutoComposerMidi {
     */
   _midiCallback(event) {
     // callback for MIDI events
-    // console.debug(event);
-
     var instr1 = this.instruments["violin"];
     var instr2 = this.instruments["acoustic_grand_piano"];
     var instr3 = this.instruments["acoustic_bass"];
@@ -109,7 +106,7 @@ class AutoComposerMidi {
     this.initialized = true;
     this.playbackLocked = false;
 
-    var updateEvent = new CustomEvent('statusUpdate', {detail: "MIDI player is loaded"});
+    var updateEvent = new CustomEvent('statusUpdate', {detail: "MIDI player is loaded!"});
     document.body.dispatchEvent(updateEvent);
   }
 
@@ -164,7 +161,6 @@ class AutoComposerMidi {
     tracks[0] = this._buildTrack(arrMelody);
 
     var write = new MidiWriter.Writer(tracks);
-    console.log("[AutoComposerMidi._buildMelodyMidiSolo()] " + write.dataUri());
 
     return write.dataUri();
   }
@@ -193,7 +189,6 @@ class AutoComposerMidi {
     tracks = [melodyTrack, accompanimentTrack, bassTrack];
 
     var write = new MidiWriter.Writer(tracks);
-    console.log("[AutoComposerMidi.buildMelodyMidiWithAccompaniment()] " + write.dataUri());
 
     return write.dataUri();
   }
@@ -229,7 +224,7 @@ class AutoComposerMidi {
       this.player.loadDataUri(strMidi);
       this.player.play();
     } else {
-      console.debug("[AutoComposerMidi._playMelody()] Player isn't initialized yet...");
+      console.warn("[AutoComposerMidi._playMelody()] Player isn't initialized yet...");
     }
   }
 

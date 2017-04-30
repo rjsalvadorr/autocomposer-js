@@ -13,7 +13,7 @@ class StatusOutput extends React.Component {
 
     this.NUM_MESSAGES = 5;
     this.state = {
-      statusMessages: []
+      statusMessages: ["Initializing..."]
     }
     this.statusEventHandler = this.statusEventHandler.bind(this);
     document.body.addEventListener('statusUpdate', this.statusEventHandler);

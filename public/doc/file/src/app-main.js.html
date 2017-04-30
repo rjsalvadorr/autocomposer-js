@@ -57,6 +57,7 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/app-main.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">const React = require(&apos;react&apos;);
 const ReactDOM = require(&apos;react-dom&apos;);
+const moment = require(&apos;moment&apos;);
 
 var AutoComposerLogic = require(&apos;./autocomposer-logic&apos;);
 var AcLogic = new AutoComposerLogic.AutoComposerLogic();
@@ -146,8 +147,6 @@ class AutoComposer extends React.Component {
   * @param {boolean} [useDataStore] - If true, the data store is changed instead of the state object.
   */
   callbackChangeState(stateKey, newState, useDataStore) {
-    console.debug(&quot;app callbackChangeState()&quot;);
-
     if(useDataStore) {
       this.store[stateKey] = newState;
     } else {
@@ -169,7 +168,6 @@ class AutoComposer extends React.Component {
   * @param {Object} event - React event
   */
   handleChange(event) {
-    console.debug(&quot;app handleChange()&quot;);
     var stateObj = function() {
       var stateKey = this.target.dataset[&quot;stateKey&quot;];
       var returnObj = {};
@@ -197,7 +195,6 @@ class AutoComposer extends React.Component {
   * @param {Object} event - React event
   */
   loadMusic(event) {
-    console.debug(&quot;app loadMusic()&quot;);
     var melodyString = event.currentTarget.dataset[&quot;payload&quot;];
     var melodiesData = melodyString.split(&quot;;&quot;);
 
@@ -289,9 +286,8 @@ class AutoComposer extends React.Component {
     if(this.store.melodies.length &gt; 0) {
       //download MIDI file
       var dataString = AcMidi.buildMelodyMidiWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);
-      var timestamp = new Date().valueOf().toString().slice(-8)
-
-      var fileName = &quot;autocomposer-&quot; + timestamp + &quot;_&quot; + this.store.melodies[0].join(&quot;-&quot;);
+      var timestamp = moment().format(&quot;YYMMDDHHmmss&quot;);
+      var fileName = &quot;autocomposer_&quot; + timestamp + &quot;_&quot; + this.state.chordProgressionRaw.replace(/\s+/g, &quot;-&quot;);
       download(dataString, fileName, &quot;audio/midi&quot;);
     }
   }

@@ -42,7 +42,7 @@ class AutoComposerLogic {
 
     return highest - lowest <= 12;
   }
-
+  
     /**
     * Parses text, and determines if user input represents a valid note/chord.
     * @param {string} input - value given by the user
