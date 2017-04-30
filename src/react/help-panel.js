@@ -48,9 +48,9 @@ class HelpPanel extends React.Component {
 
             <ol>
               <li>Enter a chord progression in the text box.</li>
-              <li>Click the <strong>Generate!</strong> button.</li>
+              <li>Click the <strong>Generate</strong> button.</li>
               <li>Squeal in delight, as the promised melodies are shown on the screen.</li>
-              <li>Load a melody.</li>
+              <li>Click a melody.</li>
               <li>Hit the <i className="fa fa-play"></i> button!</li>
             </ol>
 

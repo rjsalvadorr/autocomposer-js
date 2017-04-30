@@ -80,7 +80,7 @@
 }
 .ac-input.double-height,
 .ac-output.double-height {
-  height: 120px;
+  height: 90px;
 }
 body {
   font-family: 'Helvetica', 'Arial', sans-serif;
@@ -97,6 +97,8 @@ body {
 .ac-output.button {
   font-size: 16px;
   font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 .ac-input-label {
   font-size: 12px;
@@ -173,7 +175,7 @@ table#ac-melody-output td {
   padding: 0.5vw 0;
 }
 .ac-melody-row {
-  background-color: #ddd;
+  cursor: pointer;
 }
 .ac-melody-row.selected {
   background-color: #dfd;
@@ -182,6 +184,7 @@ table#ac-melody-output td {
   color: #fff;
   background-color: #999;
   border-color: #7a7a7a;
+  cursor: pointer;
   outline: none !important;
   border-radius: 6px;
   border-width: 0 3px 3px 0;
@@ -212,6 +215,7 @@ table#ac-melody-output td {
   border-style: inset;
 }
 .ac-input.button.disabled {
+  cursor: default;
   opacity: 0.66;
   border: none !important;
 }
@@ -279,4 +283,8 @@ table#ac-melody-output td {
 }
 .ac-input.button.red.disabled {
   background-color: #aa0e0e !important;
+}
+.ac-input.button#showHelp.active {
+  opacity: 1;
+  background-color: #343434;
 }

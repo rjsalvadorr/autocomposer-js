@@ -44,6 +44,7 @@ createButtonColors(bgColor, textColor)
 .ac-input.button
   createButtonColors(buttonBackground, buttonTextColorLight)
 
+  cursor: pointer
   outline: none !important
   border-radius: 6px
   border-width: 0 buttonBorderSize buttonBorderSize 0
@@ -62,6 +63,7 @@ createButtonColors(bgColor, textColor)
     border-style: inset
 
   &.disabled
+    cursor: default
     opacity: 0.66
     border: none !important
 
@@ -75,3 +77,9 @@ createButtonColors(bgColor, textColor)
     createButtonColors(buttonBackgroundBlue, buttonTextColorLight)
   &.red
     createButtonColors(buttonBackgroundRed, buttonTextColorLight)
+
+
+.ac-input.button#showHelp
+  &.active
+    opacity: 1
+    background-color: darken(buttonBackground, 66%)

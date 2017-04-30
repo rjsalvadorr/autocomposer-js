@@ -242,7 +242,11 @@ class AutoComposer extends React.Component {
       }
 
       this._sendStatusUpdate(&quot;Generating melodies...&quot;);
-      this.setState({showOutput: true, allowMelodyGeneration: true});
+      this.setState({showOutput: true, allowMelodyGeneration: true, melodyLoaded: false, showHelp: false});
+      this.store.melodies = [];
+
+      var newSelectionEvent = new Event(&quot;newSelection&quot;);
+      document.body.dispatchEvent(newSelectionEvent);
     } catch(exc) {
       console.warn(&quot;[AutoComposer.generateMelodies()] &quot; + exc.message + &quot;\nError Type = &quot; + exc.name);
       this._sendStatusUpdate(&quot;[ERROR] &quot; + exc.message);
@@ -312,7 +316,7 @@ class AutoComposer extends React.Component {
             &lt;div className=&quot;ac-control-wrapper flex-lg&quot;&gt;
               &lt;h1&gt;AutoComposer&lt;/h1&gt;
             &lt;/div&gt;
-            &lt;AcToggleButton inputKey=&quot;showHelp&quot; icon=&quot;question&quot; wrapperAddClass=&quot;flex-sm&quot; initialState={this.state.showHelp} onClickHandler={this.callbackChangeState} /&gt;
+            &lt;AcToggleButton inputKey=&quot;showHelp&quot; icon=&quot;question&quot; wrapperAddClass=&quot;flex-sm&quot; isActive={this.state.showHelp} onClickHandler={this.callbackChangeState} /&gt;
             &lt;AcToggleButton inputKey=&quot;showControls&quot; icon=&quot;cog&quot; wrapperAddClass=&quot;flex-sm&quot; initialState={this.state.showControls} onClickHandler={this.callbackChangeState} disabled={this.state.controlsDisabled} /&gt;
           &lt;/div&gt;
 
@@ -325,12 +329,12 @@ class AutoComposer extends React.Component {
 
           &lt;div className=&quot;panel-row has-labels&quot;&gt;
             &lt;AcTextArea inputKey=&quot;chordProgressionRaw&quot; addClass=&quot;double-height&quot; value={this.state.chordProgressionRaw} placeholder={this.store.chordProgressionPlaceholder} onChange={this.handleChange} /&gt;
-            &lt;AcButton inputKey=&quot;generateMelodies&quot; inputLabel=&quot;Generate!&quot; wrapperAddClass=&quot;square&quot; addClass=&quot;double-height blue&quot; onClick={this.generateMelodies} isActive={!this.state.chordProgressionChanged}/&gt;
+            &lt;AcButton inputKey=&quot;generateMelodies&quot; inputLabel=&quot;Generate&quot; wrapperAddClass=&quot;square&quot; addClass=&quot;double-height blue&quot; onClick={this.generateMelodies} isActive={!this.state.chordProgressionChanged}/&gt;
           &lt;/div&gt;
 
           &lt;div className=&quot;panel-row&quot;&gt;
             &lt;AcButton inputKey=&quot;generateMelodies&quot; icon=&quot;play&quot; addClass=&quot;green&quot; wrapperAddClass=&quot;flex-lg&quot; onClick={this.playMelody} disabled={!this.state.melodyLoaded}/&gt;
-            &lt;AcButton inputKey=&quot;generateMelodies&quot; icon=&quot;play&quot; addClass=&quot;green&quot; inputLabel=&quot; (Solo)&quot; wrapperAddClass=&quot;flex-sm&quot; onClick={this.playMelodySolo} disabled={!this.state.melodyLoaded}/&gt;
+            &lt;AcButton inputKey=&quot;generateMelodies&quot; icon=&quot;play&quot; addClass=&quot;green&quot; inputLabel=&quot;Solo&quot; wrapperAddClass=&quot;flex-sm&quot; onClick={this.playMelodySolo} disabled={!this.state.melodyLoaded}/&gt;
             &lt;AcButton inputKey=&quot;generateMelodies&quot; icon=&quot;stop&quot; addClass=&quot;red&quot; wrapperAddClass=&quot;flex-sm&quot; onClick={this.stopMusic} disabled={!this.state.melodyLoaded}/&gt;
             &lt;AcButton inputKey=&quot;generateMelodies&quot; icon=&quot;download&quot; wrapperAddClass=&quot;flex-sm&quot; onClick={this.downloadMidi} disabled={!this.state.melodyLoaded}/&gt;
           &lt;/div&gt;
