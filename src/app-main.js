@@ -37,6 +37,19 @@ class AutoComposer extends React.Component {
   constructor(props) {
     super(props);
 
+    /**
+    * @type {Object} - Data store. Any changes to this data store will not cause an update.
+    */
+    this.store = {
+      melodies: [],
+      chordProgressionClean: "",
+      chordProgressionPlaceholder: AcLogic.INITIAL_PROGRESSION,
+      MIN_SUPPORTED_WIDTH: 500
+    };
+
+    /**
+    * @type {Object} - Component state. Changes to this will eventually trigger a render.
+    */
     this.state = {
       showHelp: false,
       showControls: false,
@@ -51,28 +64,75 @@ class AutoComposer extends React.Component {
       // This becomes true whenever we have a chord progression change, and the correct button is clicked.
       // Returns to false after output finishes rendering
       allowMelodyGeneration: "",
-      melodyLoaded: false
-    };
+      melodyLoaded: false,
 
-    /**
-    * @type {Object} - Data store. Any changes to this data store will not cause an update.
-    */
-    this.store = {
-      melodies: [],
-      chordProgressionClean: "",
-      chordProgressionPlaceholder: AcLogic.INITIAL_PROGRESSION
+      isOnSupportedDevice: this._isOnSupportedDevice(),
+      isViewportWidthSupported: this._isViewportWidthSupported()
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.generateMelodies = this.generateMelodies.bind(this);
     this.outputFinishCallback = this.outputFinishCallback.bind(this);
     this.callbackChangeState = this.callbackChangeState.bind(this);
+    this._resizeHandler = this._resizeHandler.bind(this);
     this.loadMusic = this.loadMusic.bind(this);
 
     this.playMelody = this.playMelody.bind(this);
     this.playMelodySolo = this.playMelodySolo.bind(this);
     this.stopMusic = this.stopMusic.bind(this);
     this.downloadMidi = this.downloadMidi.bind(this);
+  }
+
+  /**
+  * Checks the device/browser. Returns true if the browser is supported.
+  * Expected to run on loading the app.
+  */
+  _isOnSupportedDevice() {
+    var ua = navigator.userAgent;
+    // token explanation
+    // android - not supporting mobile
+    // trident - IE rendering engine. IE does not support the class JS keyword. Which is all over this codebase.
+    var isSupportedDevice = ua.search(/android|trident/i) == -1;
+    return isSupportedDevice;
+  }
+
+  /**
+  * Checks the device/browser. Returns true if the app will display properly in the given device screen.
+  * Expected to run when loading the app, and on window resize.
+  */
+  _isViewportWidthSupported() {
+    if(window.innerWidth >= this.store.MIN_SUPPORTED_WIDTH) {
+      return true;
+    } else {
+      return false
+    }
+  }
+
+  /**
+  * Handler for browser resize event.
+  */
+  _resizeHandler() {
+    if(this._isViewportWidthSupported() && !this.state.isViewportWidthSupported) {
+      // state transition: non-supported VW to a supported VW
+      this.setState({isViewportWidthSupported: true});
+    } else if (!this._isViewportWidthSupported() && this.state.isViewportWidthSupported) {
+      // state transition: supported VW to a non-supported VW
+      this.setState({isViewportWidthSupported: false});
+    }
+  }
+
+  /**
+  * Add event listener
+  */
+  componentDidMount() {
+    window.addEventListener("resize", this._resizeHandler);
+  }
+
+  /**
+  * Remove event listener
+  */
+  componentWillUnmount() {
+    window.removeEventListener("resize", this._resizeHandler);
   }
 
   _sendStatusUpdate(message) {
@@ -247,52 +307,67 @@ class AutoComposer extends React.Component {
   render() {
     var chordProgressionArray = this.store.chordProgressionClean.split(" ");
     // Assume that we have an empty body tag.
-    return (
-      <div id="app-container" className="root-panel">
-        <div id="main-control-panel" className="ac-panel">
 
-          <div className="panel-row">
-            <div className="ac-control-wrapper flex-lg">
-              <h1 id="main-title">AutoComposer</h1>
+    if(this.state.isOnSupportedDevice && this.state.isViewportWidthSupported) {
+      return (
+        <div id="app-container" className="root-panel">
+          <div id="main-control-panel" className="ac-panel">
+
+            <div className="panel-row">
+              <div className="ac-control-wrapper flex-lg">
+                <h1 id="main-title">AutoComposer</h1>
+              </div>
             </div>
-            <AcToggleButton inputKey="showHelp" icon="question" wrapperAddClass="flex-sm" isActive={this.state.showHelp} onClickHandler={this.callbackChangeState} />
-            <AcToggleButton inputKey="showControls" icon="cog" wrapperAddClass="flex-sm" initialState={this.state.showControls} onClickHandler={this.callbackChangeState} disabled={this.state.controlsDisabled} />
+
+            <div className="panel-row">
+              <p>
+                This is a prototype for a program that automatically writes music. Click the <i className="fa fa-question"></i> button to get started.
+                For more info, check out the <a href="https://github.com/rjsalvadorr/autocomposer-melody/wiki" target="_blank">project wiki</a> and <a href="https://github.com/rjsalvadorr/autocomposer-melody" target="_blank">repository</a>.
+              </p>
+            </div>
+
+            <div className="panel-row has-labels">
+              <AcTextArea inputKey="chordProgressionRaw" addClass="double-height" value={this.state.chordProgressionRaw} placeholder={this.store.chordProgressionPlaceholder} onChange={this.handleChange} />
+              <AcButton inputKey="generateMelodies" inputLabel="Generate" wrapperAddClass="square" addClass="double-height blue" onClick={this.generateMelodies} isActive={!this.state.chordProgressionChanged}/>
+            </div>
+
+            <div className="panel-row">
+              <AcButton inputKey="generateMelodies" icon="play" addClass="green" wrapperAddClass="flex-lg" onClick={this.playMelody} disabled={!this.state.melodyLoaded}/>
+              <AcButton inputKey="generateMelodies" icon="play" addClass="green" inputLabel="Solo" wrapperAddClass="flex-sm" onClick={this.playMelodySolo} disabled={!this.state.melodyLoaded}/>
+              <AcButton inputKey="generateMelodies" icon="stop" addClass="red" wrapperAddClass="flex-sm" onClick={this.stopMusic} disabled={!this.state.melodyLoaded}/>
+              <AcButton inputKey="generateMelodies" icon="download" wrapperAddClass="flex-sm" onClick={this.downloadMidi} disabled={!this.state.melodyLoaded}/>
+            </div>
+
+            <div className="panel-row">
+              <AcToggleButton inputKey="showHelp" icon="question" wrapperAddClass="flex-sm" isActive={this.state.showHelp} onClickHandler={this.callbackChangeState} />
+              <AcToggleButton inputKey="showControls" icon="cog" wrapperAddClass="flex-sm" initialState={this.state.showControls} onClickHandler={this.callbackChangeState} disabled={this.state.controlsDisabled} />
+            </div>
+
+            <div className="panel-row">
+              <StatusOutput inputKey="status-output" value="status output..." />
+            </div>
+
+            <DebugPanel isHidden={!this.state.debugMode} debugData={JSON.stringify(this.state, null, 2)}/>
           </div>
 
-          <div className="panel-row">
-            <p>
-              This is a prototype for a program that automatically writes music. Click the <i className="fa fa-question"></i> button to get started.
-              For more info, check out the <a href="https://github.com/rjsalvadorr/autocomposer-melody/wiki" target="_blank">project wiki</a> and <a href="https://github.com/rjsalvadorr/autocomposer-melody" target="_blank">repository</a>.
-            </p>
-          </div>
+          <ControlPanel isShown={this.state.showControls} />
 
-          <div className="panel-row has-labels">
-            <AcTextArea inputKey="chordProgressionRaw" addClass="double-height" value={this.state.chordProgressionRaw} placeholder={this.store.chordProgressionPlaceholder} onChange={this.handleChange} />
-            <AcButton inputKey="generateMelodies" inputLabel="Generate" wrapperAddClass="square" addClass="double-height blue" onClick={this.generateMelodies} isActive={!this.state.chordProgressionChanged}/>
-          </div>
+          <HelpPanel isShown={this.state.showHelp} />
 
-          <div className="panel-row">
-            <AcButton inputKey="generateMelodies" icon="play" addClass="green" wrapperAddClass="flex-lg" onClick={this.playMelody} disabled={!this.state.melodyLoaded}/>
-            <AcButton inputKey="generateMelodies" icon="play" addClass="green" inputLabel="Solo" wrapperAddClass="flex-sm" onClick={this.playMelodySolo} disabled={!this.state.melodyLoaded}/>
-            <AcButton inputKey="generateMelodies" icon="stop" addClass="red" wrapperAddClass="flex-sm" onClick={this.stopMusic} disabled={!this.state.melodyLoaded}/>
-            <AcButton inputKey="generateMelodies" icon="download" wrapperAddClass="flex-sm" onClick={this.downloadMidi} disabled={!this.state.melodyLoaded}/>
-          </div>
+          <OutputPanel isShown={this.state.showOutput} chordProgression={chordProgressionArray} allowMelodyGeneration={this.state.allowMelodyGeneration} outputCallback={this.outputFinishCallback} loadMelody={this.loadMusic} />
 
-          <div className="panel-row">
-            <StatusOutput inputKey="status-output" value="status output..." />
-          </div>
-
-          <DebugPanel isHidden={!this.state.debugMode} debugData={JSON.stringify(this.state, null, 2)}/>
         </div>
-
-        <ControlPanel isShown={this.state.showControls} />
-
-        <HelpPanel isShown={this.state.showHelp} />
-
-        <OutputPanel isShown={this.state.showOutput} chordProgression={chordProgressionArray} allowMelodyGeneration={this.state.allowMelodyGeneration} outputCallback={this.outputFinishCallback} loadMelody={this.loadMusic} />
-
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div id="app-container" className="root-panel">
+          <div id="not-supported-panel" className="ac-panel">
+            <h1>Where's the AutoComposer?!</h1>
+            <p>You're seeing this because your browser's window size is too small, or you're using a device that's not supported by the app.</p>
+          </div>
+        </div>
+      );
+    }
   }
 }
 

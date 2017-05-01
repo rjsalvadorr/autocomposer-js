@@ -1104,6 +1104,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/react/ac-button.js~acbutton#getlabelelement",
+    "class/src/react/ac-button.js~AcButton.html#instance-method-getLabelElement",
+    "src/react/ac-button.js~AcButton#getLabelElement",
+    "method"
+  ],
+  [
     "src/react/ac-button.js~acbutton#render",
     "class/src/react/ac-button.js~AcButton.html#instance-method-render",
     "src/react/ac-button.js~AcButton#render",

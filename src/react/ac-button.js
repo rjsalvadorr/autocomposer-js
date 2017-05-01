@@ -6,8 +6,30 @@ var React = require('react');
 class AcButton extends React.Component {
   getIconElement() {
     if(this.props.icon) {
-      var iconClass = "fa fa-2x fa-" + this.props.icon;
+      var iconClass;
+
+      if(this.props.inputLabel) {
+        iconClass = "fa fa-lg fa-" + this.props.icon;
+      } else {
+        iconClass = "fa fa-2x fa-" + this.props.icon;
+      }
       return <i className={iconClass}></i>
+    } else {
+      return "";
+    }
+  }
+
+  getLabelElement() {
+    if(this.props.inputLabel) {
+      var labelElem;
+
+      if(this.props.icon) {
+        labelElem = <span className="button-text-icon">{this.props.inputLabel}</span>
+      } else {
+        labelElem = this.props.inputLabel;
+      }
+
+      return labelElem
     } else {
       return "";
     }
@@ -22,13 +44,23 @@ class AcButton extends React.Component {
     var wrapperClass = "ac-control-wrapper";
     wrapperClass += this.props.wrapperAddClass ? " " + this.props.wrapperAddClass: "";
 
-    return (
-      <div className={wrapperClass}>
+    var lineBreak = this.props.inputLabel && this.props.icon ? <br/> : "";
+
+    if(this.props.noWrapper) {
+      return (
         <button className={buttonClass} id={this.props.inputKey} onClick={this.props.onClick} disabled={this.props.disabled} data-payload={this.props.dataPayload}>
-          {this.getIconElement()} {this.props.inputLabel}
+          {this.getIconElement()} {lineBreak} {this.getLabelElement()}
         </button>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div className={wrapperClass}>
+          <button className={buttonClass} id={this.props.inputKey} onClick={this.props.onClick} disabled={this.props.disabled} data-payload={this.props.dataPayload}>
+            {this.getIconElement()} {lineBreak} {this.getLabelElement()}
+          </button>
+        </div>
+      );
+    }
   }
 }
 

@@ -77,8 +77,8 @@ class OutputPanel extends React.Component {
             <thead>
               <tr>
                 <th>Melody</th>
-                <th>Smoothness</th>
-                <th>Range</th>
+                <th className="melody-data">Smoothness</th>
+                <th className="melody-data">Range</th>
               </tr>
             </thead>
             <tbody>

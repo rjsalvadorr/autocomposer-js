@@ -1,6 +1,6 @@
 {
-  "coverage": "51.53%",
-  "expectCount": 130,
+  "coverage": "51.14%",
+  "expectCount": 131,
   "actualCount": 67,
   "files": {
     "src/autocomposer-logic.js": {
@@ -19,11 +19,12 @@
       ]
     },
     "src/react/ac-button.js": {
-      "expectCount": 3,
+      "expectCount": 4,
       "actualCount": 1,
       "undocumentLines": [
         7,
-        16
+        22,
+        38
       ]
     },
     "src/react/ac-checkbox.js": {

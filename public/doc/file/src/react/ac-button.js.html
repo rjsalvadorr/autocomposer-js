@@ -65,8 +65,30 @@
 class AcButton extends React.Component {
   getIconElement() {
     if(this.props.icon) {
-      var iconClass = &quot;fa fa-2x fa-&quot; + this.props.icon;
+      var iconClass;
+
+      if(this.props.inputLabel) {
+        iconClass = &quot;fa fa-lg fa-&quot; + this.props.icon;
+      } else {
+        iconClass = &quot;fa fa-2x fa-&quot; + this.props.icon;
+      }
       return &lt;i className={iconClass}&gt;&lt;/i&gt;
+    } else {
+      return &quot;&quot;;
+    }
+  }
+
+  getLabelElement() {
+    if(this.props.inputLabel) {
+      var labelElem;
+
+      if(this.props.icon) {
+        labelElem = &lt;span className=&quot;button-text-icon&quot;&gt;{this.props.inputLabel}&lt;/span&gt;
+      } else {
+        labelElem = this.props.inputLabel;
+      }
+
+      return labelElem
     } else {
       return &quot;&quot;;
     }
@@ -81,13 +103,23 @@ class AcButton extends React.Component {
     var wrapperClass = &quot;ac-control-wrapper&quot;;
     wrapperClass += this.props.wrapperAddClass ? &quot; &quot; + this.props.wrapperAddClass: &quot;&quot;;
 
-    return (
-      &lt;div className={wrapperClass}&gt;
+    var lineBreak = this.props.inputLabel &amp;&amp; this.props.icon ? &lt;br/&gt; : &quot;&quot;;
+
+    if(this.props.noWrapper) {
+      return (
         &lt;button className={buttonClass} id={this.props.inputKey} onClick={this.props.onClick} disabled={this.props.disabled} data-payload={this.props.dataPayload}&gt;
-          {this.getIconElement()} {this.props.inputLabel}
+          {this.getIconElement()} {lineBreak} {this.getLabelElement()}
         &lt;/button&gt;
-      &lt;/div&gt;
-    );
+      );
+    } else {
+      return (
+        &lt;div className={wrapperClass}&gt;
+          &lt;button className={buttonClass} id={this.props.inputKey} onClick={this.props.onClick} disabled={this.props.disabled} data-payload={this.props.dataPayload}&gt;
+            {this.getIconElement()} {lineBreak} {this.getLabelElement()}
+          &lt;/button&gt;
+        &lt;/div&gt;
+      );
+    }
   }
 }
 

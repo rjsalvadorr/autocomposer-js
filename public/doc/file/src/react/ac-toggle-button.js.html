@@ -108,13 +108,21 @@ class AcToggleButton extends React.Component {
     var wrapperClass = &quot;ac-control-wrapper&quot;;
     wrapperClass += this.props.wrapperAddClass ? &quot; &quot; + this.props.wrapperAddClass: &quot;&quot;;
 
-    return (
-      &lt;div className={wrapperClass}&gt;
+    if(this.props.noWrapper) {
+      return (
         &lt;button className={buttonClass} id={this.props.inputKey} data-state-key={this.props.inputKey} data-current-state={this.state.isActive} onClick={(e) =&gt; this.handleClick(e)} disabled={this.props.disabled}&gt;
           {this.getIconElement()} {this.props.inputLabel}
         &lt;/button&gt;
-      &lt;/div&gt;
-    );
+      );
+    } else {
+      return (
+        &lt;div className={wrapperClass}&gt;
+          &lt;button className={buttonClass} id={this.props.inputKey} data-state-key={this.props.inputKey} data-current-state={this.state.isActive} onClick={(e) =&gt; this.handleClick(e)} disabled={this.props.disabled}&gt;
+            {this.getIconElement()} {this.props.inputLabel}
+          &lt;/button&gt;
+        &lt;/div&gt;
+      );
+    }
   }
 }
 

@@ -1,0 +1,51 @@
+// For responsive styling
+
+bptLaptop = 992px
+bptTablet = 768px
+bptPhone = 500px
+
+headingSizeLaptop = 2.5em
+headingSizeTablet = 2em
+
+///// Small laptop / Large tablet
+@media (max-width: bptLaptop)
+  h1
+    font-size: headingSizeLaptop
+  h2
+    font-size: headingSizeLaptop * 0.75
+  h3
+    font-size: headingSizeLaptop * 0.6
+  h4
+    font-size: headingSizeLaptop * 0.5
+  h5
+    font-size: headingSizeLaptop * 0.4
+  h6
+    font-size: headingSizeLaptop * 0.35
+
+  .root-panel
+    & > .ac-panel#main-control-panel
+      width: 50%
+    & > .ac-panel
+      width: 50%
+
+  .melody-data
+    display: none
+
+///// Tablet
+@media (max-width: bptTablet)
+  h1
+    font-size: headingSizeTablet
+  h2
+    font-size: headingSizeTablet * 0.75
+  h3
+    font-size: headingSizeTablet * 0.6
+  h4
+    font-size: headingSizeTablet * 0.5
+  h5
+    font-size: headingSizeTablet * 0.4
+  h6
+    font-size: headingSizeTablet * 0.35
+
+///// Phone
+// Not implemented. Unless we find a good layout.
+// @media (max-width: bptPhone)

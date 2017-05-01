@@ -28,6 +28,9 @@ outputPanelWidth = 100% - controlPanelWidth
   padding: layoutPadding layoutPadding 0 layoutPadding
   flex: 10 1 auto
 
+  &#not-supported-panel
+    width: 100%;
+
 // Hides the main output panel if the Help panel or Control panel is visible
 #control-panel + #output-panel
 #help-panel + #output-panel
@@ -44,7 +47,7 @@ outputPanelWidth = 100% - controlPanelWidth
 .ac-panel.output-panel
   overflow: scroll
   overflow-y: scroll
-  overflow-x: hidden
+  overflow-x: visible
   padding: 0
 
   .panel-spacer

@@ -15,8 +15,21 @@
     <div id="react-root">
       <!-- All page content is loaded here -->
     </div>
-    <script src="autocomposer-melody.js"></script>
+    <div id="ie-error-container">
+      <!-- Our fancy web app doesn't work on IE. :( -->
+    </div>
+
     <script src="vextab-div.js"></script>
     <script src="download.js"></script>
+    
+    <script>
+      var ua = navigator.userAgent;
+      if(ua.search(/trident/i) > -1) {
+        var htmlString = "<h1>Well, this is embarassing...</h1>";
+        htmlString += "<p>This web application doesn't work on IE 11 and under, since those browsers don't support newer Javascript standards.</p>";
+        $("#ie-error-container").html(htmlString);
+      }
+    </script>
+    <script src="autocomposer-melody.js"></script>
   </body>
 </html>

@@ -18,6 +18,9 @@
   padding: 15px 15px 0 15px;
   flex: 10 1 auto;
 }
+.ac-panel#not-supported-panel {
+  width: 100%;
+}
 #control-panel + #output-panel,
 #help-panel + #output-panel {
   display: none;
@@ -33,7 +36,7 @@
 .ac-panel.output-panel {
   overflow: scroll;
   overflow-y: scroll;
-  overflow-x: hidden;
+  overflow-x: visible;
   padding: 0;
 }
 .ac-panel.output-panel .panel-spacer {
@@ -132,6 +135,17 @@ h1#main-title {
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 2px;
+}
+.ac-input.button .button-text-icon,
+.ac-output.button .button-text-icon {
+  font-weight: normal;
+  margin-top: 5px;
+  display: inline-block;
+  font-size: 13px;
+}
+.ac-input.button i.fa-play.has-text,
+.ac-output.button i.fa-play.has-text {
+  padding-left: 5px;
 }
 .ac-input-label {
   font-size: 12px;
@@ -328,4 +342,53 @@ table#ac-melody-output th {
 .ac-input.button#showHelp.active {
   opacity: 1;
   background-color: #343434;
+}
+@media (max-width: 992px) {
+  h1 {
+    font-size: 2.5em;
+  }
+  h2 {
+    font-size: 1.875em;
+  }
+  h3 {
+    font-size: 1.5em;
+  }
+  h4 {
+    font-size: 1.25em;
+  }
+  h5 {
+    font-size: 1em;
+  }
+  h6 {
+    font-size: 0.875em;
+  }
+  .root-panel > .ac-panel#main-control-panel {
+    width: 50%;
+  }
+  .root-panel > .ac-panel {
+    width: 50%;
+  }
+  .melody-data {
+    display: none;
+  }
+}
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2em;
+  }
+  h2 {
+    font-size: 1.5em;
+  }
+  h3 {
+    font-size: 1.2em;
+  }
+  h4 {
+    font-size: 1em;
+  }
+  h5 {
+    font-size: 0.8em;
+  }
+  h6 {
+    font-size: 0.7em;
+  }
 }

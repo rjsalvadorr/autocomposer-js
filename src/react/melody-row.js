@@ -44,7 +44,7 @@ class MelodyRow extends React.Component {
 
   createVexTab(arrChords, arrMelody) {
     var vtString, pitchClass;
-    var vexTabText = "options scale=0.9 space=5 font-size=13 font-face=Times\n";
+    var vexTabText = "options scale=0.8 space=5 font-size=13 font-face=Times\n";
     vexTabText += "tabstave\n";
     vexTabText += "notation=true tablature=false\n";
     vexTabText += "notes :w ";

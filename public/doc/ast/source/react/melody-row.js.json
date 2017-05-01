@@ -2389,10 +2389,10 @@
                             }
                           },
                           "extra": {
-                            "rawValue": "options scale=0.9 space=5 font-size=13 font-face=Times\n",
-                            "raw": "\"options scale=0.9 space=5 font-size=13 font-face=Times\\n\""
+                            "rawValue": "options scale=0.8 space=5 font-size=13 font-face=Times\n",
+                            "raw": "\"options scale=0.8 space=5 font-size=13 font-face=Times\\n\""
                           },
-                          "value": "options scale=0.9 space=5 font-size=13 font-face=Times\n"
+                          "value": "options scale=0.8 space=5 font-size=13 font-face=Times\n"
                         }
                       }
                     ],
@@ -8345,10 +8345,10 @@
                               }
                             },
                             "extra": {
-                              "rawValue": "options scale=0.9 space=5 font-size=13 font-face=Times\n",
-                              "raw": "\"options scale=0.9 space=5 font-size=13 font-face=Times\\n\""
+                              "rawValue": "options scale=0.8 space=5 font-size=13 font-face=Times\n",
+                              "raw": "\"options scale=0.8 space=5 font-size=13 font-face=Times\\n\""
                             },
-                            "value": "options scale=0.9 space=5 font-size=13 font-face=Times\n"
+                            "value": "options scale=0.8 space=5 font-size=13 font-face=Times\n"
                           }
                         }
                       ],
@@ -16522,7 +16522,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "options scale=0.9 space=5 font-size=13 font-face=Times\n",
+      "value": "options scale=0.8 space=5 font-size=13 font-face=Times\n",
       "start": 1203,
       "end": 1261,
       "loc": {
