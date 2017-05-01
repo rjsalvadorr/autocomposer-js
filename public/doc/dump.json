@@ -3,7 +3,7 @@
     "__docId__": 0,
     "kind": "file",
     "name": "src/app-main.js",
-    "content": "const React = require('react');\r\nconst ReactDOM = require('react-dom');\r\nconst moment = require('moment');\r\n\r\nvar AutoComposerLogic = require('./autocomposer-logic');\r\nvar AcLogic = new AutoComposerLogic.AutoComposerLogic();\r\n\r\nvar AutoComposerMelody = require('./autocomposer-melody');\r\nvar AcMelody = new AutoComposerMelody.AutoComposerMelody();\r\n\r\nvar acMidi = require('./autocomposer-midi');\r\nvar AcMidi = new acMidi.AutoComposerMidi();\r\n\r\nvar AcButton = require('./react/ac-button');\r\nvar AcToggleButton = require('./react/ac-toggle-button');\r\nvar AcTextArea = require('./react/ac-textarea');\r\nvar StatusOutput = require('./react/status-output')\r\n\r\nvar HelpPanel = require('./react/help-panel');\r\nvar DebugPanel = require('./react/debug-panel');\r\nvar OutputPanel = require('./react/output-panel');\r\nvar ControlPanel = require('./react/control-panel');\r\n\r\n\r\n\r\nfunction AcInputException(message) {\r\n   this.message = message;\r\n   this.name = 'AcInputException';\r\n}\r\n\r\n\r\n\r\n/**\r\n* The core React component for the web app.\r\n*/\r\nclass AutoComposer extends React.Component {\r\n  constructor(props) {\r\n    super(props);\r\n\r\n    /**\r\n    * @type {Object} - Data store. Any changes to this data store will not cause an update.\r\n    */\r\n    this.store = {\r\n      melodies: [],\r\n      chordProgressionClean: \"\",\r\n      chordProgressionPlaceholder: AcLogic.INITIAL_PROGRESSION,\r\n      MIN_SUPPORTED_WIDTH: 500\r\n    };\r\n\r\n    /**\r\n    * @type {Object} - Component state. Changes to this will eventually trigger a render.\r\n    */\r\n    this.state = {\r\n      showHelp: false,\r\n      showControls: false,\r\n      showOutput: false,\r\n\r\n      debugMode: false,\r\n      controlsDisabled: true, // While this is a mess, no need to show it.\r\n\r\n      chordProgressionRaw: \"\",\r\n      chordProgressionChanged: false,\r\n\r\n      // This becomes true whenever we have a chord progression change, and the correct button is clicked.\r\n      // Returns to false after output finishes rendering\r\n      allowMelodyGeneration: \"\",\r\n      melodyLoaded: false,\r\n\r\n      isOnSupportedDevice: this._isOnSupportedDevice(),\r\n      isViewportWidthSupported: this._isViewportWidthSupported()\r\n    };\r\n\r\n    this.handleChange = this.handleChange.bind(this);\r\n    this.generateMelodies = this.generateMelodies.bind(this);\r\n    this.outputFinishCallback = this.outputFinishCallback.bind(this);\r\n    this.callbackChangeState = this.callbackChangeState.bind(this);\r\n    this._resizeHandler = this._resizeHandler.bind(this);\r\n    this.loadMusic = this.loadMusic.bind(this);\r\n\r\n    this.playMelody = this.playMelody.bind(this);\r\n    this.playMelodySolo = this.playMelodySolo.bind(this);\r\n    this.stopMusic = this.stopMusic.bind(this);\r\n    this.downloadMidi = this.downloadMidi.bind(this);\r\n  }\r\n\r\n  /**\r\n  * Checks the device/browser. Returns true if the browser is supported.\r\n  * Expected to run on loading the app.\r\n  */\r\n  _isOnSupportedDevice() {\r\n    var ua = navigator.userAgent;\r\n    // token explanation\r\n    // android - not supporting mobile\r\n    // trident - IE rendering engine. IE does not support the class JS keyword. Which is all over this codebase.\r\n    var isSupportedDevice = ua.search(/android|trident/i) == -1;\r\n    return isSupportedDevice;\r\n  }\r\n\r\n  /**\r\n  * Checks the device/browser. Returns true if the app will display properly in the given device screen.\r\n  * Expected to run when loading the app, and on window resize.\r\n  */\r\n  _isViewportWidthSupported() {\r\n    if(window.innerWidth >= this.store.MIN_SUPPORTED_WIDTH) {\r\n      return true;\r\n    } else {\r\n      return false\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Handler for browser resize event.\r\n  */\r\n  _resizeHandler() {\r\n    if(this._isViewportWidthSupported() && !this.state.isViewportWidthSupported) {\r\n      // state transition: non-supported VW to a supported VW\r\n      this.setState({isViewportWidthSupported: true});\r\n    } else if (!this._isViewportWidthSupported() && this.state.isViewportWidthSupported) {\r\n      // state transition: supported VW to a non-supported VW\r\n      this.setState({isViewportWidthSupported: false});\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Add event listener\r\n  */\r\n  componentDidMount() {\r\n    window.addEventListener(\"resize\", this._resizeHandler);\r\n  }\r\n\r\n  /**\r\n  * Remove event listener\r\n  */\r\n  componentWillUnmount() {\r\n    window.removeEventListener(\"resize\", this._resizeHandler);\r\n  }\r\n\r\n  _sendStatusUpdate(message) {\r\n    var updateEvent = new CustomEvent('statusUpdate', {detail: message});\r\n    document.body.dispatchEvent(updateEvent);\r\n  }\r\n\r\n  /**\r\n  * Changes app state. Meant to be called from child components\r\n  * @param {string} stateKey - App state to change\r\n  * @param {number|string|Object} newState - Assigns this to the state\r\n  * @param {boolean} [useDataStore] - If true, the data store is changed instead of the state object.\r\n  */\r\n  callbackChangeState(stateKey, newState, useDataStore) {\r\n    if(useDataStore) {\r\n      this.store[stateKey] = newState;\r\n    } else {\r\n      var stateObj = function() {\r\n        var returnObj = {};\r\n\r\n        returnObj[stateKey] = newState;\r\n\r\n        return returnObj;\r\n      }.bind(this)();\r\n\r\n      this.setState(stateObj);\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Changes app state. Meant to be called from child components.\r\n  * Older function, compared to callbackChangeState()\r\n  * @param {Object} event - React event\r\n  */\r\n  handleChange(event) {\r\n    var stateObj = function() {\r\n      var stateKey = this.target.dataset[\"stateKey\"];\r\n      var returnObj = {};\r\n\r\n      if(this.target.type === \"checkbox\") {\r\n        returnObj[stateKey] = this.target.checked;\r\n      } else if(this.target.type === \"button\") {\r\n        returnObj[stateKey] = this.target.dataset[\"currentState\"] === \"true\";\r\n      } else {\r\n        returnObj[stateKey] = this.target.value;\r\n\r\n        if(stateKey === \"chordProgressionRaw\") {\r\n          returnObj[\"chordProgressionChanged\"] = true;\r\n        }\r\n      }\r\n\r\n      return returnObj;\r\n    }.bind(event)();\r\n\r\n    this.setState(stateObj);\r\n  }\r\n\r\n  /**\r\n  * Loads melody data into the App. Meant to be used as a callback from the results table.\r\n  * @param {Object} event - React event\r\n  */\r\n  loadMusic(event) {\r\n    var melodyString = event.currentTarget.dataset[\"payload\"];\r\n    var melodiesData = melodyString.split(\";\");\r\n\r\n    var melody1 = melodiesData[0].split(\",\");\r\n    var melody2 = melodiesData[1].split(\",\");\r\n    var melody3 = melodiesData[2].split(\",\");\r\n\r\n    var melodies = [melody1, melody2, melody3];\r\n    this.store.melodies = melodies;\r\n    this.setState({melodyLoaded: true});\r\n\r\n    var newSelectionEvent = new Event(\"newSelection\");\r\n    document.body.dispatchEvent(newSelectionEvent);\r\n  }\r\n\r\n  /**\r\n  * Generates the melodies for the given chord progression.\r\n  * @param {Object} event - React event\r\n  */\r\n  generateMelodies(event) {\r\n    var chordProgression = this.state.chordProgressionRaw.trim().split(\" \");\r\n\r\n    if(!this.state.chordProgressionChanged || this.state.chordProgressionRaw.trim() === this.store.chordProgressionClean) {\r\n      // Chord progression hasn't changed. No need to continue.\r\n      console.debug(\"[AutoComposer.generateMelodies()] Chord progression hasn't changed. No generation for you.\");\r\n      return;\r\n    }\r\n\r\n    this.store.chordProgressionClean = this.state.chordProgressionRaw.trim();\r\n\r\n    try {\r\n      if(this.state.chordProgressionRaw == null || this.state.chordProgressionRaw == \"\") {\r\n        throw new AcInputException('Chord input is empty!');\r\n      }\r\n\r\n      chordProgression.forEach(function(currentChordInput) {\r\n        if(!AcLogic.isValidText(currentChordInput)) {\r\n          throw new AcInputException('Chord input \\'' + currentChordInput + '\\' is not formatted properly! You should check the chord dictionary in the Help! section.');\r\n        }\r\n      });\r\n\r\n      if(chordProgression.length < 2) {\r\n        throw new AcInputException('You need to enter more chords. Two chords in a row is a completely valid input.');\r\n      }\r\n\r\n      this._sendStatusUpdate(\"Generating melodies...\");\r\n      this.setState({showOutput: true, allowMelodyGeneration: true, melodyLoaded: false, showHelp: false});\r\n      this.store.melodies = [];\r\n\r\n\r\n      var newSelectionEvent = new Event(\"newSelection\");\r\n      document.body.dispatchEvent(newSelectionEvent);\r\n    } catch(exc) {\r\n      console.warn(\"[AutoComposer.generateMelodies()] \" + exc.message + \"\\nError Type = \" + exc.name);\r\n      this._sendStatusUpdate(\"[ERROR] \" + exc.message);\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Plays the loaded melody\r\n  * @param {Object} event - React event\r\n  */\r\n  playMelody(event) {\r\n    if(this.store.melodies.length > 0) {\r\n      AcMidi.playMelodyWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Plays the loaded melody by itself\r\n  * @param {Object} event - React event\r\n  */\r\n  playMelodySolo(event) {\r\n    if(this.store.melodies.length > 0) {\r\n      AcMidi.playMelodySolo(this.store.melodies[0]);\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Stops all music currently playing.\r\n  * @param {Object} event - React event\r\n  */\r\n  stopMusic(event) {\r\n    AcMidi.stopPlayback();\r\n  }\r\n\r\n  /**\r\n  * Creates and sends MIDI data to the user.\r\n  * @param {Object} event - React event\r\n  */\r\n  downloadMidi(event) {\r\n    if(this.store.melodies.length > 0) {\r\n      //download MIDI file\r\n      var dataString = AcMidi.buildMelodyMidiWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);\r\n      var timestamp = moment().format(\"YYMMDDHHmmss\");\r\n      var fileName = \"autocomposer_\" + timestamp + \"_\" + this.state.chordProgressionRaw.replace(/\\s+/g, \"-\");\r\n      download(dataString, fileName, \"audio/midi\");\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Callback that runs when output panel is finished rendering.\r\n  * Prevents melody generation until the user enters a new progression.\r\n  * @param {Object} event - React event\r\n  */\r\n  outputFinishCallback() {\r\n    this.setState({allowMelodyGeneration: false, chordProgressionChanged: false});\r\n  }\r\n\r\n  render() {\r\n    var chordProgressionArray = this.store.chordProgressionClean.split(\" \");\r\n    // Assume that we have an empty body tag.\r\n\r\n    if(this.state.isOnSupportedDevice && this.state.isViewportWidthSupported) {\r\n      return (\r\n        <div id=\"app-container\" className=\"root-panel\">\r\n          <div id=\"main-control-panel\" className=\"ac-panel\">\r\n\r\n            <div className=\"panel-row\">\r\n              <div className=\"ac-control-wrapper flex-lg\">\r\n                <h1 id=\"main-title\">AutoComposer</h1>\r\n              </div>\r\n            </div>\r\n\r\n            <div className=\"panel-row\">\r\n              <p>\r\n                This is a prototype for a program that automatically writes music. Click the <i className=\"fa fa-question\"></i> button to get started.\r\n                For more info, check out the <a href=\"https://github.com/rjsalvadorr/autocomposer-melody/wiki\" target=\"_blank\">project wiki</a> and <a href=\"https://github.com/rjsalvadorr/autocomposer-melody\" target=\"_blank\">repository</a>.\r\n              </p>\r\n            </div>\r\n\r\n            <div className=\"panel-row has-labels\">\r\n              <AcTextArea inputKey=\"chordProgressionRaw\" addClass=\"double-height\" value={this.state.chordProgressionRaw} placeholder={this.store.chordProgressionPlaceholder} onChange={this.handleChange} />\r\n              <AcButton inputKey=\"generateMelodies\" inputLabel=\"Generate\" wrapperAddClass=\"square\" addClass=\"double-height blue\" onClick={this.generateMelodies} isActive={!this.state.chordProgressionChanged}/>\r\n            </div>\r\n\r\n            <div className=\"panel-row\">\r\n              <AcButton inputKey=\"generateMelodies\" icon=\"play\" addClass=\"green\" wrapperAddClass=\"flex-lg\" onClick={this.playMelody} disabled={!this.state.melodyLoaded}/>\r\n              <AcButton inputKey=\"generateMelodies\" icon=\"play\" addClass=\"green\" inputLabel=\"Solo\" wrapperAddClass=\"flex-sm\" onClick={this.playMelodySolo} disabled={!this.state.melodyLoaded}/>\r\n              <AcButton inputKey=\"generateMelodies\" icon=\"stop\" addClass=\"red\" wrapperAddClass=\"flex-sm\" onClick={this.stopMusic} disabled={!this.state.melodyLoaded}/>\r\n              <AcButton inputKey=\"generateMelodies\" icon=\"download\" wrapperAddClass=\"flex-sm\" onClick={this.downloadMidi} disabled={!this.state.melodyLoaded}/>\r\n            </div>\r\n\r\n            <div className=\"panel-row\">\r\n              <AcToggleButton inputKey=\"showHelp\" icon=\"question\" wrapperAddClass=\"flex-sm\" isActive={this.state.showHelp} onClickHandler={this.callbackChangeState} />\r\n              <AcToggleButton inputKey=\"showControls\" icon=\"cog\" wrapperAddClass=\"flex-sm\" initialState={this.state.showControls} onClickHandler={this.callbackChangeState} disabled={this.state.controlsDisabled} />\r\n            </div>\r\n\r\n            <div className=\"panel-row\">\r\n              <StatusOutput inputKey=\"status-output\" value=\"status output...\" />\r\n            </div>\r\n\r\n            <DebugPanel isHidden={!this.state.debugMode} debugData={JSON.stringify(this.state, null, 2)}/>\r\n          </div>\r\n\r\n          <ControlPanel isShown={this.state.showControls} />\r\n\r\n          <HelpPanel isShown={this.state.showHelp} />\r\n\r\n          <OutputPanel isShown={this.state.showOutput} chordProgression={chordProgressionArray} allowMelodyGeneration={this.state.allowMelodyGeneration} outputCallback={this.outputFinishCallback} loadMelody={this.loadMusic} />\r\n\r\n        </div>\r\n      );\r\n    } else {\r\n      return (\r\n        <div id=\"app-container\" className=\"root-panel\">\r\n          <div id=\"not-supported-panel\" className=\"ac-panel\">\r\n            <h1>Where's the AutoComposer?!</h1>\r\n            <p>You're seeing this because your browser's window size is too small, or you're using a device that's not supported by the app.</p>\r\n          </div>\r\n        </div>\r\n      );\r\n    }\r\n  }\r\n}\r\n\r\nReactDOM.render(<AutoComposer />, document.getElementById('react-root'));\r\n",
+    "content": "const React = require('react');\r\nconst ReactDOM = require('react-dom');\r\nconst moment = require('moment');\r\n\r\nvar AutoComposerLogic = require('./autocomposer-logic');\r\nvar AcLogic = new AutoComposerLogic.AutoComposerLogic();\r\n\r\nvar AutoComposerMelody = require('./autocomposer-melody');\r\nvar AcMelody = new AutoComposerMelody.AutoComposerMelody();\r\n\r\nvar acMidi = require('./autocomposer-midi');\r\nvar AcMidi = new acMidi.AutoComposerMidi();\r\n\r\nvar AcButton = require('./react/ac-button');\r\nvar AcToggleButton = require('./react/ac-toggle-button');\r\nvar AcTextArea = require('./react/ac-textarea');\r\nvar StatusOutput = require('./react/status-output')\r\n\r\nvar HelpPanel = require('./react/help-panel');\r\nvar DebugPanel = require('./react/debug-panel');\r\nvar OutputPanel = require('./react/output-panel');\r\nvar ControlPanel = require('./react/control-panel');\r\n\r\n\r\n\r\nfunction AcInputException(message) {\r\n   this.message = message;\r\n   this.name = 'AcInputException';\r\n}\r\n\r\n\r\n\r\n/**\r\n* The core React component for the web app.\r\n*/\r\nclass AutoComposer extends React.Component {\r\n  constructor(props) {\r\n    super(props);\r\n\r\n    /**\r\n    * @type {Object} - Data store. Any changes to this data store will not cause an update.\r\n    */\r\n    this.store = {\r\n      melodies: [],\r\n      chordProgressionClean: \"\",\r\n      chordProgressionPlaceholder: AcLogic.INITIAL_PROGRESSION,\r\n      RESPONSIVE_BREAKPOINT_PHONE: 500,\r\n      RESPONSIVE_BREAKPOINT_TABLET: 768\r\n    };\r\n\r\n    /**\r\n    * @type {Object} - Component state. Changes to this will eventually trigger a render.\r\n    */\r\n    this.state = {\r\n      showHelp: false,\r\n      showControls: false,\r\n      showOutput: false,\r\n\r\n      debugMode: false,\r\n      controlsDisabled: true, // While this is a mess, no need to show it.\r\n\r\n      chordProgressionRaw: \"\",\r\n      chordProgressionChanged: false,\r\n\r\n      // This becomes true whenever we have a chord progression change, and the correct button is clicked.\r\n      // Returns to false after output finishes rendering\r\n      allowMelodyGeneration: \"\",\r\n      melodyLoaded: false,\r\n\r\n      isOnSupportedDevice: this._isOnSupportedDevice(),\r\n      isOnTablet: this._isOnTablet()\r\n    };\r\n\r\n    this.handleChange = this.handleChange.bind(this);\r\n    this.generateMelodies = this.generateMelodies.bind(this);\r\n    this.outputFinishCallback = this.outputFinishCallback.bind(this);\r\n    this.callbackChangeState = this.callbackChangeState.bind(this);\r\n    this._resizeHandler = this._resizeHandler.bind(this);\r\n    this.loadMusic = this.loadMusic.bind(this);\r\n\r\n    this.playMelody = this.playMelody.bind(this);\r\n    this.playMelodySolo = this.playMelodySolo.bind(this);\r\n    this.stopMusic = this.stopMusic.bind(this);\r\n    this.downloadMidi = this.downloadMidi.bind(this);\r\n  }\r\n\r\n  /**\r\n  * Checks the device/browser. Returns true if the browser is supported.\r\n  * Expected to run on loading the app.\r\n  */\r\n  _isOnSupportedDevice() {\r\n    var ua = navigator.userAgent;\r\n    // token explanation\r\n    // android - not supporting mobile\r\n    // trident - IE rendering engine. IE does not support the class JS keyword. Which is all over this codebase.\r\n    var isSupportedDevice = ua.search(/android|trident/i) == -1;\r\n    return isSupportedDevice;\r\n  }\r\n\r\n  /**\r\n  * Checks to see if the app should use a Tablet layout.\r\n  * Expected to run on loading the app, and when it resizes\r\n  */\r\n  _isOnTablet() {\r\n    if(window.innerWidth > this.store.RESPONSIVE_BREAKPOINT_PHONE && window.innerWidth <= this.store.RESPONSIVE_BREAKPOINT_TABLET) {\r\n      return true;\r\n    } else {\r\n      return false\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Handler for browser resize event.\r\n  */\r\n  _resizeHandler() {\r\n    if(this._isOnTablet() && !this.state.isOnTablet) {\r\n      // state transition: non-tablet VW to a tablet VW\r\n      this.setState({isOnTablet: true});\r\n    } else if (!this._isOnTablet() && this.state.isOnTablet) {\r\n      // state transition: tablet VW to a non-tablet VW\r\n      this.setState({isOnTablet: false});\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Add event listener\r\n  */\r\n  componentDidMount() {\r\n    window.addEventListener(\"resize\", this._resizeHandler);\r\n  }\r\n\r\n  /**\r\n  * Remove event listener\r\n  */\r\n  componentWillUnmount() {\r\n    window.removeEventListener(\"resize\", this._resizeHandler);\r\n  }\r\n\r\n  _sendStatusUpdate(message) {\r\n    var updateEvent = new CustomEvent('statusUpdate', {detail: message});\r\n    document.body.dispatchEvent(updateEvent);\r\n  }\r\n\r\n  /**\r\n  * Changes app state. Meant to be called from child components\r\n  * @param {string} stateKey - App state to change\r\n  * @param {number|string|Object} newState - Assigns this to the state\r\n  * @param {boolean} [useDataStore] - If true, the data store is changed instead of the state object.\r\n  */\r\n  callbackChangeState(stateKey, newState, useDataStore) {\r\n    if(useDataStore) {\r\n      this.store[stateKey] = newState;\r\n    } else {\r\n      var stateObj = function() {\r\n        var returnObj = {};\r\n\r\n        returnObj[stateKey] = newState;\r\n\r\n        return returnObj;\r\n      }.bind(this)();\r\n\r\n      this.setState(stateObj);\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Changes app state. Meant to be called from child components.\r\n  * Older function, compared to callbackChangeState()\r\n  * @param {Object} event - React event\r\n  */\r\n  handleChange(event) {\r\n    var stateObj = function() {\r\n      var stateKey = this.target.dataset[\"stateKey\"];\r\n      var returnObj = {};\r\n\r\n      if(this.target.type === \"checkbox\") {\r\n        returnObj[stateKey] = this.target.checked;\r\n      } else if(this.target.type === \"button\") {\r\n        returnObj[stateKey] = this.target.dataset[\"currentState\"] === \"true\";\r\n      } else {\r\n        returnObj[stateKey] = this.target.value;\r\n\r\n        if(stateKey === \"chordProgressionRaw\") {\r\n          returnObj[\"chordProgressionChanged\"] = true;\r\n        }\r\n      }\r\n\r\n      return returnObj;\r\n    }.bind(event)();\r\n\r\n    this.setState(stateObj);\r\n  }\r\n\r\n  /**\r\n  * Loads melody data into the App. Meant to be used as a callback from the results table.\r\n  * @param {Object} event - React event\r\n  */\r\n  loadMusic(event) {\r\n    var melodyString = event.currentTarget.dataset[\"payload\"];\r\n    var melodiesData = melodyString.split(\";\");\r\n\r\n    var melody1 = melodiesData[0].split(\",\");\r\n    var melody2 = melodiesData[1].split(\",\");\r\n    var melody3 = melodiesData[2].split(\",\");\r\n\r\n    var melodies = [melody1, melody2, melody3];\r\n    this.store.melodies = melodies;\r\n    this.setState({melodyLoaded: true});\r\n\r\n    var newSelectionEvent = new Event(\"newSelection\");\r\n    document.body.dispatchEvent(newSelectionEvent);\r\n  }\r\n\r\n  /**\r\n  * Generates the melodies for the given chord progression.\r\n  * @param {Object} event - React event\r\n  */\r\n  generateMelodies(event) {\r\n    var chordProgression = this.state.chordProgressionRaw.trim().split(\" \");\r\n\r\n    if(!this.state.chordProgressionChanged || this.state.chordProgressionRaw.trim() === this.store.chordProgressionClean) {\r\n      // Chord progression hasn't changed. No need to continue.\r\n      console.debug(\"[AutoComposer.generateMelodies()] Chord progression hasn't changed. No generation for you.\");\r\n      return;\r\n    }\r\n\r\n    this.store.chordProgressionClean = this.state.chordProgressionRaw.trim();\r\n\r\n    try {\r\n      if(this.state.chordProgressionRaw == null || this.state.chordProgressionRaw == \"\") {\r\n        throw new AcInputException('Chord input is empty!');\r\n      }\r\n\r\n      chordProgression.forEach(function(currentChordInput) {\r\n        if(!AcLogic.isValidText(currentChordInput)) {\r\n          throw new AcInputException('Chord input \\'' + currentChordInput + '\\' is not formatted properly! You should check the chord dictionary in the Help! section.');\r\n        }\r\n      });\r\n\r\n      if(chordProgression.length < 2) {\r\n        throw new AcInputException('You need to enter more chords. Two chords in a row is a completely valid input.');\r\n      }\r\n\r\n      this._sendStatusUpdate(\"Generating melodies...\");\r\n      this.setState({showOutput: true, allowMelodyGeneration: true, melodyLoaded: false, showHelp: false});\r\n      this.store.melodies = [];\r\n\r\n\r\n      var newSelectionEvent = new Event(\"newSelection\");\r\n      document.body.dispatchEvent(newSelectionEvent);\r\n    } catch(exc) {\r\n      console.warn(\"[AutoComposer.generateMelodies()] \" + exc.message + \"\\nError Type = \" + exc.name);\r\n      this._sendStatusUpdate(\"[ERROR] \" + exc.message);\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Plays the loaded melody\r\n  * @param {Object} event - React event\r\n  */\r\n  playMelody(event) {\r\n    if(this.store.melodies.length > 0) {\r\n      AcMidi.playMelodyWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Plays the loaded melody by itself\r\n  * @param {Object} event - React event\r\n  */\r\n  playMelodySolo(event) {\r\n    if(this.store.melodies.length > 0) {\r\n      AcMidi.playMelodySolo(this.store.melodies[0]);\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Stops all music currently playing.\r\n  * @param {Object} event - React event\r\n  */\r\n  stopMusic(event) {\r\n    AcMidi.stopPlayback();\r\n  }\r\n\r\n  /**\r\n  * Creates and sends MIDI data to the user.\r\n  * @param {Object} event - React event\r\n  */\r\n  downloadMidi(event) {\r\n    if(this.store.melodies.length > 0) {\r\n      //download MIDI file\r\n      var dataString = AcMidi.buildMelodyMidiWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);\r\n      var timestamp = moment().format(\"YYMMDDHHmmss\");\r\n      var fileName = \"autocomposer_\" + timestamp + \"_\" + this.state.chordProgressionRaw.replace(/\\s+/g, \"-\");\r\n      download(dataString, fileName, \"audio/midi\");\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Callback that runs when output panel is finished rendering.\r\n  * Prevents melody generation until the user enters a new progression.\r\n  * @param {Object} event - React event\r\n  */\r\n  outputFinishCallback() {\r\n    this.setState({allowMelodyGeneration: false, chordProgressionChanged: false});\r\n  }\r\n\r\n  render() {\r\n    var chordProgressionArray = this.store.chordProgressionClean.split(\" \");\r\n    var rootLayoutClass = \"root-panel\";\r\n    rootLayoutClass += this.state.isOnTablet ? \" layout-tablet\" : \" layout-non-tablet\";\r\n\r\n    if(this.state.isOnSupportedDevice) {\r\n      return (\r\n        <div id=\"app-container\" className={rootLayoutClass}>\r\n          <div id=\"main-control-panel\" className=\"ac-panel\">\r\n\r\n            <div className=\"panel-row\">\r\n              <div className=\"ac-control-wrapper flex-lg\">\r\n                <h1 id=\"main-title\">AutoComposer</h1>\r\n              </div>\r\n            </div>\r\n\r\n            <div className=\"panel-row\">\r\n              <p>\r\n                This is a prototype for a program that automatically writes music. Click the <i className=\"fa fa-question\"></i> button to get started.\r\n                For more info, check out the <a href=\"https://github.com/rjsalvadorr/autocomposer-melody/wiki\" target=\"_blank\">project wiki</a> and <a href=\"https://github.com/rjsalvadorr/autocomposer-melody\" target=\"_blank\">repository</a>.\r\n              </p>\r\n            </div>\r\n\r\n            <div className=\"panel-row has-labels\">\r\n              <AcTextArea inputKey=\"chordProgressionRaw\" addClass=\"double-height\" value={this.state.chordProgressionRaw} placeholder={this.store.chordProgressionPlaceholder} onChange={this.handleChange} />\r\n              <AcButton inputKey=\"generateMelodies\" inputLabel=\"Generate\" wrapperAddClass=\"square\" addClass=\"double-height blue\" onClick={this.generateMelodies} isActive={!this.state.chordProgressionChanged}/>\r\n            </div>\r\n\r\n            <div className=\"panel-row\">\r\n              <AcButton inputKey=\"generateMelodies\" icon=\"play\" addClass=\"green\" wrapperAddClass=\"flex-lg\" onClick={this.playMelody} disabled={!this.state.melodyLoaded}/>\r\n              <AcButton inputKey=\"generateMelodies\" icon=\"play\" addClass=\"green\" inputLabel=\"Solo\" wrapperAddClass=\"flex-sm\" onClick={this.playMelodySolo} disabled={!this.state.melodyLoaded}/>\r\n              <AcButton inputKey=\"generateMelodies\" icon=\"stop\" addClass=\"red\" wrapperAddClass=\"flex-sm\" onClick={this.stopMusic} disabled={!this.state.melodyLoaded}/>\r\n              <AcButton inputKey=\"generateMelodies\" icon=\"download\" wrapperAddClass=\"flex-sm\" onClick={this.downloadMidi} disabled={!this.state.melodyLoaded}/>\r\n            </div>\r\n\r\n            <div className=\"panel-row\">\r\n              <AcToggleButton inputKey=\"showHelp\" icon=\"question\" wrapperAddClass=\"flex-sm\" isActive={this.state.showHelp} onClickHandler={this.callbackChangeState} />\r\n              <AcToggleButton inputKey=\"showControls\" icon=\"cog\" wrapperAddClass=\"flex-sm\" initialState={this.state.showControls} onClickHandler={this.callbackChangeState} disabled={this.state.controlsDisabled} />\r\n            </div>\r\n\r\n            <div className=\"panel-row\">\r\n              <StatusOutput inputKey=\"status-output\" value=\"status output...\" />\r\n            </div>\r\n\r\n            <DebugPanel isHidden={!this.state.debugMode} debugData={JSON.stringify(this.state, null, 2)}/>\r\n          </div>\r\n\r\n          <ControlPanel isShown={this.state.showControls} />\r\n\r\n          <HelpPanel isShown={this.state.showHelp} />\r\n\r\n          <OutputPanel isShown={this.state.showOutput} chordProgression={chordProgressionArray} allowMelodyGeneration={this.state.allowMelodyGeneration} outputCallback={this.outputFinishCallback} loadMelody={this.loadMusic} />\n\n          <div id=\"not-supported-panel\" className=\"ac-panel\">\r\n            <h1>Where's the AutoComposer?!</h1>\r\n            <p>You're seeing this because your browser's window size is too small, or you're using a device that's not supported by the app.</p>\r\n          </div>\r\n\r\n        </div>\r\n      );\r\n    } else {\r\n      return (\r\n        <div id=\"app-container\" className=\"root-panel\">\r\n          <div id=\"not-supported-panel\" className=\"ac-panel\">\r\n            <h1>Where's the AutoComposer?!</h1>\r\n            <p>You're seeing this because your browser's window size is too small, or you're using a device that's not supported by the app.</p>\r\n          </div>\r\n        </div>\r\n      );\r\n    }\r\n  }\r\n}\r\n\r\nReactDOM.render(<AutoComposer />, document.getElementById('react-root'));\r\n",
     "static": true,
     "longname": "src/app-main.js",
     "access": null,
@@ -557,7 +557,7 @@
     "longname": "src/app-main.js~AutoComposer#state",
     "access": null,
     "description": "",
-    "lineNumber": 53,
+    "lineNumber": 54,
     "type": {
       "nullable": null,
       "types": [
@@ -576,7 +576,7 @@
     "longname": "src/app-main.js~AutoComposer#handleChange",
     "access": null,
     "description": null,
-    "lineNumber": 73,
+    "lineNumber": 74,
     "undocument": true,
     "unknown": [
       {
@@ -599,7 +599,7 @@
     "longname": "src/app-main.js~AutoComposer#generateMelodies",
     "access": null,
     "description": null,
-    "lineNumber": 74,
+    "lineNumber": 75,
     "undocument": true,
     "unknown": [
       {
@@ -622,7 +622,7 @@
     "longname": "src/app-main.js~AutoComposer#outputFinishCallback",
     "access": null,
     "description": null,
-    "lineNumber": 75,
+    "lineNumber": 76,
     "undocument": true,
     "unknown": [
       {
@@ -645,7 +645,7 @@
     "longname": "src/app-main.js~AutoComposer#callbackChangeState",
     "access": null,
     "description": null,
-    "lineNumber": 76,
+    "lineNumber": 77,
     "undocument": true,
     "unknown": [
       {
@@ -668,7 +668,7 @@
     "longname": "src/app-main.js~AutoComposer#_resizeHandler",
     "access": null,
     "description": null,
-    "lineNumber": 77,
+    "lineNumber": 78,
     "undocument": true,
     "unknown": [
       {
@@ -691,7 +691,7 @@
     "longname": "src/app-main.js~AutoComposer#loadMusic",
     "access": null,
     "description": null,
-    "lineNumber": 78,
+    "lineNumber": 79,
     "undocument": true,
     "unknown": [
       {
@@ -714,7 +714,7 @@
     "longname": "src/app-main.js~AutoComposer#playMelody",
     "access": null,
     "description": null,
-    "lineNumber": 80,
+    "lineNumber": 81,
     "undocument": true,
     "unknown": [
       {
@@ -737,7 +737,7 @@
     "longname": "src/app-main.js~AutoComposer#playMelodySolo",
     "access": null,
     "description": null,
-    "lineNumber": 81,
+    "lineNumber": 82,
     "undocument": true,
     "unknown": [
       {
@@ -760,7 +760,7 @@
     "longname": "src/app-main.js~AutoComposer#stopMusic",
     "access": null,
     "description": null,
-    "lineNumber": 82,
+    "lineNumber": 83,
     "undocument": true,
     "unknown": [
       {
@@ -783,7 +783,7 @@
     "longname": "src/app-main.js~AutoComposer#downloadMidi",
     "access": null,
     "description": null,
-    "lineNumber": 83,
+    "lineNumber": 84,
     "undocument": true,
     "unknown": [
       {
@@ -808,7 +808,7 @@
     "longname": "src/app-main.js~AutoComposer#_isOnSupportedDevice",
     "access": null,
     "description": "Checks the device/browser. Returns true if the browser is supported.\nExpected to run on loading the app.",
-    "lineNumber": 90,
+    "lineNumber": 91,
     "params": [],
     "return": {
       "types": [
@@ -819,15 +819,15 @@
   {
     "__docId__": 34,
     "kind": "method",
-    "name": "_isViewportWidthSupported",
+    "name": "_isOnTablet",
     "memberof": "src/app-main.js~AutoComposer",
     "generator": false,
     "async": false,
     "static": false,
-    "longname": "src/app-main.js~AutoComposer#_isViewportWidthSupported",
+    "longname": "src/app-main.js~AutoComposer#_isOnTablet",
     "access": null,
-    "description": "Checks the device/browser. Returns true if the app will display properly in the given device screen.\nExpected to run when loading the app, and on window resize.",
-    "lineNumber": 103,
+    "description": "Checks to see if the app should use a Tablet layout.\nExpected to run on loading the app, and when it resizes",
+    "lineNumber": 104,
     "params": [],
     "return": {
       "types": [
@@ -846,7 +846,7 @@
     "longname": "src/app-main.js~AutoComposer#_resizeHandler",
     "access": null,
     "description": "Handler for browser resize event.",
-    "lineNumber": 114,
+    "lineNumber": 115,
     "params": []
   },
   {
@@ -860,7 +860,7 @@
     "longname": "src/app-main.js~AutoComposer#componentDidMount",
     "access": null,
     "description": "Add event listener",
-    "lineNumber": 127,
+    "lineNumber": 128,
     "params": []
   },
   {
@@ -874,7 +874,7 @@
     "longname": "src/app-main.js~AutoComposer#componentWillUnmount",
     "access": null,
     "description": "Remove event listener",
-    "lineNumber": 134,
+    "lineNumber": 135,
     "params": []
   },
   {
@@ -888,7 +888,7 @@
     "longname": "src/app-main.js~AutoComposer#_sendStatusUpdate",
     "access": null,
     "description": null,
-    "lineNumber": 138,
+    "lineNumber": 139,
     "undocument": true,
     "unknown": [
       {
@@ -916,7 +916,7 @@
     "longname": "src/app-main.js~AutoComposer#callbackChangeState",
     "access": null,
     "description": "Changes app state. Meant to be called from child components",
-    "lineNumber": 149,
+    "lineNumber": 150,
     "params": [
       {
         "nullable": null,
@@ -963,7 +963,7 @@
     "longname": "src/app-main.js~AutoComposer#handleChange",
     "access": null,
     "description": "Changes app state. Meant to be called from child components.\nOlder function, compared to callbackChangeState()",
-    "lineNumber": 170,
+    "lineNumber": 171,
     "params": [
       {
         "nullable": null,
@@ -988,7 +988,7 @@
     "longname": "src/app-main.js~AutoComposer#loadMusic",
     "access": null,
     "description": "Loads melody data into the App. Meant to be used as a callback from the results table.",
-    "lineNumber": 197,
+    "lineNumber": 198,
     "params": [
       {
         "nullable": null,
@@ -1013,7 +1013,7 @@
     "longname": "src/app-main.js~AutoComposer#generateMelodies",
     "access": null,
     "description": "Generates the melodies for the given chord progression.",
-    "lineNumber": 217,
+    "lineNumber": 218,
     "params": [
       {
         "nullable": null,
@@ -1038,7 +1038,7 @@
     "longname": "src/app-main.js~AutoComposer#playMelody",
     "access": null,
     "description": "Plays the loaded melody",
-    "lineNumber": 260,
+    "lineNumber": 261,
     "params": [
       {
         "nullable": null,
@@ -1063,7 +1063,7 @@
     "longname": "src/app-main.js~AutoComposer#playMelodySolo",
     "access": null,
     "description": "Plays the loaded melody by itself",
-    "lineNumber": 270,
+    "lineNumber": 271,
     "params": [
       {
         "nullable": null,
@@ -1088,7 +1088,7 @@
     "longname": "src/app-main.js~AutoComposer#stopMusic",
     "access": null,
     "description": "Stops all music currently playing.",
-    "lineNumber": 280,
+    "lineNumber": 281,
     "params": [
       {
         "nullable": null,
@@ -1113,7 +1113,7 @@
     "longname": "src/app-main.js~AutoComposer#downloadMidi",
     "access": null,
     "description": "Creates and sends MIDI data to the user.",
-    "lineNumber": 288,
+    "lineNumber": 289,
     "params": [
       {
         "nullable": null,
@@ -1138,7 +1138,7 @@
     "longname": "src/app-main.js~AutoComposer#outputFinishCallback",
     "access": null,
     "description": "Callback that runs when output panel is finished rendering.\nPrevents melody generation until the user enters a new progression.",
-    "lineNumber": 303,
+    "lineNumber": 304,
     "params": [
       {
         "nullable": null,
@@ -1163,7 +1163,7 @@
     "longname": "src/app-main.js~AutoComposer#render",
     "access": null,
     "description": null,
-    "lineNumber": 307,
+    "lineNumber": 308,
     "undocument": true,
     "unknown": [
       {

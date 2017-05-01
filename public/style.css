@@ -20,6 +20,7 @@
 }
 .ac-panel#not-supported-panel {
   width: 100%;
+  display: none;
 }
 #control-panel + #output-panel,
 #help-panel + #output-panel {
@@ -390,5 +391,13 @@ table#ac-melody-output th {
   }
   h6 {
     font-size: 0.7em;
+  }
+}
+@media (max-width: 500px) {
+  .ac-panel {
+    display: none;
+  }
+  .ac-panel#not-supported-panel {
+    display: block;
   }
 }

@@ -44,7 +44,8 @@ class AutoComposer extends React.Component {
       melodies: [],
       chordProgressionClean: "",
       chordProgressionPlaceholder: AcLogic.INITIAL_PROGRESSION,
-      MIN_SUPPORTED_WIDTH: 500
+      RESPONSIVE_BREAKPOINT_PHONE: 500,
+      RESPONSIVE_BREAKPOINT_TABLET: 768
     };
 
     /**
@@ -67,7 +68,7 @@ class AutoComposer extends React.Component {
       melodyLoaded: false,
 
       isOnSupportedDevice: this._isOnSupportedDevice(),
-      isViewportWidthSupported: this._isViewportWidthSupported()
+      isOnTablet: this._isOnTablet()
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -97,11 +98,11 @@ class AutoComposer extends React.Component {
   }
 
   /**
-  * Checks the device/browser. Returns true if the app will display properly in the given device screen.
-  * Expected to run when loading the app, and on window resize.
+  * Checks to see if the app should use a Tablet layout.
+  * Expected to run on loading the app, and when it resizes
   */
-  _isViewportWidthSupported() {
-    if(window.innerWidth >= this.store.MIN_SUPPORTED_WIDTH) {
+  _isOnTablet() {
+    if(window.innerWidth > this.store.RESPONSIVE_BREAKPOINT_PHONE && window.innerWidth <= this.store.RESPONSIVE_BREAKPOINT_TABLET) {
       return true;
     } else {
       return false
@@ -112,12 +113,12 @@ class AutoComposer extends React.Component {
   * Handler for browser resize event.
   */
   _resizeHandler() {
-    if(this._isViewportWidthSupported() && !this.state.isViewportWidthSupported) {
-      // state transition: non-supported VW to a supported VW
-      this.setState({isViewportWidthSupported: true});
-    } else if (!this._isViewportWidthSupported() && this.state.isViewportWidthSupported) {
-      // state transition: supported VW to a non-supported VW
-      this.setState({isViewportWidthSupported: false});
+    if(this._isOnTablet() && !this.state.isOnTablet) {
+      // state transition: non-tablet VW to a tablet VW
+      this.setState({isOnTablet: true});
+    } else if (!this._isOnTablet() && this.state.isOnTablet) {
+      // state transition: tablet VW to a non-tablet VW
+      this.setState({isOnTablet: false});
     }
   }
 
@@ -306,11 +307,12 @@ class AutoComposer extends React.Component {
 
   render() {
     var chordProgressionArray = this.store.chordProgressionClean.split(" ");
-    // Assume that we have an empty body tag.
+    var rootLayoutClass = "root-panel";
+    rootLayoutClass += this.state.isOnTablet ? " layout-tablet" : " layout-non-tablet";
 
-    if(this.state.isOnSupportedDevice && this.state.isViewportWidthSupported) {
+    if(this.state.isOnSupportedDevice) {
       return (
-        <div id="app-container" className="root-panel">
+        <div id="app-container" className={rootLayoutClass}>
           <div id="main-control-panel" className="ac-panel">
 
             <div className="panel-row">
@@ -355,6 +357,11 @@ class AutoComposer extends React.Component {
           <HelpPanel isShown={this.state.showHelp} />
 
           <OutputPanel isShown={this.state.showOutput} chordProgression={chordProgressionArray} allowMelodyGeneration={this.state.allowMelodyGeneration} outputCallback={this.outputFinishCallback} loadMelody={this.loadMusic} />
+
+          <div id="not-supported-panel" className="ac-panel">
+            <h1>Where's the AutoComposer?!</h1>
+            <p>You're seeing this because your browser's window size is too small, or you're using a device that's not supported by the app.</p>
+          </div>
 
         </div>
       );

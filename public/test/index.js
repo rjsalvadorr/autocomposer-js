@@ -13787,7 +13787,7 @@ Object.defineProperty(exports, "__esModule", {
  */
 
 var Constants = {
-	VERSION: '1.4.6',
+	VERSION: '1.4.7',
 	HEADER_CHUNK_TYPE: [0x4d, 0x54, 0x68, 0x64], // Mthd
 	HEADER_CHUNK_LENGTH: [0x00, 0x00, 0x00, 0x06], // Header size for SMF
 	HEADER_CHUNK_FORMAT0: [0x00, 0x00], // Midi Type 0 id
@@ -14331,6 +14331,22 @@ var Track = function () {
 		key: 'addCopyright',
 		value: function addCopyright(text) {
 			var event = new MetaEvent({ data: [Constants.META_COPYRIGHT_ID] });
+			var stringBytes = Utils.stringToBytes(text);
+			event.data = event.data.concat(Utils.numberToVariableLength(stringBytes.length)); // Size
+			event.data = event.data.concat(stringBytes); // Text
+			return this.addEvent(event);
+		}
+
+		/**
+   * Adds Sequence/Track Name.
+   * @param {string} text - Text of track name.
+   * @return {Track}
+   */
+
+	}, {
+		key: 'addTrackName',
+		value: function addTrackName(text) {
+			var event = new MetaEvent({ data: [Constants.META_TRACK_NAME_ID] });
 			var stringBytes = Utils.stringToBytes(text);
 			event.data = event.data.concat(Utils.numberToVariableLength(stringBytes.length)); // Size
 			event.data = event.data.concat(stringBytes); // Text
@@ -14985,6 +15001,10 @@ process.off = noop;
 process.removeListener = noop;
 process.removeAllListeners = noop;
 process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
 
 process.binding = function (name) {
     throw new Error('process.binding is not supported');
