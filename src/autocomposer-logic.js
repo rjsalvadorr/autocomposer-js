@@ -42,7 +42,31 @@ class AutoComposerLogic {
 
     return highest - lowest <= 12;
   }
-  
+
+  /**
+  * Filters out melodies that are too repetitive. For our purposes, three of the same notes in a row would be too repetitive.
+  * Assumes a melody with at least three notes.
+  * @param {string} melodyString - String representing the melody
+  * @return {boolean} - Returns false if the melody is too repetitive
+  */
+  filterRepetition(melodyString) {
+    var melodyArray = melodyString.split(" ");
+    var isNotRepetitive = true, ctrRepetitions = 0;
+
+    for(var i = 0; i < melodyArray.length - 1; i++) {
+      if(melodyArray[i] === melodyArray[i + 1]) {
+        // repetition found.
+        ctrRepetitions++;
+      }
+      if(ctrRepetitions >= 2) {
+        // this melody is too repetitive!
+        isNotRepetitive = false;
+        break;
+      }
+    }
+
+    return isNotRepetitive;
+  }
     /**
     * Parses text, and determines if user input represents a valid note/chord.
     * @param {string} input - value given by the user

@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/react/help-panel.js | AutoComposer API Document</title>
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">test/autocomposer-logic.js | AutoComposer API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -54,106 +54,81 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">src/react/help-panel.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">var React = require(&apos;react&apos;);
-var AutoComposerLogic = require(&apos;../autocomposer-logic&apos;);
-var AcLogic = new AutoComposerLogic.AutoComposerLogic();
+<div class="content" data-ice="content"><h1 data-ice="title">test/autocomposer-logic.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">var assert = require(&apos;assert&apos;);
 
-/**
-* React Component representing the Help/Info Panel
-*/
-class HelpPanel extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      chordArray: AcLogic.getChordDictionary(true)
-    }
-  }
+var AcLogic = require(&apos;../src/autocomposer-logic&apos;);
+var AutoComposerLogic = new AcLogic.AutoComposerLogic();
 
-  buildChordDictionary() {
-    var dictionaryItems = [];
-    var ctr = 1;
+describe(&apos;AutoComposerLogic&apos;, function() {
+  describe(&apos;#filterMelodyRange&apos;, function() {
+    it(&apos;should filter out melodies that have a range larger than an octave&apos;, function() {
+      // The filter function runs on each note addition for the melody generating function.
+      // So it should only be expected to look at the difference between the last two notes.
 
-    this.state.chordArray.forEach(function(chordString) {
-      dictionaryItems.push(&lt;li key={&quot;chordType&quot; + ctr}&gt;{chordString}&lt;/li&gt;);
-      ctr++;
+      melodySmallRange = &quot;C4 G4 A4&quot;;
+      melodyOctaveRange = &quot;G4 C4 C5&quot;;
+      melodyBigRange = &quot;G4 C4 D5&quot;;
+
+      assert.equal(AutoComposerLogic.filterMelodyRange(melodySmallRange), true);
+      assert.equal(AutoComposerLogic.filterMelodyRange(melodyOctaveRange), true);
+      assert.equal(AutoComposerLogic.filterMelodyRange(melodyBigRange), false);
+    });
+  });
+
+  describe(&apos;#filterRepetition&apos;, function() {
+    it(&apos;should filter out melodies that are too repetitive&apos;, function() {
+      melodyNoRepeats = &quot;C4 G4 A4 E5&quot;;
+      melodyOneRepeat = &quot;C4 G4 G4 C5 E5&quot;;
+      melodyTwoRepeats = &quot;C4 C4 G4 D5 D5 E3&quot;;
+      melodyTwoSuccessiveRepeats = &quot;C4 G4 G4 G4 D5 C5&quot;;
+
+      assert.equal(AutoComposerLogic.filterRepetition(melodyNoRepeats), true);
+      assert.equal(AutoComposerLogic.filterRepetition(melodyOneRepeat), true);
+      assert.equal(AutoComposerLogic.filterRepetition(melodyTwoRepeats), false);
+      assert.equal(AutoComposerLogic.filterRepetition(melodyTwoSuccessiveRepeats), false);
+    });
+  });
+
+  describe(&apos;#isValidText&apos;, function() {
+    it(&apos;should return true for chord inputs&apos;, function() {
+      assert.equal(AutoComposerLogic.isValidText(&apos;Gm7&apos;), true);
+      assert.equal(AutoComposerLogic.isValidText(&apos;C&apos;), true);
+      assert.equal(AutoComposerLogic.isValidText(&apos;D7&apos;), true);
+      assert.equal(AutoComposerLogic.isValidText(&apos;A#m7b5&apos;), true);
     });
 
-    return(
-      &lt;ul id=&quot;chord-dictionary&quot;&gt;
-        {dictionaryItems}
-      &lt;/ul&gt;
-    );
-  }
+    it(&apos;should return false for non-chord inputs&apos;, function() {
+      assert.equal(AutoComposerLogic.isValidText(&apos;H2&apos;), false);
+      assert.equal(AutoComposerLogic.isValidText(&apos;456456&apos;), false);
+      assert.equal(AutoComposerLogic.isValidText(&apos;Something really silly&apos;), false);
+    });
+  });
 
-  render() {
-    var lowestPitch = AcLogic.DEFAULT_LOWER_LIMIT;
-    var highestPitch = AcLogic.DEFAULT_UPPER_LIMIT;
+  describe(&apos;#convertAsciiAccidentalsToHtml&apos;, function() {
+    it(&apos;should convert ASCII accidentals to Unicode HTML entities&apos;, function() {
+      assert.equal(AutoComposerLogic.convertAsciiAccidentalsToHtml(&apos;Bb&apos;), &apos;B&amp;#9837;&apos;);
+      assert.equal(AutoComposerLogic.convertAsciiAccidentalsToHtml(&apos;C#&apos;), &apos;C&amp;#9839;&apos;);
+      assert.equal(AutoComposerLogic.convertAsciiAccidentalsToHtml(&apos;Fo&apos;), &apos;F&amp;&#x200C;deg;&apos;);
+    });
+  });
 
-    var lowestPitchAccomp = AcLogic.ACCOMPANIMENT_LOWER_LIMIT;
-    var highestPitchAccomp = AcLogic.ACCOMPANIMENT_UPPER_LIMIT;
+  describe(&apos;#convertAsciiAccidentalsToText&apos;, function() {
+    it(&apos;should convert ASCII accentals to Unicode versions&apos;, function() {
+      assert.equal(AutoComposerLogic.convertAsciiAccidentalsToText(&apos;Bb&apos;), &apos;B&#x266D;&apos;);
+      assert.equal(AutoComposerLogic.convertAsciiAccidentalsToText(&apos;C#&apos;), &apos;C&#x266F;&apos;);
+      assert.equal(AutoComposerLogic.convertAsciiAccidentalsToText(&apos;Fo&apos;), &apos;F&#xB0;&apos;);
+    });
+  });
 
-    var lowestPitchBass = AcLogic.BASS_LOWER_LIMIT;
-    var highestPitchBass = AcLogic.BASS_UPPER_LIMIT;
-
-    if(this.props.isShown) {
-      return (
-        &lt;div id=&quot;help-panel&quot; className=&quot;ac-panel output-panel&quot;&gt;
-          &lt;div className=&quot;panel-spacer&quot;&gt;
-            &lt;h2&gt;Help!&lt;/h2&gt;
-            &lt;p&gt;How to use this web app:&lt;/p&gt;
-
-            &lt;ol&gt;
-              &lt;li&gt;Enter a chord progression in the text box.&lt;/li&gt;
-              &lt;li&gt;Click the &lt;strong&gt;Generate&lt;/strong&gt; button.&lt;/li&gt;
-              &lt;li&gt;Squeal in delight, as the promised melodies are shown on the screen.&lt;/li&gt;
-              &lt;li&gt;Click a melody.&lt;/li&gt;
-              &lt;li&gt;Hit the &lt;i className=&quot;fa fa-play&quot;&gt;&lt;/i&gt; button!&lt;/li&gt;
-            &lt;/ol&gt;
-
-            &lt;p&gt;Other features:&lt;/p&gt;
-
-            &lt;ul&gt;
-              &lt;li&gt;You can download the loaded music by clicking the &lt;i className=&quot;fa fa-download&quot;&gt;&lt;/i&gt; button. The melody will be saved as a MIDI file, containing the generated melody and accompaniment.&lt;/li&gt;
-              &lt;li&gt;You can also save the score as an image. Just right click it and download!&lt;/li&gt;
-            &lt;/ul&gt;
-
-            &lt;h2&gt;Chord Dictionary&lt;/h2&gt;
-            &lt;p&gt;These are the chords you can use for this application:&lt;/p&gt;
-            {this.buildChordDictionary()}
-
-            &lt;h2&gt;Technical Info&lt;/h2&gt;
-            &lt;ul&gt;
-              &lt;li&gt;Smoothness = the distance between notes in the melody (in semitones), all added together&lt;/li&gt;
-              &lt;li&gt;Range = distance between the lowest note and the highest note (in semitones)&lt;/li&gt;
-              &lt;li&gt;The MIDI instruments for the voices are:
-                &lt;ul&gt;
-                  &lt;li&gt;Violin&lt;/li&gt;
-                  &lt;li&gt;Piano&lt;/li&gt;
-                  &lt;li&gt;Bass (plucked)&lt;/li&gt;
-                &lt;/ul&gt;
-              &lt;/li&gt;
-              &lt;li&gt;Melody range is {lowestPitch} to {highestPitch}&lt;/li&gt;
-              &lt;li&gt;Accompaniment range is {lowestPitchAccomp} to {highestPitch}&lt;/li&gt;
-              &lt;li&gt;Bass range is {lowestPitchBass} to {highestPitchBass}&lt;/li&gt;
-            &lt;/ul&gt;
-
-            &lt;p&gt;Melodies are filtered/sorted by a few rules:&lt;/p&gt;
-            &lt;ul&gt;
-              &lt;li&gt;Only the 100 smoothest melodies are shown&lt;/li&gt;
-              &lt;li&gt;Range must be no greater than one octave&lt;/li&gt;
-              &lt;li&gt;Only one repetition occurs in the melody&lt;/li&gt;
-            &lt;/ul&gt;
-          &lt;/div&gt;
-        &lt;/div&gt;
-      );
-    } else {
-      return null;
-    }
-  }
-}
-
-module.exports = HelpPanel;
+  describe(&apos;#convertAccidentalsToAscii&apos;, function() {
+    it(&apos;should convert Unicode accentals to ASCII versions&apos;, function() {
+      assert.equal(AutoComposerLogic.convertAccidentalsToAscii(&apos;B&#x266D;&apos;), &apos;Bb&apos;);
+      assert.equal(AutoComposerLogic.convertAccidentalsToAscii(&apos;C&#x266F;&apos;), &apos;C#&apos;);
+      assert.equal(AutoComposerLogic.convertAccidentalsToAscii(&apos;F&#xB0;&apos;), &apos;Fo&apos;);
+    });
+  });
+});
 </code></pre>
 
 </div>

@@ -109,79 +109,85 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/autocomposer-data.js.html#lineNumber6",
+    "test-file/test/autocomposer-logic.js.html#lineNumber6",
     "AutoComposerLogic",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber6",
-    "AutoComposerLogic",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber38",
+    "test-file/test/autocomposer-logic.js.html#lineNumber67",
     "AutoComposerLogic #convertAccidentalsToAscii",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber39",
+    "test-file/test/autocomposer-logic.js.html#lineNumber68",
     "AutoComposerLogic #convertAccidentalsToAscii should convert Unicode accentals to ASCII versions",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber22",
+    "test-file/test/autocomposer-logic.js.html#lineNumber51",
     "AutoComposerLogic #convertAsciiAccidentalsToHtml",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber23",
+    "test-file/test/autocomposer-logic.js.html#lineNumber52",
     "AutoComposerLogic #convertAsciiAccidentalsToHtml should convert ASCII accidentals to Unicode HTML entities",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber30",
+    "test-file/test/autocomposer-logic.js.html#lineNumber59",
     "AutoComposerLogic #convertAsciiAccidentalsToText",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber31",
+    "test-file/test/autocomposer-logic.js.html#lineNumber60",
     "AutoComposerLogic #convertAsciiAccidentalsToText should convert ASCII accentals to Unicode versions",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-data.js.html#lineNumber7",
+    "test-file/test/autocomposer-logic.js.html#lineNumber7",
     "AutoComposerLogic #filterMelodyRange",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-data.js.html#lineNumber8",
+    "test-file/test/autocomposer-logic.js.html#lineNumber8",
     "AutoComposerLogic #filterMelodyRange should filter out melodies that have a range larger than an octave",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber7",
+    "test-file/test/autocomposer-logic.js.html#lineNumber22",
+    "AutoComposerLogic #filterRepetition",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-logic.js.html#lineNumber23",
+    "AutoComposerLogic #filterRepetition should filter out melodies that are too repetitive",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-logic.js.html#lineNumber36",
     "AutoComposerLogic #isValidText",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber15",
+    "test-file/test/autocomposer-logic.js.html#lineNumber44",
     "AutoComposerLogic #isValidText should return false for non-chord inputs",
     "test"
   ],
   [
     "",
-    "test-file/test/autocomposer-parser.js.html#lineNumber8",
+    "test-file/test/autocomposer-logic.js.html#lineNumber37",
     "AutoComposerLogic #isValidText should return true for chord inputs",
     "test"
   ],
@@ -711,6 +717,12 @@ window.esdocSearchIndex = [
     "src/autocomposer-logic.js~autocomposerlogic#filtermelodyrange",
     "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-method-filterMelodyRange",
     "src/autocomposer-logic.js~AutoComposerLogic#filterMelodyRange",
+    "method"
+  ],
+  [
+    "src/autocomposer-logic.js~autocomposerlogic#filterrepetition",
+    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-method-filterRepetition",
+    "src/autocomposer-logic.js~AutoComposerLogic#filterRepetition",
     "method"
   ],
   [
@@ -1386,21 +1398,15 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "test/autocomposer-data.js",
-    "test-file/test/autocomposer-data.js.html",
-    "test/autocomposer-data.js",
+    "test/autocomposer-logic.js",
+    "test-file/test/autocomposer-logic.js.html",
+    "test/autocomposer-logic.js",
     "testFile"
   ],
   [
     "test/autocomposer-melody.js",
     "test-file/test/autocomposer-melody.js.html",
     "test/autocomposer-melody.js",
-    "testFile"
-  ],
-  [
-    "test/autocomposer-parser.js",
-    "test-file/test/autocomposer-parser.js.html",
-    "test/autocomposer-parser.js",
     "testFile"
   ]
 ]

@@ -482,6 +482,34 @@
         <p>
           
           
+          <span data-ice="name"><span><a href="class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-method-filterRepetition">filterRepetition</a></span></span><span data-ice="signature">(melodyString: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Filters out melodies that are too repetitive.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
           <span data-ice="name"><span><a href="class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-method-getChordDictionary">getChordDictionary</a></span></span><span data-ice="signature">(): <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span></span>
         </p>
       </div>
@@ -940,7 +968,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/autocomposer-logic.js.html#lineNumber89">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/autocomposer-logic.js.html#lineNumber113">source</a></span></span>
     </span>
   </h3>
 
@@ -1014,7 +1042,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/autocomposer-logic.js.html#lineNumber63">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/autocomposer-logic.js.html#lineNumber87">source</a></span></span>
     </span>
   </h3>
 
@@ -1088,7 +1116,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/autocomposer-logic.js.html#lineNumber76">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/autocomposer-logic.js.html#lineNumber100">source</a></span></span>
     </span>
   </h3>
 
@@ -1225,6 +1253,81 @@
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-filterRepetition">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span data-ice="name">filterRepetition</span><span data-ice="signature">(melodyString: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/autocomposer-logic.js.html#lineNumber52">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Filters out melodies that are too repetitive. For our purposes, three of the same notes in a row would be too repetitive.
+Assumes a melody with at least three notes.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">melodyString</td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>String representing the melody</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Returns false if the melody is too repetitive</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-getChordDictionary">
     <span class="access" data-ice="access">public</span>
     
@@ -1293,7 +1396,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/autocomposer-logic.js.html#lineNumber51">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/autocomposer-logic.js.html#lineNumber75">source</a></span></span>
     </span>
   </h3>
 

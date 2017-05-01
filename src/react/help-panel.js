@@ -83,10 +83,9 @@ class HelpPanel extends React.Component {
 
             <p>Melodies are filtered/sorted by a few rules:</p>
             <ul>
-              <li>Range must be no greater than one octave</li>
-              <li>Melodies that repeat the same note three times are not shown.</li>
-              <li>Smoothest melodies are shown first</li>
               <li>Only the 100 smoothest melodies are shown</li>
+              <li>Range must be no greater than one octave</li>
+              <li>Only one repetition occurs in the melody</li>
             </ul>
           </div>
         </div>
