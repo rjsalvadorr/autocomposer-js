@@ -63,7 +63,8 @@ class AutoComposer extends React.Component {
     */
     this.store = {
       melodies: [],
-      chordProgressionPlaceholder: AcLogic.INITIAL_PROGRESSION,
+      chordProgressionClean: "",
+      chordProgressionPlaceholder: AcLogic.INITIAL_PROGRESSION
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -160,11 +161,13 @@ class AutoComposer extends React.Component {
   generateMelodies(event) {
     var chordProgression = this.state.chordProgressionRaw.trim().split(" ");
 
-    if(!this.state.chordProgressionChanged) {
+    if(!this.state.chordProgressionChanged || this.state.chordProgressionRaw.trim() === this.store.chordProgressionClean) {
       // Chord progression hasn't changed. No need to continue.
       console.debug("[AutoComposer.generateMelodies()] Chord progression hasn't changed. No generation for you.");
       return;
     }
+
+    this.store.chordProgressionClean = this.state.chordProgressionRaw.trim();
 
     try {
       if(this.state.chordProgressionRaw == null || this.state.chordProgressionRaw == "") {
@@ -184,6 +187,7 @@ class AutoComposer extends React.Component {
       this._sendStatusUpdate("Generating melodies...");
       this.setState({showOutput: true, allowMelodyGeneration: true, melodyLoaded: false, showHelp: false});
       this.store.melodies = [];
+
 
       var newSelectionEvent = new Event("newSelection");
       document.body.dispatchEvent(newSelectionEvent);
@@ -245,7 +249,7 @@ class AutoComposer extends React.Component {
   }
 
   render() {
-    var chordProgressionArray = this.state.chordProgressionRaw.split(" ");
+    var chordProgressionArray = this.store.chordProgressionClean.split(" ");
     // Assume that we have an empty body tag.
     return (
       <div id="app-container" className="root-panel">

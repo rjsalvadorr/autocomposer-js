@@ -33,7 +33,7 @@ class OutputPanel extends React.Component {
   componentWillReceiveProps(nextProps, nextState){
     if(nextProps.allowMelodyGeneration) {
       console.debug("[OutputPanel.componentWillReceiveProps()] Generating melodies...");
-      var chordProgression = this.props.chordProgression;
+      var chordProgression = nextProps.chordProgression;
       this.setState({melodyUnitList: AcMelody.getMelodies(chordProgression)});
     }
   }
