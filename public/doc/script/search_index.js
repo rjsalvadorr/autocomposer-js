@@ -42,6 +42,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "autocomposer-melody/src/autocomposer-main.js~autocomposer",
+    "class/src/autocomposer-main.js~AutoComposer.html",
+    "<span>AutoComposer</span> <span class=\"search-result-import-path\">autocomposer-melody/src/autocomposer-main.js</span>",
+    "class"
+  ],
+  [
     "autocomposer-melody/src/autocomposer-logic.js~autocomposerlogic",
     "class/src/autocomposer-logic.js~AutoComposerLogic.html",
     "<span>AutoComposerLogic</span> <span class=\"search-result-import-path\">autocomposer-melody/src/autocomposer-logic.js</span>",
@@ -106,6 +112,12 @@ window.esdocSearchIndex = [
     "class/src/react/status-output.js~StatusOutput.html",
     "<span>StatusOutput</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/status-output.js</span>",
     "class"
+  ],
+  [
+    "autocomposer-melody/src/autocomposer-main.js~autocomposer",
+    "variable/index.html#static-variable-autoComposer",
+    "<span>autoComposer</span> <span class=\"search-result-import-path\">autocomposer-melody/src/autocomposer-main.js</span>",
+    "variable"
   ],
   [
     "",
@@ -735,6 +747,18 @@ window.esdocSearchIndex = [
     "src/autocomposer-logic.js~autocomposerlogic#isvalidtext",
     "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-method-isValidText",
     "src/autocomposer-logic.js~AutoComposerLogic#isValidText",
+    "method"
+  ],
+  [
+    "src/autocomposer-main.js",
+    "file/src/autocomposer-main.js.html",
+    "src/autocomposer-main.js",
+    "file"
+  ],
+  [
+    "src/autocomposer-main.js~autocomposer#constructor",
+    "class/src/autocomposer-main.js~AutoComposer.html#instance-constructor-constructor",
+    "src/autocomposer-main.js~AutoComposer#constructor",
     "method"
   ],
   [

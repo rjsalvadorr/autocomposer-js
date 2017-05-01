@@ -82,8 +82,41 @@
 .ac-output.double-height {
   height: 90px;
 }
-body {
-  font-family: 'Helvetica', 'Arial', sans-serif;
+body,
+div,
+span,
+p,
+a {
+  font-family: 'Source Sans Pro', sans-serif;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 10px 0;
+}
+h1 {
+  font-size: 3em;
+}
+h2 {
+  font-size: 2.25em;
+}
+h3 {
+  font-size: 1.8em;
+}
+h4 {
+  font-size: 1.5em;
+}
+h5 {
+  font-size: 1.2em;
+}
+h6 {
+  font-size: 1.05em;
+}
+h1#main-title {
+  margin: 0;
 }
 .ac-input.text,
 .ac-output.text {
@@ -157,7 +190,7 @@ p {
   text-align: center;
 }
 #chord-dictionary li {
-  background-color: #aaa;
+  background-color: #ccc;
   display: inline-block;
   padding: 8px;
   margin: 5px 15px;
@@ -172,13 +205,21 @@ table#ac-melody-output thead {
 }
 table#ac-melody-output th,
 table#ac-melody-output td {
-  padding: 0.5vw 0;
+  padding: 1vw 0 0.5vw 0;
+}
+table#ac-melody-output th {
+  font-size: 1.5em;
+  font-weight: normal;
+  padding: 0.5em 0;
 }
 .ac-melody-row {
   cursor: pointer;
 }
 .ac-melody-row.selected {
   background-color: #dfd;
+}
+.melody-data {
+  font-size: 2em;
 }
 .ac-input.button {
   color: #fff;

@@ -84,8 +84,8 @@ class MelodyRow extends React.Component {
             {this.createVexTab(this.props.chordProgression, this.props.melodyNotes)}
           </div>
         </td>
-        <td>{this.props.smoothness}</td>
-        <td>{this.props.range}</td>
+        <td className="melody-data">{this.props.smoothness}</td>
+        <td className="melody-data">{this.props.range}</td>
       </tr>
     );
   }

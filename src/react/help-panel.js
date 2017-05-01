@@ -44,7 +44,7 @@ class HelpPanel extends React.Component {
         <div id="help-panel" className="ac-panel output-panel">
           <div className="panel-spacer">
             <h2>Help!</h2>
-            <p>How to use this web app:</p>
+            <h4>How to use this web app:</h4>
 
             <ol>
               <li>Enter a chord progression in the text box.</li>
@@ -54,7 +54,7 @@ class HelpPanel extends React.Component {
               <li>Hit the <i className="fa fa-play"></i> button!</li>
             </ol>
 
-            <p>Other features:</p>
+            <h4>Other features:</h4>
 
             <ul>
               <li>You can download the loaded music by clicking the <i className="fa fa-download"></i> button. The melody will be saved as a MIDI file, containing the generated melody and accompaniment.</li>
@@ -81,7 +81,7 @@ class HelpPanel extends React.Component {
               <li>Bass range is {lowestPitchBass} to {highestPitchBass}</li>
             </ul>
 
-            <p>Melodies are filtered/sorted by a few rules:</p>
+            <h4>Melodies are filtered/sorted by a few rules:</h4>
             <ul>
               <li>Only the 100 smoothest melodies are shown</li>
               <li>Range must be no greater than one octave</li>

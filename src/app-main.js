@@ -13,11 +13,7 @@ var AcMidi = new acMidi.AutoComposerMidi();
 
 var AcButton = require('./react/ac-button');
 var AcToggleButton = require('./react/ac-toggle-button');
-var AcTextField = require('./react/ac-text-field');
 var AcTextArea = require('./react/ac-textarea');
-var AcSelect = require('./react/ac-select');
-var AcRadioSet = require('./react/ac-radioset');
-var AcCheckbox = require('./react/ac-checkbox');
 var StatusOutput = require('./react/status-output')
 
 var HelpPanel = require('./react/help-panel');
@@ -257,7 +253,7 @@ class AutoComposer extends React.Component {
 
           <div className="panel-row">
             <div className="ac-control-wrapper flex-lg">
-              <h1>AutoComposer</h1>
+              <h1 id="main-title">AutoComposer</h1>
             </div>
             <AcToggleButton inputKey="showHelp" icon="question" wrapperAddClass="flex-sm" isActive={this.state.showHelp} onClickHandler={this.callbackChangeState} />
             <AcToggleButton inputKey="showControls" icon="cog" wrapperAddClass="flex-sm" initialState={this.state.showControls} onClickHandler={this.callbackChangeState} disabled={this.state.controlsDisabled} />
