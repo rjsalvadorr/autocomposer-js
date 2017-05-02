@@ -34,7 +34,7 @@ class OutputPanel extends React.Component {
     if(nextProps.allowMelodyGeneration) {
       console.debug("[OutputPanel.componentWillReceiveProps()] Generating melodies...");
       var chordProgression = nextProps.chordProgression;
-      this.setState({melodyUnitList: AcMelody.getMelodies(chordProgression)});
+      this.setState({melodyUnitList: AcMelody.buildSimpleMelodies(chordProgression)});
     }
   }
 
@@ -50,7 +50,7 @@ class OutputPanel extends React.Component {
 
     for(var i = 0; i < melodyUnitList.length; i++) {
       melodyString = melodyUnitList[i].melodyNotes.join(",");
-      accompanimentString = AcMelody.getAccompaniment(melodyUnitList[i]).join(",");
+      accompanimentString = AcMelody.buildSimpleAccompaniment(melodyUnitList[i]).join(",");
       basslineString = AcMelody.getBasicBassLine(melodyUnitList[i]);
 
       arrPayload = [melodyString, accompanimentString, basslineString];

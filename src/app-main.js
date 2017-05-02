@@ -143,7 +143,7 @@ class AutoComposer extends React.Component {
   * Changes app state. Meant to be called from child components
   * @param {string} stateKey - App state to change
   * @param {number|string|Object} newState - Assigns this to the state
-  * @param {?boolean} [useDataStore] - If true, the data store is changed instead of the state object.
+  * @param {boolean} [useDataStore] - If true, the data store is changed instead of the state object.
   */
   callbackChangeState(stateKey, newState, useDataStore) {
     console.debug("app, callbackChangeState(" + stateKey + ", " + newState + ", " + useDataStore + ")");

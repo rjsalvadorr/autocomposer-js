@@ -3,7 +3,7 @@
     "__docId__": 0,
     "kind": "file",
     "name": "src/app-main.js",
-    "content": "const React = require('react');\r\nconst ReactDOM = require('react-dom');\r\nconst moment = require('moment');\r\n\r\nvar AutoComposerLogic = require('./autocomposer-logic');\r\nvar AcLogic = new AutoComposerLogic.AutoComposerLogic();\r\n\r\nvar AutoComposerMelody = require('./autocomposer-melody');\r\nvar AcMelody = new AutoComposerMelody.AutoComposerMelody();\r\n\r\nvar acMidi = require('./autocomposer-midi');\r\nvar AcMidi = new acMidi.AutoComposerMidi();\r\n\r\nvar AcButton = require('./react/ac-button');\r\nvar AcToggleButton = require('./react/ac-toggle-button');\r\nvar AcTextArea = require('./react/ac-textarea');\r\nvar StatusOutput = require('./react/status-output')\r\n\r\nvar HelpPanel = require('./react/help-panel');\r\nvar DebugPanel = require('./react/debug-panel');\r\nvar OutputPanel = require('./react/output-panel');\r\nvar ControlPanel = require('./react/control-panel');\r\n\r\n\r\n\r\nfunction AcInputException(message) {\r\n   this.message = message;\r\n   this.name = 'AcInputException';\r\n}\r\n\r\n\r\n\r\n/**\r\n* The core React component for the web app.\r\n*/\r\nclass AutoComposer extends React.Component {\r\n  constructor(props) {\r\n    super(props);\r\n\r\n    /**\r\n    * @type {Object} - Data store. Any changes to this data store will not cause an update.\r\n    */\r\n    this.store = {\r\n      melodies: [],\r\n      chordProgressionClean: \"\",\r\n      chordProgressionPlaceholder: AcLogic.INITIAL_PROGRESSION,\r\n      RESPONSIVE_BREAKPOINT_PHONE: 500,\r\n      RESPONSIVE_BREAKPOINT_TABLET: 768\r\n    };\r\n\r\n    /**\r\n    * @type {Object} - Component state. Changes to this will eventually trigger a render.\r\n    */\r\n    this.state = {\r\n      showHelp: false,\r\n      showControls: false,\r\n      showOutput: false,\r\n\r\n      debugMode: false,\r\n      controlsDisabled: true, // While this is a mess, no need to show it.\r\n\r\n      chordProgressionRaw: \"\",\r\n      chordProgressionChanged: false,\r\n\r\n      // This becomes true whenever we have a chord progression change, and the correct button is clicked.\r\n      // Returns to false after output finishes rendering\r\n      allowMelodyGeneration: \"\",\r\n      melodyLoaded: false,\r\n\r\n      isOnSupportedDevice: this._isOnSupportedDevice(),\r\n      isOnTablet: this._isOnTablet()\r\n    };\r\n\r\n    this.handleChange = this.handleChange.bind(this);\r\n    this.generateMelodies = this.generateMelodies.bind(this);\r\n    this.outputFinishCallback = this.outputFinishCallback.bind(this);\r\n    this.callbackChangeState = this.callbackChangeState.bind(this);\r\n    this._resizeHandler = this._resizeHandler.bind(this);\r\n    this.loadMusic = this.loadMusic.bind(this);\r\n\r\n    this.playMelody = this.playMelody.bind(this);\r\n    this.playMelodySolo = this.playMelodySolo.bind(this);\r\n    this.stopMusic = this.stopMusic.bind(this);\r\n    this.downloadMidi = this.downloadMidi.bind(this);\r\n  }\r\n\r\n  /**\r\n  * Checks the device/browser. Returns true if the browser is supported.\r\n  * Expected to run on loading the app.\r\n  */\r\n  _isOnSupportedDevice() {\r\n    var ua = navigator.userAgent;\r\n    // trident = IE rendering engine. IE does not support the class JS keyword. Which is all over this codebase.\r\n    var isSupportedDevice = ua.search(/trident/i) == -1;\r\n    return isSupportedDevice;\r\n  }\r\n\r\n  /**\r\n  * Checks to see if the app should use a Tablet layout.\r\n  * Expected to run on loading the app, and when it resizes\r\n  */\r\n  _isOnTablet() {\r\n    if(window.innerWidth > this.store.RESPONSIVE_BREAKPOINT_PHONE && window.innerWidth <= this.store.RESPONSIVE_BREAKPOINT_TABLET) {\r\n      return true;\r\n    } else {\r\n      return false\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Handler for browser resize event.\r\n  */\r\n  _resizeHandler() {\r\n    if(this._isOnTablet() && !this.state.isOnTablet) {\r\n      // state transition: non-tablet VW to a tablet VW\r\n      this.setState({isOnTablet: true});\r\n    } else if (!this._isOnTablet() && this.state.isOnTablet) {\r\n      // state transition: tablet VW to a non-tablet VW\r\n      this.setState({isOnTablet: false});\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Add event listener\r\n  */\r\n  componentDidMount() {\r\n    window.addEventListener(\"resize\", this._resizeHandler);\r\n  }\r\n\r\n  /**\r\n  * Remove event listener\r\n  */\r\n  componentWillUnmount() {\r\n    window.removeEventListener(\"resize\", this._resizeHandler);\r\n  }\r\n\r\n  _sendStatusUpdate(message) {\r\n    var updateEvent = new CustomEvent('statusUpdate', {detail: message});\r\n    document.body.dispatchEvent(updateEvent);\r\n  }\r\n\r\n  /**\r\n  * Changes app state. Meant to be called from child components\r\n  * @param {string} stateKey - App state to change\r\n  * @param {number|string|Object} newState - Assigns this to the state\r\n  * @param {?boolean} [useDataStore] - If true, the data store is changed instead of the state object.\r\n  */\r\n  callbackChangeState(stateKey, newState, useDataStore) {\r\n    console.debug(\"app, callbackChangeState(\" + stateKey + \", \" + newState + \", \" + useDataStore + \")\");\r\n    if(useDataStore) {\r\n      this.store[stateKey] = newState;\r\n    } else {\r\n      var stateObj = function() {\r\n        var returnObj = {};\r\n\r\n        returnObj[stateKey] = newState;\r\n\r\n        return returnObj;\r\n      }.bind(this)();\r\n\r\n      this.setState(stateObj);\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Changes app state. Meant to be called from child components.\r\n  * Older function, compared to callbackChangeState()\r\n  * @param {Object} event - React event\r\n  */\r\n  handleChange(event) {\r\n    var stateObj = function() {\r\n      var stateKey = this.target.dataset[\"stateKey\"];\r\n      var returnObj = {};\r\n\r\n      if(this.target.type === \"checkbox\") {\r\n        returnObj[stateKey] = this.target.checked;\r\n      } else if(this.target.type === \"button\") {\r\n        returnObj[stateKey] = this.target.dataset[\"currentState\"] === \"true\";\r\n      } else {\r\n        returnObj[stateKey] = this.target.value;\r\n\r\n        if(stateKey === \"chordProgressionRaw\") {\r\n          returnObj[\"chordProgressionChanged\"] = true;\r\n        }\r\n      }\r\n\r\n      return returnObj;\r\n    }.bind(event)();\r\n\r\n    this.setState(stateObj);\r\n  }\r\n\r\n  /**\r\n  * Loads melody data into the App. Meant to be used as a callback from the results table.\r\n  * @param {Object} event - React event\r\n  */\r\n  loadMusic(event) {\r\n    var melodyString = event.currentTarget.dataset[\"payload\"];\r\n    var melodiesData = melodyString.split(\";\");\r\n\r\n    var melody1 = melodiesData[0].split(\",\");\r\n    var melody2 = melodiesData[1].split(\",\");\r\n    var melody3 = melodiesData[2].split(\",\");\r\n\r\n    var melodies = [melody1, melody2, melody3];\r\n    this.store.melodies = melodies;\r\n    this.setState({melodyLoaded: true});\r\n\r\n    var newSelectionEvent = new Event(\"newSelection\");\r\n    document.body.dispatchEvent(newSelectionEvent);\r\n  }\r\n\r\n  /**\r\n  * Generates the melodies for the given chord progression.\r\n  * @param {Object} event - React event\r\n  */\r\n  generateMelodies(event) {\r\n    var chordProgression = this.state.chordProgressionRaw.trim().split(\" \");\r\n\r\n    if(!this.state.chordProgressionChanged || this.state.chordProgressionRaw.trim() === this.store.chordProgressionClean) {\r\n      // Chord progression hasn't changed. No need to continue.\r\n      console.debug(\"[AutoComposer.generateMelodies()] Chord progression hasn't changed. No generation for you.\");\r\n      return;\r\n    }\r\n\r\n    this.store.chordProgressionClean = this.state.chordProgressionRaw.trim();\r\n\r\n    try {\r\n      if(this.state.chordProgressionRaw == null || this.state.chordProgressionRaw == \"\") {\r\n        throw new AcInputException('Chord input is empty!');\r\n      }\r\n\r\n      chordProgression.forEach(function(currentChordInput) {\r\n        if(!AcLogic.isValidText(currentChordInput)) {\r\n          throw new AcInputException('Chord input \\'' + currentChordInput + '\\' is not formatted properly! You should check the chord dictionary in the Help! section.');\r\n        }\r\n      });\r\n\r\n      if(chordProgression.length < 2) {\r\n        throw new AcInputException('You need to enter more chords. Two chords in a row is a completely valid input.');\r\n      }\r\n\r\n      this._sendStatusUpdate(\"Generating melodies...\");\r\n      this.setState({showOutput: true, allowMelodyGeneration: true, melodyLoaded: false, showHelp: false});\r\n      this.store.melodies = [];\r\n\r\n\r\n      var newSelectionEvent = new Event(\"newSelection\");\r\n      document.body.dispatchEvent(newSelectionEvent);\r\n    } catch(exc) {\r\n      console.warn(\"[AutoComposer.generateMelodies()] \" + exc.message + \"\\nError Type = \" + exc.name);\r\n      this._sendStatusUpdate(\"[ERROR] \" + exc.message);\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Plays the loaded melody\r\n  * @param {Object} event - React event\r\n  */\r\n  playMelody(event) {\r\n    if(this.store.melodies.length > 0) {\r\n      AcMidi.playMelodyWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Plays the loaded melody by itself\r\n  * @param {Object} event - React event\r\n  */\r\n  playMelodySolo(event) {\r\n    if(this.store.melodies.length > 0) {\r\n      AcMidi.playMelodySolo(this.store.melodies[0]);\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Stops all music currently playing.\r\n  * @param {Object} event - React event\r\n  */\r\n  stopMusic(event) {\r\n    AcMidi.stopPlayback();\r\n  }\r\n\r\n  /**\r\n  * Creates and sends MIDI data to the user.\r\n  * @param {Object} event - React event\r\n  */\r\n  downloadMidi(event) {\r\n    if(this.store.melodies.length > 0) {\r\n      //download MIDI file\r\n      var dataString = AcMidi.buildMelodyMidiWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);\r\n      var timestamp = moment().format(\"YYMMDDHHmmss\");\r\n      var fileName = \"autocomposer_\" + timestamp + \"_\" + this.state.chordProgressionRaw.replace(/\\s+/g, \"-\");\r\n      download(dataString, fileName, \"audio/midi\");\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Callback that runs when output panel is finished rendering.\r\n  * Prevents melody generation until the user enters a new progression.\r\n  * @param {Object} event - React event\r\n  */\r\n  outputFinishCallback() {\r\n    this.setState({allowMelodyGeneration: false, chordProgressionChanged: false});\r\n  }\r\n\r\n  render() {\r\n    var chordProgressionArray = this.store.chordProgressionClean.split(\" \");\r\n    var rootLayoutClass = \"root-panel\";\r\n    rootLayoutClass += this.state.isOnTablet ? \" layout-tablet\" : \" layout-non-tablet\";\r\n\r\n    if(this.state.isOnSupportedDevice) {\r\n      return (\r\n        <div id=\"app-container\" className={rootLayoutClass}>\r\n          <div id=\"main-control-panel\" className=\"ac-panel\">\r\n\r\n            <div className=\"panel-row\">\r\n              <div className=\"ac-control-wrapper flex-lg\">\r\n                <h1 id=\"main-title\">AutoComposer</h1>\r\n              </div>\r\n              <AcToggleButton inputKey=\"showHelp\" icon=\"question\" addClass=\"blue\" wrapperAddClass=\"flex-md\" isActive={this.state.showHelp} onClickHandler={this.callbackChangeState} />\r\n            </div>\r\n\r\n            <div className=\"panel-row\">\r\n              <p id=\"main-blurb\">\r\n                This is a prototype for a program that automatically writes music. Click the <i className=\"fa fa-question\"></i> button to get started.\r\n                For more info, check out the <a href=\"https://github.com/rjsalvadorr/autocomposer-melody/wiki\" target=\"_blank\">project wiki</a> and <a href=\"https://github.com/rjsalvadorr/autocomposer-melody\" target=\"_blank\">repository</a>.\r\n              </p>\r\n            </div>\r\n\r\n            <div className=\"panel-row has-labels\">\r\n              <AcTextArea inputKey=\"chordProgressionRaw\" addClass=\"double-height\" value={this.state.chordProgressionRaw} placeholder={this.store.chordProgressionPlaceholder} onChange={this.handleChange} />\r\n              <AcButton inputKey=\"generateMelodies\" inputLabel=\"Generate\" wrapperAddClass=\"square\" addClass=\"double-height blue\" onClick={this.generateMelodies} isActive={!this.state.chordProgressionChanged}/>\r\n            </div>\r\n\r\n            <div className=\"panel-row\">\r\n              <AcButton inputKey=\"generateMelodies\" icon=\"play\" addClass=\"green\" wrapperAddClass=\"flex-lg\" onClick={this.playMelody} disabled={!this.state.melodyLoaded}/>\r\n              <AcButton inputKey=\"generateMelodies\" icon=\"play\" addClass=\"green\" inputLabel=\"Solo\" wrapperAddClass=\"flex-sm\" onClick={this.playMelodySolo} disabled={!this.state.melodyLoaded}/>\r\n              <AcButton inputKey=\"generateMelodies\" icon=\"stop\" addClass=\"red\" wrapperAddClass=\"flex-sm\" onClick={this.stopMusic} disabled={!this.state.melodyLoaded}/>\r\n              <AcButton inputKey=\"generateMelodies\" icon=\"download\" addClass=\"blue\" inputLabel=\"MIDI\" wrapperAddClass=\"flex-sm\" onClick={this.downloadMidi} disabled={!this.state.melodyLoaded}/>\r\n            </div>\r\n\r\n            <div className=\"panel-row\">\r\n              <StatusOutput inputKey=\"status-output\" value=\"status output...\" />\r\n            </div>\r\n\r\n            <DebugPanel isHidden={!this.state.debugMode} debugData={JSON.stringify(this.state, null, 2)}/>\r\n          </div>\r\n\r\n          <ControlPanel isShown={this.state.showControls} />\r\n\r\n          <HelpPanel isShown={this.state.showHelp} closeFunction={this.callbackChangeState}/>\r\n\r\n          <OutputPanel isShown={this.state.showOutput} chordProgression={chordProgressionArray} allowMelodyGeneration={this.state.allowMelodyGeneration} outputCallback={this.outputFinishCallback} loadMelody={this.loadMusic} />\r\n\r\n          <div id=\"not-supported-panel\" className=\"ac-panel\">\r\n            <h1>Where's the AutoComposer?!</h1>\r\n            <p>You're seeing this page because your device isn't supported by the app's scripts, or your browser's window size is too small.</p>\r\n            <p>If you're on a phone/tablet, try turning it to see this page in landscape!</p>\r\n          </div>\r\n\r\n        </div>\r\n      );\r\n    } else {\r\n      return (\r\n        <div id=\"app-container\" className=\"root-panel\">\r\n          <div id=\"not-supported-panel\" className=\"ac-panel\">\r\n            <h1>Where's the AutoComposer?!</h1>\r\n            <p>You're seeing this page because your device isn't supported by the app's scripts, or your browser's window size is too small.</p>\r\n            <p>If you're on a phone/tablet, try turning it to see this page in landscape!</p>\r\n          </div>\r\n        </div>\r\n      );\r\n    }\r\n  }\r\n}\r\n\r\nReactDOM.render(<AutoComposer />, document.getElementById('react-root'));\r\n",
+    "content": "const React = require('react');\r\nconst ReactDOM = require('react-dom');\r\nconst moment = require('moment');\r\n\r\nvar AutoComposerLogic = require('./autocomposer-logic');\r\nvar AcLogic = new AutoComposerLogic.AutoComposerLogic();\r\n\r\nvar AutoComposerMelody = require('./autocomposer-melody');\r\nvar AcMelody = new AutoComposerMelody.AutoComposerMelody();\r\n\r\nvar acMidi = require('./autocomposer-midi');\r\nvar AcMidi = new acMidi.AutoComposerMidi();\r\n\r\nvar AcButton = require('./react/ac-button');\r\nvar AcToggleButton = require('./react/ac-toggle-button');\r\nvar AcTextArea = require('./react/ac-textarea');\r\nvar StatusOutput = require('./react/status-output')\r\n\r\nvar HelpPanel = require('./react/help-panel');\r\nvar DebugPanel = require('./react/debug-panel');\r\nvar OutputPanel = require('./react/output-panel');\r\nvar ControlPanel = require('./react/control-panel');\r\n\r\n\r\n\r\nfunction AcInputException(message) {\r\n   this.message = message;\r\n   this.name = 'AcInputException';\r\n}\r\n\r\n\r\n\r\n/**\r\n* The core React component for the web app.\r\n*/\r\nclass AutoComposer extends React.Component {\r\n  constructor(props) {\r\n    super(props);\r\n\r\n    /**\r\n    * @type {Object} - Data store. Any changes to this data store will not cause an update.\r\n    */\r\n    this.store = {\r\n      melodies: [],\r\n      chordProgressionClean: \"\",\r\n      chordProgressionPlaceholder: AcLogic.INITIAL_PROGRESSION,\r\n      RESPONSIVE_BREAKPOINT_PHONE: 500,\r\n      RESPONSIVE_BREAKPOINT_TABLET: 768\r\n    };\r\n\r\n    /**\r\n    * @type {Object} - Component state. Changes to this will eventually trigger a render.\r\n    */\r\n    this.state = {\r\n      showHelp: false,\r\n      showControls: false,\r\n      showOutput: false,\r\n\r\n      debugMode: false,\r\n      controlsDisabled: true, // While this is a mess, no need to show it.\r\n\r\n      chordProgressionRaw: \"\",\r\n      chordProgressionChanged: false,\r\n\r\n      // This becomes true whenever we have a chord progression change, and the correct button is clicked.\r\n      // Returns to false after output finishes rendering\r\n      allowMelodyGeneration: \"\",\r\n      melodyLoaded: false,\r\n\r\n      isOnSupportedDevice: this._isOnSupportedDevice(),\r\n      isOnTablet: this._isOnTablet()\r\n    };\r\n\r\n    this.handleChange = this.handleChange.bind(this);\r\n    this.generateMelodies = this.generateMelodies.bind(this);\r\n    this.outputFinishCallback = this.outputFinishCallback.bind(this);\r\n    this.callbackChangeState = this.callbackChangeState.bind(this);\r\n    this._resizeHandler = this._resizeHandler.bind(this);\r\n    this.loadMusic = this.loadMusic.bind(this);\r\n\r\n    this.playMelody = this.playMelody.bind(this);\r\n    this.playMelodySolo = this.playMelodySolo.bind(this);\r\n    this.stopMusic = this.stopMusic.bind(this);\r\n    this.downloadMidi = this.downloadMidi.bind(this);\r\n  }\r\n\r\n  /**\r\n  * Checks the device/browser. Returns true if the browser is supported.\r\n  * Expected to run on loading the app.\r\n  */\r\n  _isOnSupportedDevice() {\r\n    var ua = navigator.userAgent;\r\n    // trident = IE rendering engine. IE does not support the class JS keyword. Which is all over this codebase.\r\n    var isSupportedDevice = ua.search(/trident/i) == -1;\r\n    return isSupportedDevice;\r\n  }\r\n\r\n  /**\r\n  * Checks to see if the app should use a Tablet layout.\r\n  * Expected to run on loading the app, and when it resizes\r\n  */\r\n  _isOnTablet() {\r\n    if(window.innerWidth > this.store.RESPONSIVE_BREAKPOINT_PHONE && window.innerWidth <= this.store.RESPONSIVE_BREAKPOINT_TABLET) {\r\n      return true;\r\n    } else {\r\n      return false\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Handler for browser resize event.\r\n  */\r\n  _resizeHandler() {\r\n    if(this._isOnTablet() && !this.state.isOnTablet) {\r\n      // state transition: non-tablet VW to a tablet VW\r\n      this.setState({isOnTablet: true});\r\n    } else if (!this._isOnTablet() && this.state.isOnTablet) {\r\n      // state transition: tablet VW to a non-tablet VW\r\n      this.setState({isOnTablet: false});\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Add event listener\r\n  */\r\n  componentDidMount() {\r\n    window.addEventListener(\"resize\", this._resizeHandler);\r\n  }\r\n\r\n  /**\r\n  * Remove event listener\r\n  */\r\n  componentWillUnmount() {\r\n    window.removeEventListener(\"resize\", this._resizeHandler);\r\n  }\r\n\r\n  _sendStatusUpdate(message) {\r\n    var updateEvent = new CustomEvent('statusUpdate', {detail: message});\r\n    document.body.dispatchEvent(updateEvent);\r\n  }\r\n\r\n  /**\r\n  * Changes app state. Meant to be called from child components\r\n  * @param {string} stateKey - App state to change\r\n  * @param {number|string|Object} newState - Assigns this to the state\r\n  * @param {boolean} [useDataStore] - If true, the data store is changed instead of the state object.\r\n  */\r\n  callbackChangeState(stateKey, newState, useDataStore) {\r\n    console.debug(\"app, callbackChangeState(\" + stateKey + \", \" + newState + \", \" + useDataStore + \")\");\r\n    if(useDataStore) {\r\n      this.store[stateKey] = newState;\r\n    } else {\r\n      var stateObj = function() {\r\n        var returnObj = {};\r\n\r\n        returnObj[stateKey] = newState;\r\n\r\n        return returnObj;\r\n      }.bind(this)();\r\n\r\n      this.setState(stateObj);\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Changes app state. Meant to be called from child components.\r\n  * Older function, compared to callbackChangeState()\r\n  * @param {Object} event - React event\r\n  */\r\n  handleChange(event) {\r\n    var stateObj = function() {\r\n      var stateKey = this.target.dataset[\"stateKey\"];\r\n      var returnObj = {};\r\n\r\n      if(this.target.type === \"checkbox\") {\r\n        returnObj[stateKey] = this.target.checked;\r\n      } else if(this.target.type === \"button\") {\r\n        returnObj[stateKey] = this.target.dataset[\"currentState\"] === \"true\";\r\n      } else {\r\n        returnObj[stateKey] = this.target.value;\r\n\r\n        if(stateKey === \"chordProgressionRaw\") {\r\n          returnObj[\"chordProgressionChanged\"] = true;\r\n        }\r\n      }\r\n\r\n      return returnObj;\r\n    }.bind(event)();\r\n\r\n    this.setState(stateObj);\r\n  }\r\n\r\n  /**\r\n  * Loads melody data into the App. Meant to be used as a callback from the results table.\r\n  * @param {Object} event - React event\r\n  */\r\n  loadMusic(event) {\r\n    var melodyString = event.currentTarget.dataset[\"payload\"];\r\n    var melodiesData = melodyString.split(\";\");\r\n\r\n    var melody1 = melodiesData[0].split(\",\");\r\n    var melody2 = melodiesData[1].split(\",\");\r\n    var melody3 = melodiesData[2].split(\",\");\r\n\r\n    var melodies = [melody1, melody2, melody3];\r\n    this.store.melodies = melodies;\r\n    this.setState({melodyLoaded: true});\r\n\r\n    var newSelectionEvent = new Event(\"newSelection\");\r\n    document.body.dispatchEvent(newSelectionEvent);\r\n  }\r\n\r\n  /**\r\n  * Generates the melodies for the given chord progression.\r\n  * @param {Object} event - React event\r\n  */\r\n  generateMelodies(event) {\r\n    var chordProgression = this.state.chordProgressionRaw.trim().split(\" \");\r\n\r\n    if(!this.state.chordProgressionChanged || this.state.chordProgressionRaw.trim() === this.store.chordProgressionClean) {\r\n      // Chord progression hasn't changed. No need to continue.\r\n      console.debug(\"[AutoComposer.generateMelodies()] Chord progression hasn't changed. No generation for you.\");\r\n      return;\r\n    }\r\n\r\n    this.store.chordProgressionClean = this.state.chordProgressionRaw.trim();\r\n\r\n    try {\r\n      if(this.state.chordProgressionRaw == null || this.state.chordProgressionRaw == \"\") {\r\n        throw new AcInputException('Chord input is empty!');\r\n      }\r\n\r\n      chordProgression.forEach(function(currentChordInput) {\r\n        if(!AcLogic.isValidText(currentChordInput)) {\r\n          throw new AcInputException('Chord input \\'' + currentChordInput + '\\' is not formatted properly! You should check the chord dictionary in the Help! section.');\r\n        }\r\n      });\r\n\r\n      if(chordProgression.length < 2) {\r\n        throw new AcInputException('You need to enter more chords. Two chords in a row is a completely valid input.');\r\n      }\r\n\r\n      this._sendStatusUpdate(\"Generating melodies...\");\r\n      this.setState({showOutput: true, allowMelodyGeneration: true, melodyLoaded: false, showHelp: false});\r\n      this.store.melodies = [];\r\n\r\n\r\n      var newSelectionEvent = new Event(\"newSelection\");\r\n      document.body.dispatchEvent(newSelectionEvent);\r\n    } catch(exc) {\r\n      console.warn(\"[AutoComposer.generateMelodies()] \" + exc.message + \"\\nError Type = \" + exc.name);\r\n      this._sendStatusUpdate(\"[ERROR] \" + exc.message);\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Plays the loaded melody\r\n  * @param {Object} event - React event\r\n  */\r\n  playMelody(event) {\r\n    if(this.store.melodies.length > 0) {\r\n      AcMidi.playMelodyWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Plays the loaded melody by itself\r\n  * @param {Object} event - React event\r\n  */\r\n  playMelodySolo(event) {\r\n    if(this.store.melodies.length > 0) {\r\n      AcMidi.playMelodySolo(this.store.melodies[0]);\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Stops all music currently playing.\r\n  * @param {Object} event - React event\r\n  */\r\n  stopMusic(event) {\r\n    AcMidi.stopPlayback();\r\n  }\r\n\r\n  /**\r\n  * Creates and sends MIDI data to the user.\r\n  * @param {Object} event - React event\r\n  */\r\n  downloadMidi(event) {\r\n    if(this.store.melodies.length > 0) {\r\n      //download MIDI file\r\n      var dataString = AcMidi.buildMelodyMidiWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);\r\n      var timestamp = moment().format(\"YYMMDDHHmmss\");\r\n      var fileName = \"autocomposer_\" + timestamp + \"_\" + this.state.chordProgressionRaw.replace(/\\s+/g, \"-\");\r\n      download(dataString, fileName, \"audio/midi\");\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Callback that runs when output panel is finished rendering.\r\n  * Prevents melody generation until the user enters a new progression.\r\n  * @param {Object} event - React event\r\n  */\r\n  outputFinishCallback() {\r\n    this.setState({allowMelodyGeneration: false, chordProgressionChanged: false});\r\n  }\r\n\r\n  render() {\r\n    var chordProgressionArray = this.store.chordProgressionClean.split(\" \");\r\n    var rootLayoutClass = \"root-panel\";\r\n    rootLayoutClass += this.state.isOnTablet ? \" layout-tablet\" : \" layout-non-tablet\";\r\n\r\n    if(this.state.isOnSupportedDevice) {\r\n      return (\r\n        <div id=\"app-container\" className={rootLayoutClass}>\r\n          <div id=\"main-control-panel\" className=\"ac-panel\">\r\n\r\n            <div className=\"panel-row\">\r\n              <div className=\"ac-control-wrapper flex-lg\">\r\n                <h1 id=\"main-title\">AutoComposer</h1>\r\n              </div>\r\n              <AcToggleButton inputKey=\"showHelp\" icon=\"question\" addClass=\"blue\" wrapperAddClass=\"flex-md\" isActive={this.state.showHelp} onClickHandler={this.callbackChangeState} />\r\n            </div>\r\n\r\n            <div className=\"panel-row\">\r\n              <p id=\"main-blurb\">\r\n                This is a prototype for a program that automatically writes music. Click the <i className=\"fa fa-question\"></i> button to get started.\r\n                For more info, check out the <a href=\"https://github.com/rjsalvadorr/autocomposer-melody/wiki\" target=\"_blank\">project wiki</a> and <a href=\"https://github.com/rjsalvadorr/autocomposer-melody\" target=\"_blank\">repository</a>.\r\n              </p>\r\n            </div>\r\n\r\n            <div className=\"panel-row has-labels\">\r\n              <AcTextArea inputKey=\"chordProgressionRaw\" addClass=\"double-height\" value={this.state.chordProgressionRaw} placeholder={this.store.chordProgressionPlaceholder} onChange={this.handleChange} />\r\n              <AcButton inputKey=\"generateMelodies\" inputLabel=\"Generate\" wrapperAddClass=\"square\" addClass=\"double-height blue\" onClick={this.generateMelodies} isActive={!this.state.chordProgressionChanged}/>\r\n            </div>\r\n\r\n            <div className=\"panel-row\">\r\n              <AcButton inputKey=\"generateMelodies\" icon=\"play\" addClass=\"green\" wrapperAddClass=\"flex-lg\" onClick={this.playMelody} disabled={!this.state.melodyLoaded}/>\r\n              <AcButton inputKey=\"generateMelodies\" icon=\"play\" addClass=\"green\" inputLabel=\"Solo\" wrapperAddClass=\"flex-sm\" onClick={this.playMelodySolo} disabled={!this.state.melodyLoaded}/>\r\n              <AcButton inputKey=\"generateMelodies\" icon=\"stop\" addClass=\"red\" wrapperAddClass=\"flex-sm\" onClick={this.stopMusic} disabled={!this.state.melodyLoaded}/>\r\n              <AcButton inputKey=\"generateMelodies\" icon=\"download\" addClass=\"blue\" inputLabel=\"MIDI\" wrapperAddClass=\"flex-sm\" onClick={this.downloadMidi} disabled={!this.state.melodyLoaded}/>\r\n            </div>\r\n\r\n            <div className=\"panel-row\">\r\n              <StatusOutput inputKey=\"status-output\" value=\"status output...\" />\r\n            </div>\r\n\r\n            <DebugPanel isHidden={!this.state.debugMode} debugData={JSON.stringify(this.state, null, 2)}/>\r\n          </div>\r\n\r\n          <ControlPanel isShown={this.state.showControls} />\r\n\r\n          <HelpPanel isShown={this.state.showHelp} closeFunction={this.callbackChangeState}/>\r\n\r\n          <OutputPanel isShown={this.state.showOutput} chordProgression={chordProgressionArray} allowMelodyGeneration={this.state.allowMelodyGeneration} outputCallback={this.outputFinishCallback} loadMelody={this.loadMusic} />\r\n\r\n          <div id=\"not-supported-panel\" className=\"ac-panel\">\r\n            <h1>Where's the AutoComposer?!</h1>\r\n            <p>You're seeing this page because your device isn't supported by the app's scripts, or your browser's window size is too small.</p>\r\n            <p>If you're on a phone/tablet, try turning it to see this page in landscape!</p>\r\n          </div>\r\n\r\n        </div>\r\n      );\r\n    } else {\r\n      return (\r\n        <div id=\"app-container\" className=\"root-panel\">\r\n          <div id=\"not-supported-panel\" className=\"ac-panel\">\r\n            <h1>Where's the AutoComposer?!</h1>\r\n            <p>You're seeing this page because your device isn't supported by the app's scripts, or your browser's window size is too small.</p>\r\n            <p>If you're on a phone/tablet, try turning it to see this page in landscape!</p>\r\n          </div>\r\n        </div>\r\n      );\r\n    }\r\n  }\r\n}\r\n\r\nReactDOM.render(<AutoComposer />, document.getElementById('react-root'));\r\n",
     "static": true,
     "longname": "src/app-main.js",
     "access": null,
@@ -941,7 +941,7 @@
         "description": "Assigns this to the state"
       },
       {
-        "nullable": true,
+        "nullable": null,
         "types": [
           "boolean"
         ],
@@ -1792,7 +1792,7 @@
     "__docId__": 74,
     "kind": "file",
     "name": "src/autocomposer-melody.js",
-    "content": "var tonal = require('tonal');\r\nvar ChordUnit = require('./chord-unit');\r\nvar MelodyUnit = require('./melody-unit');\r\n\r\nvar AutoComposerLogic = require('./autocomposer-logic');\r\nvar AcLogic = new AutoComposerLogic.AutoComposerLogic();\r\n\r\n/**\r\n * Creates melodies from a given chord progression\r\n */\r\nclass AutoComposerMelody {\r\n  /**\r\n  * @param {string[]} chordProgression - array of chord symbols\r\n  * @param {string} lowerLimit - lower boundary note (in scientific notation)\r\n  * @param {string} upperLimit - upper boundary note (in scientific notation)\r\n  */\r\n  constructor(chordProgression, lowerLimit, upperLimit) {\r\n    /** @type {string[]} */\r\n    this.chordProgression = chordProgression || AcLogic.INITIAL_PROGRESSION;\r\n    /** @type {string} */\r\n    this.lowerLimit = lowerLimit || AcLogic.DEFAULT_LOWER_LIMIT;\r\n    /** @type {string} */\r\n    this.upperLimit = upperLimit || AcLogic.DEFAULT_UPPER_LIMIT;\r\n  }\r\n\r\n  _sendStatusUpdate(message) {\r\n    var updateEvent = new CustomEvent('statusUpdate', {detail: message});\r\n    document.body.dispatchEvent(updateEvent);\r\n  }\r\n\r\n    /**\r\n    * For a given note, find its lowest instance in the specified range.\r\n    * @private\r\n    * @param {string} pitch - pitch class\r\n    * @param {string} lowerLimit - note (written in scientific notation)\r\n    * @param {string} upperLimit - note (written in scientific notation)\r\n    * @return {string[]} - an array of notes (written in scientific pitch)\r\n    */\r\n  _getLowestNoteInRange(pitch, lowerLimit, upperLimit) {\r\n    var chordTonesInRange = tonal.range.pitchSet(pitch, [lowerLimit, upperLimit]);\r\n    return chordTonesInRange[0];\r\n  }\r\n\r\n    /**\r\n    * For a given array of chord tones, remove the specified pitches.\r\n    * @private\r\n    * @param {string[]} pitchArray - pitches to remove\r\n    * @param {string[]} chordTones - chord tones\r\n    * @return {string[]} - the remaining chord tones\r\n    */\r\n  _removePitchesFromChordTones(pitchArray, chordTones) {\r\n    var indexToRemove;\r\n    pitchArray.forEach(function(pitch) {\r\n      indexToRemove = chordTones.indexOf(pitch);\r\n      if (indexToRemove > -1) {\r\n        chordTones.splice(indexToRemove, 1);\r\n      }\r\n    });\r\n    return chordTones;\r\n  }\r\n\r\n    /**\r\n    * For a given MelodyUnit, get an accompaniment for it.\r\n    * @private\r\n    * @param {MelodyUnit} melodyUnit - melody that needs accompaniment\r\n    * @return {string[]} - array of strings, each representing one or more notes to play under each melodic note.\r\n    */\r\n  getAccompaniment(melodyUnit) {\r\n    // Omit root note, and maybe avoid doubling the top note as well.\r\n    var noteArray = [], chordNotes, currentChord, bassPitch, topPitch;\r\n\r\n    for(var i = 0; i < melodyUnit.chordProgression.length; i++) {\r\n      currentChord = melodyUnit.chordProgression[i];\r\n      bassPitch = tonal.chord.parse(currentChord)[\"tonic\"];\r\n      topPitch =  tonal.note.pc(melodyUnit.melodyNotes[i]);\r\n\r\n      chordNotes = tonal.chord.notes(currentChord);\r\n      chordNotes = this._removePitchesFromChordTones([bassPitch, topPitch], chordNotes);\r\n\r\n      for(var j = 0; j < chordNotes.length; j++) {\r\n        chordNotes[j] = this._getLowestNoteInRange(chordNotes[j], AcLogic.ACCOMPANIMENT_LOWER_LIMIT, AcLogic.ACCOMPANIMENT_UPPER_LIMIT);\r\n      }\r\n      noteArray.push(chordNotes.join(\" \"));\r\n    }\r\n\r\n    return noteArray;\r\n  }\r\n\r\n    /**\r\n    * For a given MelodyUnit, return a basic bass line consisting only of root notes.\r\n    * @private\r\n    * @param {MelodyUnit} melodyUnit - melody that needs a bassline\r\n    * @return {string} - string representing a bassline.\r\n    */\r\n  getBasicBassLine(melodyUnit) {\r\n    var noteArray = [], currentChord, bassPitch, bassNote;\r\n\r\n    // return all the lowest root notes for the progression.\r\n    for(var i = 0; i < melodyUnit.chordProgression.length; i++) {\r\n      currentChord = melodyUnit.chordProgression[i];\r\n      bassPitch = tonal.chord.parse(currentChord)[\"tonic\"];\r\n      bassNote = this._getLowestNoteInRange(bassPitch, AcLogic.BASS_LOWER_LIMIT, AcLogic.BASS_UPPER_LIMIT);\r\n\r\n      noteArray.push(bassNote);\r\n    }\r\n\r\n    return noteArray;\r\n  }\r\n\r\n    /**\r\n    * For a given chord, get all the chord tones between the upper and lower limits.\r\n    * @private\r\n    * @param {string} chord - chord symbol\r\n    * @param {string} lowerLimit - note (written in scientific notation)\r\n    * @param {string} upperLimit - note (written in scientific notation)\r\n    * @return {string[]} - an array of notes (written in scientific pitch)\r\n    */\r\n  getAllChordTones(chord, lowerLimit, upperLimit) {\r\n    var chordTones = tonal.chord(chord);\r\n    var chordTonesInRange = tonal.range.pitchSet(chordTones, [lowerLimit, upperLimit]);\r\n\r\n    for(var i = 0; i < chordTonesInRange.length; i++) {\r\n      for(var j = 0; j < chordTones.length; j++) {\r\n        // Fixing pesky issue where D7 was returned as \"D Gb A C\" instead of \"D F# A C\"\r\n        // If the current chord tone is enharmonic with the note from the pitch set,\r\n        // Override it with the chord tone.\r\n        if(tonal.note.pc(chordTonesInRange[i]) != chordTones[j]\r\n          && tonal.note.enharmonics(chordTones[j]).indexOf(tonal.note.pc(chordTonesInRange[i])) > -1) {\r\n          chordTonesInRange[i] = chordTones[j] + tonal.note.oct(chordTonesInRange[i]);\r\n        }\r\n      }\r\n    }\r\n\r\n    return chordTonesInRange;\r\n  }\r\n\r\n    /**\r\n    * For a given chord symbol, creates a ChordUnit object\r\n    * @private\r\n    * @param {string} chord - chord symbol\r\n    * @param {string} lowerLimit - note (in scientific notation)\r\n    * @param {string} upperLimit - note (in scientific notation)\r\n    * @return {ChordUnit}\r\n    */\r\n  buildChordUnit(chord, lowerLimit, upperLimit) {\r\n    var chordTonesInRange = this.getAllChordTones(chord, lowerLimit, upperLimit);\r\n    var chordUnit = new ChordUnit.ChordUnit(chord, chordTonesInRange, null);\r\n    return chordUnit;\r\n  }\r\n\r\n    /**\r\n    * For a given melody, creates a MelodyUnit object\r\n    * @private\r\n    * @param {string[]} chordProgression - a chord progression\r\n    * @param {string} melodyString - a melody (in scientific notation)\r\n    * @return {MelodyUnit}\r\n    */\r\n  buildMelodyUnit(chordProgression, melodyString) {\r\n    var arrMelody = melodyString.split(\" \");\r\n    var melodyUnit = new MelodyUnit.MelodyUnit(chordProgression, arrMelody);\r\n    return melodyUnit;\r\n  }\r\n\r\n    /**\r\n    * For a given chord progression and melody, generate a series of melodies that fit over the progression\r\n    * @private\r\n    * @param {string[]} chordProgression - a chord progression\r\n    * @param {string[]} rawMelodies - a string representing the melody\r\n    * @param {Object} options - if true, generated melodies will be sorted, with smoothest melodies coming first.\r\n    * @param {boolean} options.sort - if true, generated melodies will be sorted, with smoothest melodies coming first.\r\n    * @param {number} options.limit - limits the output to a set number.\r\n    * @return {MelodyUnit[]} - a list of ChordUnit objects.\r\n    */\r\n  buildMelodyUnitList(chordProgression, rawMelodies, options) {\r\n    var melodyUnits = [];\r\n    var haxThis = this;\r\n\r\n    rawMelodies.forEach(function(rawMelody) {\r\n      melodyUnits.push(haxThis.buildMelodyUnit(chordProgression, rawMelody));\r\n    });\r\n\r\n    if(options) {\r\n      if(options.sort) {\r\n        melodyUnits.sort(function(a, b) {\r\n          return a.smoothness - b.smoothness;\r\n        });\r\n      }\r\n\r\n      if(options.limit) {\r\n        melodyUnits.splice(options.limit);\r\n      }\r\n    }\r\n    return melodyUnits;\r\n  }\r\n\r\n    /**\r\n    * For a given chord progression, generate a series of melodies that fit over the progression\r\n    * @private\r\n    * @param {string[]} chordProgression - chord symbols\r\n    * @param {string} lowerLimit - lower limit (in scientific notation). Optional value.\r\n    * @param {string} upperLimit - upper limit (in scientific notation). Optional value.\r\n    * @return {ChordUnit[]} - a list of ChordUnit objects.\r\n    */\r\n  buildChordUnitList(chordProgression, lowerLimit, upperLimit) {\r\n    if(lowerLimit == null) {\r\n      lowerLimit = this.lowerLimit;\r\n    }\r\n    if(upperLimit == null) {\r\n      upperLimit = this.upperLimit;\r\n    }\r\n\r\n    var chordUnitList = [];\r\n    var chordTonesInRange;\r\n\r\n    for(var i = chordProgression.length - 1; i >= 0; i--) {\r\n      chordTonesInRange = this.getAllChordTones(chordProgression[i], lowerLimit, upperLimit);\r\n\r\n      if(i === chordProgression.length) {\r\n        chordUnitList[i] = new ChordUnit.ChordUnit(chordProgression[i], chordTonesInRange, null);\r\n      } else {\r\n        chordUnitList[i] = new ChordUnit.ChordUnit(chordProgression[i], chordTonesInRange, chordUnitList[i + 1]);\r\n      }\r\n    }\r\n\r\n    return chordUnitList;\r\n  }\r\n\r\n    /**\r\n    * Recursive function that adds new notes to the previous notes passed into it.\r\n    * On the first call of this function, melodyList should be null.\r\n    * @private\r\n    * @param {ChordUnit} chordUnit - the ChordUnit for the next chord\r\n    * @param {?string[]} melodyList - list of existing melodies\r\n    * @param {Object} options - if true, generated melodies will be filtered\r\n    * @param {boolean} options.filtered - if true, generated melodies will be filtered\r\n    * @param {boolean} options.rawOutput - if true, generated melodies will be given as strings\r\n    * @return {string[]} - a list of melodies. Each element is a string represeting a melody. Each melody string is written as a series of pitches delimited by a space.\r\n    */\r\n  getMelodiesCore(chordUnit, melodyList, options) {\r\n    var returnList = [];\r\n    var chordTones = chordUnit.chordTones;\r\n    var currentMelody, currentChordTone;\r\n    var rawMelody, newMelody, isInRange;\r\n    var isNotRepetitive, timestamp, haxThis = this;\r\n\r\n    if(melodyList) {\r\n      // We're somewhere along the middle of the chain.\r\n      for(var i = 0; i < melodyList.length; i++) {\r\n        currentMelody = melodyList[i];\r\n\r\n        for(var j = 0; j < chordTones.length; j++) {\r\n          currentChordTone = chordTones[j];\r\n\r\n          if(melodyList.length > 10000) {\r\n            timestamp = new Date().valueOf().toString().slice(-8);\r\n            if(timestamp % 8 === 0) {\r\n              // Randomly skips generation every now and then.\r\n              // Removes 20% of results?\r\n              break;\r\n            }\r\n          }\r\n\r\n          newMelody = currentMelody + \" \" + currentChordTone;\r\n\r\n          if(options.filtered) {\r\n            // check the distance of the last note and the new chord tone\r\n            // if it's more than an octave, skip this.\r\n            isInRange = AcLogic.filterMelodyRange(newMelody);\r\n            if(!isInRange) {\r\n              break;\r\n            }\r\n\r\n            if(newMelody.split(\" \").length >= 3) {\r\n              // check if melody is too repetitive. For our purposes, three of the same notes in a row\r\n              // would be too repetitive.\r\n              isNotRepetitive =  AcLogic.filterRepetition(newMelody);\r\n            } else {\r\n              isNotRepetitive = true;\r\n            }\r\n            if(!isNotRepetitive) {\r\n              break;\r\n            }\r\n\r\n            returnList.push(newMelody);\r\n          } else {\r\n            returnList.push(newMelody);\r\n          }\r\n        }\r\n      }\r\n    } else {\r\n      // This is the beginning of the chain.\r\n      melodyList = chordUnit.chordTones;\r\n      returnList.push.apply(returnList, melodyList);\r\n    }\r\n\r\n    if(chordUnit.nextChordUnit) {\r\n      // We're somewhere before the end of the chain.\r\n      return this.getMelodiesCore(chordUnit.nextChordUnit, returnList, options);\r\n    } else {\r\n      // End of the chain.\r\n      if(options.filtered && returnList.length > AcLogic.NUM_MELODIES_LIMIT) {\r\n        this._sendStatusUpdate(\"Generated  \" + returnList.length + \" melodies. Creating list of \" + AcLogic.NUM_MELODIES_LIMIT + \"...\");\r\n      } else {\r\n        this._sendStatusUpdate(\"Generated  \" + returnList.length + \" melodies.\");\r\n      }\r\n      return returnList;\r\n    }\r\n  }\r\n\r\n    /**\r\n    * For a given chord progression, generate a series of melodies that fit over the progression.\r\n    * @param {string[]} chordProgression - chord progression given by user\r\n    * @return {MelodyUnit[]} - an array of notes (written in scientific pitch)\r\n    */\r\n  getAllMelodies(chordProgression) {\r\n    var chordUnitList = this.buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);\r\n    var melodies = this.getMelodiesCore(chordUnitList[0], null, {filtered: false});\r\n\r\n    var melodyUnits = [];\r\n    var haxThis = this;\r\n    melodies.forEach(function(rawMelody) {\r\n      melodyUnits.push(haxThis.buildMelodyUnit(chordProgression, rawMelody));\r\n    });\r\n\r\n    return melodyUnits;\r\n  }\r\n\r\n    /**\r\n    * For a given chord progression, generate a series of melodies that fit over the progression.\r\n    * @param {string[]} chordProgression - chord progression given by user\r\n    * @return {string[]} - an array of notes (written in scientific pitch)\r\n    */\r\n  getRawMelodies(chordProgression) {\r\n    var chordUnitList = this.buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);\r\n    var melodies = this.getMelodiesCore(chordUnitList[0], null, {filtered: true, rawOutput: true});\r\n\r\n    return melodies;\r\n  }\r\n\r\n    /**\r\n    * For a given chord progression, generate a series of melodies that fit over the progression.\r\n    * Currently, the melodies are sorted by smoothness, and are limited to the first 100 melodies.\r\n    * @param {string[]} chordProgression - chord progression given by user\r\n    * @return {MelodyUnit[]} - an array of MelodyUnits\r\n    */\r\n  getMelodies(chordProgression) {\r\n    var chordUnitList = this.buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);\r\n    var rawMelodies = this.getMelodiesCore(chordUnitList[0], null, {filtered: true});\r\n    var options = {sort: true, limit: AcLogic.NUM_MELODIES_LIMIT};\r\n\r\n    var melodyUnits = this.buildMelodyUnitList(chordProgression, rawMelodies, options);\r\n\r\n    return melodyUnits;\r\n  }\r\n\r\n};\r\n\r\nexports.AutoComposerMelody = AutoComposerMelody;\r\n",
+    "content": "var tonal = require('tonal');\r\nvar ChordUnit = require('./chord-unit');\r\nvar MelodyUnit = require('./melody-unit');\r\n\r\nvar AutoComposerLogic = require('./autocomposer-logic');\r\nvar AcLogic = new AutoComposerLogic.AutoComposerLogic();\r\n\r\n/**\r\n* Creates melodies from a given chord progression\r\n* @emits {statusUpdate} - Emits a \"statusUpdate\" event with details when important events happen (like melody generation finishing, etc.)\r\n*/\r\nclass AutoComposerMelody {\r\n  /**\r\n  * @param {string[]} chordProgression - array of chord symbols\r\n  * @param {string} lowerLimit - lower boundary note (in scientific notation)\r\n  * @param {string} upperLimit - upper boundary note (in scientific notation)\r\n  */\r\n  constructor(chordProgression, lowerLimit, upperLimit) {\r\n    /** @type {string[]} */\r\n    this.chordProgression = chordProgression || AcLogic.INITIAL_PROGRESSION;\r\n    /** @type {string} */\r\n    this.lowerLimit = lowerLimit || AcLogic.DEFAULT_LOWER_LIMIT;\r\n    /** @type {string} */\r\n    this.upperLimit = upperLimit || AcLogic.DEFAULT_UPPER_LIMIT;\r\n  }\r\n\r\n  /**\r\n  * Sends a status update that's displayed to the user.\r\n  * @private\r\n  * @param {string} message - status update message\r\n  * @emits {statusUpdate}\r\n  */\r\n  _sendStatusUpdate(message) {\r\n    var updateEvent = new CustomEvent('statusUpdate', {detail: message});\r\n    document.body.dispatchEvent(updateEvent);\r\n  }\r\n\r\n    /**\r\n    * For a given note, find its lowest instance in the specified range.\r\n    * @private\r\n    * @param {string} pitch - pitch class\r\n    * @param {string} lowerLimit - note (written in scientific notation)\r\n    * @param {string} upperLimit - note (written in scientific notation)\r\n    * @return {string[]} - an array of notes (written in scientific pitch)\r\n    */\r\n  _getLowestNoteInRange(pitch, lowerLimit, upperLimit) {\r\n    var chordTonesInRange = tonal.range.pitchSet(pitch, [lowerLimit, upperLimit]);\r\n    return chordTonesInRange[0];\r\n  }\r\n\r\n    /**\r\n    * For a given array of chord tones, remove the specified pitches.\r\n    * @private\r\n    * @param {string[]} chordTones - chord tones\r\n    * @param {string[]} pitchArray - pitches to remove\r\n    * @return {string[]} - the remaining chord tones\r\n    */\r\n  _removePitchesFromChordTones(chordTones, pitchArray) {\r\n    var indexToRemove;\r\n    pitchArray.forEach(function(pitch) {\r\n      indexToRemove = chordTones.indexOf(pitch);\r\n      if (indexToRemove > -1) {\r\n        chordTones.splice(indexToRemove, 1);\r\n      }\r\n    });\r\n    return chordTones;\r\n  }\r\n\r\n    /**\r\n    * For a given MelodyUnit, get a simple accompaniment for it.\r\n    * @param {MelodyUnit} melodyUnit - melody that needs accompaniment\r\n    * @return {string[]} - array of strings, each representing one or more notes to play under each melodic note.\r\n    */\r\n  buildSimpleAccompaniment(melodyUnit) {\r\n    // Omit root note, and maybe avoid doubling the top note as well.\r\n    var noteArray = [], chordNotes, currentChord, bassPitch, topPitch;\r\n\r\n    for(var i = 0; i < melodyUnit.chordProgression.length; i++) {\r\n      currentChord = melodyUnit.chordProgression[i];\r\n      bassPitch = tonal.chord.parse(currentChord)[\"tonic\"];\r\n      topPitch =  tonal.note.pc(melodyUnit.melodyNotes[i]);\r\n\r\n      chordNotes = tonal.chord.notes(currentChord);\r\n      chordNotes = this._removePitchesFromChordTones(chordNotes, [topPitch]);\r\n\r\n      for(var j = 0; j < chordNotes.length; j++) {\r\n        chordNotes[j] = this._getLowestNoteInRange(chordNotes[j], AcLogic.ACCOMPANIMENT_LOWER_LIMIT, AcLogic.ACCOMPANIMENT_UPPER_LIMIT);\r\n      }\r\n      noteArray.push(chordNotes.join(\" \"));\r\n    }\r\n\r\n    return noteArray;\r\n  }\r\n\r\n    /**\r\n    * For a given MelodyUnit, return a basic bass line consisting only of root notes.\r\n    * @private\r\n    * @param {MelodyUnit} melodyUnit - melody that needs a bassline\r\n    * @return {string} - string representing a bassline.\r\n    */\r\n  getBasicBassLine(melodyUnit) {\r\n    var noteArray = [], currentChord, bassPitch, bassNote;\r\n\r\n    // return all the lowest root notes for the progression.\r\n    for(var i = 0; i < melodyUnit.chordProgression.length; i++) {\r\n      currentChord = melodyUnit.chordProgression[i];\r\n      bassPitch = tonal.chord.parse(currentChord)[\"tonic\"];\r\n      bassNote = this._getLowestNoteInRange(bassPitch, AcLogic.BASS_LOWER_LIMIT, AcLogic.BASS_UPPER_LIMIT);\r\n\r\n      noteArray.push(bassNote);\r\n    }\r\n\r\n    return noteArray;\r\n  }\r\n\r\n    /**\r\n    * For a given chord, get all the chord tones between the upper and lower limits.\r\n    * @private\r\n    * @param {string} chord - chord symbol\r\n    * @param {string} lowerLimit - note (written in scientific notation)\r\n    * @param {string} upperLimit - note (written in scientific notation)\r\n    * @return {string[]} - an array of notes (written in scientific pitch)\r\n    */\r\n  getAllChordTones(chord, lowerLimit, upperLimit) {\r\n    var chordTones = tonal.chord(chord);\r\n    var chordTonesInRange = tonal.range.pitchSet(chordTones, [lowerLimit, upperLimit]);\r\n\r\n    for(var i = 0; i < chordTonesInRange.length; i++) {\r\n      for(var j = 0; j < chordTones.length; j++) {\r\n        // Fixing pesky issue where D7 was returned as \"D Gb A C\" instead of \"D F# A C\"\r\n        // If the current chord tone is enharmonic with the note from the pitch set,\r\n        // Override it with the chord tone.\r\n        if(tonal.note.pc(chordTonesInRange[i]) != chordTones[j]\r\n          && tonal.note.enharmonics(chordTones[j]).indexOf(tonal.note.pc(chordTonesInRange[i])) > -1) {\r\n          chordTonesInRange[i] = chordTones[j] + tonal.note.oct(chordTonesInRange[i]);\r\n        }\r\n      }\r\n    }\r\n\r\n    return chordTonesInRange;\r\n  }\r\n\r\n    /**\r\n    * For a given chord symbol, creates a ChordUnit object\r\n    * @private\r\n    * @param {string} chord - chord symbol\r\n    * @param {string} lowerLimit - note (in scientific notation)\r\n    * @param {string} upperLimit - note (in scientific notation)\r\n    * @return {ChordUnit}\r\n    */\r\n  buildChordUnit(chord, lowerLimit, upperLimit) {\r\n    var chordTonesInRange = this.getAllChordTones(chord, lowerLimit, upperLimit);\r\n    var chordUnit = new ChordUnit.ChordUnit(chord, chordTonesInRange, null);\r\n    return chordUnit;\r\n  }\r\n\r\n    /**\r\n    * For a given melody, creates a MelodyUnit object\r\n    * @private\r\n    * @param {string[]} chordProgression - a chord progression\r\n    * @param {string} melodyString - a melody (in scientific notation)\r\n    * @return {MelodyUnit}\r\n    */\r\n  buildMelodyUnit(chordProgression, melodyString) {\r\n    var arrMelody = melodyString.split(\" \");\r\n    var melodyUnit = new MelodyUnit.MelodyUnit(chordProgression, arrMelody);\r\n    return melodyUnit;\r\n  }\r\n\r\n    /**\r\n    * For a given chord progression and melody, generate a series of melodies that fit over the progression\r\n    * @private\r\n    * @param {string[]} chordProgression - a chord progression\r\n    * @param {string[]} rawMelodies - a string representing the melody\r\n    * @param {Object} options - if true, generated melodies will be sorted, with smoothest melodies coming first.\r\n    * @param {boolean} options.sort - if true, generated melodies will be sorted, with smoothest melodies coming first.\r\n    * @param {number} options.limit - limits the output to a set number.\r\n    * @return {MelodyUnit[]} - a list of ChordUnit objects.\r\n    */\r\n  buildMelodyUnitList(chordProgression, rawMelodies, options) {\r\n    var melodyUnits = [];\r\n    var haxThis = this;\r\n\r\n    rawMelodies.forEach(function(rawMelody) {\r\n      melodyUnits.push(haxThis.buildMelodyUnit(chordProgression, rawMelody));\r\n    });\r\n\r\n    if(options) {\r\n      if(options.sort) {\r\n        melodyUnits.sort(function(a, b) {\r\n          return a.smoothness - b.smoothness;\r\n        });\r\n      }\r\n\r\n      if(options.limit) {\r\n        melodyUnits.splice(options.limit);\r\n      }\r\n    }\r\n    return melodyUnits;\r\n  }\r\n\r\n    /**\r\n    * For a given chord progression, generate a series of melodies that fit over the progression\r\n    * @private\r\n    * @param {string[]} chordProgression - chord symbols\r\n    * @param {string} lowerLimit - lower limit (in scientific notation). Optional value.\r\n    * @param {string} upperLimit - upper limit (in scientific notation). Optional value.\r\n    * @return {ChordUnit[]} - a list of ChordUnit objects.\r\n    */\r\n  buildChordUnitList(chordProgression, lowerLimit, upperLimit) {\r\n    if(lowerLimit == null) {\r\n      lowerLimit = this.lowerLimit;\r\n    }\r\n    if(upperLimit == null) {\r\n      upperLimit = this.upperLimit;\r\n    }\r\n\r\n    var chordUnitList = [];\r\n    var chordTonesInRange;\r\n\r\n    for(var i = chordProgression.length - 1; i >= 0; i--) {\r\n      chordTonesInRange = this.getAllChordTones(chordProgression[i], lowerLimit, upperLimit);\r\n\r\n      if(i === chordProgression.length) {\r\n        chordUnitList[i] = new ChordUnit.ChordUnit(chordProgression[i], chordTonesInRange, null);\r\n      } else {\r\n        chordUnitList[i] = new ChordUnit.ChordUnit(chordProgression[i], chordTonesInRange, chordUnitList[i + 1]);\r\n      }\r\n    }\r\n\r\n    return chordUnitList;\r\n  }\r\n\r\n    /**\r\n    * Recursive function that adds new notes to the previous notes passed into it.\r\n    * On the first call of this function, melodyList should be null.\r\n    * @private\r\n    * @param {ChordUnit} chordUnit - the ChordUnit for the next chord\r\n    * @param {?string[]} melodyList - list of existing melodies\r\n    * @param {Object} options - if true, generated melodies will be filtered\r\n    * @param {boolean} options.filtered - if true, generated melodies will be filtered\r\n    * @return {string[]} - a list of melodies. Each element is a string represeting a melody. Each melody string is written as a series of pitches delimited by a space.\r\n    */\r\n  buildSimpleMelodiesCore(chordUnit, melodyList, options) {\r\n    var returnList = [];\r\n    var chordTones = chordUnit.chordTones;\r\n    var currentMelody, currentChordTone;\r\n    var rawMelody, newMelody, isInRange;\r\n    var isNotRepetitive, timestamp, haxThis = this;\r\n\r\n    if(melodyList) {\r\n      // We're somewhere along the middle of the chain.\r\n      for(var i = 0; i < melodyList.length; i++) {\r\n        currentMelody = melodyList[i];\r\n\r\n        for(var j = 0; j < chordTones.length; j++) {\r\n          currentChordTone = chordTones[j];\r\n\r\n          if(melodyList.length > 10000) {\r\n            timestamp = new Date().valueOf().toString().slice(-8);\r\n            if(timestamp % 8 === 0) {\r\n              // Randomly skips generation every now and then.\r\n              // Removes 20% of results?\r\n              break;\r\n            }\r\n          }\r\n\r\n          newMelody = currentMelody + \" \" + currentChordTone;\r\n\r\n          if(options.filtered) {\r\n            // check the distance of the last note and the new chord tone\r\n            // if it's more than an octave, skip this.\r\n            isInRange = AcLogic.filterMelodyRange(newMelody);\r\n            if(!isInRange) {\r\n              break;\r\n            }\r\n\r\n            if(newMelody.split(\" \").length >= 3) {\r\n              // check if melody is too repetitive. For our purposes, three of the same notes in a row\r\n              // would be too repetitive.\r\n              isNotRepetitive =  AcLogic.filterRepetition(newMelody);\r\n            } else {\r\n              isNotRepetitive = true;\r\n            }\r\n            if(!isNotRepetitive) {\r\n              break;\r\n            }\r\n\r\n            returnList.push(newMelody);\r\n          } else {\r\n            returnList.push(newMelody);\r\n          }\r\n        }\r\n      }\r\n    } else {\r\n      // This is the beginning of the chain.\r\n      melodyList = chordUnit.chordTones;\r\n      returnList.push.apply(returnList, melodyList);\r\n    }\r\n\r\n    if(chordUnit.nextChordUnit) {\r\n      // We're somewhere before the end of the chain.\r\n      return this.buildSimpleMelodiesCore(chordUnit.nextChordUnit, returnList, options);\r\n    } else {\r\n      // End of the chain.\r\n      if(options.filtered && returnList.length > AcLogic.NUM_MELODIES_LIMIT) {\r\n        this._sendStatusUpdate(\"Generated  \" + returnList.length + \" melodies. Creating list of \" + AcLogic.NUM_MELODIES_LIMIT + \"...\");\r\n      } else {\r\n        this._sendStatusUpdate(\"Generated  \" + returnList.length + \" melodies.\");\r\n      }\r\n      return returnList;\r\n    }\r\n  }\r\n\r\n    /**\r\n    * For a given chord progression, generate a series of melodies that fit over the progression.\r\n    * @private\r\n    * @deprecated\r\n    * @param {string[]} chordProgression - chord progression given by user\r\n    * @return {MelodyUnit[]} - an array of notes (written in scientific pitch)\r\n    */\r\n  buildAllMelodies(chordProgression) {\r\n    var chordUnitList = this.buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);\r\n    var melodies = this.buildSimpleMelodiesCore(chordUnitList[0], null, {filtered: false});\r\n\r\n    var melodyUnits = [];\r\n    var haxThis = this;\r\n    melodies.forEach(function(rawMelody) {\r\n      melodyUnits.push(haxThis.buildMelodyUnit(chordProgression, rawMelody));\r\n    });\r\n\r\n    return melodyUnits;\r\n  }\r\n\r\n    /**\r\n    * For a given chord progression, generate a series of melodies that fit over the progression.\r\n    * @private\r\n    * @deprecated\r\n    * @param {string[]} chordProgression - chord progression given by user\r\n    * @return {string[]} - an array of notes (written in scientific pitch)\r\n    */\r\n  buildRawMelodies(chordProgression) {\r\n    var chordUnitList = this.buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);\r\n    var melodies = this.buildSimpleMelodiesCore(chordUnitList[0], null, {filtered: true});\r\n\r\n    return melodies;\r\n  }\r\n\r\n    /**\r\n    * For a given chord progression, generate a series of melodies that fit over the progression.\r\n    * The melodies are sorted by smoothness, and are limited to the smoothest 100 melodies by default.\r\n    * @param {string[]} chordProgression - chord progression given by user\r\n    * @param {Object} [options] - options for melody generation\r\n    * @param {Object} [options.raw] - if true, returns output as strings (default = false)\r\n    * @param {Object} [options.limit] - if false, returns all the generated melodies, not just the top 100 (default = true)\r\n    * @param {Object} [options.filter] - if false, returns melodies that are considered too \"ugly\" for the default process. (default = true)\r\n    * @return {MelodyUnit[]} - an array of MelodyUnits\r\n    */\r\n  buildSimpleMelodies(chordProgression, options) {\r\n    var useDefault, melodyUnits, rawMelodies, coreOptions, muOptions;\r\n    var rawOption, limitOption, filterOption, sortOption;\r\n    var chordUnitList = this.buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);\r\n\r\n    if(options) {\r\n      // In all these ternary operations, the default value is on the right.\r\n      rawOption = options.raw && (options.raw === \"true\" || options.raw === true) ? true : false;\r\n      filterOption = typeof options.filter !== \"undefined\" && (options.filter === \"false\" || options.limit === false) ? false : true;\r\n      if(typeof options.filter !== \"undefined\" && (options.limit === \"false\" || options.limit === false)) {\r\n        limitOption = null;\r\n        sortOption = false;\r\n      } else {\r\n        // default vals\r\n        limitOption = AcLogic.NUM_MELODIES_LIMIT;\r\n        sortOption = true;\r\n      }\r\n    } else {\r\n      // default values\r\n      rawOption = false;\r\n      filterOption = true;\r\n      limitOption = AcLogic.NUM_MELODIES_LIMIT;\r\n      sortOption = true;\r\n    }\r\n\r\n    rawMelodies = this.buildSimpleMelodiesCore(chordUnitList[0], null, {filtered: filterOption});\r\n\r\n    if(rawOption) {\r\n      return rawMelodies;\r\n    }\r\n\r\n    melodyUnits = this.buildMelodyUnitList(chordProgression, rawMelodies, {sort: sortOption, limit: limitOption});\r\n    return melodyUnits;\r\n  }\r\n\r\n};\r\n\r\nexports.AutoComposerMelody = AutoComposerMelody;\r\n",
     "static": true,
     "longname": "src/autocomposer-melody.js",
     "access": null,
@@ -1941,7 +1941,15 @@
     "importPath": "autocomposer-melody/src/autocomposer-melody.js",
     "importStyle": "{AutoComposerMelody}",
     "description": "Creates melodies from a given chord progression",
-    "lineNumber": 11,
+    "lineNumber": 12,
+    "emits": [
+      {
+        "types": [
+          "statusUpdate"
+        ],
+        "description": "Emits a \"statusUpdate\" event with details when important events happen (like melody generation finishing, etc.)"
+      }
+    ],
     "interface": false
   },
   {
@@ -1955,7 +1963,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#constructor",
     "access": null,
     "description": "",
-    "lineNumber": 17,
+    "lineNumber": 18,
     "params": [
       {
         "nullable": null,
@@ -1998,7 +2006,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#chordProgression",
     "access": null,
     "description": null,
-    "lineNumber": 19,
+    "lineNumber": 20,
     "type": {
       "nullable": null,
       "types": [
@@ -2017,7 +2025,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#lowerLimit",
     "access": null,
     "description": null,
-    "lineNumber": 21,
+    "lineNumber": 22,
     "type": {
       "nullable": null,
       "types": [
@@ -2036,7 +2044,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#upperLimit",
     "access": null,
     "description": null,
-    "lineNumber": 23,
+    "lineNumber": 24,
     "type": {
       "nullable": null,
       "types": [
@@ -2055,22 +2063,27 @@
     "async": false,
     "static": false,
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#_sendStatusUpdate",
-    "access": null,
-    "description": null,
-    "lineNumber": 26,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
+    "access": "private",
+    "description": "Sends a status update that's displayed to the user.",
+    "lineNumber": 33,
     "params": [
       {
-        "name": "message",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "message",
+        "description": "status update message"
+      }
+    ],
+    "emits": [
+      {
+        "types": [
+          "statusUpdate"
+        ],
+        "description": ""
       }
     ]
   },
@@ -2085,7 +2098,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#_getLowestNoteInRange",
     "access": "private",
     "description": "For a given note, find its lowest instance in the specified range.",
-    "lineNumber": 39,
+    "lineNumber": 46,
     "params": [
       {
         "nullable": null,
@@ -2138,18 +2151,8 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#_removePitchesFromChordTones",
     "access": "private",
     "description": "For a given array of chord tones, remove the specified pitches.",
-    "lineNumber": 51,
+    "lineNumber": 58,
     "params": [
-      {
-        "nullable": null,
-        "types": [
-          "string[]"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "pitchArray",
-        "description": "pitches to remove"
-      },
       {
         "nullable": null,
         "types": [
@@ -2159,6 +2162,16 @@
         "optional": false,
         "name": "chordTones",
         "description": "chord tones"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string[]"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pitchArray",
+        "description": "pitches to remove"
       }
     ],
     "return": {
@@ -2173,15 +2186,15 @@
   {
     "__docId__": 88,
     "kind": "method",
-    "name": "getAccompaniment",
+    "name": "buildSimpleAccompaniment",
     "memberof": "src/autocomposer-melody.js~AutoComposerMelody",
     "generator": false,
     "async": false,
     "static": false,
-    "longname": "src/autocomposer-melody.js~AutoComposerMelody#getAccompaniment",
-    "access": "private",
-    "description": "For a given MelodyUnit, get an accompaniment for it.",
-    "lineNumber": 68,
+    "longname": "src/autocomposer-melody.js~AutoComposerMelody#buildSimpleAccompaniment",
+    "access": null,
+    "description": "For a given MelodyUnit, get a simple accompaniment for it.",
+    "lineNumber": 74,
     "params": [
       {
         "nullable": null,
@@ -2214,7 +2227,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#getBasicBassLine",
     "access": "private",
     "description": "For a given MelodyUnit, return a basic bass line consisting only of root notes.",
-    "lineNumber": 95,
+    "lineNumber": 101,
     "params": [
       {
         "nullable": null,
@@ -2247,7 +2260,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#getAllChordTones",
     "access": "private",
     "description": "For a given chord, get all the chord tones between the upper and lower limits.",
-    "lineNumber": 118,
+    "lineNumber": 124,
     "params": [
       {
         "nullable": null,
@@ -2300,7 +2313,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#buildChordUnit",
     "access": "private",
     "description": "For a given chord symbol, creates a ChordUnit object",
-    "lineNumber": 145,
+    "lineNumber": 151,
     "params": [
       {
         "nullable": null,
@@ -2353,7 +2366,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#buildMelodyUnit",
     "access": "private",
     "description": "For a given melody, creates a MelodyUnit object",
-    "lineNumber": 158,
+    "lineNumber": 164,
     "params": [
       {
         "nullable": null,
@@ -2396,7 +2409,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#buildMelodyUnitList",
     "access": "private",
     "description": "For a given chord progression and melody, generate a series of melodies that fit over the progression",
-    "lineNumber": 174,
+    "lineNumber": 180,
     "params": [
       {
         "nullable": null,
@@ -2469,7 +2482,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#buildChordUnitList",
     "access": "private",
     "description": "For a given chord progression, generate a series of melodies that fit over the progression",
-    "lineNumber": 204,
+    "lineNumber": 210,
     "params": [
       {
         "nullable": null,
@@ -2514,15 +2527,15 @@
   {
     "__docId__": 95,
     "kind": "method",
-    "name": "getMelodiesCore",
+    "name": "buildSimpleMelodiesCore",
     "memberof": "src/autocomposer-melody.js~AutoComposerMelody",
     "generator": false,
     "async": false,
     "static": false,
-    "longname": "src/autocomposer-melody.js~AutoComposerMelody#getMelodiesCore",
+    "longname": "src/autocomposer-melody.js~AutoComposerMelody#buildSimpleMelodiesCore",
     "access": "private",
     "description": "Recursive function that adds new notes to the previous notes passed into it.\nOn the first call of this function, melodyList should be null.",
-    "lineNumber": 239,
+    "lineNumber": 244,
     "params": [
       {
         "nullable": null,
@@ -2563,16 +2576,6 @@
         "optional": false,
         "name": "options.filtered",
         "description": "if true, generated melodies will be filtered"
-      },
-      {
-        "nullable": null,
-        "types": [
-          "boolean"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "options.rawOutput",
-        "description": "if true, generated melodies will be given as strings"
       }
     ],
     "return": {
@@ -2587,15 +2590,16 @@
   {
     "__docId__": 96,
     "kind": "method",
-    "name": "getAllMelodies",
+    "name": "buildAllMelodies",
     "memberof": "src/autocomposer-melody.js~AutoComposerMelody",
     "generator": false,
     "async": false,
     "static": false,
-    "longname": "src/autocomposer-melody.js~AutoComposerMelody#getAllMelodies",
-    "access": null,
+    "longname": "src/autocomposer-melody.js~AutoComposerMelody#buildAllMelodies",
+    "access": "private",
     "description": "For a given chord progression, generate a series of melodies that fit over the progression.",
-    "lineNumber": 315,
+    "lineNumber": 322,
+    "deprecated": true,
     "params": [
       {
         "nullable": null,
@@ -2620,15 +2624,16 @@
   {
     "__docId__": 97,
     "kind": "method",
-    "name": "getRawMelodies",
+    "name": "buildRawMelodies",
     "memberof": "src/autocomposer-melody.js~AutoComposerMelody",
     "generator": false,
     "async": false,
     "static": false,
-    "longname": "src/autocomposer-melody.js~AutoComposerMelody#getRawMelodies",
-    "access": null,
+    "longname": "src/autocomposer-melody.js~AutoComposerMelody#buildRawMelodies",
+    "access": "private",
     "description": "For a given chord progression, generate a series of melodies that fit over the progression.",
-    "lineNumber": 333,
+    "lineNumber": 342,
+    "deprecated": true,
     "params": [
       {
         "nullable": null,
@@ -2653,15 +2658,15 @@
   {
     "__docId__": 98,
     "kind": "method",
-    "name": "getMelodies",
+    "name": "buildSimpleMelodies",
     "memberof": "src/autocomposer-melody.js~AutoComposerMelody",
     "generator": false,
     "async": false,
     "static": false,
-    "longname": "src/autocomposer-melody.js~AutoComposerMelody#getMelodies",
+    "longname": "src/autocomposer-melody.js~AutoComposerMelody#buildSimpleMelodies",
     "access": null,
-    "description": "For a given chord progression, generate a series of melodies that fit over the progression.\nCurrently, the melodies are sorted by smoothness, and are limited to the first 100 melodies.",
-    "lineNumber": 346,
+    "description": "For a given chord progression, generate a series of melodies that fit over the progression.\nThe melodies are sorted by smoothness, and are limited to the smoothest 100 melodies by default.",
+    "lineNumber": 359,
     "params": [
       {
         "nullable": null,
@@ -2672,6 +2677,46 @@
         "optional": false,
         "name": "chordProgression",
         "description": "chord progression given by user"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": true,
+        "name": "options",
+        "description": "options for melody generation"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": true,
+        "name": "options.raw",
+        "description": "if true, returns output as strings (default = false)"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": true,
+        "name": "options.limit",
+        "description": "if false, returns all the generated melodies, not just the top 100 (default = true)"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": true,
+        "name": "options.filter",
+        "description": "if false, returns melodies that are considered too \"ugly\" for the default process. (default = true)"
       }
     ],
     "return": {
@@ -2687,7 +2732,7 @@
     "__docId__": 99,
     "kind": "file",
     "name": "src/autocomposer-midi.js",
-    "content": "var MidiWriter = require('midi-writer-js');\r\nvar MidiPlayer = require('midi-player-js');\r\nvar SoundfontPlayer = require('soundfont-player');\r\nvar tonalNote = require('tonal-note');\r\n\r\n/**\r\n * Class responsible for playing audio and generating MIDI files for users.\r\n */\r\nclass AutoComposerMidi {\r\n  constructor() {\r\n    this.NOTE_DURATION = \"1\";\r\n    this.NUM_INSTRUMENTS = 3;\r\n\r\n    this.instrumentData = {\r\n      melody: {\r\n        name: \"violin\",\r\n        sfInstrument: null, // actual instrument to be used by the app\r\n        gain: 1.7,\r\n        midiInstrumentCode: 40\r\n      },\r\n      accompaniment: {\r\n        name: \"acoustic_guitar_steel\",\r\n        sfInstrument: null,\r\n        gain: 1.6,\r\n        midiInstrumentCode: 25\r\n      },\r\n      bass: {\r\n        name: \"acoustic_bass\",\r\n        sfInstrument: null,\r\n        gain: 1.65,\r\n        midiInstrumentCode: 32\r\n      },\r\n      getByName: function(instrName) {\r\n        for (var instrumentRole in this) {\r\n          if(instrName === this[instrumentRole].name) {\r\n            return this[instrumentRole];\r\n          }\r\n        }\r\n        return null;\r\n      }\r\n    };\r\n\r\n    this.numInstrumentsInit = 0;\r\n\r\n    this.player = null;\r\n    this.audioContext = new AudioContext;\r\n\r\n    this.initialized = false;\r\n    // Added this flag to fix an issue where notes randomly play again after the track ends.\r\n    // It only works for tracks that are all the same length. If we ever have to play tracks that have\r\n    // different lengths, we'll need a different solution.\r\n    this.playbackLocked = true;\r\n\r\n    // is this kind of scope hackery necessary?!\r\n    var haxThis = this;\r\n    var currentInstrument;\r\n\r\n    for (var instrumentRole in this.instrumentData) {\r\n      // initialize each instrument\r\n      if(typeof this.instrumentData[instrumentRole] !== \"function\")\r\n      Soundfont.instrument(this.audioContext, haxThis.instrumentData[instrumentRole].name, {soundfont: 'FluidR3_GM'}).then(function (sfInstrument) {\r\n        currentInstrument = haxThis.instrumentData.getByName(sfInstrument.name);\r\n        currentInstrument.sfInstrument = sfInstrument;\r\n\r\n        haxThis.numInstrumentsInit++;\r\n\r\n        console.log(\"[INNER FUNCTION] instrumentRole=\" + instrumentRole);\r\n        console.log(currentInstrument);\r\n        console.log(sfInstrument);\r\n        if(haxThis.numInstrumentsInit === haxThis.NUM_INSTRUMENTS) {\r\n          haxThis._finishLoad();\r\n        }\r\n      });\r\n    }\r\n\r\n  }\r\n\r\n    /**\r\n    * Triggers the note playing for all instruments. Called for every MIDI event in the app.\r\n    * @private\r\n    * @param {number} event - MIDI event\r\n    */\r\n  _midiCallback(event) {\r\n    // callback for MIDI events\r\n    var instr1 = this.instrumentData[\"melody\"];\r\n    var instr2 = this.instrumentData[\"accompaniment\"];\r\n    var instr3 = this.instrumentData[\"bass\"];\r\n\r\n    if (!this.playbackLocked && event.name == 'Note on' && event.velocity > 0) {\r\n        switch(event.track) {\r\n          case 1:\r\n            instr1.sfInstrument.play(event.noteName, this.audioContext.currentTime, {gain: instr1.gain});\r\n            break;\r\n          case 2:\r\n            instr2.sfInstrument.play(event.noteName, this.audioContext.currentTime, {gain: instr2.gain});\r\n            break;\r\n          case 3:\r\n            instr3.sfInstrument.play(event.noteName, this.audioContext.currentTime, {gain: instr3.gain});\r\n            break;\r\n          default:\r\n            // nothing!\r\n        }\r\n    }\r\n\r\n    if (event.name == 'Note off') {\r\n      switch(event.track) {\r\n        case 1:\r\n          instr1.sfInstrument.stop();\r\n          break;\r\n        case 2:\r\n          instr2.sfInstrument.stop();\r\n          break;\r\n        case 3:\r\n          instr3.sfInstrument.stop();\r\n          break;\r\n        default:\r\n          // nothing!\r\n      }\r\n    }\r\n\r\n    if (event.name == \"End of Track\") {\r\n      this.playbackLocked = true;\r\n    }\r\n  }\r\n\r\n    /**\r\n    * Completes the loading of this class. The \"midiPlayerReady\" eve\r\n    * @private\r\n    * @emits {midiPlayerReady} - Emits this event when the audio player successfully loads\r\n    */\r\n  _finishLoad() {\r\n    var haxThis = this;\r\n    this.player = new MidiPlayer.Player(function(event) {\r\n      haxThis._midiCallback(event);\r\n    });\r\n    this.initialized = true;\r\n    this.playbackLocked = false;\r\n\r\n    var updateEvent = new CustomEvent('statusUpdate', {detail: \"MIDI player is loaded!\"});\r\n    document.body.dispatchEvent(updateEvent);\r\n  }\r\n\r\n    /**\r\n    * Builds MIDI info for a note or chord\r\n    * @private\r\n    * @param {number[]} arrNumMidi - MIDI numbers for a set of pitches\r\n    * @param {number} duration - MIDI number for a pitch\r\n    * @param {number} wait\r\n    * @return {MidiWriter.NoteEvent} - ???\r\n    */\r\n  _buildMidi(arrNumMidi, duration, wait) {\r\n      if(!wait) {\r\n          wait = \"0\";\r\n      }\r\n      return new MidiWriter.NoteEvent({pitch: arrNumMidi, duration: duration, wait: wait, velocity: 100});\r\n  }\r\n\r\n    /**\r\n    * Builds a Track from a given chord.\r\n    * @private\r\n    * @param {string[]} arrChordNotes - chordNotes\r\n    * @param {Object} instrumentData - instrument data for track\r\n    * @return {Track} - a MidiWriter Track\r\n    */\r\n  _buildTrack(arrChordNotes, instrumentData) {\r\n    var notes, midiNumber, midiNumbers;\r\n    var returnTrack = new MidiWriter.Track();\r\n    returnTrack.addEvent(new MidiWriter.ProgramChangeEvent({instrument : instrumentData.midiInstrumentCode}));\r\n    returnTrack.addInstrumentName(instrumentData.name);\r\n\r\n    for(var i = 0; i < arrChordNotes.length; i++) {\r\n      midiNumbers = [];\r\n      notes = arrChordNotes[i].split(\" \");\r\n\r\n      notes.forEach(function(note){\r\n        midiNumbers.push(tonalNote.midi(note));\r\n      })\r\n\r\n      returnTrack.addEvent(this._buildMidi(midiNumbers, this.NOTE_DURATION));\r\n    }\r\n\r\n    return returnTrack;\r\n  }\r\n\r\n    /**\r\n    * Gets the MIDI data for a given melody.\r\n    * @private\r\n    * @param {string[]} arrMelody - our melody\r\n    * @return {string} - MIDI data, as a DataURI string\r\n    */\r\n  _buildMelodyMidiSolo(arrMelody) {\r\n    var tracks = [], midiNumber;\r\n    tracks[0] = this._buildTrack(arrMelody, this.instrumentData[\"melody\"]);\r\n\r\n    var write = new MidiWriter.Writer(tracks);\r\n\r\n    return write.dataUri();\r\n  }\r\n\r\n    /**\r\n    * Gets the MIDI data for a given melody, with accompaniment.\r\n    * @param {string[]} arrMelody - main melody\r\n    * @param {string[]} arrAcompanimentLine - accompaniment line\r\n    * @param {string[]} arrBassLine - bass line\r\n    * @return {string} - MIDI data, as a DataURI string.\r\n    */\r\n  buildMelodyMidiWithAccompaniment(arrMelody, arrAcompanimentLine, arrBassLine) {\r\n    var tracks, midiNumber;\r\n\r\n    var melodyTrack = this._buildTrack(arrMelody, this.instrumentData[\"melody\"]);\r\n    var accompanimentTrack = this._buildTrack(arrAcompanimentLine, this.instrumentData[\"accompaniment\"]);\r\n    var bassTrack = this._buildTrack(arrBassLine, this.instrumentData[\"bass\"]);\r\n\r\n    tracks = [melodyTrack, accompanimentTrack, bassTrack];\r\n\r\n    var write = new MidiWriter.Writer(tracks);\r\n\r\n    return write.dataUri();\r\n  }\r\n\r\n    /**\r\n    * Plays the given melody.\r\n    * @param {string[]} melodySolo - solo melody (violin)\r\n    */\r\n  playMelodySolo(melodySolo) {\r\n    var strMidi = this._buildMelodyMidiSolo(melodySolo);\r\n    this._playMelody(strMidi);\r\n  }\r\n    /**\r\n    * Plays the given melodies.\r\n    * @param {string[]} melodySolo - solo melody (violin)\r\n    * @param {string[]} melodyAccomp - accompaniment melody (piano)\r\n    * @param {string[]} melodyBass - bass melody (bass)\r\n    */\r\n  playMelodyWithAccompaniment(melodySolo, melodyAccomp, melodyBass) {\r\n    var strMidi = this.buildMelodyMidiWithAccompaniment(melodySolo, melodyAccomp, melodyBass);\r\n    this._playMelody(strMidi);\r\n  }\r\n\r\n    /**\r\n    * Actually plays the given melody\r\n    * @private\r\n    * @param {string} strMidi - MIDI data, as a DataURI string.\r\n    */\r\n  _playMelody(strMidi) {\r\n    if(this.initialized) {\r\n      this.stopPlayback();\r\n      this.playbackLocked = false;\r\n      this.player.loadDataUri(strMidi);\r\n      this.player.play();\r\n    } else {\r\n      console.warn(\"[AutoComposerMidi._playMelody()] Player isn't initialized yet...\");\r\n    }\r\n  }\r\n\r\n    /**\r\n    * Stops all playback\r\n    */\r\n  stopPlayback() {\r\n    this.instrumentData[\"melody\"].sfInstrument.stop();\r\n    this.instrumentData[\"accompaniment\"].sfInstrument.stop();\r\n    this.instrumentData[\"bass\"].sfInstrument.stop();\r\n    this.player.stop();\r\n  }\r\n}\r\n\r\nexports.AutoComposerMidi = AutoComposerMidi;\r\n",
+    "content": "var MidiWriter = require('midi-writer-js');\r\nvar MidiPlayer = require('midi-player-js');\r\nvar SoundfontPlayer = require('soundfont-player');\r\nvar tonalNote = require('tonal-note');\r\n\r\n/**\r\n* Class responsible for playing audio and generating MIDI files for users.\r\n* @emits {statusUpdate} - Emits this event when the audio player successfully loads.\r\n*/\r\nclass AutoComposerMidi {\r\n  constructor() {\r\n    this.NOTE_DURATION = \"1\";\r\n    this.NUM_INSTRUMENTS = 3;\r\n\r\n    this.instrumentData = {\r\n      melody: {\r\n        name: \"violin\",\r\n        sfInstrument: null, // actual instrument to be used by the app\r\n        gain: 1.7,\r\n        midiInstrumentCode: 40\r\n      },\r\n      accompaniment: {\r\n        name: \"acoustic_guitar_steel\",\r\n        sfInstrument: null,\r\n        gain: 1.6,\r\n        midiInstrumentCode: 25\r\n      },\r\n      bass: {\r\n        name: \"acoustic_bass\",\r\n        sfInstrument: null,\r\n        gain: 1.65,\r\n        midiInstrumentCode: 32\r\n      },\r\n      getByName: function(instrName) {\r\n        for (var instrumentRole in this) {\r\n          if(instrName === this[instrumentRole].name) {\r\n            return this[instrumentRole];\r\n          }\r\n        }\r\n        return null;\r\n      }\r\n    };\r\n\r\n    this.numInstrumentsInit = 0;\r\n\r\n    this.player = null;\r\n    this.audioContext = new AudioContext;\r\n\r\n    this.initialized = false;\r\n    // Added this flag to fix an issue where notes randomly play again after the track ends.\r\n    // It only works for tracks that are all the same length. If we ever have to play tracks that have\r\n    // different lengths, we'll need a different solution.\r\n    this.playbackLocked = true;\r\n\r\n    // is this kind of scope hackery necessary?!\r\n    var haxThis = this;\r\n    var currentInstrument;\r\n\r\n    for (var instrumentRole in this.instrumentData) {\r\n      // initialize each instrument\r\n      if(typeof this.instrumentData[instrumentRole] !== \"function\")\r\n      Soundfont.instrument(this.audioContext, haxThis.instrumentData[instrumentRole].name, {soundfont: 'FluidR3_GM'}).then(function (sfInstrument) {\r\n        currentInstrument = haxThis.instrumentData.getByName(sfInstrument.name);\r\n        currentInstrument.sfInstrument = sfInstrument;\r\n\r\n        haxThis.numInstrumentsInit++;\r\n\r\n        console.log(\"[INNER FUNCTION] instrumentRole=\" + instrumentRole);\r\n        console.log(currentInstrument);\r\n        console.log(sfInstrument);\r\n        if(haxThis.numInstrumentsInit === haxThis.NUM_INSTRUMENTS) {\r\n          haxThis._finishLoad();\r\n        }\r\n      });\r\n    }\r\n\r\n  }\r\n\r\n    /**\r\n    * Triggers the note playing for all instruments. Called for every MIDI event in the app.\r\n    * @private\r\n    * @param {number} event - MIDI event\r\n    */\r\n  _midiCallback(event) {\r\n    // callback for MIDI events\r\n    var instr1 = this.instrumentData[\"melody\"];\r\n    var instr2 = this.instrumentData[\"accompaniment\"];\r\n    var instr3 = this.instrumentData[\"bass\"];\r\n\r\n    if (!this.playbackLocked && event.name == 'Note on' && event.velocity > 0) {\r\n        switch(event.track) {\r\n          case 1:\r\n            instr1.sfInstrument.play(event.noteName, this.audioContext.currentTime, {gain: instr1.gain});\r\n            break;\r\n          case 2:\r\n            instr2.sfInstrument.play(event.noteName, this.audioContext.currentTime, {gain: instr2.gain});\r\n            break;\r\n          case 3:\r\n            instr3.sfInstrument.play(event.noteName, this.audioContext.currentTime, {gain: instr3.gain});\r\n            break;\r\n          default:\r\n            // nothing!\r\n        }\r\n    }\r\n\r\n    if (event.name == 'Note off') {\r\n      switch(event.track) {\r\n        case 1:\r\n          instr1.sfInstrument.stop();\r\n          break;\r\n        case 2:\r\n          instr2.sfInstrument.stop();\r\n          break;\r\n        case 3:\r\n          instr3.sfInstrument.stop();\r\n          break;\r\n        default:\r\n          // nothing!\r\n      }\r\n    }\r\n\r\n    if (event.name == \"End of Track\") {\r\n      this.playbackLocked = true;\r\n    }\r\n  }\r\n\r\n    /**\r\n    * Completes the loading of this class. The \"midiPlayerReady\" eve\r\n    * @private\r\n    * @emits {statusUpdate} - Emits this event when the audio player successfully loads\r\n    */\r\n  _finishLoad() {\r\n    var haxThis = this;\r\n    this.player = new MidiPlayer.Player(function(event) {\r\n      haxThis._midiCallback(event);\r\n    });\r\n    this.initialized = true;\r\n    this.playbackLocked = false;\r\n\r\n    var updateEvent = new CustomEvent('statusUpdate', {detail: \"MIDI player is loaded!\"});\r\n    document.body.dispatchEvent(updateEvent);\r\n  }\r\n\r\n    /**\r\n    * Builds MIDI info for a note or chord\r\n    * @private\r\n    * @param {number[]} arrNumMidi - MIDI numbers for a set of pitches\r\n    * @param {number} duration - MIDI number for a pitch\r\n    * @param {number} wait\r\n    * @return {MidiWriter.NoteEvent} - ???\r\n    */\r\n  _buildMidi(arrNumMidi, duration, wait) {\r\n      if(!wait) {\r\n          wait = \"0\";\r\n      }\r\n      return new MidiWriter.NoteEvent({pitch: arrNumMidi, duration: duration, wait: wait, velocity: 100});\r\n  }\r\n\r\n    /**\r\n    * Builds a Track from a given chord.\r\n    * @private\r\n    * @param {string[]} arrChordNotes - chordNotes\r\n    * @param {Object} instrumentData - instrument data for track\r\n    * @return {Track} - a MidiWriter Track\r\n    */\r\n  _buildTrack(arrChordNotes, instrumentData) {\r\n    var notes, midiNumber, midiNumbers;\r\n    var returnTrack = new MidiWriter.Track();\r\n    returnTrack.addEvent(new MidiWriter.ProgramChangeEvent({instrument : instrumentData.midiInstrumentCode}));\r\n    returnTrack.addInstrumentName(instrumentData.name);\r\n\r\n    for(var i = 0; i < arrChordNotes.length; i++) {\r\n      midiNumbers = [];\r\n      notes = arrChordNotes[i].split(\" \");\r\n\r\n      notes.forEach(function(note){\r\n        midiNumbers.push(tonalNote.midi(note));\r\n      })\r\n\r\n      returnTrack.addEvent(this._buildMidi(midiNumbers, this.NOTE_DURATION));\r\n    }\r\n\r\n    return returnTrack;\r\n  }\r\n\r\n    /**\r\n    * Gets the MIDI data for a given melody.\r\n    * @private\r\n    * @param {string[]} arrMelody - our melody\r\n    * @return {string} - MIDI data, as a DataURI string\r\n    */\r\n  _buildMelodyMidiSolo(arrMelody) {\r\n    var tracks = [], midiNumber;\r\n    tracks[0] = this._buildTrack(arrMelody, this.instrumentData[\"melody\"]);\r\n\r\n    var write = new MidiWriter.Writer(tracks);\r\n\r\n    return write.dataUri();\r\n  }\r\n\r\n    /**\r\n    * Gets the MIDI data for a given melody, with accompaniment.\r\n    * @param {string[]} arrMelody - main melody\r\n    * @param {string[]} arrAcompanimentLine - accompaniment line\r\n    * @param {string[]} arrBassLine - bass line\r\n    * @return {string} - MIDI data, as a DataURI string.\r\n    */\r\n  buildMelodyMidiWithAccompaniment(arrMelody, arrAcompanimentLine, arrBassLine) {\r\n    var tracks, midiNumber;\r\n\r\n    var melodyTrack = this._buildTrack(arrMelody, this.instrumentData[\"melody\"]);\r\n    var accompanimentTrack = this._buildTrack(arrAcompanimentLine, this.instrumentData[\"accompaniment\"]);\r\n    var bassTrack = this._buildTrack(arrBassLine, this.instrumentData[\"bass\"]);\r\n\r\n    tracks = [melodyTrack, accompanimentTrack, bassTrack];\r\n\r\n    var write = new MidiWriter.Writer(tracks);\r\n\r\n    return write.dataUri();\r\n  }\r\n\r\n    /**\r\n    * Plays the given melody.\r\n    * @param {string[]} melodySolo - solo melody (violin)\r\n    */\r\n  playMelodySolo(melodySolo) {\r\n    var strMidi = this._buildMelodyMidiSolo(melodySolo);\r\n    this._playMelody(strMidi);\r\n  }\r\n    /**\r\n    * Plays the given melodies.\r\n    * @param {string[]} melodySolo - solo melody (violin)\r\n    * @param {string[]} melodyAccomp - accompaniment melody (piano)\r\n    * @param {string[]} melodyBass - bass melody (bass)\r\n    */\r\n  playMelodyWithAccompaniment(melodySolo, melodyAccomp, melodyBass) {\r\n    var strMidi = this.buildMelodyMidiWithAccompaniment(melodySolo, melodyAccomp, melodyBass);\r\n    this._playMelody(strMidi);\r\n  }\r\n\r\n    /**\r\n    * Actually plays the given melody\r\n    * @private\r\n    * @param {string} strMidi - MIDI data, as a DataURI string.\r\n    */\r\n  _playMelody(strMidi) {\r\n    if(this.initialized) {\r\n      this.stopPlayback();\r\n      this.playbackLocked = false;\r\n      this.player.loadDataUri(strMidi);\r\n      this.player.play();\r\n    } else {\r\n      console.warn(\"[AutoComposerMidi._playMelody()] Player isn't initialized yet...\");\r\n    }\r\n  }\r\n\r\n    /**\r\n    * Stops all playback\r\n    */\r\n  stopPlayback() {\r\n    this.instrumentData[\"melody\"].sfInstrument.stop();\r\n    this.instrumentData[\"accompaniment\"].sfInstrument.stop();\r\n    this.instrumentData[\"bass\"].sfInstrument.stop();\r\n    this.player.stop();\r\n  }\r\n}\r\n\r\nexports.AutoComposerMidi = AutoComposerMidi;\r\n",
     "static": true,
     "longname": "src/autocomposer-midi.js",
     "access": null,
@@ -2810,7 +2855,15 @@
     "importPath": "autocomposer-melody/src/autocomposer-midi.js",
     "importStyle": "{AutoComposerMidi}",
     "description": "Class responsible for playing audio and generating MIDI files for users.",
-    "lineNumber": 9,
+    "lineNumber": 10,
+    "emits": [
+      {
+        "types": [
+          "statusUpdate"
+        ],
+        "description": "Emits this event when the audio player successfully loads."
+      }
+    ],
     "interface": false
   },
   {
@@ -2824,7 +2877,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#constructor",
     "access": null,
     "description": null,
-    "lineNumber": 10,
+    "lineNumber": 11,
     "undocument": true,
     "unknown": [
       {
@@ -2843,7 +2896,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#NOTE_DURATION",
     "access": null,
     "description": null,
-    "lineNumber": 11,
+    "lineNumber": 12,
     "undocument": true,
     "unknown": [
       {
@@ -2866,7 +2919,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#NUM_INSTRUMENTS",
     "access": null,
     "description": null,
-    "lineNumber": 12,
+    "lineNumber": 13,
     "undocument": true,
     "unknown": [
       {
@@ -2889,7 +2942,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#instrumentData",
     "access": null,
     "description": null,
-    "lineNumber": 14,
+    "lineNumber": 15,
     "undocument": true,
     "unknown": [
       {
@@ -2912,7 +2965,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#numInstrumentsInit",
     "access": null,
     "description": null,
-    "lineNumber": 43,
+    "lineNumber": 44,
     "undocument": true,
     "unknown": [
       {
@@ -2935,7 +2988,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#player",
     "access": null,
     "description": null,
-    "lineNumber": 45,
+    "lineNumber": 46,
     "undocument": true,
     "unknown": [
       {
@@ -2958,7 +3011,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#audioContext",
     "access": null,
     "description": null,
-    "lineNumber": 46,
+    "lineNumber": 47,
     "undocument": true,
     "unknown": [
       {
@@ -2981,7 +3034,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 48,
+    "lineNumber": 49,
     "undocument": true,
     "unknown": [
       {
@@ -3004,7 +3057,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#playbackLocked",
     "access": null,
     "description": null,
-    "lineNumber": 52,
+    "lineNumber": 53,
     "undocument": true,
     "unknown": [
       {
@@ -3029,7 +3082,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#_midiCallback",
     "access": "private",
     "description": "Triggers the note playing for all instruments. Called for every MIDI event in the app.",
-    "lineNumber": 83,
+    "lineNumber": 84,
     "params": [
       {
         "nullable": null,
@@ -3052,7 +3105,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#playbackLocked",
     "access": null,
     "description": null,
-    "lineNumber": 122,
+    "lineNumber": 123,
     "undocument": true,
     "unknown": [
       {
@@ -3077,12 +3130,12 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#_finishLoad",
     "access": "private",
     "description": "Completes the loading of this class. The \"midiPlayerReady\" eve",
-    "lineNumber": 131,
+    "lineNumber": 132,
     "params": [],
     "emits": [
       {
         "types": [
-          "midiPlayerReady"
+          "statusUpdate"
         ],
         "description": "Emits this event when the audio player successfully loads"
       }
@@ -3097,7 +3150,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#player",
     "access": null,
     "description": null,
-    "lineNumber": 133,
+    "lineNumber": 134,
     "undocument": true,
     "unknown": [
       {
@@ -3120,7 +3173,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 136,
+    "lineNumber": 137,
     "undocument": true,
     "unknown": [
       {
@@ -3143,7 +3196,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#playbackLocked",
     "access": null,
     "description": null,
-    "lineNumber": 137,
+    "lineNumber": 138,
     "undocument": true,
     "unknown": [
       {
@@ -3168,7 +3221,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#_buildMidi",
     "access": "private",
     "description": "Builds MIDI info for a note or chord",
-    "lineNumber": 151,
+    "lineNumber": 152,
     "params": [
       {
         "nullable": null,
@@ -3221,7 +3274,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#_buildTrack",
     "access": "private",
     "description": "Builds a Track from a given chord.",
-    "lineNumber": 165,
+    "lineNumber": 166,
     "params": [
       {
         "nullable": null,
@@ -3264,7 +3317,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#_buildMelodyMidiSolo",
     "access": "private",
     "description": "Gets the MIDI data for a given melody.",
-    "lineNumber": 191,
+    "lineNumber": 192,
     "params": [
       {
         "nullable": null,
@@ -3297,7 +3350,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#buildMelodyMidiWithAccompaniment",
     "access": null,
     "description": "Gets the MIDI data for a given melody, with accompaniment.",
-    "lineNumber": 207,
+    "lineNumber": 208,
     "params": [
       {
         "nullable": null,
@@ -3350,7 +3403,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#playMelodySolo",
     "access": null,
     "description": "Plays the given melody.",
-    "lineNumber": 225,
+    "lineNumber": 226,
     "params": [
       {
         "nullable": null,
@@ -3375,7 +3428,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#playMelodyWithAccompaniment",
     "access": null,
     "description": "Plays the given melodies.",
-    "lineNumber": 235,
+    "lineNumber": 236,
     "params": [
       {
         "nullable": null,
@@ -3420,7 +3473,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#_playMelody",
     "access": "private",
     "description": "Actually plays the given melody",
-    "lineNumber": 245,
+    "lineNumber": 246,
     "params": [
       {
         "nullable": null,
@@ -3443,7 +3496,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#playbackLocked",
     "access": null,
     "description": null,
-    "lineNumber": 248,
+    "lineNumber": 249,
     "undocument": true,
     "unknown": [
       {
@@ -3468,7 +3521,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#stopPlayback",
     "access": null,
     "description": "Stops all playback",
-    "lineNumber": 259,
+    "lineNumber": 260,
     "params": []
   },
   {
@@ -4761,7 +4814,7 @@
     "__docId__": 221,
     "kind": "testFile",
     "name": "test/autocomposer-melody.js",
-    "content": "var assert = require('assert');\r\nconst _ = require('underscore');\r\n\r\nvar AcMelody = require('../src/autocomposer-melody');\r\nvar AutoComposerMelody = new AcMelody.AutoComposerMelody();\r\n\r\nAutoComposerMelody._sendStatusUpdate = function() {\r\n  // Overriding this function with nothing since it contains browser code.\r\n}\r\n\r\nvar AutoComposerLogic = require('../src/autocomposer-logic');\r\nvar AcLogic = new AutoComposerLogic.AutoComposerLogic();\r\n\r\nvar TEST_CHORD_1 = \"Gm7\";\r\nvar TEST_CHORD_2 = \"Cm7\";\r\nvar TEST_CHORD_3 = \"D7\";\r\n\r\nvar TEST_LOWER_LIMIT_1 = \"Bb3\";\r\nvar TEST_UPPER_LIMIT_1 = \"G#4\";\r\n\r\nvar TEST_LOWER_LIMIT_2 = \"Ab4\";\r\nvar TEST_UPPER_LIMIT_2 = \"B5\";\r\n\r\ndescribe('AutoComposerMelody', function() {\r\n  describe('#getAllChordTones', function() {\r\n    it('should return all chord tones in the range (inclusive)', function() {\r\n      expectedTones1 = [\"Bb3\", \"D4\", \"F4\", \"G4\"];\r\n      expectedTones2 = [\"A4\", \"C5\", \"D5\", \"F#5\", \"A5\"];\r\n\r\n      resultTones1 = AutoComposerMelody.getAllChordTones(TEST_CHORD_1, TEST_LOWER_LIMIT_1, TEST_UPPER_LIMIT_1);\r\n      resultTones2 = AutoComposerMelody.getAllChordTones(TEST_CHORD_3, TEST_LOWER_LIMIT_2, TEST_UPPER_LIMIT_2);\r\n\r\n      assert.deepEqual(resultTones1, expectedTones1);\r\n      assert.deepEqual(resultTones2, expectedTones2);\r\n    });\r\n  });\r\n\r\n  describe('#buildChordUnitList', function() {\r\n    it('should return a list of ChordUnits for a given progression', function() {\r\n      var expChordUnit3 = {\r\n        chord: \"D7\",\r\n        chordTones: [\"A4\", \"C5\", \"D5\", \"F#5\", \"A5\"],\r\n      };\r\n      var expChordUnit2 = {\r\n        chord: \"Cm7\",\r\n        chordTones: [\"Bb4\", \"C5\", \"Eb5\", \"G5\", \"Bb5\"],\r\n      };\r\n      var expChordUnit1 = {\r\n        chord: \"Gm7\",\r\n        chordTones: [\"Bb4\", \"D5\", \"F5\", \"G5\", \"Bb5\"],\r\n      };\r\n\r\n      var expectedArray = [expChordUnit1, expChordUnit2, expChordUnit3];\r\n      var chordProgression = [\"Gm7\",\"Cm7\",\"D7\"];\r\n      var chordUnitList = AutoComposerMelody.buildChordUnitList(chordProgression, TEST_LOWER_LIMIT_2, TEST_UPPER_LIMIT_2);\r\n\r\n      assert.deepEqual(chordUnitList[0].chordTones, expectedArray[0].chordTones);\r\n      assert.deepEqual(chordUnitList[1].chordTones, expectedArray[1].chordTones);\r\n      assert.deepEqual(chordUnitList[2].chordTones, expectedArray[2].chordTones);\r\n    });\r\n  });\r\n\r\n  describe('#buildMelodyUnit', function() {\r\n    it('should build a melody unit with metadata for each raw melody', function() {\r\n      var chordProgression = [\"G\", \"Em\", \"C\", \"D\"];\r\n      var melody1 = \"B3 G4 E4 F#4\";\r\n      var melody2 = \"G4 B4 C5 D5\";\r\n\r\n      exp1 = {\r\n        chordProgression: chordProgression,\r\n        melodyNotes: melody1.split(\" \"),\r\n        smoothness: 13,\r\n        range: 8,\r\n        melodyString: melody1\r\n      }\r\n\r\n      exp2 = {\r\n        chordProgression: chordProgression,\r\n        melodyNotes: melody2.split(\" \"),\r\n        smoothness: 7,\r\n        range: 7,\r\n        melodyString: melody2\r\n      }\r\n\r\n      result1 = AutoComposerMelody.buildMelodyUnit(chordProgression, melody1);\r\n      result2 = AutoComposerMelody.buildMelodyUnit(chordProgression, melody2);\r\n\r\n      assert.deepEqual(result1, exp1);\r\n      assert.deepEqual(result2, exp2);\r\n    });\r\n  });\r\n\r\n  describe('#buildMelodyUnitList', function() {\r\n    var chordProgression = [\"G\", \"Em\", \"C\", \"D\"];\r\n    var melodies = [\"B3 G4 E4 F#4\", \"G4 B4 C5 D5\", \"G4 G4 G4 F#4\", \"G5 G5 G5 A5\"];\r\n\r\n    it('should sort the output if specified', function() {\r\n      resultSorted = AutoComposerMelody.buildMelodyUnitList(chordProgression, melodies, {sort: true});\r\n\r\n      assert(resultSorted[0].smoothness < resultSorted[3].smoothness);\r\n    });\r\n\r\n    it('should limit the output if specified', function() {\r\n      var numLimit = 2;\r\n      result = AutoComposerMelody.buildMelodyUnitList(chordProgression, melodies, {limit: numLimit});\r\n\r\n      assert.equal(result.length, numLimit);\r\n    });\r\n  });\r\n\r\n  describe('#getMelodies', function() {\r\n    it('should return a list of melodies for a given progression', function() {\r\n      var chordProgression = [\"Gm\",\"Cm\",\"D\"];\r\n      var melodyList = AutoComposerMelody.getAllMelodies(chordProgression);\r\n\r\n      assert.equal(typeof melodyList[0] === 'string', false);\r\n    });\r\n\r\n    it('should return less melodies if filters are on', function() {\r\n      var chordProgression = [\"Gm\",\"Cm\",\"D\"];\r\n      var melodyListAll = AutoComposerMelody.getAllMelodies(chordProgression);\r\n      var melodyList = AutoComposerMelody.getMelodies(chordProgression);\r\n\r\n      assert(melodyListAll.length > melodyList.length, \"Filtered melody list is smaller than an unfiltered list\");\r\n      assert.equal(typeof melodyList[0] === 'string', false);\r\n    });\r\n\r\n    it('should return raw melodies as a string array', function() {\r\n      var chordProgression = [\"Gm\",\"Cm\",\"D\"];\r\n      var melodyList = AutoComposerMelody.getRawMelodies(chordProgression);\r\n\r\n      assert.equal(typeof melodyList[0] === 'string', true);\r\n    });\r\n  });\r\n\r\n  describe('#getBasicBassLine', function() {\r\n    it('should return a simple bassline for a melody', function() {\r\n      var chordProgression = [\"G\", \"Em\", \"C\", \"D\"];\r\n      var melody = \"B3 G4 E4 F#4\";\r\n      var melodyUnit = AutoComposerMelody.buildMelodyUnit(chordProgression, melody);\r\n\r\n      var resultBassline = AutoComposerMelody.getBasicBassLine(melodyUnit);\r\n      var expBassline = [\"G1\", \"E1\", \"C2\", \"D2\"];\r\n\r\n      assert.deepEqual(resultBassline, expBassline);\r\n    });\r\n  });\r\n\r\n  describe('#getAccompaniment', function() {\r\n    it('should return a simple accompaniment for a melody', function() {\r\n      var chordProgression = [\"G\", \"Em\", \"C\", \"D\"];\r\n      var melody = \"B3 G4 E4 F#4\";\r\n      var expAccompaniment = [\"D3\", \"B2\", \"G2\", \"A2\"];\r\n\r\n      var melodyUnit = AutoComposerMelody.buildMelodyUnit(chordProgression, melody);\r\n      var resultBassline = AutoComposerMelody.getAccompaniment(melodyUnit);\r\n\r\n      assert.deepEqual(resultBassline, expAccompaniment);\r\n    });\r\n  });\r\n});\r\n",
+    "content": "var assert = require('assert');\r\nconst _ = require('underscore');\r\n\r\nvar AcMelody = require('../src/autocomposer-melody');\r\nvar AutoComposerMelody = new AcMelody.AutoComposerMelody();\r\n\r\nAutoComposerMelody._sendStatusUpdate = function() {\r\n  // Overriding this function with nothing since it contains browser code.\r\n}\r\n\r\nvar AutoComposerLogic = require('../src/autocomposer-logic');\r\nvar AcLogic = new AutoComposerLogic.AutoComposerLogic();\r\n\r\nvar TEST_CHORD_1 = \"Gm7\";\r\nvar TEST_CHORD_2 = \"Cm7\";\r\nvar TEST_CHORD_3 = \"D7\";\r\n\r\nvar TEST_LOWER_LIMIT_1 = \"Bb3\";\r\nvar TEST_UPPER_LIMIT_1 = \"G#4\";\r\n\r\nvar TEST_LOWER_LIMIT_2 = \"Ab4\";\r\nvar TEST_UPPER_LIMIT_2 = \"B5\";\r\n\r\ndescribe('AutoComposerMelody', function() {\r\n  describe('#getAllChordTones', function() {\r\n    it('should return all chord tones in the range (inclusive)', function() {\r\n      expectedTones1 = [\"Bb3\", \"D4\", \"F4\", \"G4\"];\r\n      expectedTones2 = [\"A4\", \"C5\", \"D5\", \"F#5\", \"A5\"];\r\n\r\n      resultTones1 = AutoComposerMelody.getAllChordTones(TEST_CHORD_1, TEST_LOWER_LIMIT_1, TEST_UPPER_LIMIT_1);\r\n      resultTones2 = AutoComposerMelody.getAllChordTones(TEST_CHORD_3, TEST_LOWER_LIMIT_2, TEST_UPPER_LIMIT_2);\r\n\r\n      assert.deepEqual(resultTones1, expectedTones1);\r\n      assert.deepEqual(resultTones2, expectedTones2);\r\n    });\r\n  });\r\n\r\n  describe('#buildChordUnitList', function() {\r\n    it('should return a list of ChordUnits for a given progression', function() {\r\n      var expChordUnit3 = {\r\n        chord: \"D7\",\r\n        chordTones: [\"A4\", \"C5\", \"D5\", \"F#5\", \"A5\"],\r\n      };\r\n      var expChordUnit2 = {\r\n        chord: \"Cm7\",\r\n        chordTones: [\"Bb4\", \"C5\", \"Eb5\", \"G5\", \"Bb5\"],\r\n      };\r\n      var expChordUnit1 = {\r\n        chord: \"Gm7\",\r\n        chordTones: [\"Bb4\", \"D5\", \"F5\", \"G5\", \"Bb5\"],\r\n      };\r\n\r\n      var expectedArray = [expChordUnit1, expChordUnit2, expChordUnit3];\r\n      var chordProgression = [\"Gm7\",\"Cm7\",\"D7\"];\r\n      var chordUnitList = AutoComposerMelody.buildChordUnitList(chordProgression, TEST_LOWER_LIMIT_2, TEST_UPPER_LIMIT_2);\r\n\r\n      assert.deepEqual(chordUnitList[0].chordTones, expectedArray[0].chordTones);\r\n      assert.deepEqual(chordUnitList[1].chordTones, expectedArray[1].chordTones);\r\n      assert.deepEqual(chordUnitList[2].chordTones, expectedArray[2].chordTones);\r\n    });\r\n  });\r\n\r\n  describe('#buildMelodyUnit', function() {\r\n    it('should build a melody unit with metadata for each raw melody', function() {\r\n      var chordProgression = [\"G\", \"Em\", \"C\", \"D\"];\r\n      var melody1 = \"B3 G4 E4 F#4\";\r\n      var melody2 = \"G4 B4 C5 D5\";\r\n\r\n      exp1 = {\r\n        chordProgression: chordProgression,\r\n        melodyNotes: melody1.split(\" \"),\r\n        smoothness: 13,\r\n        range: 8,\r\n        melodyString: melody1\r\n      }\r\n\r\n      exp2 = {\r\n        chordProgression: chordProgression,\r\n        melodyNotes: melody2.split(\" \"),\r\n        smoothness: 7,\r\n        range: 7,\r\n        melodyString: melody2\r\n      }\r\n\r\n      result1 = AutoComposerMelody.buildMelodyUnit(chordProgression, melody1);\r\n      result2 = AutoComposerMelody.buildMelodyUnit(chordProgression, melody2);\r\n\r\n      assert.deepEqual(result1, exp1);\r\n      assert.deepEqual(result2, exp2);\r\n    });\r\n  });\r\n\r\n  describe('#buildMelodyUnitList', function() {\r\n    var chordProgression = [\"G\", \"Em\", \"C\", \"D\"];\r\n    var melodies = [\"B3 G4 E4 F#4\", \"G4 B4 C5 D5\", \"G4 G4 G4 F#4\", \"G5 G5 G5 A5\"];\r\n\r\n    it('should sort the output if specified', function() {\r\n      resultSorted = AutoComposerMelody.buildMelodyUnitList(chordProgression, melodies, {sort: true});\r\n\r\n      assert(resultSorted[0].smoothness < resultSorted[3].smoothness);\r\n    });\r\n\r\n    it('should limit the output if specified', function() {\r\n      var numLimit = 2;\r\n      result = AutoComposerMelody.buildMelodyUnitList(chordProgression, melodies, {limit: numLimit});\r\n\r\n      assert.equal(result.length, numLimit);\r\n    });\r\n  });\r\n\r\n  describe('#buildSimpleMelodies', function() {\r\n    it('should return a list of melodies for a given progression', function() {\r\n      var chordProgression = [\"Gm\",\"Cm\",\"D\"];\r\n      var melodyList = AutoComposerMelody.buildAllMelodies(chordProgression);\r\n\r\n      assert.equal(typeof melodyList[0] === 'string', false);\r\n    });\r\n\r\n    it('should return less melodies if filters are on', function() {\r\n      var chordProgression = [\"Gm\",\"Cm\",\"D\"];\r\n      var melodyListAll = AutoComposerMelody.buildAllMelodies(chordProgression);\r\n      var melodyList = AutoComposerMelody.buildSimpleMelodies(chordProgression);\r\n\r\n      assert(melodyListAll.length > melodyList.length, \"Filtered melody list is smaller than an unfiltered list\");\r\n      assert.equal(typeof melodyList[0] === 'string', false);\r\n    });\r\n\r\n    it('should return raw melodies as a string array', function() {\r\n      var chordProgression = [\"Gm\",\"Cm\",\"D\"];\r\n      var melodyList = AutoComposerMelody.buildRawMelodies(chordProgression);\r\n\r\n      assert.equal(typeof melodyList[0] === 'string', true);\r\n    });\r\n  });\r\n\r\n  describe('#getBasicBassLine', function() {\r\n    it('should return a simple bassline for a melody', function() {\r\n      var chordProgression = [\"G\", \"Em\", \"C\", \"D\"];\r\n      var melody = \"B3 G4 E4 F#4\";\r\n      var melodyUnit = AutoComposerMelody.buildMelodyUnit(chordProgression, melody);\r\n\r\n      var resultBassline = AutoComposerMelody.getBasicBassLine(melodyUnit);\r\n      var expBassline = [\"G1\", \"E1\", \"C2\", \"D2\"];\r\n\r\n      assert.deepEqual(resultBassline, expBassline);\r\n    });\r\n  });\r\n\r\n  describe('#buildSimpleAccompaniment', function() {\r\n    it('should return a simple accompaniment for a melody', function() {\r\n      var chordProgression = [\"G\", \"Em\", \"C\", \"D\"];\r\n      var melody = \"B3 G4 E4 F#4\";\r\n      var expAccompaniment = [\"G2 D3\", \"E3 B2\", \"C3 G2\", \"D3 A2\"];\r\n\r\n      var melodyUnit = AutoComposerMelody.buildMelodyUnit(chordProgression, melody);\r\n      var resultBassline = AutoComposerMelody.buildSimpleAccompaniment(melodyUnit);\r\n\r\n      assert.deepEqual(resultBassline, expAccompaniment);\r\n    });\r\n  });\r\n\r\n  it('should not break after some refactoring...', function() {\r\n    var chordProgression = [\"Gm\",\"Cm\"];\r\n\r\n    var melodyList = AutoComposerMelody.buildSimpleMelodies(chordProgression);\r\n    var melodyListRaw = AutoComposerMelody.buildRawMelodies(chordProgression);\r\n    var melodyListAll = AutoComposerMelody.buildAllMelodies(chordProgression);\r\n\r\n    var melodyListRefactor = AutoComposerMelody.buildSimpleMelodies(chordProgression);\r\n    var melodyListRefactor2 = AutoComposerMelody.buildSimpleMelodies(chordProgression, {somethingDumb: \"yes\"});\r\n    var melodyListRawRefactor = AutoComposerMelody.buildSimpleMelodies(chordProgression, {raw: true});\r\n    var melodyListAllRefactor = AutoComposerMelody.buildSimpleMelodies(chordProgression, {limit: false, filter: false});\r\n    \r\n    assert.deepEqual(melodyList, melodyListRefactor);\r\n    assert.deepEqual(melodyList, melodyListRefactor2);\r\n    assert.deepEqual(melodyListRaw, melodyListRawRefactor);\r\n    assert.deepEqual(melodyListAll, melodyListAllRefactor);\r\n  });\r\n});\r\n",
     "static": true,
     "longname": "test/autocomposer-melody.js",
     "access": null,
@@ -4908,7 +4961,7 @@
     "static": true,
     "longname": "test/autocomposer-melody.js~describe14.describe24",
     "access": null,
-    "description": "#getMelodies",
+    "description": "#buildSimpleMelodies",
     "lineNumber": 111
   },
   {
@@ -4986,7 +5039,7 @@
     "static": true,
     "longname": "test/autocomposer-melody.js~describe14.describe30",
     "access": null,
-    "description": "#getAccompaniment",
+    "description": "#buildSimpleAccompaniment",
     "lineNumber": 149
   },
   {
@@ -5001,5 +5054,18 @@
     "access": null,
     "description": "should return a simple accompaniment for a melody",
     "lineNumber": 150
+  },
+  {
+    "__docId__": 240,
+    "kind": "testIt",
+    "name": "it32",
+    "testId": 32,
+    "memberof": "test/autocomposer-melody.js~describe14",
+    "testDepth": 1,
+    "static": true,
+    "longname": "test/autocomposer-melody.js~describe14.it32",
+    "access": null,
+    "description": "should not break after some refactoring...",
+    "lineNumber": 162
   }
 ]

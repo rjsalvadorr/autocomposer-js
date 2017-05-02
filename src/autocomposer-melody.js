@@ -6,8 +6,9 @@ var AutoComposerLogic = require('./autocomposer-logic');
 var AcLogic = new AutoComposerLogic.AutoComposerLogic();
 
 /**
- * Creates melodies from a given chord progression
- */
+* Creates melodies from a given chord progression
+* @emits {statusUpdate} - Emits a "statusUpdate" event with details when important events happen (like melody generation finishing, etc.)
+*/
 class AutoComposerMelody {
   /**
   * @param {string[]} chordProgression - array of chord symbols
@@ -23,6 +24,12 @@ class AutoComposerMelody {
     this.upperLimit = upperLimit || AcLogic.DEFAULT_UPPER_LIMIT;
   }
 
+  /**
+  * Sends a status update that's displayed to the user.
+  * @private
+  * @param {string} message - status update message
+  * @emits {statusUpdate}
+  */
   _sendStatusUpdate(message) {
     var updateEvent = new CustomEvent('statusUpdate', {detail: message});
     document.body.dispatchEvent(updateEvent);
@@ -44,11 +51,11 @@ class AutoComposerMelody {
     /**
     * For a given array of chord tones, remove the specified pitches.
     * @private
-    * @param {string[]} pitchArray - pitches to remove
     * @param {string[]} chordTones - chord tones
+    * @param {string[]} pitchArray - pitches to remove
     * @return {string[]} - the remaining chord tones
     */
-  _removePitchesFromChordTones(pitchArray, chordTones) {
+  _removePitchesFromChordTones(chordTones, pitchArray) {
     var indexToRemove;
     pitchArray.forEach(function(pitch) {
       indexToRemove = chordTones.indexOf(pitch);
@@ -60,12 +67,11 @@ class AutoComposerMelody {
   }
 
     /**
-    * For a given MelodyUnit, get an accompaniment for it.
-    * @private
+    * For a given MelodyUnit, get a simple accompaniment for it.
     * @param {MelodyUnit} melodyUnit - melody that needs accompaniment
     * @return {string[]} - array of strings, each representing one or more notes to play under each melodic note.
     */
-  getAccompaniment(melodyUnit) {
+  buildSimpleAccompaniment(melodyUnit) {
     // Omit root note, and maybe avoid doubling the top note as well.
     var noteArray = [], chordNotes, currentChord, bassPitch, topPitch;
 
@@ -75,7 +81,7 @@ class AutoComposerMelody {
       topPitch =  tonal.note.pc(melodyUnit.melodyNotes[i]);
 
       chordNotes = tonal.chord.notes(currentChord);
-      chordNotes = this._removePitchesFromChordTones([bassPitch, topPitch], chordNotes);
+      chordNotes = this._removePitchesFromChordTones(chordNotes, [topPitch]);
 
       for(var j = 0; j < chordNotes.length; j++) {
         chordNotes[j] = this._getLowestNoteInRange(chordNotes[j], AcLogic.ACCOMPANIMENT_LOWER_LIMIT, AcLogic.ACCOMPANIMENT_UPPER_LIMIT);
@@ -233,10 +239,9 @@ class AutoComposerMelody {
     * @param {?string[]} melodyList - list of existing melodies
     * @param {Object} options - if true, generated melodies will be filtered
     * @param {boolean} options.filtered - if true, generated melodies will be filtered
-    * @param {boolean} options.rawOutput - if true, generated melodies will be given as strings
     * @return {string[]} - a list of melodies. Each element is a string represeting a melody. Each melody string is written as a series of pitches delimited by a space.
     */
-  getMelodiesCore(chordUnit, melodyList, options) {
+  buildSimpleMelodiesCore(chordUnit, melodyList, options) {
     var returnList = [];
     var chordTones = chordUnit.chordTones;
     var currentMelody, currentChordTone;
@@ -295,7 +300,7 @@ class AutoComposerMelody {
 
     if(chordUnit.nextChordUnit) {
       // We're somewhere before the end of the chain.
-      return this.getMelodiesCore(chordUnit.nextChordUnit, returnList, options);
+      return this.buildSimpleMelodiesCore(chordUnit.nextChordUnit, returnList, options);
     } else {
       // End of the chain.
       if(options.filtered && returnList.length > AcLogic.NUM_MELODIES_LIMIT) {
@@ -309,12 +314,14 @@ class AutoComposerMelody {
 
     /**
     * For a given chord progression, generate a series of melodies that fit over the progression.
+    * @private
+    * @deprecated
     * @param {string[]} chordProgression - chord progression given by user
     * @return {MelodyUnit[]} - an array of notes (written in scientific pitch)
     */
-  getAllMelodies(chordProgression) {
+  buildAllMelodies(chordProgression) {
     var chordUnitList = this.buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);
-    var melodies = this.getMelodiesCore(chordUnitList[0], null, {filtered: false});
+    var melodies = this.buildSimpleMelodiesCore(chordUnitList[0], null, {filtered: false});
 
     var melodyUnits = [];
     var haxThis = this;
@@ -327,29 +334,60 @@ class AutoComposerMelody {
 
     /**
     * For a given chord progression, generate a series of melodies that fit over the progression.
+    * @private
+    * @deprecated
     * @param {string[]} chordProgression - chord progression given by user
     * @return {string[]} - an array of notes (written in scientific pitch)
     */
-  getRawMelodies(chordProgression) {
+  buildRawMelodies(chordProgression) {
     var chordUnitList = this.buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);
-    var melodies = this.getMelodiesCore(chordUnitList[0], null, {filtered: true, rawOutput: true});
+    var melodies = this.buildSimpleMelodiesCore(chordUnitList[0], null, {filtered: true});
 
     return melodies;
   }
 
     /**
     * For a given chord progression, generate a series of melodies that fit over the progression.
-    * Currently, the melodies are sorted by smoothness, and are limited to the first 100 melodies.
+    * The melodies are sorted by smoothness, and are limited to the smoothest 100 melodies by default.
     * @param {string[]} chordProgression - chord progression given by user
+    * @param {Object} [options] - options for melody generation
+    * @param {Object} [options.raw] - if true, returns output as strings (default = false)
+    * @param {Object} [options.limit] - if false, returns all the generated melodies, not just the top 100 (default = true)
+    * @param {Object} [options.filter] - if false, returns melodies that are considered too "ugly" for the default process. (default = true)
     * @return {MelodyUnit[]} - an array of MelodyUnits
     */
-  getMelodies(chordProgression) {
+  buildSimpleMelodies(chordProgression, options) {
+    var useDefault, melodyUnits, rawMelodies, coreOptions, muOptions;
+    var rawOption, limitOption, filterOption, sortOption;
     var chordUnitList = this.buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);
-    var rawMelodies = this.getMelodiesCore(chordUnitList[0], null, {filtered: true});
-    var options = {sort: true, limit: AcLogic.NUM_MELODIES_LIMIT};
 
-    var melodyUnits = this.buildMelodyUnitList(chordProgression, rawMelodies, options);
+    if(options) {
+      // In all these ternary operations, the default value is on the right.
+      rawOption = options.raw && (options.raw === "true" || options.raw === true) ? true : false;
+      filterOption = typeof options.filter !== "undefined" && (options.filter === "false" || options.limit === false) ? false : true;
+      if(typeof options.filter !== "undefined" && (options.limit === "false" || options.limit === false)) {
+        limitOption = null;
+        sortOption = false;
+      } else {
+        // default vals
+        limitOption = AcLogic.NUM_MELODIES_LIMIT;
+        sortOption = true;
+      }
+    } else {
+      // default values
+      rawOption = false;
+      filterOption = true;
+      limitOption = AcLogic.NUM_MELODIES_LIMIT;
+      sortOption = true;
+    }
 
+    rawMelodies = this.buildSimpleMelodiesCore(chordUnitList[0], null, {filtered: filterOption});
+
+    if(rawOption) {
+      return rawMelodies;
+    }
+
+    melodyUnits = this.buildMelodyUnitList(chordProgression, rawMelodies, {sort: sortOption, limit: limitOption});
     return melodyUnits;
   }
 

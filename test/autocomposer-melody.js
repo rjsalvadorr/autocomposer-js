@@ -108,18 +108,18 @@ describe('AutoComposerMelody', function() {
     });
   });
 
-  describe('#getMelodies', function() {
+  describe('#buildSimpleMelodies', function() {
     it('should return a list of melodies for a given progression', function() {
       var chordProgression = ["Gm","Cm","D"];
-      var melodyList = AutoComposerMelody.getAllMelodies(chordProgression);
+      var melodyList = AutoComposerMelody.buildAllMelodies(chordProgression);
 
       assert.equal(typeof melodyList[0] === 'string', false);
     });
 
     it('should return less melodies if filters are on', function() {
       var chordProgression = ["Gm","Cm","D"];
-      var melodyListAll = AutoComposerMelody.getAllMelodies(chordProgression);
-      var melodyList = AutoComposerMelody.getMelodies(chordProgression);
+      var melodyListAll = AutoComposerMelody.buildAllMelodies(chordProgression);
+      var melodyList = AutoComposerMelody.buildSimpleMelodies(chordProgression);
 
       assert(melodyListAll.length > melodyList.length, "Filtered melody list is smaller than an unfiltered list");
       assert.equal(typeof melodyList[0] === 'string', false);
@@ -127,7 +127,7 @@ describe('AutoComposerMelody', function() {
 
     it('should return raw melodies as a string array', function() {
       var chordProgression = ["Gm","Cm","D"];
-      var melodyList = AutoComposerMelody.getRawMelodies(chordProgression);
+      var melodyList = AutoComposerMelody.buildRawMelodies(chordProgression);
 
       assert.equal(typeof melodyList[0] === 'string', true);
     });
@@ -146,16 +146,34 @@ describe('AutoComposerMelody', function() {
     });
   });
 
-  describe('#getAccompaniment', function() {
+  describe('#buildSimpleAccompaniment', function() {
     it('should return a simple accompaniment for a melody', function() {
       var chordProgression = ["G", "Em", "C", "D"];
       var melody = "B3 G4 E4 F#4";
-      var expAccompaniment = ["D3", "B2", "G2", "A2"];
+      var expAccompaniment = ["G2 D3", "E3 B2", "C3 G2", "D3 A2"];
 
       var melodyUnit = AutoComposerMelody.buildMelodyUnit(chordProgression, melody);
-      var resultBassline = AutoComposerMelody.getAccompaniment(melodyUnit);
+      var resultBassline = AutoComposerMelody.buildSimpleAccompaniment(melodyUnit);
 
       assert.deepEqual(resultBassline, expAccompaniment);
     });
+  });
+
+  it('should not break after some refactoring...', function() {
+    var chordProgression = ["Gm","Cm"];
+
+    var melodyList = AutoComposerMelody.buildSimpleMelodies(chordProgression);
+    var melodyListRaw = AutoComposerMelody.buildRawMelodies(chordProgression);
+    var melodyListAll = AutoComposerMelody.buildAllMelodies(chordProgression);
+
+    var melodyListRefactor = AutoComposerMelody.buildSimpleMelodies(chordProgression);
+    var melodyListRefactor2 = AutoComposerMelody.buildSimpleMelodies(chordProgression, {somethingDumb: "yes"});
+    var melodyListRawRefactor = AutoComposerMelody.buildSimpleMelodies(chordProgression, {raw: true});
+    var melodyListAllRefactor = AutoComposerMelody.buildSimpleMelodies(chordProgression, {limit: false, filter: false});
+
+    assert.deepEqual(melodyList, melodyListRefactor);
+    assert.deepEqual(melodyList, melodyListRefactor2);
+    assert.deepEqual(melodyListRaw, melodyListRawRefactor);
+    assert.deepEqual(melodyListAll, melodyListAllRefactor);
   });
 });

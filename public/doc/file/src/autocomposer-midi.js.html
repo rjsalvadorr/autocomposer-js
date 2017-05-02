@@ -50,8 +50,9 @@ var SoundfontPlayer = require(&apos;soundfont-player&apos;);
 var tonalNote = require(&apos;tonal-note&apos;);
 
 /**
- * Class responsible for playing audio and generating MIDI files for users.
- */
+* Class responsible for playing audio and generating MIDI files for users.
+* @emits {statusUpdate} - Emits this event when the audio player successfully loads.
+*/
 class AutoComposerMidi {
   constructor() {
     this.NOTE_DURATION = &quot;1&quot;;
@@ -172,7 +173,7 @@ class AutoComposerMidi {
     /**
     * Completes the loading of this class. The &quot;midiPlayerReady&quot; eve
     * @private
-    * @emits {midiPlayerReady} - Emits this event when the audio player successfully loads
+    * @emits {statusUpdate} - Emits this event when the audio player successfully loads
     */
   _finishLoad() {
     var haxThis = this;

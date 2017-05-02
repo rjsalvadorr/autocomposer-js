@@ -1,8 +1,9 @@
 var range = require('tonal-range')
 
 /**
- * Represents a melody and associated metadata.
- */
+* Represents a melody and associated metadata.
+* @public
+*/
 class MelodyUnit {
     /**
     * @param {string[]} chordProgression - array of chord symbols

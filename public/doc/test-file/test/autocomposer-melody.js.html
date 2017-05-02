@@ -154,18 +154,18 @@ describe(&apos;AutoComposerMelody&apos;, function() {
     });
   });
 
-  describe(&apos;#getMelodies&apos;, function() {
+  describe(&apos;#buildSimpleMelodies&apos;, function() {
     it(&apos;should return a list of melodies for a given progression&apos;, function() {
       var chordProgression = [&quot;Gm&quot;,&quot;Cm&quot;,&quot;D&quot;];
-      var melodyList = AutoComposerMelody.getAllMelodies(chordProgression);
+      var melodyList = AutoComposerMelody.buildAllMelodies(chordProgression);
 
       assert.equal(typeof melodyList[0] === &apos;string&apos;, false);
     });
 
     it(&apos;should return less melodies if filters are on&apos;, function() {
       var chordProgression = [&quot;Gm&quot;,&quot;Cm&quot;,&quot;D&quot;];
-      var melodyListAll = AutoComposerMelody.getAllMelodies(chordProgression);
-      var melodyList = AutoComposerMelody.getMelodies(chordProgression);
+      var melodyListAll = AutoComposerMelody.buildAllMelodies(chordProgression);
+      var melodyList = AutoComposerMelody.buildSimpleMelodies(chordProgression);
 
       assert(melodyListAll.length &gt; melodyList.length, &quot;Filtered melody list is smaller than an unfiltered list&quot;);
       assert.equal(typeof melodyList[0] === &apos;string&apos;, false);
@@ -173,7 +173,7 @@ describe(&apos;AutoComposerMelody&apos;, function() {
 
     it(&apos;should return raw melodies as a string array&apos;, function() {
       var chordProgression = [&quot;Gm&quot;,&quot;Cm&quot;,&quot;D&quot;];
-      var melodyList = AutoComposerMelody.getRawMelodies(chordProgression);
+      var melodyList = AutoComposerMelody.buildRawMelodies(chordProgression);
 
       assert.equal(typeof melodyList[0] === &apos;string&apos;, true);
     });
@@ -192,17 +192,35 @@ describe(&apos;AutoComposerMelody&apos;, function() {
     });
   });
 
-  describe(&apos;#getAccompaniment&apos;, function() {
+  describe(&apos;#buildSimpleAccompaniment&apos;, function() {
     it(&apos;should return a simple accompaniment for a melody&apos;, function() {
       var chordProgression = [&quot;G&quot;, &quot;Em&quot;, &quot;C&quot;, &quot;D&quot;];
       var melody = &quot;B3 G4 E4 F#4&quot;;
-      var expAccompaniment = [&quot;D3&quot;, &quot;B2&quot;, &quot;G2&quot;, &quot;A2&quot;];
+      var expAccompaniment = [&quot;G2 D3&quot;, &quot;E3 B2&quot;, &quot;C3 G2&quot;, &quot;D3 A2&quot;];
 
       var melodyUnit = AutoComposerMelody.buildMelodyUnit(chordProgression, melody);
-      var resultBassline = AutoComposerMelody.getAccompaniment(melodyUnit);
+      var resultBassline = AutoComposerMelody.buildSimpleAccompaniment(melodyUnit);
 
       assert.deepEqual(resultBassline, expAccompaniment);
     });
+  });
+
+  it(&apos;should not break after some refactoring...&apos;, function() {
+    var chordProgression = [&quot;Gm&quot;,&quot;Cm&quot;];
+
+    var melodyList = AutoComposerMelody.buildSimpleMelodies(chordProgression);
+    var melodyListRaw = AutoComposerMelody.buildRawMelodies(chordProgression);
+    var melodyListAll = AutoComposerMelody.buildAllMelodies(chordProgression);
+
+    var melodyListRefactor = AutoComposerMelody.buildSimpleMelodies(chordProgression);
+    var melodyListRefactor2 = AutoComposerMelody.buildSimpleMelodies(chordProgression, {somethingDumb: &quot;yes&quot;});
+    var melodyListRawRefactor = AutoComposerMelody.buildSimpleMelodies(chordProgression, {raw: true});
+    var melodyListAllRefactor = AutoComposerMelody.buildSimpleMelodies(chordProgression, {limit: false, filter: false});
+    
+    assert.deepEqual(melodyList, melodyListRefactor);
+    assert.deepEqual(melodyList, melodyListRefactor2);
+    assert.deepEqual(melodyListRaw, melodyListRawRefactor);
+    assert.deepEqual(melodyListAll, melodyListAllRefactor);
   });
 });
 </code></pre>

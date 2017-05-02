@@ -176,13 +176,37 @@ window.esdocSearchIndex = [
   [
     "",
     "test-file/test/autocomposer-melody.js.html#lineNumber149",
-    "AutoComposerMelody #getAccompaniment",
+    "AutoComposerMelody #buildSimpleAccompaniment",
     "test"
   ],
   [
     "",
     "test-file/test/autocomposer-melody.js.html#lineNumber150",
-    "AutoComposerMelody #getAccompaniment should return a simple accompaniment for a melody",
+    "AutoComposerMelody #buildSimpleAccompaniment should return a simple accompaniment for a melody",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-melody.js.html#lineNumber111",
+    "AutoComposerMelody #buildSimpleMelodies",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-melody.js.html#lineNumber112",
+    "AutoComposerMelody #buildSimpleMelodies should return a list of melodies for a given progression",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-melody.js.html#lineNumber119",
+    "AutoComposerMelody #buildSimpleMelodies should return less melodies if filters are on",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/autocomposer-melody.js.html#lineNumber128",
+    "AutoComposerMelody #buildSimpleMelodies should return raw melodies as a string array",
     "test"
   ],
   [
@@ -211,26 +235,8 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber111",
-    "AutoComposerMelody #getMelodies",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber112",
-    "AutoComposerMelody #getMelodies should return a list of melodies for a given progression",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber119",
-    "AutoComposerMelody #getMelodies should return less melodies if filters are on",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/autocomposer-melody.js.html#lineNumber128",
-    "AutoComposerMelody #getMelodies should return raw melodies as a string array",
+    "test-file/test/autocomposer-melody.js.html#lineNumber162",
+    "AutoComposerMelody should not break after some refactoring...",
     "test"
   ],
   [
@@ -690,6 +696,18 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/autocomposer-melody.js~autocomposermelody#buildsimpleaccompaniment",
+    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-buildSimpleAccompaniment",
+    "src/autocomposer-melody.js~AutoComposerMelody#buildSimpleAccompaniment",
+    "method"
+  ],
+  [
+    "src/autocomposer-melody.js~autocomposermelody#buildsimplemelodies",
+    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-buildSimpleMelodies",
+    "src/autocomposer-melody.js~AutoComposerMelody#buildSimpleMelodies",
+    "method"
+  ],
+  [
     "src/autocomposer-melody.js~autocomposermelody#chordprogression",
     "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-member-chordProgression",
     "src/autocomposer-melody.js~AutoComposerMelody#chordProgression",
@@ -699,24 +717,6 @@ window.esdocSearchIndex = [
     "src/autocomposer-melody.js~autocomposermelody#constructor",
     "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-constructor-constructor",
     "src/autocomposer-melody.js~AutoComposerMelody#constructor",
-    "method"
-  ],
-  [
-    "src/autocomposer-melody.js~autocomposermelody#getallmelodies",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-getAllMelodies",
-    "src/autocomposer-melody.js~AutoComposerMelody#getAllMelodies",
-    "method"
-  ],
-  [
-    "src/autocomposer-melody.js~autocomposermelody#getmelodies",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-getMelodies",
-    "src/autocomposer-melody.js~AutoComposerMelody#getMelodies",
-    "method"
-  ],
-  [
-    "src/autocomposer-melody.js~autocomposermelody#getrawmelodies",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-getRawMelodies",
-    "src/autocomposer-melody.js~AutoComposerMelody#getRawMelodies",
     "method"
   ],
   [
