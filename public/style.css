@@ -102,7 +102,9 @@
   text-align: right;
   color: #222;
 }
-.panel-close-button:hover,
+.panel-close-button:hover {
+  color: #4e4e4e;
+}
 .panel-close-button:active {
   color: #6b6b6b;
 }
@@ -301,6 +303,12 @@ table#ac-melody-output th {
 .ac-input.button span {
   vertical-align: middle;
 }
+.ac-input.button .fa-play {
+  padding-left: 5px;
+}
+.ac-input.button .fa-download {
+  padding-left: 6px;
+}
 .ac-input.button.green {
   color: #fff;
   background-color: #0d990d;
@@ -464,6 +472,10 @@ table#ac-melody-output th {
   .ac-output.button .button-text-icon {
     font-size: 9.600000000000001px;
     margin-top: 2px;
+  }
+  .ac-input.button i.fa-download,
+  .ac-output.button i.fa-download {
+    padding-left: 4px;
   }
   .ac-input.button i.fa-lg,
   .ac-output.button i.fa-lg {

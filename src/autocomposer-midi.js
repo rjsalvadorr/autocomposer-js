@@ -8,16 +8,39 @@ var tonalNote = require('tonal-note');
  */
 class AutoComposerMidi {
   constructor() {
-    this.INSTRUMENT_NAMES = ["violin", "acoustic_grand_piano", "acoustic_bass"];
-    this.INSTRUMENT_GAIN = {
-      violin: 1.7,
-      acoustic_grand_piano: 1.6,
-      acoustic_bass: 1.65
-    }
     this.NOTE_DURATION = "1";
+    this.NUM_INSTRUMENTS = 3;
 
-    this.instruments = {};
-    this.instrumentInit = 0;
+    this.instrumentData = {
+      melody: {
+        name: "violin",
+        sfInstrument: null, // actual instrument to be used by the app
+        gain: 1.7,
+        midiInstrumentCode: 40
+      },
+      accompaniment: {
+        name: "acoustic_guitar_steel",
+        sfInstrument: null,
+        gain: 1.6,
+        midiInstrumentCode: 25
+      },
+      bass: {
+        name: "acoustic_bass",
+        sfInstrument: null,
+        gain: 1.65,
+        midiInstrumentCode: 32
+      },
+      getByName: function(instrName) {
+        for (var instrumentRole in this) {
+          if(instrName === this[instrumentRole].name) {
+            return this[instrumentRole];
+          }
+        }
+        return null;
+      }
+    };
+
+    this.numInstrumentsInit = 0;
 
     this.player = null;
     this.audioContext = new AudioContext;
@@ -30,14 +53,21 @@ class AutoComposerMidi {
 
     // is this kind of scope hackery necessary?!
     var haxThis = this;
+    var currentInstrument;
 
-    for(var i = 0; i < this.INSTRUMENT_NAMES.length; i++) {
+    for (var instrumentRole in this.instrumentData) {
       // initialize each instrument
-      Soundfont.instrument(this.audioContext, this.INSTRUMENT_NAMES[i], {soundfont: 'FluidR3_GM'}).then(function (sfInstrument) {
-        haxThis.instruments[sfInstrument.name] = sfInstrument;
-        haxThis.instrumentInit++;
+      if(typeof this.instrumentData[instrumentRole] !== "function")
+      Soundfont.instrument(this.audioContext, haxThis.instrumentData[instrumentRole].name, {soundfont: 'FluidR3_GM'}).then(function (sfInstrument) {
+        currentInstrument = haxThis.instrumentData.getByName(sfInstrument.name);
+        currentInstrument.sfInstrument = sfInstrument;
 
-        if(haxThis.instrumentInit === haxThis.INSTRUMENT_NAMES.length) {
+        haxThis.numInstrumentsInit++;
+
+        console.log("[INNER FUNCTION] instrumentRole=" + instrumentRole);
+        console.log(currentInstrument);
+        console.log(sfInstrument);
+        if(haxThis.numInstrumentsInit === haxThis.NUM_INSTRUMENTS) {
           haxThis._finishLoad();
         }
       });
@@ -52,20 +82,20 @@ class AutoComposerMidi {
     */
   _midiCallback(event) {
     // callback for MIDI events
-    var instr1 = this.instruments["violin"];
-    var instr2 = this.instruments["acoustic_grand_piano"];
-    var instr3 = this.instruments["acoustic_bass"];
+    var instr1 = this.instrumentData["melody"];
+    var instr2 = this.instrumentData["accompaniment"];
+    var instr3 = this.instrumentData["bass"];
 
     if (!this.playbackLocked && event.name == 'Note on' && event.velocity > 0) {
         switch(event.track) {
           case 1:
-            instr1.play(event.noteName, this.audioContext.currentTime, {gain: this.INSTRUMENT_GAIN["violin"]});
+            instr1.sfInstrument.play(event.noteName, this.audioContext.currentTime, {gain: instr1.gain});
             break;
           case 2:
-            instr2.play(event.noteName, this.audioContext.currentTime, {gain: this.INSTRUMENT_GAIN["acoustic_grand_piano"]});
+            instr2.sfInstrument.play(event.noteName, this.audioContext.currentTime, {gain: instr2.gain});
             break;
           case 3:
-            instr3.play(event.noteName, this.audioContext.currentTime, {gain: this.INSTRUMENT_GAIN["acoustic_bass"]});
+            instr3.sfInstrument.play(event.noteName, this.audioContext.currentTime, {gain: instr3.gain});
             break;
           default:
             // nothing!
@@ -75,13 +105,13 @@ class AutoComposerMidi {
     if (event.name == 'Note off') {
       switch(event.track) {
         case 1:
-          instr1.stop();
+          instr1.sfInstrument.stop();
           break;
         case 2:
-          instr2.stop();
+          instr2.sfInstrument.stop();
           break;
         case 3:
-          instr3.stop();
+          instr3.sfInstrument.stop();
           break;
         default:
           // nothing!
@@ -129,11 +159,14 @@ class AutoComposerMidi {
     * Builds a Track from a given chord.
     * @private
     * @param {string[]} arrChordNotes - chordNotes
+    * @param {Object} instrumentData - instrument data for track
     * @return {Track} - a MidiWriter Track
     */
-  _buildTrack(arrChordNotes) {
+  _buildTrack(arrChordNotes, instrumentData) {
     var notes, midiNumber, midiNumbers;
     var returnTrack = new MidiWriter.Track();
+    returnTrack.addEvent(new MidiWriter.ProgramChangeEvent({instrument : instrumentData.midiInstrumentCode}));
+    returnTrack.addInstrumentName(instrumentData.name);
 
     for(var i = 0; i < arrChordNotes.length; i++) {
       midiNumbers = [];
@@ -157,8 +190,7 @@ class AutoComposerMidi {
     */
   _buildMelodyMidiSolo(arrMelody) {
     var tracks = [], midiNumber;
-    //tracks[0] = this._buildMelodyTrack(arrMelody);
-    tracks[0] = this._buildTrack(arrMelody);
+    tracks[0] = this._buildTrack(arrMelody, this.instrumentData["melody"]);
 
     var write = new MidiWriter.Writer(tracks);
 
@@ -175,16 +207,9 @@ class AutoComposerMidi {
   buildMelodyMidiWithAccompaniment(arrMelody, arrAcompanimentLine, arrBassLine) {
     var tracks, midiNumber;
 
-    //var melodyTrack = this._buildMelodyTrack(arrMelody);
-    var melodyTrack = this._buildTrack(arrMelody);
-    melodyTrack.addInstrumentName("violin");
-
-    var accompanimentTrack = this._buildTrack(arrAcompanimentLine);
-    accompanimentTrack.addInstrumentName("acoustic_grand_piano");
-
-    //var bassTrack = this._buildMelodyTrack(arrBassLine);
-    var bassTrack = this._buildTrack(arrBassLine);
-    bassTrack.addInstrumentName("acoustic_bass");
+    var melodyTrack = this._buildTrack(arrMelody, this.instrumentData["melody"]);
+    var accompanimentTrack = this._buildTrack(arrAcompanimentLine, this.instrumentData["accompaniment"]);
+    var bassTrack = this._buildTrack(arrBassLine, this.instrumentData["bass"]);
 
     tracks = [melodyTrack, accompanimentTrack, bassTrack];
 
@@ -232,9 +257,9 @@ class AutoComposerMidi {
     * Stops all playback
     */
   stopPlayback() {
-    this.instruments["violin"].stop();
-    this.instruments["acoustic_grand_piano"].stop();
-    this.instruments["acoustic_bass"].stop();
+    this.instrumentData["melody"].sfInstrument.stop();
+    this.instrumentData["accompaniment"].sfInstrument.stop();
+    this.instrumentData["bass"].sfInstrument.stop();
     this.player.stop();
   }
 }

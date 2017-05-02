@@ -738,21 +738,15 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/autocomposer-midi.js~autocomposermidi#instrument_gain",
-    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-INSTRUMENT_GAIN",
-    "src/autocomposer-midi.js~AutoComposerMidi#INSTRUMENT_GAIN",
-    "member"
-  ],
-  [
-    "src/autocomposer-midi.js~autocomposermidi#instrument_names",
-    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-INSTRUMENT_NAMES",
-    "src/autocomposer-midi.js~AutoComposerMidi#INSTRUMENT_NAMES",
-    "member"
-  ],
-  [
     "src/autocomposer-midi.js~autocomposermidi#note_duration",
     "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-NOTE_DURATION",
     "src/autocomposer-midi.js~AutoComposerMidi#NOTE_DURATION",
+    "member"
+  ],
+  [
+    "src/autocomposer-midi.js~autocomposermidi#num_instruments",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-NUM_INSTRUMENTS",
+    "src/autocomposer-midi.js~AutoComposerMidi#NUM_INSTRUMENTS",
     "member"
   ],
   [
@@ -780,15 +774,15 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/autocomposer-midi.js~autocomposermidi#instrumentinit",
-    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-instrumentInit",
-    "src/autocomposer-midi.js~AutoComposerMidi#instrumentInit",
+    "src/autocomposer-midi.js~autocomposermidi#instrumentdata",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-instrumentData",
+    "src/autocomposer-midi.js~AutoComposerMidi#instrumentData",
     "member"
   ],
   [
-    "src/autocomposer-midi.js~autocomposermidi#instruments",
-    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-instruments",
-    "src/autocomposer-midi.js~AutoComposerMidi#instruments",
+    "src/autocomposer-midi.js~autocomposermidi#numinstrumentsinit",
+    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-numInstrumentsInit",
+    "src/autocomposer-midi.js~AutoComposerMidi#numInstrumentsInit",
     "member"
   ],
   [

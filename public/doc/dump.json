@@ -3,7 +3,7 @@
     "__docId__": 0,
     "kind": "file",
     "name": "src/app-main.js",
-    "content": "const React = require('react');\r\nconst ReactDOM = require('react-dom');\r\nconst moment = require('moment');\r\n\r\nvar AutoComposerLogic = require('./autocomposer-logic');\r\nvar AcLogic = new AutoComposerLogic.AutoComposerLogic();\r\n\r\nvar AutoComposerMelody = require('./autocomposer-melody');\r\nvar AcMelody = new AutoComposerMelody.AutoComposerMelody();\r\n\r\nvar acMidi = require('./autocomposer-midi');\r\nvar AcMidi = new acMidi.AutoComposerMidi();\r\n\r\nvar AcButton = require('./react/ac-button');\r\nvar AcToggleButton = require('./react/ac-toggle-button');\r\nvar AcTextArea = require('./react/ac-textarea');\r\nvar StatusOutput = require('./react/status-output')\r\n\r\nvar HelpPanel = require('./react/help-panel');\r\nvar DebugPanel = require('./react/debug-panel');\r\nvar OutputPanel = require('./react/output-panel');\r\nvar ControlPanel = require('./react/control-panel');\r\n\r\n\r\n\r\nfunction AcInputException(message) {\r\n   this.message = message;\r\n   this.name = 'AcInputException';\r\n}\r\n\r\n\r\n\r\n/**\r\n* The core React component for the web app.\r\n*/\r\nclass AutoComposer extends React.Component {\r\n  constructor(props) {\r\n    super(props);\r\n\r\n    /**\r\n    * @type {Object} - Data store. Any changes to this data store will not cause an update.\r\n    */\r\n    this.store = {\r\n      melodies: [],\r\n      chordProgressionClean: \"\",\r\n      chordProgressionPlaceholder: AcLogic.INITIAL_PROGRESSION,\r\n      RESPONSIVE_BREAKPOINT_PHONE: 500,\r\n      RESPONSIVE_BREAKPOINT_TABLET: 768\r\n    };\r\n\r\n    /**\r\n    * @type {Object} - Component state. Changes to this will eventually trigger a render.\r\n    */\r\n    this.state = {\r\n      showHelp: false,\r\n      showControls: false,\r\n      showOutput: false,\r\n\r\n      debugMode: false,\r\n      controlsDisabled: true, // While this is a mess, no need to show it.\r\n\r\n      chordProgressionRaw: \"\",\r\n      chordProgressionChanged: false,\r\n\r\n      // This becomes true whenever we have a chord progression change, and the correct button is clicked.\r\n      // Returns to false after output finishes rendering\r\n      allowMelodyGeneration: \"\",\r\n      melodyLoaded: false,\r\n\r\n      isOnSupportedDevice: this._isOnSupportedDevice(),\r\n      isOnTablet: this._isOnTablet()\r\n    };\r\n\r\n    this.handleChange = this.handleChange.bind(this);\r\n    this.generateMelodies = this.generateMelodies.bind(this);\r\n    this.outputFinishCallback = this.outputFinishCallback.bind(this);\r\n    this.callbackChangeState = this.callbackChangeState.bind(this);\r\n    this._resizeHandler = this._resizeHandler.bind(this);\r\n    this.loadMusic = this.loadMusic.bind(this);\r\n\r\n    this.playMelody = this.playMelody.bind(this);\r\n    this.playMelodySolo = this.playMelodySolo.bind(this);\r\n    this.stopMusic = this.stopMusic.bind(this);\r\n    this.downloadMidi = this.downloadMidi.bind(this);\r\n  }\r\n\r\n  /**\r\n  * Checks the device/browser. Returns true if the browser is supported.\r\n  * Expected to run on loading the app.\r\n  */\r\n  _isOnSupportedDevice() {\r\n    var ua = navigator.userAgent;\r\n    // trident = IE rendering engine. IE does not support the class JS keyword. Which is all over this codebase.\r\n    var isSupportedDevice = ua.search(/trident/i) == -1;\r\n    return isSupportedDevice;\r\n  }\r\n\r\n  /**\r\n  * Checks to see if the app should use a Tablet layout.\r\n  * Expected to run on loading the app, and when it resizes\r\n  */\r\n  _isOnTablet() {\r\n    if(window.innerWidth > this.store.RESPONSIVE_BREAKPOINT_PHONE && window.innerWidth <= this.store.RESPONSIVE_BREAKPOINT_TABLET) {\r\n      return true;\r\n    } else {\r\n      return false\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Handler for browser resize event.\r\n  */\r\n  _resizeHandler() {\r\n    if(this._isOnTablet() && !this.state.isOnTablet) {\r\n      // state transition: non-tablet VW to a tablet VW\r\n      this.setState({isOnTablet: true});\r\n    } else if (!this._isOnTablet() && this.state.isOnTablet) {\r\n      // state transition: tablet VW to a non-tablet VW\r\n      this.setState({isOnTablet: false});\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Add event listener\r\n  */\r\n  componentDidMount() {\r\n    window.addEventListener(\"resize\", this._resizeHandler);\r\n  }\r\n\r\n  /**\r\n  * Remove event listener\r\n  */\r\n  componentWillUnmount() {\r\n    window.removeEventListener(\"resize\", this._resizeHandler);\r\n  }\r\n\r\n  _sendStatusUpdate(message) {\r\n    var updateEvent = new CustomEvent('statusUpdate', {detail: message});\r\n    document.body.dispatchEvent(updateEvent);\r\n  }\r\n\r\n  /**\r\n  * Changes app state. Meant to be called from child components\r\n  * @param {string} stateKey - App state to change\r\n  * @param {number|string|Object} newState - Assigns this to the state\r\n  * @param {?boolean} [useDataStore] - If true, the data store is changed instead of the state object.\r\n  */\r\n  callbackChangeState(stateKey, newState, useDataStore) {\r\n    console.debug(\"app, callbackChangeState(\" + stateKey + \", \" + newState + \", \" + useDataStore + \")\");\r\n    if(useDataStore) {\r\n      this.store[stateKey] = newState;\r\n    } else {\r\n      var stateObj = function() {\r\n        var returnObj = {};\r\n\r\n        returnObj[stateKey] = newState;\r\n\r\n        return returnObj;\r\n      }.bind(this)();\r\n\r\n      this.setState(stateObj);\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Changes app state. Meant to be called from child components.\r\n  * Older function, compared to callbackChangeState()\r\n  * @param {Object} event - React event\r\n  */\r\n  handleChange(event) {\r\n    var stateObj = function() {\r\n      var stateKey = this.target.dataset[\"stateKey\"];\r\n      var returnObj = {};\r\n\r\n      if(this.target.type === \"checkbox\") {\r\n        returnObj[stateKey] = this.target.checked;\r\n      } else if(this.target.type === \"button\") {\r\n        returnObj[stateKey] = this.target.dataset[\"currentState\"] === \"true\";\r\n      } else {\r\n        returnObj[stateKey] = this.target.value;\r\n\r\n        if(stateKey === \"chordProgressionRaw\") {\r\n          returnObj[\"chordProgressionChanged\"] = true;\r\n        }\r\n      }\r\n\r\n      return returnObj;\r\n    }.bind(event)();\r\n\r\n    this.setState(stateObj);\r\n  }\r\n\r\n  /**\r\n  * Loads melody data into the App. Meant to be used as a callback from the results table.\r\n  * @param {Object} event - React event\r\n  */\r\n  loadMusic(event) {\r\n    var melodyString = event.currentTarget.dataset[\"payload\"];\r\n    var melodiesData = melodyString.split(\";\");\r\n\r\n    var melody1 = melodiesData[0].split(\",\");\r\n    var melody2 = melodiesData[1].split(\",\");\r\n    var melody3 = melodiesData[2].split(\",\");\r\n\r\n    var melodies = [melody1, melody2, melody3];\r\n    this.store.melodies = melodies;\r\n    this.setState({melodyLoaded: true});\r\n\r\n    var newSelectionEvent = new Event(\"newSelection\");\r\n    document.body.dispatchEvent(newSelectionEvent);\r\n  }\r\n\r\n  /**\r\n  * Generates the melodies for the given chord progression.\r\n  * @param {Object} event - React event\r\n  */\r\n  generateMelodies(event) {\r\n    var chordProgression = this.state.chordProgressionRaw.trim().split(\" \");\r\n\r\n    if(!this.state.chordProgressionChanged || this.state.chordProgressionRaw.trim() === this.store.chordProgressionClean) {\r\n      // Chord progression hasn't changed. No need to continue.\r\n      console.debug(\"[AutoComposer.generateMelodies()] Chord progression hasn't changed. No generation for you.\");\r\n      return;\r\n    }\r\n\r\n    this.store.chordProgressionClean = this.state.chordProgressionRaw.trim();\r\n\r\n    try {\r\n      if(this.state.chordProgressionRaw == null || this.state.chordProgressionRaw == \"\") {\r\n        throw new AcInputException('Chord input is empty!');\r\n      }\r\n\r\n      chordProgression.forEach(function(currentChordInput) {\r\n        if(!AcLogic.isValidText(currentChordInput)) {\r\n          throw new AcInputException('Chord input \\'' + currentChordInput + '\\' is not formatted properly! You should check the chord dictionary in the Help! section.');\r\n        }\r\n      });\r\n\r\n      if(chordProgression.length < 2) {\r\n        throw new AcInputException('You need to enter more chords. Two chords in a row is a completely valid input.');\r\n      }\r\n\r\n      this._sendStatusUpdate(\"Generating melodies...\");\r\n      this.setState({showOutput: true, allowMelodyGeneration: true, melodyLoaded: false, showHelp: false});\r\n      this.store.melodies = [];\r\n\r\n\r\n      var newSelectionEvent = new Event(\"newSelection\");\r\n      document.body.dispatchEvent(newSelectionEvent);\r\n    } catch(exc) {\r\n      console.warn(\"[AutoComposer.generateMelodies()] \" + exc.message + \"\\nError Type = \" + exc.name);\r\n      this._sendStatusUpdate(\"[ERROR] \" + exc.message);\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Plays the loaded melody\r\n  * @param {Object} event - React event\r\n  */\r\n  playMelody(event) {\r\n    if(this.store.melodies.length > 0) {\r\n      AcMidi.playMelodyWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Plays the loaded melody by itself\r\n  * @param {Object} event - React event\r\n  */\r\n  playMelodySolo(event) {\r\n    if(this.store.melodies.length > 0) {\r\n      AcMidi.playMelodySolo(this.store.melodies[0]);\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Stops all music currently playing.\r\n  * @param {Object} event - React event\r\n  */\r\n  stopMusic(event) {\r\n    AcMidi.stopPlayback();\r\n  }\r\n\r\n  /**\r\n  * Creates and sends MIDI data to the user.\r\n  * @param {Object} event - React event\r\n  */\r\n  downloadMidi(event) {\r\n    if(this.store.melodies.length > 0) {\r\n      //download MIDI file\r\n      var dataString = AcMidi.buildMelodyMidiWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);\r\n      var timestamp = moment().format(\"YYMMDDHHmmss\");\r\n      var fileName = \"autocomposer_\" + timestamp + \"_\" + this.state.chordProgressionRaw.replace(/\\s+/g, \"-\");\r\n      download(dataString, fileName, \"audio/midi\");\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Callback that runs when output panel is finished rendering.\r\n  * Prevents melody generation until the user enters a new progression.\r\n  * @param {Object} event - React event\r\n  */\r\n  outputFinishCallback() {\r\n    this.setState({allowMelodyGeneration: false, chordProgressionChanged: false});\r\n  }\r\n\r\n  render() {\r\n    var chordProgressionArray = this.store.chordProgressionClean.split(\" \");\r\n    var rootLayoutClass = \"root-panel\";\r\n    rootLayoutClass += this.state.isOnTablet ? \" layout-tablet\" : \" layout-non-tablet\";\r\n\r\n    if(this.state.isOnSupportedDevice) {\r\n      return (\r\n        <div id=\"app-container\" className={rootLayoutClass}>\r\n          <div id=\"main-control-panel\" className=\"ac-panel\">\r\n\r\n            <div className=\"panel-row\">\r\n              <div className=\"ac-control-wrapper flex-lg\">\r\n                <h1 id=\"main-title\">AutoComposer</h1>\r\n              </div>\r\n              <AcToggleButton inputKey=\"showHelp\" icon=\"question\" addClass=\"blue\" wrapperAddClass=\"flex-md\" isActive={this.state.showHelp} onClickHandler={this.callbackChangeState} />\r\n            </div>\r\n\r\n            <div className=\"panel-row\">\r\n              <p id=\"main-blurb\">\r\n                This is a prototype for a program that automatically writes music. Click the <i className=\"fa fa-question\"></i> button to get started.\r\n                For more info, check out the <a href=\"https://github.com/rjsalvadorr/autocomposer-melody/wiki\" target=\"_blank\">project wiki</a> and <a href=\"https://github.com/rjsalvadorr/autocomposer-melody\" target=\"_blank\">repository</a>.\r\n              </p>\r\n            </div>\r\n\r\n            <div className=\"panel-row has-labels\">\r\n              <AcTextArea inputKey=\"chordProgressionRaw\" addClass=\"double-height\" value={this.state.chordProgressionRaw} placeholder={this.store.chordProgressionPlaceholder} onChange={this.handleChange} />\r\n              <AcButton inputKey=\"generateMelodies\" inputLabel=\"Generate\" wrapperAddClass=\"square\" addClass=\"double-height blue\" onClick={this.generateMelodies} isActive={!this.state.chordProgressionChanged}/>\r\n            </div>\r\n\r\n            <div className=\"panel-row\">\r\n              <AcButton inputKey=\"generateMelodies\" icon=\"play\" addClass=\"green\" wrapperAddClass=\"flex-lg\" onClick={this.playMelody} disabled={!this.state.melodyLoaded}/>\r\n              <AcButton inputKey=\"generateMelodies\" icon=\"play\" addClass=\"green\" inputLabel=\"Solo\" wrapperAddClass=\"flex-sm\" onClick={this.playMelodySolo} disabled={!this.state.melodyLoaded}/>\r\n              <AcButton inputKey=\"generateMelodies\" icon=\"stop\" addClass=\"red\" wrapperAddClass=\"flex-sm\" onClick={this.stopMusic} disabled={!this.state.melodyLoaded}/>\r\n              <AcButton inputKey=\"generateMelodies\" icon=\"download\" addClass=\"blue\" wrapperAddClass=\"flex-sm\" onClick={this.downloadMidi} disabled={!this.state.melodyLoaded}/>\r\n            </div>\r\n\r\n            <div className=\"panel-row\">\r\n              <StatusOutput inputKey=\"status-output\" value=\"status output...\" />\r\n            </div>\r\n\r\n            <DebugPanel isHidden={!this.state.debugMode} debugData={JSON.stringify(this.state, null, 2)}/>\r\n          </div>\r\n\r\n          <ControlPanel isShown={this.state.showControls} />\r\n\r\n          <HelpPanel isShown={this.state.showHelp} closeFunction={this.callbackChangeState}/>\r\n\r\n          <OutputPanel isShown={this.state.showOutput} chordProgression={chordProgressionArray} allowMelodyGeneration={this.state.allowMelodyGeneration} outputCallback={this.outputFinishCallback} loadMelody={this.loadMusic} />\r\n\r\n          <div id=\"not-supported-panel\" className=\"ac-panel\">\r\n            <h1>Where's the AutoComposer?!</h1>\r\n            <p>You're seeing this page because your device isn't supported by the app's scripts, or your browser's window size is too small.</p>\r\n            <p>If you're on a phone/tablet, try turning it to see this page in landscape!</p>\r\n          </div>\r\n\r\n        </div>\r\n      );\r\n    } else {\r\n      return (\r\n        <div id=\"app-container\" className=\"root-panel\">\r\n          <div id=\"not-supported-panel\" className=\"ac-panel\">\r\n            <h1>Where's the AutoComposer?!</h1>\r\n            <p>You're seeing this page because your device isn't supported by the app's scripts, or your browser's window size is too small.</p>\r\n            <p>If you're on a phone/tablet, try turning it to see this page in landscape!</p>\r\n          </div>\r\n        </div>\r\n      );\r\n    }\r\n  }\r\n}\r\n\r\nReactDOM.render(<AutoComposer />, document.getElementById('react-root'));\r\n",
+    "content": "const React = require('react');\r\nconst ReactDOM = require('react-dom');\r\nconst moment = require('moment');\r\n\r\nvar AutoComposerLogic = require('./autocomposer-logic');\r\nvar AcLogic = new AutoComposerLogic.AutoComposerLogic();\r\n\r\nvar AutoComposerMelody = require('./autocomposer-melody');\r\nvar AcMelody = new AutoComposerMelody.AutoComposerMelody();\r\n\r\nvar acMidi = require('./autocomposer-midi');\r\nvar AcMidi = new acMidi.AutoComposerMidi();\r\n\r\nvar AcButton = require('./react/ac-button');\r\nvar AcToggleButton = require('./react/ac-toggle-button');\r\nvar AcTextArea = require('./react/ac-textarea');\r\nvar StatusOutput = require('./react/status-output')\r\n\r\nvar HelpPanel = require('./react/help-panel');\r\nvar DebugPanel = require('./react/debug-panel');\r\nvar OutputPanel = require('./react/output-panel');\r\nvar ControlPanel = require('./react/control-panel');\r\n\r\n\r\n\r\nfunction AcInputException(message) {\r\n   this.message = message;\r\n   this.name = 'AcInputException';\r\n}\r\n\r\n\r\n\r\n/**\r\n* The core React component for the web app.\r\n*/\r\nclass AutoComposer extends React.Component {\r\n  constructor(props) {\r\n    super(props);\r\n\r\n    /**\r\n    * @type {Object} - Data store. Any changes to this data store will not cause an update.\r\n    */\r\n    this.store = {\r\n      melodies: [],\r\n      chordProgressionClean: \"\",\r\n      chordProgressionPlaceholder: AcLogic.INITIAL_PROGRESSION,\r\n      RESPONSIVE_BREAKPOINT_PHONE: 500,\r\n      RESPONSIVE_BREAKPOINT_TABLET: 768\r\n    };\r\n\r\n    /**\r\n    * @type {Object} - Component state. Changes to this will eventually trigger a render.\r\n    */\r\n    this.state = {\r\n      showHelp: false,\r\n      showControls: false,\r\n      showOutput: false,\r\n\r\n      debugMode: false,\r\n      controlsDisabled: true, // While this is a mess, no need to show it.\r\n\r\n      chordProgressionRaw: \"\",\r\n      chordProgressionChanged: false,\r\n\r\n      // This becomes true whenever we have a chord progression change, and the correct button is clicked.\r\n      // Returns to false after output finishes rendering\r\n      allowMelodyGeneration: \"\",\r\n      melodyLoaded: false,\r\n\r\n      isOnSupportedDevice: this._isOnSupportedDevice(),\r\n      isOnTablet: this._isOnTablet()\r\n    };\r\n\r\n    this.handleChange = this.handleChange.bind(this);\r\n    this.generateMelodies = this.generateMelodies.bind(this);\r\n    this.outputFinishCallback = this.outputFinishCallback.bind(this);\r\n    this.callbackChangeState = this.callbackChangeState.bind(this);\r\n    this._resizeHandler = this._resizeHandler.bind(this);\r\n    this.loadMusic = this.loadMusic.bind(this);\r\n\r\n    this.playMelody = this.playMelody.bind(this);\r\n    this.playMelodySolo = this.playMelodySolo.bind(this);\r\n    this.stopMusic = this.stopMusic.bind(this);\r\n    this.downloadMidi = this.downloadMidi.bind(this);\r\n  }\r\n\r\n  /**\r\n  * Checks the device/browser. Returns true if the browser is supported.\r\n  * Expected to run on loading the app.\r\n  */\r\n  _isOnSupportedDevice() {\r\n    var ua = navigator.userAgent;\r\n    // trident = IE rendering engine. IE does not support the class JS keyword. Which is all over this codebase.\r\n    var isSupportedDevice = ua.search(/trident/i) == -1;\r\n    return isSupportedDevice;\r\n  }\r\n\r\n  /**\r\n  * Checks to see if the app should use a Tablet layout.\r\n  * Expected to run on loading the app, and when it resizes\r\n  */\r\n  _isOnTablet() {\r\n    if(window.innerWidth > this.store.RESPONSIVE_BREAKPOINT_PHONE && window.innerWidth <= this.store.RESPONSIVE_BREAKPOINT_TABLET) {\r\n      return true;\r\n    } else {\r\n      return false\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Handler for browser resize event.\r\n  */\r\n  _resizeHandler() {\r\n    if(this._isOnTablet() && !this.state.isOnTablet) {\r\n      // state transition: non-tablet VW to a tablet VW\r\n      this.setState({isOnTablet: true});\r\n    } else if (!this._isOnTablet() && this.state.isOnTablet) {\r\n      // state transition: tablet VW to a non-tablet VW\r\n      this.setState({isOnTablet: false});\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Add event listener\r\n  */\r\n  componentDidMount() {\r\n    window.addEventListener(\"resize\", this._resizeHandler);\r\n  }\r\n\r\n  /**\r\n  * Remove event listener\r\n  */\r\n  componentWillUnmount() {\r\n    window.removeEventListener(\"resize\", this._resizeHandler);\r\n  }\r\n\r\n  _sendStatusUpdate(message) {\r\n    var updateEvent = new CustomEvent('statusUpdate', {detail: message});\r\n    document.body.dispatchEvent(updateEvent);\r\n  }\r\n\r\n  /**\r\n  * Changes app state. Meant to be called from child components\r\n  * @param {string} stateKey - App state to change\r\n  * @param {number|string|Object} newState - Assigns this to the state\r\n  * @param {?boolean} [useDataStore] - If true, the data store is changed instead of the state object.\r\n  */\r\n  callbackChangeState(stateKey, newState, useDataStore) {\r\n    console.debug(\"app, callbackChangeState(\" + stateKey + \", \" + newState + \", \" + useDataStore + \")\");\r\n    if(useDataStore) {\r\n      this.store[stateKey] = newState;\r\n    } else {\r\n      var stateObj = function() {\r\n        var returnObj = {};\r\n\r\n        returnObj[stateKey] = newState;\r\n\r\n        return returnObj;\r\n      }.bind(this)();\r\n\r\n      this.setState(stateObj);\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Changes app state. Meant to be called from child components.\r\n  * Older function, compared to callbackChangeState()\r\n  * @param {Object} event - React event\r\n  */\r\n  handleChange(event) {\r\n    var stateObj = function() {\r\n      var stateKey = this.target.dataset[\"stateKey\"];\r\n      var returnObj = {};\r\n\r\n      if(this.target.type === \"checkbox\") {\r\n        returnObj[stateKey] = this.target.checked;\r\n      } else if(this.target.type === \"button\") {\r\n        returnObj[stateKey] = this.target.dataset[\"currentState\"] === \"true\";\r\n      } else {\r\n        returnObj[stateKey] = this.target.value;\r\n\r\n        if(stateKey === \"chordProgressionRaw\") {\r\n          returnObj[\"chordProgressionChanged\"] = true;\r\n        }\r\n      }\r\n\r\n      return returnObj;\r\n    }.bind(event)();\r\n\r\n    this.setState(stateObj);\r\n  }\r\n\r\n  /**\r\n  * Loads melody data into the App. Meant to be used as a callback from the results table.\r\n  * @param {Object} event - React event\r\n  */\r\n  loadMusic(event) {\r\n    var melodyString = event.currentTarget.dataset[\"payload\"];\r\n    var melodiesData = melodyString.split(\";\");\r\n\r\n    var melody1 = melodiesData[0].split(\",\");\r\n    var melody2 = melodiesData[1].split(\",\");\r\n    var melody3 = melodiesData[2].split(\",\");\r\n\r\n    var melodies = [melody1, melody2, melody3];\r\n    this.store.melodies = melodies;\r\n    this.setState({melodyLoaded: true});\r\n\r\n    var newSelectionEvent = new Event(\"newSelection\");\r\n    document.body.dispatchEvent(newSelectionEvent);\r\n  }\r\n\r\n  /**\r\n  * Generates the melodies for the given chord progression.\r\n  * @param {Object} event - React event\r\n  */\r\n  generateMelodies(event) {\r\n    var chordProgression = this.state.chordProgressionRaw.trim().split(\" \");\r\n\r\n    if(!this.state.chordProgressionChanged || this.state.chordProgressionRaw.trim() === this.store.chordProgressionClean) {\r\n      // Chord progression hasn't changed. No need to continue.\r\n      console.debug(\"[AutoComposer.generateMelodies()] Chord progression hasn't changed. No generation for you.\");\r\n      return;\r\n    }\r\n\r\n    this.store.chordProgressionClean = this.state.chordProgressionRaw.trim();\r\n\r\n    try {\r\n      if(this.state.chordProgressionRaw == null || this.state.chordProgressionRaw == \"\") {\r\n        throw new AcInputException('Chord input is empty!');\r\n      }\r\n\r\n      chordProgression.forEach(function(currentChordInput) {\r\n        if(!AcLogic.isValidText(currentChordInput)) {\r\n          throw new AcInputException('Chord input \\'' + currentChordInput + '\\' is not formatted properly! You should check the chord dictionary in the Help! section.');\r\n        }\r\n      });\r\n\r\n      if(chordProgression.length < 2) {\r\n        throw new AcInputException('You need to enter more chords. Two chords in a row is a completely valid input.');\r\n      }\r\n\r\n      this._sendStatusUpdate(\"Generating melodies...\");\r\n      this.setState({showOutput: true, allowMelodyGeneration: true, melodyLoaded: false, showHelp: false});\r\n      this.store.melodies = [];\r\n\r\n\r\n      var newSelectionEvent = new Event(\"newSelection\");\r\n      document.body.dispatchEvent(newSelectionEvent);\r\n    } catch(exc) {\r\n      console.warn(\"[AutoComposer.generateMelodies()] \" + exc.message + \"\\nError Type = \" + exc.name);\r\n      this._sendStatusUpdate(\"[ERROR] \" + exc.message);\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Plays the loaded melody\r\n  * @param {Object} event - React event\r\n  */\r\n  playMelody(event) {\r\n    if(this.store.melodies.length > 0) {\r\n      AcMidi.playMelodyWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Plays the loaded melody by itself\r\n  * @param {Object} event - React event\r\n  */\r\n  playMelodySolo(event) {\r\n    if(this.store.melodies.length > 0) {\r\n      AcMidi.playMelodySolo(this.store.melodies[0]);\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Stops all music currently playing.\r\n  * @param {Object} event - React event\r\n  */\r\n  stopMusic(event) {\r\n    AcMidi.stopPlayback();\r\n  }\r\n\r\n  /**\r\n  * Creates and sends MIDI data to the user.\r\n  * @param {Object} event - React event\r\n  */\r\n  downloadMidi(event) {\r\n    if(this.store.melodies.length > 0) {\r\n      //download MIDI file\r\n      var dataString = AcMidi.buildMelodyMidiWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);\r\n      var timestamp = moment().format(\"YYMMDDHHmmss\");\r\n      var fileName = \"autocomposer_\" + timestamp + \"_\" + this.state.chordProgressionRaw.replace(/\\s+/g, \"-\");\r\n      download(dataString, fileName, \"audio/midi\");\r\n    }\r\n  }\r\n\r\n  /**\r\n  * Callback that runs when output panel is finished rendering.\r\n  * Prevents melody generation until the user enters a new progression.\r\n  * @param {Object} event - React event\r\n  */\r\n  outputFinishCallback() {\r\n    this.setState({allowMelodyGeneration: false, chordProgressionChanged: false});\r\n  }\r\n\r\n  render() {\r\n    var chordProgressionArray = this.store.chordProgressionClean.split(\" \");\r\n    var rootLayoutClass = \"root-panel\";\r\n    rootLayoutClass += this.state.isOnTablet ? \" layout-tablet\" : \" layout-non-tablet\";\r\n\r\n    if(this.state.isOnSupportedDevice) {\r\n      return (\r\n        <div id=\"app-container\" className={rootLayoutClass}>\r\n          <div id=\"main-control-panel\" className=\"ac-panel\">\r\n\r\n            <div className=\"panel-row\">\r\n              <div className=\"ac-control-wrapper flex-lg\">\r\n                <h1 id=\"main-title\">AutoComposer</h1>\r\n              </div>\r\n              <AcToggleButton inputKey=\"showHelp\" icon=\"question\" addClass=\"blue\" wrapperAddClass=\"flex-md\" isActive={this.state.showHelp} onClickHandler={this.callbackChangeState} />\r\n            </div>\r\n\r\n            <div className=\"panel-row\">\r\n              <p id=\"main-blurb\">\r\n                This is a prototype for a program that automatically writes music. Click the <i className=\"fa fa-question\"></i> button to get started.\r\n                For more info, check out the <a href=\"https://github.com/rjsalvadorr/autocomposer-melody/wiki\" target=\"_blank\">project wiki</a> and <a href=\"https://github.com/rjsalvadorr/autocomposer-melody\" target=\"_blank\">repository</a>.\r\n              </p>\r\n            </div>\r\n\r\n            <div className=\"panel-row has-labels\">\r\n              <AcTextArea inputKey=\"chordProgressionRaw\" addClass=\"double-height\" value={this.state.chordProgressionRaw} placeholder={this.store.chordProgressionPlaceholder} onChange={this.handleChange} />\r\n              <AcButton inputKey=\"generateMelodies\" inputLabel=\"Generate\" wrapperAddClass=\"square\" addClass=\"double-height blue\" onClick={this.generateMelodies} isActive={!this.state.chordProgressionChanged}/>\r\n            </div>\r\n\r\n            <div className=\"panel-row\">\r\n              <AcButton inputKey=\"generateMelodies\" icon=\"play\" addClass=\"green\" wrapperAddClass=\"flex-lg\" onClick={this.playMelody} disabled={!this.state.melodyLoaded}/>\r\n              <AcButton inputKey=\"generateMelodies\" icon=\"play\" addClass=\"green\" inputLabel=\"Solo\" wrapperAddClass=\"flex-sm\" onClick={this.playMelodySolo} disabled={!this.state.melodyLoaded}/>\r\n              <AcButton inputKey=\"generateMelodies\" icon=\"stop\" addClass=\"red\" wrapperAddClass=\"flex-sm\" onClick={this.stopMusic} disabled={!this.state.melodyLoaded}/>\r\n              <AcButton inputKey=\"generateMelodies\" icon=\"download\" addClass=\"blue\" inputLabel=\"MIDI\" wrapperAddClass=\"flex-sm\" onClick={this.downloadMidi} disabled={!this.state.melodyLoaded}/>\r\n            </div>\r\n\r\n            <div className=\"panel-row\">\r\n              <StatusOutput inputKey=\"status-output\" value=\"status output...\" />\r\n            </div>\r\n\r\n            <DebugPanel isHidden={!this.state.debugMode} debugData={JSON.stringify(this.state, null, 2)}/>\r\n          </div>\r\n\r\n          <ControlPanel isShown={this.state.showControls} />\r\n\r\n          <HelpPanel isShown={this.state.showHelp} closeFunction={this.callbackChangeState}/>\r\n\r\n          <OutputPanel isShown={this.state.showOutput} chordProgression={chordProgressionArray} allowMelodyGeneration={this.state.allowMelodyGeneration} outputCallback={this.outputFinishCallback} loadMelody={this.loadMusic} />\r\n\r\n          <div id=\"not-supported-panel\" className=\"ac-panel\">\r\n            <h1>Where's the AutoComposer?!</h1>\r\n            <p>You're seeing this page because your device isn't supported by the app's scripts, or your browser's window size is too small.</p>\r\n            <p>If you're on a phone/tablet, try turning it to see this page in landscape!</p>\r\n          </div>\r\n\r\n        </div>\r\n      );\r\n    } else {\r\n      return (\r\n        <div id=\"app-container\" className=\"root-panel\">\r\n          <div id=\"not-supported-panel\" className=\"ac-panel\">\r\n            <h1>Where's the AutoComposer?!</h1>\r\n            <p>You're seeing this page because your device isn't supported by the app's scripts, or your browser's window size is too small.</p>\r\n            <p>If you're on a phone/tablet, try turning it to see this page in landscape!</p>\r\n          </div>\r\n        </div>\r\n      );\r\n    }\r\n  }\r\n}\r\n\r\nReactDOM.render(<AutoComposer />, document.getElementById('react-root'));\r\n",
     "static": true,
     "longname": "src/app-main.js",
     "access": null,
@@ -2687,7 +2687,7 @@
     "__docId__": 99,
     "kind": "file",
     "name": "src/autocomposer-midi.js",
-    "content": "var MidiWriter = require('midi-writer-js');\r\nvar MidiPlayer = require('midi-player-js');\r\nvar SoundfontPlayer = require('soundfont-player');\r\nvar tonalNote = require('tonal-note');\r\n\r\n/**\r\n * Class responsible for playing audio and generating MIDI files for users.\r\n */\r\nclass AutoComposerMidi {\r\n  constructor() {\r\n    this.INSTRUMENT_NAMES = [\"violin\", \"acoustic_grand_piano\", \"acoustic_bass\"];\r\n    this.INSTRUMENT_GAIN = {\r\n      violin: 1.7,\r\n      acoustic_grand_piano: 1.6,\r\n      acoustic_bass: 1.65\r\n    }\r\n    this.NOTE_DURATION = \"1\";\r\n\r\n    this.instruments = {};\r\n    this.instrumentInit = 0;\r\n\r\n    this.player = null;\r\n    this.audioContext = new AudioContext;\r\n\r\n    this.initialized = false;\r\n    // Added this flag to fix an issue where notes randomly play again after the track ends.\r\n    // It only works for tracks that are all the same length. If we ever have to play tracks that have\r\n    // different lengths, we'll need a different solution.\r\n    this.playbackLocked = true;\r\n\r\n    // is this kind of scope hackery necessary?!\r\n    var haxThis = this;\r\n\r\n    for(var i = 0; i < this.INSTRUMENT_NAMES.length; i++) {\r\n      // initialize each instrument\r\n      Soundfont.instrument(this.audioContext, this.INSTRUMENT_NAMES[i], {soundfont: 'FluidR3_GM'}).then(function (sfInstrument) {\r\n        haxThis.instruments[sfInstrument.name] = sfInstrument;\r\n        haxThis.instrumentInit++;\r\n\r\n        if(haxThis.instrumentInit === haxThis.INSTRUMENT_NAMES.length) {\r\n          haxThis._finishLoad();\r\n        }\r\n      });\r\n    }\r\n\r\n  }\r\n\r\n    /**\r\n    * Triggers the note playing for all instruments. Called for every MIDI event in the app.\r\n    * @private\r\n    * @param {number} event - MIDI event\r\n    */\r\n  _midiCallback(event) {\r\n    // callback for MIDI events\r\n    var instr1 = this.instruments[\"violin\"];\r\n    var instr2 = this.instruments[\"acoustic_grand_piano\"];\r\n    var instr3 = this.instruments[\"acoustic_bass\"];\r\n\r\n    if (!this.playbackLocked && event.name == 'Note on' && event.velocity > 0) {\r\n        switch(event.track) {\r\n          case 1:\r\n            instr1.play(event.noteName, this.audioContext.currentTime, {gain: this.INSTRUMENT_GAIN[\"violin\"]});\r\n            break;\r\n          case 2:\r\n            instr2.play(event.noteName, this.audioContext.currentTime, {gain: this.INSTRUMENT_GAIN[\"acoustic_grand_piano\"]});\r\n            break;\r\n          case 3:\r\n            instr3.play(event.noteName, this.audioContext.currentTime, {gain: this.INSTRUMENT_GAIN[\"acoustic_bass\"]});\r\n            break;\r\n          default:\r\n            // nothing!\r\n        }\r\n    }\r\n\r\n    if (event.name == 'Note off') {\r\n      switch(event.track) {\r\n        case 1:\r\n          instr1.stop();\r\n          break;\r\n        case 2:\r\n          instr2.stop();\r\n          break;\r\n        case 3:\r\n          instr3.stop();\r\n          break;\r\n        default:\r\n          // nothing!\r\n      }\r\n    }\r\n\r\n    if (event.name == \"End of Track\") {\r\n      this.playbackLocked = true;\r\n    }\r\n  }\r\n\r\n    /**\r\n    * Completes the loading of this class. The \"midiPlayerReady\" eve\r\n    * @private\r\n    * @emits {midiPlayerReady} - Emits this event when the audio player successfully loads\r\n    */\r\n  _finishLoad() {\r\n    var haxThis = this;\r\n    this.player = new MidiPlayer.Player(function(event) {\r\n      haxThis._midiCallback(event);\r\n    });\r\n    this.initialized = true;\r\n    this.playbackLocked = false;\r\n\r\n    var updateEvent = new CustomEvent('statusUpdate', {detail: \"MIDI player is loaded!\"});\r\n    document.body.dispatchEvent(updateEvent);\r\n  }\r\n\r\n    /**\r\n    * Builds MIDI info for a note or chord\r\n    * @private\r\n    * @param {number[]} arrNumMidi - MIDI numbers for a set of pitches\r\n    * @param {number} duration - MIDI number for a pitch\r\n    * @param {number} wait\r\n    * @return {MidiWriter.NoteEvent} - ???\r\n    */\r\n  _buildMidi(arrNumMidi, duration, wait) {\r\n      if(!wait) {\r\n          wait = \"0\";\r\n      }\r\n      return new MidiWriter.NoteEvent({pitch: arrNumMidi, duration: duration, wait: wait, velocity: 100});\r\n  }\r\n\r\n    /**\r\n    * Builds a Track from a given chord.\r\n    * @private\r\n    * @param {string[]} arrChordNotes - chordNotes\r\n    * @return {Track} - a MidiWriter Track\r\n    */\r\n  _buildTrack(arrChordNotes) {\r\n    var notes, midiNumber, midiNumbers;\r\n    var returnTrack = new MidiWriter.Track();\r\n\r\n    for(var i = 0; i < arrChordNotes.length; i++) {\r\n      midiNumbers = [];\r\n      notes = arrChordNotes[i].split(\" \");\r\n\r\n      notes.forEach(function(note){\r\n        midiNumbers.push(tonalNote.midi(note));\r\n      })\r\n\r\n      returnTrack.addEvent(this._buildMidi(midiNumbers, this.NOTE_DURATION));\r\n    }\r\n\r\n    return returnTrack;\r\n  }\r\n\r\n    /**\r\n    * Gets the MIDI data for a given melody.\r\n    * @private\r\n    * @param {string[]} arrMelody - our melody\r\n    * @return {string} - MIDI data, as a DataURI string\r\n    */\r\n  _buildMelodyMidiSolo(arrMelody) {\r\n    var tracks = [], midiNumber;\r\n    //tracks[0] = this._buildMelodyTrack(arrMelody);\r\n    tracks[0] = this._buildTrack(arrMelody);\r\n\r\n    var write = new MidiWriter.Writer(tracks);\r\n\r\n    return write.dataUri();\r\n  }\r\n\r\n    /**\r\n    * Gets the MIDI data for a given melody, with accompaniment.\r\n    * @param {string[]} arrMelody - main melody\r\n    * @param {string[]} arrAcompanimentLine - accompaniment line\r\n    * @param {string[]} arrBassLine - bass line\r\n    * @return {string} - MIDI data, as a DataURI string.\r\n    */\r\n  buildMelodyMidiWithAccompaniment(arrMelody, arrAcompanimentLine, arrBassLine) {\r\n    var tracks, midiNumber;\r\n\r\n    //var melodyTrack = this._buildMelodyTrack(arrMelody);\r\n    var melodyTrack = this._buildTrack(arrMelody);\r\n    melodyTrack.addInstrumentName(\"violin\");\r\n\r\n    var accompanimentTrack = this._buildTrack(arrAcompanimentLine);\r\n    accompanimentTrack.addInstrumentName(\"acoustic_grand_piano\");\r\n\r\n    //var bassTrack = this._buildMelodyTrack(arrBassLine);\r\n    var bassTrack = this._buildTrack(arrBassLine);\r\n    bassTrack.addInstrumentName(\"acoustic_bass\");\r\n\r\n    tracks = [melodyTrack, accompanimentTrack, bassTrack];\r\n\r\n    var write = new MidiWriter.Writer(tracks);\r\n\r\n    return write.dataUri();\r\n  }\r\n\r\n    /**\r\n    * Plays the given melody.\r\n    * @param {string[]} melodySolo - solo melody (violin)\r\n    */\r\n  playMelodySolo(melodySolo) {\r\n    var strMidi = this._buildMelodyMidiSolo(melodySolo);\r\n    this._playMelody(strMidi);\r\n  }\r\n    /**\r\n    * Plays the given melodies.\r\n    * @param {string[]} melodySolo - solo melody (violin)\r\n    * @param {string[]} melodyAccomp - accompaniment melody (piano)\r\n    * @param {string[]} melodyBass - bass melody (bass)\r\n    */\r\n  playMelodyWithAccompaniment(melodySolo, melodyAccomp, melodyBass) {\r\n    var strMidi = this.buildMelodyMidiWithAccompaniment(melodySolo, melodyAccomp, melodyBass);\r\n    this._playMelody(strMidi);\r\n  }\r\n\r\n    /**\r\n    * Actually plays the given melody\r\n    * @private\r\n    * @param {string} strMidi - MIDI data, as a DataURI string.\r\n    */\r\n  _playMelody(strMidi) {\r\n    if(this.initialized) {\r\n      this.stopPlayback();\r\n      this.playbackLocked = false;\r\n      this.player.loadDataUri(strMidi);\r\n      this.player.play();\r\n    } else {\r\n      console.warn(\"[AutoComposerMidi._playMelody()] Player isn't initialized yet...\");\r\n    }\r\n  }\r\n\r\n    /**\r\n    * Stops all playback\r\n    */\r\n  stopPlayback() {\r\n    this.instruments[\"violin\"].stop();\r\n    this.instruments[\"acoustic_grand_piano\"].stop();\r\n    this.instruments[\"acoustic_bass\"].stop();\r\n    this.player.stop();\r\n  }\r\n}\r\n\r\nexports.AutoComposerMidi = AutoComposerMidi;\r\n",
+    "content": "var MidiWriter = require('midi-writer-js');\r\nvar MidiPlayer = require('midi-player-js');\r\nvar SoundfontPlayer = require('soundfont-player');\r\nvar tonalNote = require('tonal-note');\r\n\r\n/**\r\n * Class responsible for playing audio and generating MIDI files for users.\r\n */\r\nclass AutoComposerMidi {\r\n  constructor() {\r\n    this.NOTE_DURATION = \"1\";\r\n    this.NUM_INSTRUMENTS = 3;\r\n\r\n    this.instrumentData = {\r\n      melody: {\r\n        name: \"violin\",\r\n        sfInstrument: null, // actual instrument to be used by the app\r\n        gain: 1.7,\r\n        midiInstrumentCode: 40\r\n      },\r\n      accompaniment: {\r\n        name: \"acoustic_guitar_steel\",\r\n        sfInstrument: null,\r\n        gain: 1.6,\r\n        midiInstrumentCode: 25\r\n      },\r\n      bass: {\r\n        name: \"acoustic_bass\",\r\n        sfInstrument: null,\r\n        gain: 1.65,\r\n        midiInstrumentCode: 32\r\n      },\r\n      getByName: function(instrName) {\r\n        for (var instrumentRole in this) {\r\n          if(instrName === this[instrumentRole].name) {\r\n            return this[instrumentRole];\r\n          }\r\n        }\r\n        return null;\r\n      }\r\n    };\r\n\r\n    this.numInstrumentsInit = 0;\r\n\r\n    this.player = null;\r\n    this.audioContext = new AudioContext;\r\n\r\n    this.initialized = false;\r\n    // Added this flag to fix an issue where notes randomly play again after the track ends.\r\n    // It only works for tracks that are all the same length. If we ever have to play tracks that have\r\n    // different lengths, we'll need a different solution.\r\n    this.playbackLocked = true;\r\n\r\n    // is this kind of scope hackery necessary?!\r\n    var haxThis = this;\r\n    var currentInstrument;\r\n\r\n    for (var instrumentRole in this.instrumentData) {\r\n      // initialize each instrument\r\n      if(typeof this.instrumentData[instrumentRole] !== \"function\")\r\n      Soundfont.instrument(this.audioContext, haxThis.instrumentData[instrumentRole].name, {soundfont: 'FluidR3_GM'}).then(function (sfInstrument) {\r\n        currentInstrument = haxThis.instrumentData.getByName(sfInstrument.name);\r\n        currentInstrument.sfInstrument = sfInstrument;\r\n\r\n        haxThis.numInstrumentsInit++;\r\n\r\n        console.log(\"[INNER FUNCTION] instrumentRole=\" + instrumentRole);\r\n        console.log(currentInstrument);\r\n        console.log(sfInstrument);\r\n        if(haxThis.numInstrumentsInit === haxThis.NUM_INSTRUMENTS) {\r\n          haxThis._finishLoad();\r\n        }\r\n      });\r\n    }\r\n\r\n  }\r\n\r\n    /**\r\n    * Triggers the note playing for all instruments. Called for every MIDI event in the app.\r\n    * @private\r\n    * @param {number} event - MIDI event\r\n    */\r\n  _midiCallback(event) {\r\n    // callback for MIDI events\r\n    var instr1 = this.instrumentData[\"melody\"];\r\n    var instr2 = this.instrumentData[\"accompaniment\"];\r\n    var instr3 = this.instrumentData[\"bass\"];\r\n\r\n    if (!this.playbackLocked && event.name == 'Note on' && event.velocity > 0) {\r\n        switch(event.track) {\r\n          case 1:\r\n            instr1.sfInstrument.play(event.noteName, this.audioContext.currentTime, {gain: instr1.gain});\r\n            break;\r\n          case 2:\r\n            instr2.sfInstrument.play(event.noteName, this.audioContext.currentTime, {gain: instr2.gain});\r\n            break;\r\n          case 3:\r\n            instr3.sfInstrument.play(event.noteName, this.audioContext.currentTime, {gain: instr3.gain});\r\n            break;\r\n          default:\r\n            // nothing!\r\n        }\r\n    }\r\n\r\n    if (event.name == 'Note off') {\r\n      switch(event.track) {\r\n        case 1:\r\n          instr1.sfInstrument.stop();\r\n          break;\r\n        case 2:\r\n          instr2.sfInstrument.stop();\r\n          break;\r\n        case 3:\r\n          instr3.sfInstrument.stop();\r\n          break;\r\n        default:\r\n          // nothing!\r\n      }\r\n    }\r\n\r\n    if (event.name == \"End of Track\") {\r\n      this.playbackLocked = true;\r\n    }\r\n  }\r\n\r\n    /**\r\n    * Completes the loading of this class. The \"midiPlayerReady\" eve\r\n    * @private\r\n    * @emits {midiPlayerReady} - Emits this event when the audio player successfully loads\r\n    */\r\n  _finishLoad() {\r\n    var haxThis = this;\r\n    this.player = new MidiPlayer.Player(function(event) {\r\n      haxThis._midiCallback(event);\r\n    });\r\n    this.initialized = true;\r\n    this.playbackLocked = false;\r\n\r\n    var updateEvent = new CustomEvent('statusUpdate', {detail: \"MIDI player is loaded!\"});\r\n    document.body.dispatchEvent(updateEvent);\r\n  }\r\n\r\n    /**\r\n    * Builds MIDI info for a note or chord\r\n    * @private\r\n    * @param {number[]} arrNumMidi - MIDI numbers for a set of pitches\r\n    * @param {number} duration - MIDI number for a pitch\r\n    * @param {number} wait\r\n    * @return {MidiWriter.NoteEvent} - ???\r\n    */\r\n  _buildMidi(arrNumMidi, duration, wait) {\r\n      if(!wait) {\r\n          wait = \"0\";\r\n      }\r\n      return new MidiWriter.NoteEvent({pitch: arrNumMidi, duration: duration, wait: wait, velocity: 100});\r\n  }\r\n\r\n    /**\r\n    * Builds a Track from a given chord.\r\n    * @private\r\n    * @param {string[]} arrChordNotes - chordNotes\r\n    * @param {Object} instrumentData - instrument data for track\r\n    * @return {Track} - a MidiWriter Track\r\n    */\r\n  _buildTrack(arrChordNotes, instrumentData) {\r\n    var notes, midiNumber, midiNumbers;\r\n    var returnTrack = new MidiWriter.Track();\r\n    returnTrack.addEvent(new MidiWriter.ProgramChangeEvent({instrument : instrumentData.midiInstrumentCode}));\r\n    returnTrack.addInstrumentName(instrumentData.name);\r\n\r\n    for(var i = 0; i < arrChordNotes.length; i++) {\r\n      midiNumbers = [];\r\n      notes = arrChordNotes[i].split(\" \");\r\n\r\n      notes.forEach(function(note){\r\n        midiNumbers.push(tonalNote.midi(note));\r\n      })\r\n\r\n      returnTrack.addEvent(this._buildMidi(midiNumbers, this.NOTE_DURATION));\r\n    }\r\n\r\n    return returnTrack;\r\n  }\r\n\r\n    /**\r\n    * Gets the MIDI data for a given melody.\r\n    * @private\r\n    * @param {string[]} arrMelody - our melody\r\n    * @return {string} - MIDI data, as a DataURI string\r\n    */\r\n  _buildMelodyMidiSolo(arrMelody) {\r\n    var tracks = [], midiNumber;\r\n    tracks[0] = this._buildTrack(arrMelody, this.instrumentData[\"melody\"]);\r\n\r\n    var write = new MidiWriter.Writer(tracks);\r\n\r\n    return write.dataUri();\r\n  }\r\n\r\n    /**\r\n    * Gets the MIDI data for a given melody, with accompaniment.\r\n    * @param {string[]} arrMelody - main melody\r\n    * @param {string[]} arrAcompanimentLine - accompaniment line\r\n    * @param {string[]} arrBassLine - bass line\r\n    * @return {string} - MIDI data, as a DataURI string.\r\n    */\r\n  buildMelodyMidiWithAccompaniment(arrMelody, arrAcompanimentLine, arrBassLine) {\r\n    var tracks, midiNumber;\r\n\r\n    var melodyTrack = this._buildTrack(arrMelody, this.instrumentData[\"melody\"]);\r\n    var accompanimentTrack = this._buildTrack(arrAcompanimentLine, this.instrumentData[\"accompaniment\"]);\r\n    var bassTrack = this._buildTrack(arrBassLine, this.instrumentData[\"bass\"]);\r\n\r\n    tracks = [melodyTrack, accompanimentTrack, bassTrack];\r\n\r\n    var write = new MidiWriter.Writer(tracks);\r\n\r\n    return write.dataUri();\r\n  }\r\n\r\n    /**\r\n    * Plays the given melody.\r\n    * @param {string[]} melodySolo - solo melody (violin)\r\n    */\r\n  playMelodySolo(melodySolo) {\r\n    var strMidi = this._buildMelodyMidiSolo(melodySolo);\r\n    this._playMelody(strMidi);\r\n  }\r\n    /**\r\n    * Plays the given melodies.\r\n    * @param {string[]} melodySolo - solo melody (violin)\r\n    * @param {string[]} melodyAccomp - accompaniment melody (piano)\r\n    * @param {string[]} melodyBass - bass melody (bass)\r\n    */\r\n  playMelodyWithAccompaniment(melodySolo, melodyAccomp, melodyBass) {\r\n    var strMidi = this.buildMelodyMidiWithAccompaniment(melodySolo, melodyAccomp, melodyBass);\r\n    this._playMelody(strMidi);\r\n  }\r\n\r\n    /**\r\n    * Actually plays the given melody\r\n    * @private\r\n    * @param {string} strMidi - MIDI data, as a DataURI string.\r\n    */\r\n  _playMelody(strMidi) {\r\n    if(this.initialized) {\r\n      this.stopPlayback();\r\n      this.playbackLocked = false;\r\n      this.player.loadDataUri(strMidi);\r\n      this.player.play();\r\n    } else {\r\n      console.warn(\"[AutoComposerMidi._playMelody()] Player isn't initialized yet...\");\r\n    }\r\n  }\r\n\r\n    /**\r\n    * Stops all playback\r\n    */\r\n  stopPlayback() {\r\n    this.instrumentData[\"melody\"].sfInstrument.stop();\r\n    this.instrumentData[\"accompaniment\"].sfInstrument.stop();\r\n    this.instrumentData[\"bass\"].sfInstrument.stop();\r\n    this.player.stop();\r\n  }\r\n}\r\n\r\nexports.AutoComposerMidi = AutoComposerMidi;\r\n",
     "static": true,
     "longname": "src/autocomposer-midi.js",
     "access": null,
@@ -2837,59 +2837,13 @@
   {
     "__docId__": 106,
     "kind": "member",
-    "name": "INSTRUMENT_NAMES",
-    "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
-    "static": false,
-    "longname": "src/autocomposer-midi.js~AutoComposerMidi#INSTRUMENT_NAMES",
-    "access": null,
-    "description": null,
-    "lineNumber": 11,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "type": {
-      "types": [
-        "string[]"
-      ]
-    }
-  },
-  {
-    "__docId__": 107,
-    "kind": "member",
-    "name": "INSTRUMENT_GAIN",
-    "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
-    "static": false,
-    "longname": "src/autocomposer-midi.js~AutoComposerMidi#INSTRUMENT_GAIN",
-    "access": null,
-    "description": null,
-    "lineNumber": 12,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "type": {
-      "types": [
-        "{\"violin\": number, \"acoustic_grand_piano\": number, \"acoustic_bass\": number}"
-      ]
-    }
-  },
-  {
-    "__docId__": 108,
-    "kind": "member",
     "name": "NOTE_DURATION",
     "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
     "static": false,
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#NOTE_DURATION",
     "access": null,
     "description": null,
-    "lineNumber": 17,
+    "lineNumber": 11,
     "undocument": true,
     "unknown": [
       {
@@ -2904,38 +2858,15 @@
     }
   },
   {
-    "__docId__": 109,
+    "__docId__": 107,
     "kind": "member",
-    "name": "instruments",
+    "name": "NUM_INSTRUMENTS",
     "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
     "static": false,
-    "longname": "src/autocomposer-midi.js~AutoComposerMidi#instruments",
+    "longname": "src/autocomposer-midi.js~AutoComposerMidi#NUM_INSTRUMENTS",
     "access": null,
     "description": null,
-    "lineNumber": 19,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "type": {
-      "types": [
-        "{}"
-      ]
-    }
-  },
-  {
-    "__docId__": 110,
-    "kind": "member",
-    "name": "instrumentInit",
-    "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
-    "static": false,
-    "longname": "src/autocomposer-midi.js~AutoComposerMidi#instrumentInit",
-    "access": null,
-    "description": null,
-    "lineNumber": 20,
+    "lineNumber": 12,
     "undocument": true,
     "unknown": [
       {
@@ -2950,7 +2881,53 @@
     }
   },
   {
-    "__docId__": 111,
+    "__docId__": 108,
+    "kind": "member",
+    "name": "instrumentData",
+    "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
+    "static": false,
+    "longname": "src/autocomposer-midi.js~AutoComposerMidi#instrumentData",
+    "access": null,
+    "description": null,
+    "lineNumber": 14,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "{\"melody\": *, \"accompaniment\": *, \"bass\": *, \"getByName\": *}"
+      ]
+    }
+  },
+  {
+    "__docId__": 109,
+    "kind": "member",
+    "name": "numInstrumentsInit",
+    "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
+    "static": false,
+    "longname": "src/autocomposer-midi.js~AutoComposerMidi#numInstrumentsInit",
+    "access": null,
+    "description": null,
+    "lineNumber": 43,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "number"
+      ]
+    }
+  },
+  {
+    "__docId__": 110,
     "kind": "member",
     "name": "player",
     "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
@@ -2958,7 +2935,30 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#player",
     "access": null,
     "description": null,
-    "lineNumber": 22,
+    "lineNumber": 45,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 111,
+    "kind": "member",
+    "name": "audioContext",
+    "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
+    "static": false,
+    "longname": "src/autocomposer-midi.js~AutoComposerMidi#audioContext",
+    "access": null,
+    "description": null,
+    "lineNumber": 46,
     "undocument": true,
     "unknown": [
       {
@@ -2975,13 +2975,13 @@
   {
     "__docId__": 112,
     "kind": "member",
-    "name": "audioContext",
+    "name": "initialized",
     "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
     "static": false,
-    "longname": "src/autocomposer-midi.js~AutoComposerMidi#audioContext",
+    "longname": "src/autocomposer-midi.js~AutoComposerMidi#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 23,
+    "lineNumber": 48,
     "undocument": true,
     "unknown": [
       {
@@ -2991,20 +2991,20 @@
     ],
     "type": {
       "types": [
-        "*"
+        "boolean"
       ]
     }
   },
   {
     "__docId__": 113,
     "kind": "member",
-    "name": "initialized",
+    "name": "playbackLocked",
     "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
     "static": false,
-    "longname": "src/autocomposer-midi.js~AutoComposerMidi#initialized",
+    "longname": "src/autocomposer-midi.js~AutoComposerMidi#playbackLocked",
     "access": null,
     "description": null,
-    "lineNumber": 25,
+    "lineNumber": 52,
     "undocument": true,
     "unknown": [
       {
@@ -3020,29 +3020,6 @@
   },
   {
     "__docId__": 114,
-    "kind": "member",
-    "name": "playbackLocked",
-    "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
-    "static": false,
-    "longname": "src/autocomposer-midi.js~AutoComposerMidi#playbackLocked",
-    "access": null,
-    "description": null,
-    "lineNumber": 29,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "type": {
-      "types": [
-        "boolean"
-      ]
-    }
-  },
-  {
-    "__docId__": 115,
     "kind": "method",
     "name": "_midiCallback",
     "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
@@ -3052,7 +3029,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#_midiCallback",
     "access": "private",
     "description": "Triggers the note playing for all instruments. Called for every MIDI event in the app.",
-    "lineNumber": 53,
+    "lineNumber": 83,
     "params": [
       {
         "nullable": null,
@@ -3067,7 +3044,7 @@
     ]
   },
   {
-    "__docId__": 116,
+    "__docId__": 115,
     "kind": "member",
     "name": "playbackLocked",
     "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
@@ -3075,7 +3052,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#playbackLocked",
     "access": null,
     "description": null,
-    "lineNumber": 92,
+    "lineNumber": 122,
     "undocument": true,
     "unknown": [
       {
@@ -3090,7 +3067,7 @@
     }
   },
   {
-    "__docId__": 117,
+    "__docId__": 116,
     "kind": "method",
     "name": "_finishLoad",
     "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
@@ -3100,7 +3077,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#_finishLoad",
     "access": "private",
     "description": "Completes the loading of this class. The \"midiPlayerReady\" eve",
-    "lineNumber": 101,
+    "lineNumber": 131,
     "params": [],
     "emits": [
       {
@@ -3112,7 +3089,7 @@
     ]
   },
   {
-    "__docId__": 118,
+    "__docId__": 117,
     "kind": "member",
     "name": "player",
     "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
@@ -3120,7 +3097,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#player",
     "access": null,
     "description": null,
-    "lineNumber": 103,
+    "lineNumber": 133,
     "undocument": true,
     "unknown": [
       {
@@ -3135,7 +3112,7 @@
     }
   },
   {
-    "__docId__": 119,
+    "__docId__": 118,
     "kind": "member",
     "name": "initialized",
     "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
@@ -3143,7 +3120,30 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 106,
+    "lineNumber": 136,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "boolean"
+      ]
+    }
+  },
+  {
+    "__docId__": 119,
+    "kind": "member",
+    "name": "playbackLocked",
+    "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
+    "static": false,
+    "longname": "src/autocomposer-midi.js~AutoComposerMidi#playbackLocked",
+    "access": null,
+    "description": null,
+    "lineNumber": 137,
     "undocument": true,
     "unknown": [
       {
@@ -3159,29 +3159,6 @@
   },
   {
     "__docId__": 120,
-    "kind": "member",
-    "name": "playbackLocked",
-    "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
-    "static": false,
-    "longname": "src/autocomposer-midi.js~AutoComposerMidi#playbackLocked",
-    "access": null,
-    "description": null,
-    "lineNumber": 107,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "type": {
-      "types": [
-        "boolean"
-      ]
-    }
-  },
-  {
-    "__docId__": 121,
     "kind": "method",
     "name": "_buildMidi",
     "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
@@ -3191,7 +3168,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#_buildMidi",
     "access": "private",
     "description": "Builds MIDI info for a note or chord",
-    "lineNumber": 121,
+    "lineNumber": 151,
     "params": [
       {
         "nullable": null,
@@ -3234,7 +3211,7 @@
     }
   },
   {
-    "__docId__": 122,
+    "__docId__": 121,
     "kind": "method",
     "name": "_buildTrack",
     "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
@@ -3244,7 +3221,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#_buildTrack",
     "access": "private",
     "description": "Builds a Track from a given chord.",
-    "lineNumber": 134,
+    "lineNumber": 165,
     "params": [
       {
         "nullable": null,
@@ -3255,6 +3232,16 @@
         "optional": false,
         "name": "arrChordNotes",
         "description": "chordNotes"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "instrumentData",
+        "description": "instrument data for track"
       }
     ],
     "return": {
@@ -3267,7 +3254,7 @@
     }
   },
   {
-    "__docId__": 123,
+    "__docId__": 122,
     "kind": "method",
     "name": "_buildMelodyMidiSolo",
     "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
@@ -3277,7 +3264,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#_buildMelodyMidiSolo",
     "access": "private",
     "description": "Gets the MIDI data for a given melody.",
-    "lineNumber": 158,
+    "lineNumber": 191,
     "params": [
       {
         "nullable": null,
@@ -3300,7 +3287,7 @@
     }
   },
   {
-    "__docId__": 124,
+    "__docId__": 123,
     "kind": "method",
     "name": "buildMelodyMidiWithAccompaniment",
     "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
@@ -3310,7 +3297,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#buildMelodyMidiWithAccompaniment",
     "access": null,
     "description": "Gets the MIDI data for a given melody, with accompaniment.",
-    "lineNumber": 175,
+    "lineNumber": 207,
     "params": [
       {
         "nullable": null,
@@ -3353,7 +3340,7 @@
     }
   },
   {
-    "__docId__": 125,
+    "__docId__": 124,
     "kind": "method",
     "name": "playMelodySolo",
     "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
@@ -3363,7 +3350,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#playMelodySolo",
     "access": null,
     "description": "Plays the given melody.",
-    "lineNumber": 200,
+    "lineNumber": 225,
     "params": [
       {
         "nullable": null,
@@ -3378,7 +3365,7 @@
     ]
   },
   {
-    "__docId__": 126,
+    "__docId__": 125,
     "kind": "method",
     "name": "playMelodyWithAccompaniment",
     "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
@@ -3388,7 +3375,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#playMelodyWithAccompaniment",
     "access": null,
     "description": "Plays the given melodies.",
-    "lineNumber": 210,
+    "lineNumber": 235,
     "params": [
       {
         "nullable": null,
@@ -3423,7 +3410,7 @@
     ]
   },
   {
-    "__docId__": 127,
+    "__docId__": 126,
     "kind": "method",
     "name": "_playMelody",
     "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
@@ -3433,7 +3420,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#_playMelody",
     "access": "private",
     "description": "Actually plays the given melody",
-    "lineNumber": 220,
+    "lineNumber": 245,
     "params": [
       {
         "nullable": null,
@@ -3448,7 +3435,7 @@
     ]
   },
   {
-    "__docId__": 128,
+    "__docId__": 127,
     "kind": "member",
     "name": "playbackLocked",
     "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
@@ -3456,7 +3443,7 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#playbackLocked",
     "access": null,
     "description": null,
-    "lineNumber": 223,
+    "lineNumber": 248,
     "undocument": true,
     "unknown": [
       {
@@ -3471,7 +3458,7 @@
     }
   },
   {
-    "__docId__": 129,
+    "__docId__": 128,
     "kind": "method",
     "name": "stopPlayback",
     "memberof": "src/autocomposer-midi.js~AutoComposerMidi",
@@ -3481,11 +3468,11 @@
     "longname": "src/autocomposer-midi.js~AutoComposerMidi#stopPlayback",
     "access": null,
     "description": "Stops all playback",
-    "lineNumber": 234,
+    "lineNumber": 259,
     "params": []
   },
   {
-    "__docId__": 130,
+    "__docId__": 129,
     "kind": "file",
     "name": "src/chord-unit.js",
     "content": "var AcLogic = require('../src/autocomposer-logic');\r\nvar AutoComposerLogic = new AcLogic.AutoComposerLogic();\r\n\r\n/**\r\n * Represents some data built around a specific chord.\r\n * Has a reference to the next ChordUnit in the progression, and the chord tones that will be used in melody generation.\r\n */\r\nclass ChordUnit {\r\n    /**\r\n    * @param {string} chord - chord symbol\r\n    * @param {string[]} chordTones - array of notes in the melody\r\n    * @param {ChordUnit} nextChordUnit - next ChordUnit in the chain\r\n    */\r\n  constructor(chord, chordTones, nextChordUnit) {\r\n    /** @type {string} */\r\n    this.chord = chord;\r\n    /** @type {string[]} */\r\n    this.chordTones = chordTones;\r\n    /** @type {ChordUnit} */\r\n    this.nextChordUnit = nextChordUnit;\r\n  }\r\n\r\n    /**\r\n    * @param {ChordUnit} next - the next ChordUnit in the chain.\r\n    */\r\n  setNextChordUnit(next) {\r\n    this.nextChordUnit(next);\r\n  }\r\n}\r\n\r\nexports.ChordUnit = ChordUnit;\r\n",
@@ -3496,7 +3483,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 131,
+    "__docId__": 130,
     "kind": "variable",
     "name": "AcLogic",
     "memberof": "src/chord-unit.js",
@@ -3522,7 +3509,7 @@
     }
   },
   {
-    "__docId__": 132,
+    "__docId__": 131,
     "kind": "variable",
     "name": "AutoComposerLogic",
     "memberof": "src/chord-unit.js",
@@ -3548,7 +3535,7 @@
     }
   },
   {
-    "__docId__": 133,
+    "__docId__": 132,
     "kind": "class",
     "name": "ChordUnit",
     "memberof": "src/chord-unit.js",
@@ -3563,7 +3550,7 @@
     "interface": false
   },
   {
-    "__docId__": 134,
+    "__docId__": 133,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/chord-unit.js~ChordUnit",
@@ -3608,7 +3595,7 @@
     ]
   },
   {
-    "__docId__": 135,
+    "__docId__": 134,
     "kind": "member",
     "name": "chord",
     "memberof": "src/chord-unit.js~ChordUnit",
@@ -3627,7 +3614,7 @@
     }
   },
   {
-    "__docId__": 136,
+    "__docId__": 135,
     "kind": "member",
     "name": "chordTones",
     "memberof": "src/chord-unit.js~ChordUnit",
@@ -3646,7 +3633,7 @@
     }
   },
   {
-    "__docId__": 137,
+    "__docId__": 136,
     "kind": "member",
     "name": "nextChordUnit",
     "memberof": "src/chord-unit.js~ChordUnit",
@@ -3665,7 +3652,7 @@
     }
   },
   {
-    "__docId__": 138,
+    "__docId__": 137,
     "kind": "method",
     "name": "setNextChordUnit",
     "memberof": "src/chord-unit.js~ChordUnit",
@@ -3690,7 +3677,7 @@
     ]
   },
   {
-    "__docId__": 139,
+    "__docId__": 138,
     "kind": "file",
     "name": "src/melody-unit.js",
     "content": "var range = require('tonal-range')\r\n\r\n/**\r\n * Represents a melody and associated metadata.\r\n */\r\nclass MelodyUnit {\r\n    /**\r\n    * @param {string[]} chordProgression - array of chord symbols\r\n    * @param {string[]} melodyNotes - array of notes in the melody\r\n    */\r\n  constructor(chordProgression, melodyNotes) {\r\n  \t/** @type {string[]} */\r\n    this.chordProgression = chordProgression;\r\n    /** @type {string[]} */\r\n    this.melodyNotes = melodyNotes;\r\n    /** @type {number} */\r\n    this.smoothness = this.getSmoothness();\r\n    /** @type {number} */\r\n    this.range = this.getRange();\r\n    /** @type {string} */\r\n    this.melodyString = this.melodyNotes.join(\" \");\r\n  }\r\n\r\n    /**\r\n    * Calculates the range of this melody.\r\n    * @private\r\n    * @return {number} - Range of the melody (in semitones)\r\n    */\r\n  getRange() {\r\n    var totalRange = range.numeric(this.melodyNotes);\r\n    var highest = Math.max.apply(null, totalRange);\r\n    var lowest = Math.min.apply(null, totalRange);\r\n\r\n    return highest - lowest;\r\n  }\r\n\r\n    /**\r\n    * Calculates the smoothness of this melody.\r\n    * @private\r\n    * @return {number} - Range of the melody (in semitones)\r\n    */\r\n  getSmoothness() {\r\n    var totalSmoothness = 0;\r\n    var subset, subRange, highest, lowest, distance;\r\n\r\n    for(var i = 2; i <= this.melodyNotes.length; i++) {\r\n      subset = this.melodyNotes.slice(i - 2, i);\r\n      subRange = range.numeric(subset);\r\n      highest = Math.max.apply(null, subRange);\r\n      lowest = Math.min.apply(null, subRange);\r\n      distance = highest - lowest;\r\n      totalSmoothness += distance;\r\n    }\r\n\r\n    return totalSmoothness;\r\n  }\r\n\r\n}\r\n\r\nexports.MelodyUnit = MelodyUnit;\r\n",
@@ -3701,7 +3688,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 140,
+    "__docId__": 139,
     "kind": "variable",
     "name": "range",
     "memberof": "src/melody-unit.js",
@@ -3727,7 +3714,7 @@
     }
   },
   {
-    "__docId__": 141,
+    "__docId__": 140,
     "kind": "class",
     "name": "MelodyUnit",
     "memberof": "src/melody-unit.js",
@@ -3742,7 +3729,7 @@
     "interface": false
   },
   {
-    "__docId__": 142,
+    "__docId__": 141,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/melody-unit.js~MelodyUnit",
@@ -3777,7 +3764,7 @@
     ]
   },
   {
-    "__docId__": 143,
+    "__docId__": 142,
     "kind": "member",
     "name": "chordProgression",
     "memberof": "src/melody-unit.js~MelodyUnit",
@@ -3796,7 +3783,7 @@
     }
   },
   {
-    "__docId__": 144,
+    "__docId__": 143,
     "kind": "member",
     "name": "melodyNotes",
     "memberof": "src/melody-unit.js~MelodyUnit",
@@ -3815,7 +3802,7 @@
     }
   },
   {
-    "__docId__": 145,
+    "__docId__": 144,
     "kind": "member",
     "name": "smoothness",
     "memberof": "src/melody-unit.js~MelodyUnit",
@@ -3834,7 +3821,7 @@
     }
   },
   {
-    "__docId__": 146,
+    "__docId__": 145,
     "kind": "member",
     "name": "range",
     "memberof": "src/melody-unit.js~MelodyUnit",
@@ -3853,7 +3840,7 @@
     }
   },
   {
-    "__docId__": 147,
+    "__docId__": 146,
     "kind": "member",
     "name": "melodyString",
     "memberof": "src/melody-unit.js~MelodyUnit",
@@ -3872,7 +3859,7 @@
     }
   },
   {
-    "__docId__": 148,
+    "__docId__": 147,
     "kind": "method",
     "name": "getRange",
     "memberof": "src/melody-unit.js~MelodyUnit",
@@ -3894,7 +3881,7 @@
     }
   },
   {
-    "__docId__": 149,
+    "__docId__": 148,
     "kind": "method",
     "name": "getSmoothness",
     "memberof": "src/melody-unit.js~MelodyUnit",
@@ -3916,7 +3903,7 @@
     }
   },
   {
-    "__docId__": 151,
+    "__docId__": 150,
     "kind": "external",
     "name": "Infinity",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
@@ -3928,7 +3915,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 152,
+    "__docId__": 151,
     "kind": "external",
     "name": "NaN",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
@@ -3940,7 +3927,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 153,
+    "__docId__": 152,
     "kind": "external",
     "name": "undefined",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
@@ -3952,7 +3939,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 154,
+    "__docId__": 153,
     "kind": "external",
     "name": "null",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
@@ -3964,7 +3951,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 155,
+    "__docId__": 154,
     "kind": "external",
     "name": "Object",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
@@ -3976,7 +3963,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 156,
+    "__docId__": 155,
     "kind": "external",
     "name": "object",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
@@ -3988,7 +3975,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 157,
+    "__docId__": 156,
     "kind": "external",
     "name": "Function",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
@@ -4000,7 +3987,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 158,
+    "__docId__": 157,
     "kind": "external",
     "name": "function",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
@@ -4012,7 +3999,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 159,
+    "__docId__": 158,
     "kind": "external",
     "name": "Boolean",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
@@ -4024,7 +4011,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 160,
+    "__docId__": 159,
     "kind": "external",
     "name": "boolean",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
@@ -4036,7 +4023,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 161,
+    "__docId__": 160,
     "kind": "external",
     "name": "Symbol",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
@@ -4048,7 +4035,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 162,
+    "__docId__": 161,
     "kind": "external",
     "name": "Error",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
@@ -4060,7 +4047,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 163,
+    "__docId__": 162,
     "kind": "external",
     "name": "EvalError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
@@ -4072,7 +4059,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 164,
+    "__docId__": 163,
     "kind": "external",
     "name": "InternalError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
@@ -4084,7 +4071,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 165,
+    "__docId__": 164,
     "kind": "external",
     "name": "RangeError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
@@ -4096,7 +4083,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 166,
+    "__docId__": 165,
     "kind": "external",
     "name": "ReferenceError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
@@ -4108,7 +4095,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 167,
+    "__docId__": 166,
     "kind": "external",
     "name": "SyntaxError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
@@ -4120,7 +4107,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 168,
+    "__docId__": 167,
     "kind": "external",
     "name": "TypeError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
@@ -4132,7 +4119,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 169,
+    "__docId__": 168,
     "kind": "external",
     "name": "URIError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
@@ -4144,7 +4131,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 170,
+    "__docId__": 169,
     "kind": "external",
     "name": "Number",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
@@ -4156,7 +4143,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 171,
+    "__docId__": 170,
     "kind": "external",
     "name": "number",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
@@ -4168,7 +4155,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 172,
+    "__docId__": 171,
     "kind": "external",
     "name": "Date",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
@@ -4180,7 +4167,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 173,
+    "__docId__": 172,
     "kind": "external",
     "name": "String",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
@@ -4192,7 +4179,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 174,
+    "__docId__": 173,
     "kind": "external",
     "name": "string",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
@@ -4204,7 +4191,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 175,
+    "__docId__": 174,
     "kind": "external",
     "name": "RegExp",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
@@ -4216,7 +4203,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 176,
+    "__docId__": 175,
     "kind": "external",
     "name": "Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
@@ -4228,7 +4215,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 177,
+    "__docId__": 176,
     "kind": "external",
     "name": "Int8Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
@@ -4240,7 +4227,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 178,
+    "__docId__": 177,
     "kind": "external",
     "name": "Uint8Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
@@ -4252,7 +4239,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 179,
+    "__docId__": 178,
     "kind": "external",
     "name": "Uint8ClampedArray",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
@@ -4264,7 +4251,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 180,
+    "__docId__": 179,
     "kind": "external",
     "name": "Int16Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
@@ -4276,7 +4263,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 181,
+    "__docId__": 180,
     "kind": "external",
     "name": "Uint16Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
@@ -4288,7 +4275,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 182,
+    "__docId__": 181,
     "kind": "external",
     "name": "Int32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
@@ -4300,7 +4287,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 183,
+    "__docId__": 182,
     "kind": "external",
     "name": "Uint32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
@@ -4312,7 +4299,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 184,
+    "__docId__": 183,
     "kind": "external",
     "name": "Float32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
@@ -4324,7 +4311,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 185,
+    "__docId__": 184,
     "kind": "external",
     "name": "Float64Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
@@ -4336,7 +4323,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 186,
+    "__docId__": 185,
     "kind": "external",
     "name": "Map",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
@@ -4348,7 +4335,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 187,
+    "__docId__": 186,
     "kind": "external",
     "name": "Set",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
@@ -4360,7 +4347,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 188,
+    "__docId__": 187,
     "kind": "external",
     "name": "WeakMap",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
@@ -4372,7 +4359,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 189,
+    "__docId__": 188,
     "kind": "external",
     "name": "WeakSet",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
@@ -4384,7 +4371,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 190,
+    "__docId__": 189,
     "kind": "external",
     "name": "ArrayBuffer",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
@@ -4396,7 +4383,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 191,
+    "__docId__": 190,
     "kind": "external",
     "name": "DataView",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
@@ -4408,7 +4395,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 192,
+    "__docId__": 191,
     "kind": "external",
     "name": "JSON",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
@@ -4420,7 +4407,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 193,
+    "__docId__": 192,
     "kind": "external",
     "name": "Promise",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
@@ -4432,7 +4419,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 194,
+    "__docId__": 193,
     "kind": "external",
     "name": "Generator",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
@@ -4444,7 +4431,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 195,
+    "__docId__": 194,
     "kind": "external",
     "name": "GeneratorFunction",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
@@ -4456,7 +4443,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 196,
+    "__docId__": 195,
     "kind": "external",
     "name": "Reflect",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
@@ -4468,7 +4455,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 197,
+    "__docId__": 196,
     "kind": "external",
     "name": "Proxy",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
@@ -4481,7 +4468,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 199,
+    "__docId__": 198,
     "kind": "external",
     "name": "CanvasRenderingContext2D",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D",
@@ -4493,7 +4480,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 200,
+    "__docId__": 199,
     "kind": "external",
     "name": "DocumentFragment",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment",
@@ -4505,7 +4492,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 201,
+    "__docId__": 200,
     "kind": "external",
     "name": "Element",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Element",
@@ -4517,7 +4504,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 202,
+    "__docId__": 201,
     "kind": "external",
     "name": "Event",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Event",
@@ -4529,7 +4516,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 203,
+    "__docId__": 202,
     "kind": "external",
     "name": "Node",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Node",
@@ -4541,7 +4528,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 204,
+    "__docId__": 203,
     "kind": "external",
     "name": "NodeList",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/NodeList",
@@ -4553,7 +4540,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 205,
+    "__docId__": 204,
     "kind": "external",
     "name": "XMLHttpRequest",
     "externalLink": "https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest",
@@ -4565,7 +4552,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 206,
+    "__docId__": 205,
     "kind": "external",
     "name": "AudioContext",
     "externalLink": "https://developer.mozilla.org/en/docs/Web/API/AudioContext",
@@ -4578,7 +4565,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 207,
+    "__docId__": 206,
     "kind": "testFile",
     "name": "test/autocomposer-logic.js",
     "content": "var assert = require('assert');\r\n\r\nvar AcLogic = require('../src/autocomposer-logic');\r\nvar AutoComposerLogic = new AcLogic.AutoComposerLogic();\r\n\r\ndescribe('AutoComposerLogic', function() {\r\n  describe('#filterMelodyRange', function() {\r\n    it('should filter out melodies that have a range larger than an octave', function() {\r\n      // The filter function runs on each note addition for the melody generating function.\r\n      // So it should only be expected to look at the difference between the last two notes.\r\n\r\n      melodySmallRange = \"C4 G4 A4\";\r\n      melodyOctaveRange = \"G4 C4 C5\";\r\n      melodyBigRange = \"G4 C4 D5\";\r\n\r\n      assert.equal(AutoComposerLogic.filterMelodyRange(melodySmallRange), true);\r\n      assert.equal(AutoComposerLogic.filterMelodyRange(melodyOctaveRange), true);\r\n      assert.equal(AutoComposerLogic.filterMelodyRange(melodyBigRange), false);\r\n    });\r\n  });\r\n\r\n  describe('#filterRepetition', function() {\r\n    it('should filter out melodies that are too repetitive', function() {\r\n      melodyNoRepeats = \"C4 G4 A4 E5\";\r\n      melodyOneRepeat = \"C4 G4 G4 C5 E5\";\r\n      melodyTwoRepeats = \"C4 C4 G4 D5 D5 E3\";\r\n      melodyTwoSuccessiveRepeats = \"C4 G4 G4 G4 D5 C5\";\r\n\r\n      assert.equal(AutoComposerLogic.filterRepetition(melodyNoRepeats), true);\r\n      assert.equal(AutoComposerLogic.filterRepetition(melodyOneRepeat), true);\r\n      assert.equal(AutoComposerLogic.filterRepetition(melodyTwoRepeats), false);\r\n      assert.equal(AutoComposerLogic.filterRepetition(melodyTwoSuccessiveRepeats), false);\r\n    });\r\n  });\r\n\r\n  describe('#isValidText', function() {\r\n    it('should return true for chord inputs', function() {\r\n      assert.equal(AutoComposerLogic.isValidText('Gm7'), true);\r\n      assert.equal(AutoComposerLogic.isValidText('C'), true);\r\n      assert.equal(AutoComposerLogic.isValidText('D7'), true);\r\n      assert.equal(AutoComposerLogic.isValidText('A#m7b5'), true);\r\n    });\r\n\r\n    it('should return false for non-chord inputs', function() {\r\n      assert.equal(AutoComposerLogic.isValidText('H2'), false);\r\n      assert.equal(AutoComposerLogic.isValidText('456456'), false);\r\n      assert.equal(AutoComposerLogic.isValidText('Something really silly'), false);\r\n    });\r\n  });\r\n\r\n  describe('#convertAsciiAccidentalsToHtml', function() {\r\n    it('should convert ASCII accidentals to Unicode HTML entities', function() {\r\n      assert.equal(AutoComposerLogic.convertAsciiAccidentalsToHtml('Bb'), 'B&#9837;');\r\n      assert.equal(AutoComposerLogic.convertAsciiAccidentalsToHtml('C#'), 'C&#9839;');\r\n      assert.equal(AutoComposerLogic.convertAsciiAccidentalsToHtml('Fo'), 'F&‌deg;');\r\n    });\r\n  });\r\n\r\n  describe('#convertAsciiAccidentalsToText', function() {\r\n    it('should convert ASCII accentals to Unicode versions', function() {\r\n      assert.equal(AutoComposerLogic.convertAsciiAccidentalsToText('Bb'), 'B♭');\r\n      assert.equal(AutoComposerLogic.convertAsciiAccidentalsToText('C#'), 'C♯');\r\n      assert.equal(AutoComposerLogic.convertAsciiAccidentalsToText('Fo'), 'F°');\r\n    });\r\n  });\r\n\r\n  describe('#convertAccidentalsToAscii', function() {\r\n    it('should convert Unicode accentals to ASCII versions', function() {\r\n      assert.equal(AutoComposerLogic.convertAccidentalsToAscii('B♭'), 'Bb');\r\n      assert.equal(AutoComposerLogic.convertAccidentalsToAscii('C♯'), 'C#');\r\n      assert.equal(AutoComposerLogic.convertAccidentalsToAscii('F°'), 'Fo');\r\n    });\r\n  });\r\n});\r\n",
@@ -4589,7 +4576,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 208,
+    "__docId__": 207,
     "kind": "testDescribe",
     "name": "describe0",
     "testId": 0,
@@ -4602,7 +4589,7 @@
     "lineNumber": 6
   },
   {
-    "__docId__": 209,
+    "__docId__": 208,
     "kind": "testDescribe",
     "name": "describe1",
     "testId": 1,
@@ -4615,7 +4602,7 @@
     "lineNumber": 7
   },
   {
-    "__docId__": 210,
+    "__docId__": 209,
     "kind": "testIt",
     "name": "it2",
     "testId": 2,
@@ -4628,7 +4615,7 @@
     "lineNumber": 8
   },
   {
-    "__docId__": 211,
+    "__docId__": 210,
     "kind": "testDescribe",
     "name": "describe3",
     "testId": 3,
@@ -4641,7 +4628,7 @@
     "lineNumber": 22
   },
   {
-    "__docId__": 212,
+    "__docId__": 211,
     "kind": "testIt",
     "name": "it4",
     "testId": 4,
@@ -4654,7 +4641,7 @@
     "lineNumber": 23
   },
   {
-    "__docId__": 213,
+    "__docId__": 212,
     "kind": "testDescribe",
     "name": "describe5",
     "testId": 5,
@@ -4667,7 +4654,7 @@
     "lineNumber": 36
   },
   {
-    "__docId__": 214,
+    "__docId__": 213,
     "kind": "testIt",
     "name": "it6",
     "testId": 6,
@@ -4680,7 +4667,7 @@
     "lineNumber": 37
   },
   {
-    "__docId__": 215,
+    "__docId__": 214,
     "kind": "testIt",
     "name": "it7",
     "testId": 7,
@@ -4693,7 +4680,7 @@
     "lineNumber": 44
   },
   {
-    "__docId__": 216,
+    "__docId__": 215,
     "kind": "testDescribe",
     "name": "describe8",
     "testId": 8,
@@ -4706,7 +4693,7 @@
     "lineNumber": 51
   },
   {
-    "__docId__": 217,
+    "__docId__": 216,
     "kind": "testIt",
     "name": "it9",
     "testId": 9,
@@ -4719,7 +4706,7 @@
     "lineNumber": 52
   },
   {
-    "__docId__": 218,
+    "__docId__": 217,
     "kind": "testDescribe",
     "name": "describe10",
     "testId": 10,
@@ -4732,7 +4719,7 @@
     "lineNumber": 59
   },
   {
-    "__docId__": 219,
+    "__docId__": 218,
     "kind": "testIt",
     "name": "it11",
     "testId": 11,
@@ -4745,7 +4732,7 @@
     "lineNumber": 60
   },
   {
-    "__docId__": 220,
+    "__docId__": 219,
     "kind": "testDescribe",
     "name": "describe12",
     "testId": 12,
@@ -4758,7 +4745,7 @@
     "lineNumber": 67
   },
   {
-    "__docId__": 221,
+    "__docId__": 220,
     "kind": "testIt",
     "name": "it13",
     "testId": 13,
@@ -4771,7 +4758,7 @@
     "lineNumber": 68
   },
   {
-    "__docId__": 222,
+    "__docId__": 221,
     "kind": "testFile",
     "name": "test/autocomposer-melody.js",
     "content": "var assert = require('assert');\r\nconst _ = require('underscore');\r\n\r\nvar AcMelody = require('../src/autocomposer-melody');\r\nvar AutoComposerMelody = new AcMelody.AutoComposerMelody();\r\n\r\nAutoComposerMelody._sendStatusUpdate = function() {\r\n  // Overriding this function with nothing since it contains browser code.\r\n}\r\n\r\nvar AutoComposerLogic = require('../src/autocomposer-logic');\r\nvar AcLogic = new AutoComposerLogic.AutoComposerLogic();\r\n\r\nvar TEST_CHORD_1 = \"Gm7\";\r\nvar TEST_CHORD_2 = \"Cm7\";\r\nvar TEST_CHORD_3 = \"D7\";\r\n\r\nvar TEST_LOWER_LIMIT_1 = \"Bb3\";\r\nvar TEST_UPPER_LIMIT_1 = \"G#4\";\r\n\r\nvar TEST_LOWER_LIMIT_2 = \"Ab4\";\r\nvar TEST_UPPER_LIMIT_2 = \"B5\";\r\n\r\ndescribe('AutoComposerMelody', function() {\r\n  describe('#getAllChordTones', function() {\r\n    it('should return all chord tones in the range (inclusive)', function() {\r\n      expectedTones1 = [\"Bb3\", \"D4\", \"F4\", \"G4\"];\r\n      expectedTones2 = [\"A4\", \"C5\", \"D5\", \"F#5\", \"A5\"];\r\n\r\n      resultTones1 = AutoComposerMelody.getAllChordTones(TEST_CHORD_1, TEST_LOWER_LIMIT_1, TEST_UPPER_LIMIT_1);\r\n      resultTones2 = AutoComposerMelody.getAllChordTones(TEST_CHORD_3, TEST_LOWER_LIMIT_2, TEST_UPPER_LIMIT_2);\r\n\r\n      assert.deepEqual(resultTones1, expectedTones1);\r\n      assert.deepEqual(resultTones2, expectedTones2);\r\n    });\r\n  });\r\n\r\n  describe('#buildChordUnitList', function() {\r\n    it('should return a list of ChordUnits for a given progression', function() {\r\n      var expChordUnit3 = {\r\n        chord: \"D7\",\r\n        chordTones: [\"A4\", \"C5\", \"D5\", \"F#5\", \"A5\"],\r\n      };\r\n      var expChordUnit2 = {\r\n        chord: \"Cm7\",\r\n        chordTones: [\"Bb4\", \"C5\", \"Eb5\", \"G5\", \"Bb5\"],\r\n      };\r\n      var expChordUnit1 = {\r\n        chord: \"Gm7\",\r\n        chordTones: [\"Bb4\", \"D5\", \"F5\", \"G5\", \"Bb5\"],\r\n      };\r\n\r\n      var expectedArray = [expChordUnit1, expChordUnit2, expChordUnit3];\r\n      var chordProgression = [\"Gm7\",\"Cm7\",\"D7\"];\r\n      var chordUnitList = AutoComposerMelody.buildChordUnitList(chordProgression, TEST_LOWER_LIMIT_2, TEST_UPPER_LIMIT_2);\r\n\r\n      assert.deepEqual(chordUnitList[0].chordTones, expectedArray[0].chordTones);\r\n      assert.deepEqual(chordUnitList[1].chordTones, expectedArray[1].chordTones);\r\n      assert.deepEqual(chordUnitList[2].chordTones, expectedArray[2].chordTones);\r\n    });\r\n  });\r\n\r\n  describe('#buildMelodyUnit', function() {\r\n    it('should build a melody unit with metadata for each raw melody', function() {\r\n      var chordProgression = [\"G\", \"Em\", \"C\", \"D\"];\r\n      var melody1 = \"B3 G4 E4 F#4\";\r\n      var melody2 = \"G4 B4 C5 D5\";\r\n\r\n      exp1 = {\r\n        chordProgression: chordProgression,\r\n        melodyNotes: melody1.split(\" \"),\r\n        smoothness: 13,\r\n        range: 8,\r\n        melodyString: melody1\r\n      }\r\n\r\n      exp2 = {\r\n        chordProgression: chordProgression,\r\n        melodyNotes: melody2.split(\" \"),\r\n        smoothness: 7,\r\n        range: 7,\r\n        melodyString: melody2\r\n      }\r\n\r\n      result1 = AutoComposerMelody.buildMelodyUnit(chordProgression, melody1);\r\n      result2 = AutoComposerMelody.buildMelodyUnit(chordProgression, melody2);\r\n\r\n      assert.deepEqual(result1, exp1);\r\n      assert.deepEqual(result2, exp2);\r\n    });\r\n  });\r\n\r\n  describe('#buildMelodyUnitList', function() {\r\n    var chordProgression = [\"G\", \"Em\", \"C\", \"D\"];\r\n    var melodies = [\"B3 G4 E4 F#4\", \"G4 B4 C5 D5\", \"G4 G4 G4 F#4\", \"G5 G5 G5 A5\"];\r\n\r\n    it('should sort the output if specified', function() {\r\n      resultSorted = AutoComposerMelody.buildMelodyUnitList(chordProgression, melodies, {sort: true});\r\n\r\n      assert(resultSorted[0].smoothness < resultSorted[3].smoothness);\r\n    });\r\n\r\n    it('should limit the output if specified', function() {\r\n      var numLimit = 2;\r\n      result = AutoComposerMelody.buildMelodyUnitList(chordProgression, melodies, {limit: numLimit});\r\n\r\n      assert.equal(result.length, numLimit);\r\n    });\r\n  });\r\n\r\n  describe('#getMelodies', function() {\r\n    it('should return a list of melodies for a given progression', function() {\r\n      var chordProgression = [\"Gm\",\"Cm\",\"D\"];\r\n      var melodyList = AutoComposerMelody.getAllMelodies(chordProgression);\r\n\r\n      assert.equal(typeof melodyList[0] === 'string', false);\r\n    });\r\n\r\n    it('should return less melodies if filters are on', function() {\r\n      var chordProgression = [\"Gm\",\"Cm\",\"D\"];\r\n      var melodyListAll = AutoComposerMelody.getAllMelodies(chordProgression);\r\n      var melodyList = AutoComposerMelody.getMelodies(chordProgression);\r\n\r\n      assert(melodyListAll.length > melodyList.length, \"Filtered melody list is smaller than an unfiltered list\");\r\n      assert.equal(typeof melodyList[0] === 'string', false);\r\n    });\r\n\r\n    it('should return raw melodies as a string array', function() {\r\n      var chordProgression = [\"Gm\",\"Cm\",\"D\"];\r\n      var melodyList = AutoComposerMelody.getRawMelodies(chordProgression);\r\n\r\n      assert.equal(typeof melodyList[0] === 'string', true);\r\n    });\r\n  });\r\n\r\n  describe('#getBasicBassLine', function() {\r\n    it('should return a simple bassline for a melody', function() {\r\n      var chordProgression = [\"G\", \"Em\", \"C\", \"D\"];\r\n      var melody = \"B3 G4 E4 F#4\";\r\n      var melodyUnit = AutoComposerMelody.buildMelodyUnit(chordProgression, melody);\r\n\r\n      var resultBassline = AutoComposerMelody.getBasicBassLine(melodyUnit);\r\n      var expBassline = [\"G1\", \"E1\", \"C2\", \"D2\"];\r\n\r\n      assert.deepEqual(resultBassline, expBassline);\r\n    });\r\n  });\r\n\r\n  describe('#getAccompaniment', function() {\r\n    it('should return a simple accompaniment for a melody', function() {\r\n      var chordProgression = [\"G\", \"Em\", \"C\", \"D\"];\r\n      var melody = \"B3 G4 E4 F#4\";\r\n      var expAccompaniment = [\"D3\", \"B2\", \"G2\", \"A2\"];\r\n\r\n      var melodyUnit = AutoComposerMelody.buildMelodyUnit(chordProgression, melody);\r\n      var resultBassline = AutoComposerMelody.getAccompaniment(melodyUnit);\r\n\r\n      assert.deepEqual(resultBassline, expAccompaniment);\r\n    });\r\n  });\r\n});\r\n",
@@ -4782,7 +4769,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 223,
+    "__docId__": 222,
     "kind": "testDescribe",
     "name": "describe14",
     "testId": 14,
@@ -4795,7 +4782,7 @@
     "lineNumber": 24
   },
   {
-    "__docId__": 224,
+    "__docId__": 223,
     "kind": "testDescribe",
     "name": "describe15",
     "testId": 15,
@@ -4808,7 +4795,7 @@
     "lineNumber": 25
   },
   {
-    "__docId__": 225,
+    "__docId__": 224,
     "kind": "testIt",
     "name": "it16",
     "testId": 16,
@@ -4821,7 +4808,7 @@
     "lineNumber": 26
   },
   {
-    "__docId__": 226,
+    "__docId__": 225,
     "kind": "testDescribe",
     "name": "describe17",
     "testId": 17,
@@ -4834,7 +4821,7 @@
     "lineNumber": 38
   },
   {
-    "__docId__": 227,
+    "__docId__": 226,
     "kind": "testIt",
     "name": "it18",
     "testId": 18,
@@ -4847,7 +4834,7 @@
     "lineNumber": 39
   },
   {
-    "__docId__": 228,
+    "__docId__": 227,
     "kind": "testDescribe",
     "name": "describe19",
     "testId": 19,
@@ -4860,7 +4847,7 @@
     "lineNumber": 63
   },
   {
-    "__docId__": 229,
+    "__docId__": 228,
     "kind": "testIt",
     "name": "it20",
     "testId": 20,
@@ -4873,7 +4860,7 @@
     "lineNumber": 64
   },
   {
-    "__docId__": 230,
+    "__docId__": 229,
     "kind": "testDescribe",
     "name": "describe21",
     "testId": 21,
@@ -4886,7 +4873,7 @@
     "lineNumber": 93
   },
   {
-    "__docId__": 231,
+    "__docId__": 230,
     "kind": "testIt",
     "name": "it22",
     "testId": 22,
@@ -4899,7 +4886,7 @@
     "lineNumber": 97
   },
   {
-    "__docId__": 232,
+    "__docId__": 231,
     "kind": "testIt",
     "name": "it23",
     "testId": 23,
@@ -4912,7 +4899,7 @@
     "lineNumber": 103
   },
   {
-    "__docId__": 233,
+    "__docId__": 232,
     "kind": "testDescribe",
     "name": "describe24",
     "testId": 24,
@@ -4925,7 +4912,7 @@
     "lineNumber": 111
   },
   {
-    "__docId__": 234,
+    "__docId__": 233,
     "kind": "testIt",
     "name": "it25",
     "testId": 25,
@@ -4938,7 +4925,7 @@
     "lineNumber": 112
   },
   {
-    "__docId__": 235,
+    "__docId__": 234,
     "kind": "testIt",
     "name": "it26",
     "testId": 26,
@@ -4951,7 +4938,7 @@
     "lineNumber": 119
   },
   {
-    "__docId__": 236,
+    "__docId__": 235,
     "kind": "testIt",
     "name": "it27",
     "testId": 27,
@@ -4964,7 +4951,7 @@
     "lineNumber": 128
   },
   {
-    "__docId__": 237,
+    "__docId__": 236,
     "kind": "testDescribe",
     "name": "describe28",
     "testId": 28,
@@ -4977,7 +4964,7 @@
     "lineNumber": 136
   },
   {
-    "__docId__": 238,
+    "__docId__": 237,
     "kind": "testIt",
     "name": "it29",
     "testId": 29,
@@ -4990,7 +4977,7 @@
     "lineNumber": 137
   },
   {
-    "__docId__": 239,
+    "__docId__": 238,
     "kind": "testDescribe",
     "name": "describe30",
     "testId": 30,
@@ -5003,7 +4990,7 @@
     "lineNumber": 149
   },
   {
-    "__docId__": 240,
+    "__docId__": 239,
     "kind": "testIt",
     "name": "it31",
     "testId": 31,
