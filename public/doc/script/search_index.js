@@ -1,47 +1,5 @@
 window.esdocSearchIndex = [
   [
-    "autocomposer-melody/src/react/ac-button.js~acbutton",
-    "class/src/react/ac-button.js~AcButton.html",
-    "<span>AcButton</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/ac-button.js</span>",
-    "class"
-  ],
-  [
-    "autocomposer-melody/src/react/ac-checkbox.js~accheckbox",
-    "class/src/react/ac-checkbox.js~AcCheckbox.html",
-    "<span>AcCheckbox</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/ac-checkbox.js</span>",
-    "class"
-  ],
-  [
-    "autocomposer-melody/src/react/ac-radioset.js~acradioset",
-    "class/src/react/ac-radioset.js~AcRadioSet.html",
-    "<span>AcRadioSet</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/ac-radioset.js</span>",
-    "class"
-  ],
-  [
-    "autocomposer-melody/src/react/ac-select.js~acselect",
-    "class/src/react/ac-select.js~AcSelect.html",
-    "<span>AcSelect</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/ac-select.js</span>",
-    "class"
-  ],
-  [
-    "autocomposer-melody/src/react/ac-textarea.js~actextarea",
-    "class/src/react/ac-textarea.js~AcTextArea.html",
-    "<span>AcTextArea</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/ac-textarea.js</span>",
-    "class"
-  ],
-  [
-    "autocomposer-melody/src/react/ac-text-field.js~actextfield",
-    "class/src/react/ac-text-field.js~AcTextField.html",
-    "<span>AcTextField</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/ac-text-field.js</span>",
-    "class"
-  ],
-  [
-    "autocomposer-melody/src/react/ac-toggle-button.js~actogglebutton",
-    "class/src/react/ac-toggle-button.js~AcToggleButton.html",
-    "<span>AcToggleButton</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/ac-toggle-button.js</span>",
-    "class"
-  ],
-  [
     "autocomposer-melody/src/autocomposer-main.js~autocomposer",
     "class/src/autocomposer-main.js~AutoComposer.html",
     "<span>AutoComposer</span> <span class=\"search-result-import-path\">autocomposer-melody/src/autocomposer-main.js</span>",
@@ -72,45 +30,9 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "autocomposer-melody/src/react/control-panel.js~controlpanel",
-    "class/src/react/control-panel.js~ControlPanel.html",
-    "<span>ControlPanel</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/control-panel.js</span>",
-    "class"
-  ],
-  [
-    "autocomposer-melody/src/react/debug-panel.js~debugpanel",
-    "class/src/react/debug-panel.js~DebugPanel.html",
-    "<span>DebugPanel</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/debug-panel.js</span>",
-    "class"
-  ],
-  [
-    "autocomposer-melody/src/react/help-panel.js~helppanel",
-    "class/src/react/help-panel.js~HelpPanel.html",
-    "<span>HelpPanel</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/help-panel.js</span>",
-    "class"
-  ],
-  [
-    "autocomposer-melody/src/react/melody-row.js~melodyrow",
-    "class/src/react/melody-row.js~MelodyRow.html",
-    "<span>MelodyRow</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/melody-row.js</span>",
-    "class"
-  ],
-  [
     "autocomposer-melody/src/melody-unit.js~melodyunit",
     "class/src/melody-unit.js~MelodyUnit.html",
     "<span>MelodyUnit</span> <span class=\"search-result-import-path\">autocomposer-melody/src/melody-unit.js</span>",
-    "class"
-  ],
-  [
-    "autocomposer-melody/src/react/output-panel.js~outputpanel",
-    "class/src/react/output-panel.js~OutputPanel.html",
-    "<span>OutputPanel</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/output-panel.js</span>",
-    "class"
-  ],
-  [
-    "autocomposer-melody/src/react/status-output.js~statusoutput",
-    "class/src/react/status-output.js~StatusOutput.html",
-    "<span>StatusOutput</span> <span class=\"search-result-import-path\">autocomposer-melody/src/react/status-output.js</span>",
     "class"
   ],
   [
@@ -768,48 +690,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/autocomposer-melody.js~autocomposermelody#_getlowestnoteinrange",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-_getLowestNoteInRange",
-    "src/autocomposer-melody.js~AutoComposerMelody#_getLowestNoteInRange",
-    "method"
-  ],
-  [
-    "src/autocomposer-melody.js~autocomposermelody#_removepitchesfromchordtones",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-_removePitchesFromChordTones",
-    "src/autocomposer-melody.js~AutoComposerMelody#_removePitchesFromChordTones",
-    "method"
-  ],
-  [
-    "src/autocomposer-melody.js~autocomposermelody#_sendstatusupdate",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-_sendStatusUpdate",
-    "src/autocomposer-melody.js~AutoComposerMelody#_sendStatusUpdate",
-    "method"
-  ],
-  [
-    "src/autocomposer-melody.js~autocomposermelody#buildchordunit",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-buildChordUnit",
-    "src/autocomposer-melody.js~AutoComposerMelody#buildChordUnit",
-    "method"
-  ],
-  [
-    "src/autocomposer-melody.js~autocomposermelody#buildchordunitlist",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-buildChordUnitList",
-    "src/autocomposer-melody.js~AutoComposerMelody#buildChordUnitList",
-    "method"
-  ],
-  [
-    "src/autocomposer-melody.js~autocomposermelody#buildmelodyunit",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-buildMelodyUnit",
-    "src/autocomposer-melody.js~AutoComposerMelody#buildMelodyUnit",
-    "method"
-  ],
-  [
-    "src/autocomposer-melody.js~autocomposermelody#buildmelodyunitlist",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-buildMelodyUnitList",
-    "src/autocomposer-melody.js~AutoComposerMelody#buildMelodyUnitList",
-    "method"
-  ],
-  [
     "src/autocomposer-melody.js~autocomposermelody#chordprogression",
     "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-member-chordProgression",
     "src/autocomposer-melody.js~AutoComposerMelody#chordProgression",
@@ -822,39 +702,15 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/autocomposer-melody.js~autocomposermelody#getaccompaniment",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-getAccompaniment",
-    "src/autocomposer-melody.js~AutoComposerMelody#getAccompaniment",
-    "method"
-  ],
-  [
-    "src/autocomposer-melody.js~autocomposermelody#getallchordtones",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-getAllChordTones",
-    "src/autocomposer-melody.js~AutoComposerMelody#getAllChordTones",
-    "method"
-  ],
-  [
     "src/autocomposer-melody.js~autocomposermelody#getallmelodies",
     "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-getAllMelodies",
     "src/autocomposer-melody.js~AutoComposerMelody#getAllMelodies",
     "method"
   ],
   [
-    "src/autocomposer-melody.js~autocomposermelody#getbasicbassline",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-getBasicBassLine",
-    "src/autocomposer-melody.js~AutoComposerMelody#getBasicBassLine",
-    "method"
-  ],
-  [
     "src/autocomposer-melody.js~autocomposermelody#getmelodies",
     "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-getMelodies",
     "src/autocomposer-melody.js~AutoComposerMelody#getMelodies",
-    "method"
-  ],
-  [
-    "src/autocomposer-melody.js~autocomposermelody#getmelodiescore",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-getMelodiesCore",
-    "src/autocomposer-melody.js~AutoComposerMelody#getMelodiesCore",
     "method"
   ],
   [
@@ -898,42 +754,6 @@ window.esdocSearchIndex = [
     "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-member-NOTE_DURATION",
     "src/autocomposer-midi.js~AutoComposerMidi#NOTE_DURATION",
     "member"
-  ],
-  [
-    "src/autocomposer-midi.js~autocomposermidi#_buildmelodymidisolo",
-    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_buildMelodyMidiSolo",
-    "src/autocomposer-midi.js~AutoComposerMidi#_buildMelodyMidiSolo",
-    "method"
-  ],
-  [
-    "src/autocomposer-midi.js~autocomposermidi#_buildmidi",
-    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_buildMidi",
-    "src/autocomposer-midi.js~AutoComposerMidi#_buildMidi",
-    "method"
-  ],
-  [
-    "src/autocomposer-midi.js~autocomposermidi#_buildtrack",
-    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_buildTrack",
-    "src/autocomposer-midi.js~AutoComposerMidi#_buildTrack",
-    "method"
-  ],
-  [
-    "src/autocomposer-midi.js~autocomposermidi#_finishload",
-    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_finishLoad",
-    "src/autocomposer-midi.js~AutoComposerMidi#_finishLoad",
-    "method"
-  ],
-  [
-    "src/autocomposer-midi.js~autocomposermidi#_midicallback",
-    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_midiCallback",
-    "src/autocomposer-midi.js~AutoComposerMidi#_midiCallback",
-    "method"
-  ],
-  [
-    "src/autocomposer-midi.js~autocomposermidi#_playmelody",
-    "class/src/autocomposer-midi.js~AutoComposerMidi.html#instance-method-_playMelody",
-    "src/autocomposer-midi.js~AutoComposerMidi#_playMelody",
-    "method"
   ],
   [
     "src/autocomposer-midi.js~autocomposermidi#audiocontext",
@@ -1056,18 +876,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/melody-unit.js~melodyunit#getrange",
-    "class/src/melody-unit.js~MelodyUnit.html#instance-method-getRange",
-    "src/melody-unit.js~MelodyUnit#getRange",
-    "method"
-  ],
-  [
-    "src/melody-unit.js~melodyunit#getsmoothness",
-    "class/src/melody-unit.js~MelodyUnit.html#instance-method-getSmoothness",
-    "src/melody-unit.js~MelodyUnit#getSmoothness",
-    "method"
-  ],
-  [
     "src/melody-unit.js~melodyunit#melodynotes",
     "class/src/melody-unit.js~MelodyUnit.html#instance-member-melodyNotes",
     "src/melody-unit.js~MelodyUnit#melodyNotes",
@@ -1090,342 +898,6 @@ window.esdocSearchIndex = [
     "class/src/melody-unit.js~MelodyUnit.html#instance-member-smoothness",
     "src/melody-unit.js~MelodyUnit#smoothness",
     "member"
-  ],
-  [
-    "src/react/ac-button.js",
-    "file/src/react/ac-button.js.html",
-    "src/react/ac-button.js",
-    "file"
-  ],
-  [
-    "src/react/ac-button.js~acbutton#geticonelement",
-    "class/src/react/ac-button.js~AcButton.html#instance-method-getIconElement",
-    "src/react/ac-button.js~AcButton#getIconElement",
-    "method"
-  ],
-  [
-    "src/react/ac-button.js~acbutton#getlabelelement",
-    "class/src/react/ac-button.js~AcButton.html#instance-method-getLabelElement",
-    "src/react/ac-button.js~AcButton#getLabelElement",
-    "method"
-  ],
-  [
-    "src/react/ac-button.js~acbutton#render",
-    "class/src/react/ac-button.js~AcButton.html#instance-method-render",
-    "src/react/ac-button.js~AcButton#render",
-    "method"
-  ],
-  [
-    "src/react/ac-checkbox.js",
-    "file/src/react/ac-checkbox.js.html",
-    "src/react/ac-checkbox.js",
-    "file"
-  ],
-  [
-    "src/react/ac-checkbox.js~accheckbox#render",
-    "class/src/react/ac-checkbox.js~AcCheckbox.html#instance-method-render",
-    "src/react/ac-checkbox.js~AcCheckbox#render",
-    "method"
-  ],
-  [
-    "src/react/ac-radioset.js",
-    "file/src/react/ac-radioset.js.html",
-    "src/react/ac-radioset.js",
-    "file"
-  ],
-  [
-    "src/react/ac-radioset.js~acradioset#createradioitems",
-    "class/src/react/ac-radioset.js~AcRadioSet.html#instance-method-createRadioItems",
-    "src/react/ac-radioset.js~AcRadioSet#createRadioItems",
-    "method"
-  ],
-  [
-    "src/react/ac-radioset.js~acradioset#render",
-    "class/src/react/ac-radioset.js~AcRadioSet.html#instance-method-render",
-    "src/react/ac-radioset.js~AcRadioSet#render",
-    "method"
-  ],
-  [
-    "src/react/ac-select.js",
-    "file/src/react/ac-select.js.html",
-    "src/react/ac-select.js",
-    "file"
-  ],
-  [
-    "src/react/ac-select.js~acselect#createselectitems",
-    "class/src/react/ac-select.js~AcSelect.html#instance-method-createSelectItems",
-    "src/react/ac-select.js~AcSelect#createSelectItems",
-    "method"
-  ],
-  [
-    "src/react/ac-select.js~acselect#render",
-    "class/src/react/ac-select.js~AcSelect.html#instance-method-render",
-    "src/react/ac-select.js~AcSelect#render",
-    "method"
-  ],
-  [
-    "src/react/ac-text-field.js",
-    "file/src/react/ac-text-field.js.html",
-    "src/react/ac-text-field.js",
-    "file"
-  ],
-  [
-    "src/react/ac-text-field.js~actextfield#render",
-    "class/src/react/ac-text-field.js~AcTextField.html#instance-method-render",
-    "src/react/ac-text-field.js~AcTextField#render",
-    "method"
-  ],
-  [
-    "src/react/ac-textarea.js",
-    "file/src/react/ac-textarea.js.html",
-    "src/react/ac-textarea.js",
-    "file"
-  ],
-  [
-    "src/react/ac-textarea.js~actextarea#render",
-    "class/src/react/ac-textarea.js~AcTextArea.html#instance-method-render",
-    "src/react/ac-textarea.js~AcTextArea#render",
-    "method"
-  ],
-  [
-    "src/react/ac-toggle-button.js",
-    "file/src/react/ac-toggle-button.js.html",
-    "src/react/ac-toggle-button.js",
-    "file"
-  ],
-  [
-    "src/react/ac-toggle-button.js~actogglebutton#constructor",
-    "class/src/react/ac-toggle-button.js~AcToggleButton.html#instance-constructor-constructor",
-    "src/react/ac-toggle-button.js~AcToggleButton#constructor",
-    "method"
-  ],
-  [
-    "src/react/ac-toggle-button.js~actogglebutton#geticonelement",
-    "class/src/react/ac-toggle-button.js~AcToggleButton.html#instance-method-getIconElement",
-    "src/react/ac-toggle-button.js~AcToggleButton#getIconElement",
-    "method"
-  ],
-  [
-    "src/react/ac-toggle-button.js~actogglebutton#handleclick",
-    "class/src/react/ac-toggle-button.js~AcToggleButton.html#instance-method-handleClick",
-    "src/react/ac-toggle-button.js~AcToggleButton#handleClick",
-    "method"
-  ],
-  [
-    "src/react/ac-toggle-button.js~actogglebutton#render",
-    "class/src/react/ac-toggle-button.js~AcToggleButton.html#instance-method-render",
-    "src/react/ac-toggle-button.js~AcToggleButton#render",
-    "method"
-  ],
-  [
-    "src/react/ac-toggle-button.js~actogglebutton#state",
-    "class/src/react/ac-toggle-button.js~AcToggleButton.html#instance-member-state",
-    "src/react/ac-toggle-button.js~AcToggleButton#state",
-    "member"
-  ],
-  [
-    "src/react/control-panel.js",
-    "file/src/react/control-panel.js.html",
-    "src/react/control-panel.js",
-    "file"
-  ],
-  [
-    "src/react/control-panel.js~controlpanel#constructor",
-    "class/src/react/control-panel.js~ControlPanel.html#instance-constructor-constructor",
-    "src/react/control-panel.js~ControlPanel#constructor",
-    "method"
-  ],
-  [
-    "src/react/control-panel.js~controlpanel#render",
-    "class/src/react/control-panel.js~ControlPanel.html#instance-method-render",
-    "src/react/control-panel.js~ControlPanel#render",
-    "method"
-  ],
-  [
-    "src/react/debug-panel.js",
-    "file/src/react/debug-panel.js.html",
-    "src/react/debug-panel.js",
-    "file"
-  ],
-  [
-    "src/react/debug-panel.js~debugpanel#render",
-    "class/src/react/debug-panel.js~DebugPanel.html#instance-method-render",
-    "src/react/debug-panel.js~DebugPanel#render",
-    "method"
-  ],
-  [
-    "src/react/help-panel.js",
-    "file/src/react/help-panel.js.html",
-    "src/react/help-panel.js",
-    "file"
-  ],
-  [
-    "src/react/help-panel.js~helppanel#buildchorddictionary",
-    "class/src/react/help-panel.js~HelpPanel.html#instance-method-buildChordDictionary",
-    "src/react/help-panel.js~HelpPanel#buildChordDictionary",
-    "method"
-  ],
-  [
-    "src/react/help-panel.js~helppanel#constructor",
-    "class/src/react/help-panel.js~HelpPanel.html#instance-constructor-constructor",
-    "src/react/help-panel.js~HelpPanel#constructor",
-    "method"
-  ],
-  [
-    "src/react/help-panel.js~helppanel#render",
-    "class/src/react/help-panel.js~HelpPanel.html#instance-method-render",
-    "src/react/help-panel.js~HelpPanel#render",
-    "method"
-  ],
-  [
-    "src/react/help-panel.js~helppanel#state",
-    "class/src/react/help-panel.js~HelpPanel.html#instance-member-state",
-    "src/react/help-panel.js~HelpPanel#state",
-    "member"
-  ],
-  [
-    "src/react/melody-row.js",
-    "file/src/react/melody-row.js.html",
-    "src/react/melody-row.js",
-    "file"
-  ],
-  [
-    "src/react/melody-row.js~melodyrow#clickhandler",
-    "class/src/react/melody-row.js~MelodyRow.html#instance-method-clickHandler",
-    "src/react/melody-row.js~MelodyRow#clickHandler",
-    "method"
-  ],
-  [
-    "src/react/melody-row.js~melodyrow#constructor",
-    "class/src/react/melody-row.js~MelodyRow.html#instance-constructor-constructor",
-    "src/react/melody-row.js~MelodyRow#constructor",
-    "method"
-  ],
-  [
-    "src/react/melody-row.js~melodyrow#createvextab",
-    "class/src/react/melody-row.js~MelodyRow.html#instance-method-createVexTab",
-    "src/react/melody-row.js~MelodyRow#createVexTab",
-    "method"
-  ],
-  [
-    "src/react/melody-row.js~melodyrow#isclicked",
-    "class/src/react/melody-row.js~MelodyRow.html#instance-member-isClicked",
-    "src/react/melody-row.js~MelodyRow#isClicked",
-    "member"
-  ],
-  [
-    "src/react/melody-row.js~melodyrow#render",
-    "class/src/react/melody-row.js~MelodyRow.html#instance-method-render",
-    "src/react/melody-row.js~MelodyRow#render",
-    "method"
-  ],
-  [
-    "src/react/melody-row.js~melodyrow#selectioneventhandler",
-    "class/src/react/melody-row.js~MelodyRow.html#instance-method-selectionEventHandler",
-    "src/react/melody-row.js~MelodyRow#selectionEventHandler",
-    "method"
-  ],
-  [
-    "src/react/melody-row.js~melodyrow#state",
-    "class/src/react/melody-row.js~MelodyRow.html#instance-member-state",
-    "src/react/melody-row.js~MelodyRow#state",
-    "member"
-  ],
-  [
-    "src/react/output-panel.js",
-    "file/src/react/output-panel.js.html",
-    "src/react/output-panel.js",
-    "file"
-  ],
-  [
-    "src/react/output-panel.js~outputpanel#componentdidupdate",
-    "class/src/react/output-panel.js~OutputPanel.html#instance-method-componentDidUpdate",
-    "src/react/output-panel.js~OutputPanel#componentDidUpdate",
-    "method"
-  ],
-  [
-    "src/react/output-panel.js~outputpanel#componentwillreceiveprops",
-    "class/src/react/output-panel.js~OutputPanel.html#instance-method-componentWillReceiveProps",
-    "src/react/output-panel.js~OutputPanel#componentWillReceiveProps",
-    "method"
-  ],
-  [
-    "src/react/output-panel.js~outputpanel#constructor",
-    "class/src/react/output-panel.js~OutputPanel.html#instance-constructor-constructor",
-    "src/react/output-panel.js~OutputPanel#constructor",
-    "method"
-  ],
-  [
-    "src/react/output-panel.js~outputpanel#createmelodyrows",
-    "class/src/react/output-panel.js~OutputPanel.html#instance-method-createMelodyRows",
-    "src/react/output-panel.js~OutputPanel#createMelodyRows",
-    "method"
-  ],
-  [
-    "src/react/output-panel.js~outputpanel#loadmelody",
-    "class/src/react/output-panel.js~OutputPanel.html#instance-method-loadMelody",
-    "src/react/output-panel.js~OutputPanel#loadMelody",
-    "method"
-  ],
-  [
-    "src/react/output-panel.js~outputpanel#render",
-    "class/src/react/output-panel.js~OutputPanel.html#instance-method-render",
-    "src/react/output-panel.js~OutputPanel#render",
-    "method"
-  ],
-  [
-    "src/react/output-panel.js~outputpanel#shouldcomponentupdate",
-    "class/src/react/output-panel.js~OutputPanel.html#instance-method-shouldComponentUpdate",
-    "src/react/output-panel.js~OutputPanel#shouldComponentUpdate",
-    "method"
-  ],
-  [
-    "src/react/output-panel.js~outputpanel#state",
-    "class/src/react/output-panel.js~OutputPanel.html#instance-member-state",
-    "src/react/output-panel.js~OutputPanel#state",
-    "member"
-  ],
-  [
-    "src/react/status-output.js",
-    "file/src/react/status-output.js.html",
-    "src/react/status-output.js",
-    "file"
-  ],
-  [
-    "src/react/status-output.js~statusoutput#num_messages",
-    "class/src/react/status-output.js~StatusOutput.html#instance-member-NUM_MESSAGES",
-    "src/react/status-output.js~StatusOutput#NUM_MESSAGES",
-    "member"
-  ],
-  [
-    "src/react/status-output.js~statusoutput#buildstatusoutput",
-    "class/src/react/status-output.js~StatusOutput.html#instance-method-buildStatusOutput",
-    "src/react/status-output.js~StatusOutput#buildStatusOutput",
-    "method"
-  ],
-  [
-    "src/react/status-output.js~statusoutput#constructor",
-    "class/src/react/status-output.js~StatusOutput.html#instance-constructor-constructor",
-    "src/react/status-output.js~StatusOutput#constructor",
-    "method"
-  ],
-  [
-    "src/react/status-output.js~statusoutput#render",
-    "class/src/react/status-output.js~StatusOutput.html#instance-method-render",
-    "src/react/status-output.js~StatusOutput#render",
-    "method"
-  ],
-  [
-    "src/react/status-output.js~statusoutput#state",
-    "class/src/react/status-output.js~StatusOutput.html#instance-member-state",
-    "src/react/status-output.js~StatusOutput#state",
-    "member"
-  ],
-  [
-    "src/react/status-output.js~statusoutput#statuseventhandler",
-    "class/src/react/status-output.js~StatusOutput.html#instance-method-statusEventHandler",
-    "src/react/status-output.js~StatusOutput#statusEventHandler",
-    "method"
   ],
   [
     "test/autocomposer-logic.js",

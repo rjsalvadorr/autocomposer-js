@@ -55,10 +55,10 @@ outputPanelWidth = 100% - controlPanelWidth
     padding: layoutPadding
 
 
-.ac-control-wrapper
+///// Mixin/function for children of a "panel-row"
+panelRowChild()
   display: inline-block
   padding: 0 (layoutPadding / 2)
-  box-sizing: border-box
   // 8 can be conisdered full-width. Input wrappers all try to fill width by default.
   flex-grow: 8
 
@@ -88,6 +88,11 @@ outputPanelWidth = 100% - controlPanelWidth
     &.textarea
       padding: 0 2px
 
+///// Aliases for "panel-row-child"
+.ac-control-wrapper
+.panel-row-child
+  panelRowChild()
+
 .ac-input
 .ac-output
   width: 100%
@@ -96,3 +101,13 @@ outputPanelWidth = 100% - controlPanelWidth
 
   &.double-height
     height: inputHeight * 1.5
+
+.panel-close-button
+  margin: 10px 0
+  padding: 0 10px !important
+  text-align: right
+  color: textColor
+
+  &:hover
+  &:active
+    color: lighten(textColor, 33%)

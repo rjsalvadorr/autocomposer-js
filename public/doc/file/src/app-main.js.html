@@ -39,19 +39,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/chord-unit.js~ChordUnit.html">ChordUnit</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/melody-unit.js~MelodyUnit.html">MelodyUnit</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposer">autoComposer</a></span></span></li>
-<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">react</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/ac-button.js~AcButton.html">AcButton</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/ac-checkbox.js~AcCheckbox.html">AcCheckbox</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/ac-radioset.js~AcRadioSet.html">AcRadioSet</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/ac-select.js~AcSelect.html">AcSelect</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/ac-text-field.js~AcTextField.html">AcTextField</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/ac-textarea.js~AcTextArea.html">AcTextArea</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/ac-toggle-button.js~AcToggleButton.html">AcToggleButton</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/control-panel.js~ControlPanel.html">ControlPanel</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/debug-panel.js~DebugPanel.html">DebugPanel</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/help-panel.js~HelpPanel.html">HelpPanel</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/melody-row.js~MelodyRow.html">MelodyRow</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/output-panel.js~OutputPanel.html">OutputPanel</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/react/status-output.js~StatusOutput.html">StatusOutput</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -149,10 +136,8 @@ class AutoComposer extends React.Component {
   */
   _isOnSupportedDevice() {
     var ua = navigator.userAgent;
-    // token explanation
-    // android - not supporting mobile
-    // trident - IE rendering engine. IE does not support the class JS keyword. Which is all over this codebase.
-    var isSupportedDevice = ua.search(/android|trident/i) == -1;
+    // trident = IE rendering engine. IE does not support the class JS keyword. Which is all over this codebase.
+    var isSupportedDevice = ua.search(/trident/i) == -1;
     return isSupportedDevice;
   }
 
@@ -204,9 +189,10 @@ class AutoComposer extends React.Component {
   * Changes app state. Meant to be called from child components
   * @param {string} stateKey - App state to change
   * @param {number|string|Object} newState - Assigns this to the state
-  * @param {boolean} [useDataStore] - If true, the data store is changed instead of the state object.
+  * @param {?boolean} [useDataStore] - If true, the data store is changed instead of the state object.
   */
   callbackChangeState(stateKey, newState, useDataStore) {
+    console.debug(&quot;app, callbackChangeState(&quot; + stateKey + &quot;, &quot; + newState + &quot;, &quot; + useDataStore + &quot;)&quot;);
     if(useDataStore) {
       this.store[stateKey] = newState;
     } else {
@@ -378,10 +364,11 @@ class AutoComposer extends React.Component {
               &lt;div className=&quot;ac-control-wrapper flex-lg&quot;&gt;
                 &lt;h1 id=&quot;main-title&quot;&gt;AutoComposer&lt;/h1&gt;
               &lt;/div&gt;
+              &lt;AcToggleButton inputKey=&quot;showHelp&quot; icon=&quot;question&quot; addClass=&quot;blue&quot; wrapperAddClass=&quot;flex-md&quot; isActive={this.state.showHelp} onClickHandler={this.callbackChangeState} /&gt;
             &lt;/div&gt;
 
             &lt;div className=&quot;panel-row&quot;&gt;
-              &lt;p&gt;
+              &lt;p id=&quot;main-blurb&quot;&gt;
                 This is a prototype for a program that automatically writes music. Click the &lt;i className=&quot;fa fa-question&quot;&gt;&lt;/i&gt; button to get started.
                 For more info, check out the &lt;a href=&quot;https://github.com/rjsalvadorr/autocomposer-melody/wiki&quot; target=&quot;_blank&quot;&gt;project wiki&lt;/a&gt; and &lt;a href=&quot;https://github.com/rjsalvadorr/autocomposer-melody&quot; target=&quot;_blank&quot;&gt;repository&lt;/a&gt;.
               &lt;/p&gt;
@@ -396,12 +383,7 @@ class AutoComposer extends React.Component {
               &lt;AcButton inputKey=&quot;generateMelodies&quot; icon=&quot;play&quot; addClass=&quot;green&quot; wrapperAddClass=&quot;flex-lg&quot; onClick={this.playMelody} disabled={!this.state.melodyLoaded}/&gt;
               &lt;AcButton inputKey=&quot;generateMelodies&quot; icon=&quot;play&quot; addClass=&quot;green&quot; inputLabel=&quot;Solo&quot; wrapperAddClass=&quot;flex-sm&quot; onClick={this.playMelodySolo} disabled={!this.state.melodyLoaded}/&gt;
               &lt;AcButton inputKey=&quot;generateMelodies&quot; icon=&quot;stop&quot; addClass=&quot;red&quot; wrapperAddClass=&quot;flex-sm&quot; onClick={this.stopMusic} disabled={!this.state.melodyLoaded}/&gt;
-              &lt;AcButton inputKey=&quot;generateMelodies&quot; icon=&quot;download&quot; wrapperAddClass=&quot;flex-sm&quot; onClick={this.downloadMidi} disabled={!this.state.melodyLoaded}/&gt;
-            &lt;/div&gt;
-
-            &lt;div className=&quot;panel-row&quot;&gt;
-              &lt;AcToggleButton inputKey=&quot;showHelp&quot; icon=&quot;question&quot; wrapperAddClass=&quot;flex-sm&quot; isActive={this.state.showHelp} onClickHandler={this.callbackChangeState} /&gt;
-              &lt;AcToggleButton inputKey=&quot;showControls&quot; icon=&quot;cog&quot; wrapperAddClass=&quot;flex-sm&quot; initialState={this.state.showControls} onClickHandler={this.callbackChangeState} disabled={this.state.controlsDisabled} /&gt;
+              &lt;AcButton inputKey=&quot;generateMelodies&quot; icon=&quot;download&quot; addClass=&quot;blue&quot; wrapperAddClass=&quot;flex-sm&quot; onClick={this.downloadMidi} disabled={!this.state.melodyLoaded}/&gt;
             &lt;/div&gt;
 
             &lt;div className=&quot;panel-row&quot;&gt;
@@ -413,13 +395,14 @@ class AutoComposer extends React.Component {
 
           &lt;ControlPanel isShown={this.state.showControls} /&gt;
 
-          &lt;HelpPanel isShown={this.state.showHelp} /&gt;
+          &lt;HelpPanel isShown={this.state.showHelp} closeFunction={this.callbackChangeState}/&gt;
 
           &lt;OutputPanel isShown={this.state.showOutput} chordProgression={chordProgressionArray} allowMelodyGeneration={this.state.allowMelodyGeneration} outputCallback={this.outputFinishCallback} loadMelody={this.loadMusic} /&gt;
 
           &lt;div id=&quot;not-supported-panel&quot; className=&quot;ac-panel&quot;&gt;
             &lt;h1&gt;Where&apos;s the AutoComposer?!&lt;/h1&gt;
-            &lt;p&gt;You&apos;re seeing this because your browser&apos;s window size is too small, or you&apos;re using a device that&apos;s not supported by the app.&lt;/p&gt;
+            &lt;p&gt;You&apos;re seeing this page because your device isn&apos;t supported by the app&apos;s scripts, or your browser&apos;s window size is too small.&lt;/p&gt;
+            &lt;p&gt;If you&apos;re on a phone/tablet, try turning it to see this page in landscape!&lt;/p&gt;
           &lt;/div&gt;
 
         &lt;/div&gt;
@@ -429,7 +412,8 @@ class AutoComposer extends React.Component {
         &lt;div id=&quot;app-container&quot; className=&quot;root-panel&quot;&gt;
           &lt;div id=&quot;not-supported-panel&quot; className=&quot;ac-panel&quot;&gt;
             &lt;h1&gt;Where&apos;s the AutoComposer?!&lt;/h1&gt;
-            &lt;p&gt;You&apos;re seeing this because your browser&apos;s window size is too small, or you&apos;re using a device that&apos;s not supported by the app.&lt;/p&gt;
+            &lt;p&gt;You&apos;re seeing this page because your device isn&apos;t supported by the app&apos;s scripts, or your browser&apos;s window size is too small.&lt;/p&gt;
+            &lt;p&gt;If you&apos;re on a phone/tablet, try turning it to see this page in landscape!&lt;/p&gt;
           &lt;/div&gt;
         &lt;/div&gt;
       );

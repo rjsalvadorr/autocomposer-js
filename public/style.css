@@ -43,37 +43,47 @@
 .ac-panel.output-panel .panel-spacer {
   padding: 15px;
 }
-.ac-control-wrapper {
+.ac-control-wrapper,
+.panel-row-child {
   display: inline-block;
   padding: 0 7.5px;
-  box-sizing: border-box;
   flex-grow: 8;
 }
-.ac-control-wrapper:first-child {
+.ac-control-wrapper:first-child,
+.panel-row-child:first-child {
   padding-left: 0;
 }
-.ac-control-wrapper:last-child {
+.ac-control-wrapper:last-child,
+.panel-row-child:last-child {
   padding-right: 0;
 }
-.ac-control-wrapper.square {
+.ac-control-wrapper.square,
+.panel-row-child.square {
   flex-grow: 0;
   width: 150px;
 }
-.ac-control-wrapper.flex-sm {
+.ac-control-wrapper.flex-sm,
+.panel-row-child.flex-sm {
   flex-grow: 2;
 }
-.ac-control-wrapper.flex-md {
+.ac-control-wrapper.flex-md,
+.panel-row-child.flex-md {
   flex-grow: 4;
 }
-.ac-control-wrapper.flex-lg {
+.ac-control-wrapper.flex-lg,
+.panel-row-child.flex-lg {
   flex-grow: 8;
 }
 .ac-control-wrapper .ac-input.text,
-.ac-control-wrapper .ac-output.text {
+.panel-row-child .ac-input.text,
+.ac-control-wrapper .ac-output.text,
+.panel-row-child .ac-output.text {
   padding: 2px 6px;
 }
 .ac-control-wrapper .ac-input.textarea,
-.ac-control-wrapper .ac-output.textarea {
+.panel-row-child .ac-input.textarea,
+.ac-control-wrapper .ac-output.textarea,
+.panel-row-child .ac-output.textarea {
   padding: 0 2px;
 }
 .ac-input,
@@ -85,6 +95,16 @@
 .ac-input.double-height,
 .ac-output.double-height {
   height: 90px;
+}
+.panel-close-button {
+  margin: 10px 0;
+  padding: 0 10px !important;
+  text-align: right;
+  color: #222;
+}
+.panel-close-button:hover,
+.panel-close-button:active {
+  color: #6b6b6b;
 }
 body,
 div,
@@ -122,6 +142,9 @@ h6 {
 h1#main-title {
   margin: 0;
 }
+p#main-blurb {
+  margin: 0 0 5px 0;
+}
 .ac-input.text,
 .ac-output.text {
   font-size: 16px;
@@ -133,7 +156,6 @@ h1#main-title {
 .ac-input.button,
 .ac-output.button {
   font-size: 16px;
-  font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 2px;
 }
@@ -203,6 +225,7 @@ p {
 }
 #chord-dictionary {
   text-align: center;
+  padding: 0;
 }
 #chord-dictionary li {
   background-color: #ccc;
@@ -251,28 +274,26 @@ table#ac-melody-output th {
 }
 .ac-input.button:active {
   border-color: #676767;
-  background-color: #676767;
+  background-color: #636363;
 }
 .ac-input.button.active {
   border-color: #676767;
-  background-color: #676767;
+  background-color: #6b6b6b;
 }
 .ac-input.button.disabled {
-  background-color: #7a7a7a !important;
+  background-color: #919191 !important;
 }
 .ac-input.button:active {
-  opacity: 0.8;
   border-width: 3px 0 0 3px;
   border-style: inset;
 }
 .ac-input.button.active {
-  opacity: 0.8;
   border-width: 3px 0 0 3px;
   border-style: inset;
 }
 .ac-input.button.disabled {
   cursor: default;
-  opacity: 0.66;
+  opacity: 0.5;
   border: none !important;
 }
 .ac-input.button i,
@@ -282,67 +303,63 @@ table#ac-melody-output th {
 }
 .ac-input.button.green {
   color: #fff;
-  background-color: #0fab0f;
-  border-color: #0c890c;
+  background-color: #0d990d;
+  border-color: #0a7a0a;
 }
 .ac-input.button.green:hover,
 .ac-input.button.green:active {
-  background-color: #0c890c;
+  background-color: #0a7a0a;
 }
 .ac-input.button.green:active {
-  border-color: #0a730a;
-  background-color: #0a730a;
+  border-color: #096709;
+  background-color: #0f5c0f;
 }
 .ac-input.button.green.active {
-  border-color: #0a730a;
-  background-color: #0a730a;
+  border-color: #096709;
+  background-color: #0f650f;
 }
 .ac-input.button.green.disabled {
-  background-color: #0c890c !important;
+  background-color: #198419 !important;
 }
 .ac-input.button.blue {
   color: #fff;
-  background-color: #381c93;
-  border-color: #2d1676;
+  background-color: #321984;
+  border-color: #28146a;
 }
 .ac-input.button.blue:hover,
 .ac-input.button.blue:active {
-  background-color: #2d1676;
+  background-color: #28146a;
 }
 .ac-input.button.blue:active {
-  border-color: #261362;
-  background-color: #261362;
+  border-color: #211158;
+  background-color: #231551;
 }
 .ac-input.button.blue.active {
-  border-color: #261362;
-  background-color: #261362;
+  border-color: #211158;
+  background-color: #251657;
 }
 .ac-input.button.blue.disabled {
-  background-color: #2d1676 !important;
+  background-color: #342273 !important;
 }
 .ac-input.button.red {
   color: #fff;
-  background-color: #d51212;
-  border-color: #aa0e0e;
+  background-color: #bf1010;
+  border-color: #990d0d;
 }
 .ac-input.button.red:hover,
 .ac-input.button.red:active {
-  background-color: #aa0e0e;
+  background-color: #990d0d;
 }
 .ac-input.button.red:active {
-  border-color: #8f0c0c;
-  background-color: #8f0c0c;
+  border-color: #800b0b;
+  background-color: #731313;
 }
 .ac-input.button.red.active {
-  border-color: #8f0c0c;
-  background-color: #8f0c0c;
+  border-color: #800b0b;
+  background-color: #7f1212;
 }
 .ac-input.button.red.disabled {
-  background-color: #aa0e0e !important;
-}
-.ac-input.button#showHelp.active {
-  opacity: 1;
-  background-color: #343434;
+  background-color: #a42020 !important;
 }
 @media (max-width: 992px) {
   h1 {
@@ -391,6 +408,70 @@ table#ac-melody-output th {
   }
   h6 {
     font-size: 0.7em;
+  }
+  div,
+  span,
+  p,
+  a,
+  li {
+    font-size: 14px;
+  }
+  #chord-dictionary li {
+    font-size: initial;
+    padding: 6px;
+    margin: 5px 6px;
+  }
+  .ac-panel {
+    padding: 10px 10px 0 10px;
+  }
+  .ac-panel.output-panel .panel-spacer {
+    padding: 10px;
+  }
+  .panel-row {
+    padding: 0 0 10px 0;
+  }
+  .panel-row.has-labels {
+    padding: 0 0 10px 0;
+  }
+  .ac-control-wrapper {
+    padding: 0 5px;
+  }
+  .ac-control-wrapper.square {
+    width: 108px;
+  }
+  .ac-input,
+  .ac-output {
+    min-height: 44px;
+  }
+  .ac-input.double-height,
+  .ac-output.double-height {
+    height: 44px;
+  }
+  .ac-input.text,
+  .ac-output.text {
+    font-size: 12px;
+  }
+  .ac-input.textarea,
+  .ac-output.textarea {
+    font-size: 15px;
+  }
+  .ac-input.button,
+  .ac-output.button {
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+  .ac-input.button .button-text-icon,
+  .ac-output.button .button-text-icon {
+    font-size: 9.600000000000001px;
+    margin-top: 2px;
+  }
+  .ac-input.button i.fa-lg,
+  .ac-output.button i.fa-lg {
+    font-size: 1.25em;
+  }
+  .ac-input.button i.fa-2x,
+  .ac-output.button i.fa-2x {
+    font-size: 1.75em;
   }
 }
 @media (max-width: 500px) {

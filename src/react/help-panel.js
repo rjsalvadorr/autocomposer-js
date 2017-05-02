@@ -11,6 +11,8 @@ class HelpPanel extends React.Component {
     this.state = {
       chordArray: AcLogic.getChordDictionary(true)
     }
+
+    this.closePanel = this.closePanel.bind(this);
   }
 
   buildChordDictionary() {
@@ -29,6 +31,11 @@ class HelpPanel extends React.Component {
     );
   }
 
+  closePanel(event) {
+    console.debug("help panel, closePanel()");
+    this.props.closeFunction("showHelp", false);
+  }
+
   render() {
     var lowestPitch = AcLogic.DEFAULT_LOWER_LIMIT;
     var highestPitch = AcLogic.DEFAULT_UPPER_LIMIT;
@@ -43,7 +50,12 @@ class HelpPanel extends React.Component {
       return (
         <div id="help-panel" className="ac-panel output-panel">
           <div className="panel-spacer">
-            <h2>Help!</h2>
+            <div className="panel-row">
+              <h2 className="panel-row-child">Help!</h2>
+              <a href="#" className="panel-row-child panel-close-button flex-sm" onClick={this.closePanel}>
+                <i className="fa fa-2x fa-close"></i>
+              </a>
+            </div>
             <h4>How to use this web app:</h4>
 
             <ol>

@@ -1,9 +1,9 @@
 // Fine details such as colours, box-shadow, text-shadow
 
 buttonBackground = #999
-buttonBackgroundGreen = #0FAB0F
-buttonBackgroundRed = #D51212
-buttonBackgroundBlue = #381C93
+buttonBackgroundGreen = #0d990d
+buttonBackgroundRed = #bf1010
+buttonBackgroundBlue = #321984
 
 buttonTextColorLight = #FFF
 buttonTextColorDark = #222
@@ -29,16 +29,16 @@ createButtonColors(bgColor, textColor)
   // Button is currently being clicked
   &:active
     border-color: borderColorActive
-    background-color: darken(bgColor, 33%)
+    background-color: desaturate(darken(bgColor, 35%), 15%)
 
   // Toggle buttons in an active state.
   // Maybe you should rename this to avoid confusion.
   &.active
     border-color: borderColorActive
-    background-color: darken(bgColor, 33%)
+    background-color: desaturate(darken(bgColor, 30%), 12%)
 
   &.disabled
-    background-color: darken(bgColor, 20%) !important
+    background-color: desaturate(darken(bgColor, 5%), 20%) !important
 
 
 .ac-input.button
@@ -51,20 +51,18 @@ createButtonColors(bgColor, textColor)
 
   // Button is currently being clicked
   &:active
-    opacity: 0.8
     border-width: buttonBorderSize 0 0 buttonBorderSize
     border-style: inset
 
   // Toggle buttons in an active state.
   // Maybe you should rename this to avoid confusion.
   &.active
-    opacity: 0.8
     border-width: buttonBorderSize 0 0 buttonBorderSize
     border-style: inset
 
   &.disabled
     cursor: default
-    opacity: 0.66
+    opacity: 0.5
     border: none !important
 
   i, p, span
@@ -77,9 +75,3 @@ createButtonColors(bgColor, textColor)
     createButtonColors(buttonBackgroundBlue, buttonTextColorLight)
   &.red
     createButtonColors(buttonBackgroundRed, buttonTextColorLight)
-
-
-.ac-input.button#showHelp
-  &.active
-    opacity: 1
-    background-color: darken(buttonBackground, 66%)

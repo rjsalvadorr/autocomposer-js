@@ -90,10 +90,8 @@ class AutoComposer extends React.Component {
   */
   _isOnSupportedDevice() {
     var ua = navigator.userAgent;
-    // token explanation
-    // android - not supporting mobile
-    // trident - IE rendering engine. IE does not support the class JS keyword. Which is all over this codebase.
-    var isSupportedDevice = ua.search(/android|trident/i) == -1;
+    // trident = IE rendering engine. IE does not support the class JS keyword. Which is all over this codebase.
+    var isSupportedDevice = ua.search(/trident/i) == -1;
     return isSupportedDevice;
   }
 
@@ -145,9 +143,10 @@ class AutoComposer extends React.Component {
   * Changes app state. Meant to be called from child components
   * @param {string} stateKey - App state to change
   * @param {number|string|Object} newState - Assigns this to the state
-  * @param {boolean} [useDataStore] - If true, the data store is changed instead of the state object.
+  * @param {?boolean} [useDataStore] - If true, the data store is changed instead of the state object.
   */
   callbackChangeState(stateKey, newState, useDataStore) {
+    console.debug("app, callbackChangeState(" + stateKey + ", " + newState + ", " + useDataStore + ")");
     if(useDataStore) {
       this.store[stateKey] = newState;
     } else {
@@ -319,10 +318,11 @@ class AutoComposer extends React.Component {
               <div className="ac-control-wrapper flex-lg">
                 <h1 id="main-title">AutoComposer</h1>
               </div>
+              <AcToggleButton inputKey="showHelp" icon="question" addClass="blue" wrapperAddClass="flex-md" isActive={this.state.showHelp} onClickHandler={this.callbackChangeState} />
             </div>
 
             <div className="panel-row">
-              <p>
+              <p id="main-blurb">
                 This is a prototype for a program that automatically writes music. Click the <i className="fa fa-question"></i> button to get started.
                 For more info, check out the <a href="https://github.com/rjsalvadorr/autocomposer-melody/wiki" target="_blank">project wiki</a> and <a href="https://github.com/rjsalvadorr/autocomposer-melody" target="_blank">repository</a>.
               </p>
@@ -337,12 +337,7 @@ class AutoComposer extends React.Component {
               <AcButton inputKey="generateMelodies" icon="play" addClass="green" wrapperAddClass="flex-lg" onClick={this.playMelody} disabled={!this.state.melodyLoaded}/>
               <AcButton inputKey="generateMelodies" icon="play" addClass="green" inputLabel="Solo" wrapperAddClass="flex-sm" onClick={this.playMelodySolo} disabled={!this.state.melodyLoaded}/>
               <AcButton inputKey="generateMelodies" icon="stop" addClass="red" wrapperAddClass="flex-sm" onClick={this.stopMusic} disabled={!this.state.melodyLoaded}/>
-              <AcButton inputKey="generateMelodies" icon="download" wrapperAddClass="flex-sm" onClick={this.downloadMidi} disabled={!this.state.melodyLoaded}/>
-            </div>
-
-            <div className="panel-row">
-              <AcToggleButton inputKey="showHelp" icon="question" wrapperAddClass="flex-sm" isActive={this.state.showHelp} onClickHandler={this.callbackChangeState} />
-              <AcToggleButton inputKey="showControls" icon="cog" wrapperAddClass="flex-sm" initialState={this.state.showControls} onClickHandler={this.callbackChangeState} disabled={this.state.controlsDisabled} />
+              <AcButton inputKey="generateMelodies" icon="download" addClass="blue" wrapperAddClass="flex-sm" onClick={this.downloadMidi} disabled={!this.state.melodyLoaded}/>
             </div>
 
             <div className="panel-row">
@@ -354,13 +349,14 @@ class AutoComposer extends React.Component {
 
           <ControlPanel isShown={this.state.showControls} />
 
-          <HelpPanel isShown={this.state.showHelp} />
+          <HelpPanel isShown={this.state.showHelp} closeFunction={this.callbackChangeState}/>
 
           <OutputPanel isShown={this.state.showOutput} chordProgression={chordProgressionArray} allowMelodyGeneration={this.state.allowMelodyGeneration} outputCallback={this.outputFinishCallback} loadMelody={this.loadMusic} />
 
           <div id="not-supported-panel" className="ac-panel">
             <h1>Where's the AutoComposer?!</h1>
-            <p>You're seeing this because your browser's window size is too small, or you're using a device that's not supported by the app.</p>
+            <p>You're seeing this page because your device isn't supported by the app's scripts, or your browser's window size is too small.</p>
+            <p>If you're on a phone/tablet, try turning it to see this page in landscape!</p>
           </div>
 
         </div>
@@ -370,7 +366,8 @@ class AutoComposer extends React.Component {
         <div id="app-container" className="root-panel">
           <div id="not-supported-panel" className="ac-panel">
             <h1>Where's the AutoComposer?!</h1>
-            <p>You're seeing this because your browser's window size is too small, or you're using a device that's not supported by the app.</p>
+            <p>You're seeing this page because your device isn't supported by the app's scripts, or your browser's window size is too small.</p>
+            <p>If you're on a phone/tablet, try turning it to see this page in landscape!</p>
           </div>
         </div>
       );

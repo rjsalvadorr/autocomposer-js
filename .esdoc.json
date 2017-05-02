@@ -1,12 +1,14 @@
 {
   "title": "AutoComposer",
   "source": "./src",
+  "excludes": ["\\.config\\.(js|es6)$", "(ac-.*|.*-panel|.*-output|.*-row)\\.js$"],
   "destination": "./public/doc",
-  "access": ["public", "private", "protected"],
+  "access": ["public"],
   "plugins": [{"name": "esdoc-node"}],
   "test": {
     "type": "mocha",
     "source": "./test",
     "includes": ["(spec|Spec|test|Test)\\.(js|es6)$", ".*.js"]
-  }
+  },
+  "coverage": false
 }

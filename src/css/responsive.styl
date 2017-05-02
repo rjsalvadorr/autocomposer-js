@@ -4,11 +4,10 @@ bptLaptop = 992px
 bptTablet = 768px
 bptPhone = 500px
 
-headingSizeLaptop = 2.5em
-headingSizeTablet = 2em
-
 ///// Small laptop / Large tablet
 @media (max-width: bptLaptop)
+  headingSizeLaptop = 2.5em
+
   h1
     font-size: headingSizeLaptop
   h2
@@ -33,6 +32,11 @@ headingSizeTablet = 2em
 
 ///// Tablet
 @media (max-width: bptTablet)
+  headingSizeTablet = 2em
+  layoutPadding = 10px
+  inputHeight = 44px
+  inputFontSize = 12px
+
   h1
     font-size: headingSizeTablet
   h2
@@ -45,6 +49,65 @@ headingSizeTablet = 2em
     font-size: headingSizeTablet * 0.4
   h6
     font-size: headingSizeTablet * 0.35
+
+  div, span, p, a, li
+    font-size: 14px
+
+  #chord-dictionary li
+    font-size: initial
+    padding: 6px
+    margin: 5px 6px
+
+  ///// overall layout
+  .ac-panel
+    padding: layoutPadding layoutPadding 0 layoutPadding
+
+    &.output-panel .panel-spacer
+      padding: layoutPadding
+
+  .panel-row
+    padding: 0 0 layoutPadding 0
+
+  .panel-row.has-labels
+    padding: 0 0 layoutPadding 0
+
+  .ac-control-wrapper
+    padding: 0 (layoutPadding / 2)
+
+  ///// control element size
+  .ac-control-wrapper.square
+    width: (layoutPadding + inputHeight) * 2
+
+  .ac-input
+  .ac-output
+    min-height: inputHeight
+
+    &.double-height
+      height: inputHeight
+
+
+  ///// input button text
+  .ac-input
+  .ac-output
+    &.text
+      font-size: inputFontSize
+
+    &.textarea
+      font-size: inputFontSize * 1.25
+
+    &.button
+      font-size: inputFontSize
+      letter-spacing: 1px
+
+      .button-text-icon
+        font-size: inputFontSize * 0.8
+        margin-top: 2px
+
+      i.fa-lg
+        font-size: 1.25em
+
+      i.fa-2x
+        font-size: 1.75em
 
 ///// Phone
 @media (max-width: bptPhone)
