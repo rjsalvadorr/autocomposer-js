@@ -10,14 +10,7 @@ const AcConstants = require('./autocomposer-constants');
 * @emits {statusUpdate} - Emits a "statusUpdate" event with details when important events happen (like melody generation finishing, etc.)
 */
 class AutoComposerMelody {
-  /**
-  * @param {string[]} chordProgression - array of chord symbols
-  * @param {string} lowerLimit - lower boundary note (in scientific notation)
-  * @param {string} upperLimit - upper boundary note (in scientific notation)
-  */
   constructor() {
-    /** @type {string[]} */
-    this.chordProgression = AcConstants.INITIAL_PROGRESSION;
     /** @type {string} */
     this.lowerLimit = AcConstants.DEFAULT_LOWER_LIMIT;
     /** @type {string} */

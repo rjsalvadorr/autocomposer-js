@@ -666,12 +666,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/autocomposer-melody.js~autocomposermelody#chordprogression",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-member-chordProgression",
-    "src/autocomposer-melody.js~AutoComposerMelody#chordProgression",
-    "member"
-  ],
-  [
     "src/autocomposer-melody.js~autocomposermelody#constructor",
     "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-constructor-constructor",
     "src/autocomposer-melody.js~AutoComposerMelody#constructor",

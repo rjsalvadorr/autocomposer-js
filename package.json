@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rjsalvadorr/autocomposer-melody.git"
+    "url": "https://github.com/rjsalvadorr/autocomposer-js.git"
   },
   "scripts": {
     "test": "mocha && esdoc",

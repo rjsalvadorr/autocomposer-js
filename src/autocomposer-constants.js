@@ -40,8 +40,6 @@ module.exports = {
   BASS_LOWER_LIMIT: "E1",
   BASS_UPPER_LIMIT: "F2",
 
-  INITIAL_PROGRESSION: "G Em C D", // TODO - remove this. This is for the UI, and doesn't belong here. :(
-
   NUM_GENERATIONS_LIMIT: 100000, // Number of melody generation attempts that the program will make.
   NUM_MELODIES_LIMIT: 100 // Number of melodies that's returned'
 }

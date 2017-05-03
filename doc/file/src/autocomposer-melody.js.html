@@ -19,7 +19,7 @@
   <a href="identifiers.html">Reference</a>
   <a href="source.html">Source</a>
   <a href="test.html" data-ice="testLink">Test</a>
-  <a data-ice="repoURL" href="https://github.com/rjsalvadorr/autocomposer-melody.git" class="repo-url-github">Repository</a>
+  <a data-ice="repoURL" href="https://github.com/rjsalvadorr/autocomposer-js.git" class="repo-url-github">Repository</a>
   <div class="search-box">
   <span>
     <img src="./image/search.png">
@@ -58,14 +58,7 @@ const AcConstants = require(&apos;./autocomposer-constants&apos;);
 * @emits {statusUpdate} - Emits a &quot;statusUpdate&quot; event with details when important events happen (like melody generation finishing, etc.)
 */
 class AutoComposerMelody {
-  /**
-  * @param {string[]} chordProgression - array of chord symbols
-  * @param {string} lowerLimit - lower boundary note (in scientific notation)
-  * @param {string} upperLimit - upper boundary note (in scientific notation)
-  */
   constructor() {
-    /** @type {string[]} */
-    this.chordProgression = AcConstants.INITIAL_PROGRESSION;
     /** @type {string} */
     this.lowerLimit = AcConstants.DEFAULT_LOWER_LIMIT;
     /** @type {string} */
