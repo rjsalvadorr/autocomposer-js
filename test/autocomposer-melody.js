@@ -20,20 +20,20 @@ var TEST_LOWER_LIMIT_2 = "Ab4";
 var TEST_UPPER_LIMIT_2 = "B5";
 
 describe('AutoComposerMelody', function() {
-  describe('#getAllChordTones', function() {
+  describe('#_getAllChordTones', function() {
     it('should return all chord tones in the range (inclusive)', function() {
       expectedTones1 = ["Bb3", "D4", "F4", "G4"];
       expectedTones2 = ["A4", "C5", "D5", "F#5", "A5"];
 
-      resultTones1 = AutoComposerMelody.getAllChordTones(TEST_CHORD_1, TEST_LOWER_LIMIT_1, TEST_UPPER_LIMIT_1);
-      resultTones2 = AutoComposerMelody.getAllChordTones(TEST_CHORD_3, TEST_LOWER_LIMIT_2, TEST_UPPER_LIMIT_2);
+      resultTones1 = AutoComposerMelody._getAllChordTones(TEST_CHORD_1, TEST_LOWER_LIMIT_1, TEST_UPPER_LIMIT_1);
+      resultTones2 = AutoComposerMelody._getAllChordTones(TEST_CHORD_3, TEST_LOWER_LIMIT_2, TEST_UPPER_LIMIT_2);
 
       assert.deepEqual(resultTones1, expectedTones1);
       assert.deepEqual(resultTones2, expectedTones2);
     });
   });
 
-  describe('#buildChordUnitList', function() {
+  describe('#_buildChordUnitList', function() {
     it('should return a list of ChordUnits for a given progression', function() {
       var expChordUnit3 = {
         chord: "D7",
@@ -50,7 +50,7 @@ describe('AutoComposerMelody', function() {
 
       var expectedArray = [expChordUnit1, expChordUnit2, expChordUnit3];
       var chordProgression = ["Gm7","Cm7","D7"];
-      var chordUnitList = AutoComposerMelody.buildChordUnitList(chordProgression, TEST_LOWER_LIMIT_2, TEST_UPPER_LIMIT_2);
+      var chordUnitList = AutoComposerMelody._buildChordUnitList(chordProgression, TEST_LOWER_LIMIT_2, TEST_UPPER_LIMIT_2);
 
       assert.deepEqual(chordUnitList[0].chordTones, expectedArray[0].chordTones);
       assert.deepEqual(chordUnitList[1].chordTones, expectedArray[1].chordTones);
@@ -58,7 +58,7 @@ describe('AutoComposerMelody', function() {
     });
   });
 
-  describe('#buildMelodyUnit', function() {
+  describe('#_buildMelodyUnit', function() {
     it('should build a melody unit with metadata for each raw melody', function() {
       var chordProgression = ["G", "Em", "C", "D"];
       var melody1 = "B3 G4 E4 F#4";
@@ -80,27 +80,27 @@ describe('AutoComposerMelody', function() {
         melodyString: melody2
       }
 
-      result1 = AutoComposerMelody.buildMelodyUnit(chordProgression, melody1);
-      result2 = AutoComposerMelody.buildMelodyUnit(chordProgression, melody2);
+      result1 = AutoComposerMelody._buildMelodyUnit(chordProgression, melody1);
+      result2 = AutoComposerMelody._buildMelodyUnit(chordProgression, melody2);
 
       assert.deepEqual(result1, exp1);
       assert.deepEqual(result2, exp2);
     });
   });
 
-  describe('#buildMelodyUnitList', function() {
+  describe('#_buildMelodyUnitList', function() {
     var chordProgression = ["G", "Em", "C", "D"];
     var melodies = ["B3 G4 E4 F#4", "G4 B4 C5 D5", "G4 G4 G4 F#4", "G5 G5 G5 A5"];
 
     it('should sort the output if specified', function() {
-      resultSorted = AutoComposerMelody.buildMelodyUnitList(chordProgression, melodies, {sort: true});
+      resultSorted = AutoComposerMelody._buildMelodyUnitList(chordProgression, melodies, {sort: true});
 
       assert(resultSorted[0].smoothness < resultSorted[3].smoothness);
     });
 
     it('should limit the output if specified', function() {
       var numLimit = 2;
-      result = AutoComposerMelody.buildMelodyUnitList(chordProgression, melodies, {limit: numLimit});
+      result = AutoComposerMelody._buildMelodyUnitList(chordProgression, melodies, {limit: numLimit});
 
       assert.equal(result.length, numLimit);
     });
@@ -131,13 +131,13 @@ describe('AutoComposerMelody', function() {
     });
   });
 
-  describe('#getBasicBassLine', function() {
+  describe('#buildBasicBassLine', function() {
     it('should return a simple bassline for a melody', function() {
       var chordProgression = ["G", "Em", "C", "D"];
       var melody = "B3 G4 E4 F#4";
-      var melodyUnit = AutoComposerMelody.buildMelodyUnit(chordProgression, melody);
+      var melodyUnit = AutoComposerMelody._buildMelodyUnit(chordProgression, melody);
 
-      var resultBassline = AutoComposerMelody.getBasicBassLine(melodyUnit);
+      var resultBassline = AutoComposerMelody.buildBasicBassLine(melodyUnit);
       var expBassline = ["G1", "E1", "C2", "D2"];
 
       assert.deepEqual(resultBassline, expBassline);
@@ -150,7 +150,7 @@ describe('AutoComposerMelody', function() {
       var melody = "B3 G4 E4 F#4";
       var expAccompaniment = ["G2 D3", "E3 B2", "C3 G2", "D3 A2"];
 
-      var melodyUnit = AutoComposerMelody.buildMelodyUnit(chordProgression, melody);
+      var melodyUnit = AutoComposerMelody._buildMelodyUnit(chordProgression, melody);
       var resultBassline = AutoComposerMelody.buildSimpleAccompaniment(melodyUnit);
 
       assert.deepEqual(resultBassline, expAccompaniment);

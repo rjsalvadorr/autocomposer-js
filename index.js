@@ -1,10 +1,12 @@
 
 var moduleMelody = require('./src/autocomposer-melody');
-var moduleMidi = require('./src/autocomposer-midi-writer');
+var moduleMidiWriter = require('./src/autocomposer-midi-writer');
 var moduleLogic = require('./src/autocomposer-logic');
+var moduleConstants = require('./src/autocomposer-constants');
 
 module.exports = {
   melody: moduleMelody,
-  midiWriter: moduleMidi,
-  logic: moduleLogic
+  midiWriter: moduleMidiWriter,
+  logic: moduleLogic,
+  constants: moduleConstants
 }
