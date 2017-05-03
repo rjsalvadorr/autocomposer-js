@@ -43,7 +43,8 @@
 </nav>
 
 <div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="autocomposerjs">AutoComposerJS</h1>
-<p>See it in action <a href="http://www.rj-salvador.com/apps/autocomposer">here</a>.</p>
+<p><a href="https://badge.fury.io/js/autocomposer-js"><img src="https://badge.fury.io/js/autocomposer-js.svg" alt="npm version"></a></p>
+<p>See it in action <a href="http://www.rj-salvador.com/apps/autocomposer">here</a>!</p>
 <h2 id="overview">Overview</h2>
 <p>AutoComposerJS creates small musical snippets that conform to the <em>best practices</em> of Western music theory. In its current form, it does this by writing a simple melody over a chord progression. It also has a few more tricks:</p>
 <ul>
@@ -86,6 +87,8 @@ var allTheMelodies = AutoComposerJS.melody.buildSimpleMelodies(chordProgression)
    &quot;melodyString&quot;:&quot;D5 C5&quot;
 }</code>
 </code></pre><p>The <code>range</code> is the distance between the highest and lowest note (in semitones). The <code>smoothness</code> shows the total distance between all notes in the melody (in semitones).</p>
+<h3 id="browserify">Browserify</h3>
+<p>If you&apos;re going to use this for a <a href="https://github.com/rjsalvadorr/autocomposer-ui">web app of some sort</a> and you&apos;re going to <em>Browserify</em> it, use <code>src/browser-build.js</code> as your target. This will include the MIDI player which can play all those nice melodies on a browser.</p>
 <h2 id="potential-uses">Potential Uses</h2>
 <ul>
 <li>Brainstorming when starting or continuing a musical composition.</li>

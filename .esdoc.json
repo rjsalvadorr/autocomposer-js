@@ -3,7 +3,7 @@
   "source": "./src",
   "excludes": ["\\.config\\.(js|es6)$", "(browser.*)\\.js$"],
   "undocumentIdentifier": false,
-  "destination": "./doc",
+  "destination": "./docs",
   "access": ["public"],
   "plugins": [{"name": "esdoc-node"}],
   "test": {
