@@ -1,6 +1,8 @@
 # AutoComposerJS
 
-See it in action [here](http://www.rj-salvador.com/apps/autocomposer).
+[![npm version](https://badge.fury.io/js/autocomposer-js.svg)](https://badge.fury.io/js/autocomposer-js)
+
+See it in action [here](http://www.rj-salvador.com/apps/autocomposer)!
 
 ## Overview
 AutoComposerJS creates small musical snippets that conform to the _best practices_ of Western music theory. In its current form, it does this by writing a simple melody over a chord progression. It also has a few more tricks:
@@ -57,6 +59,9 @@ The melodies will be returned as `MelodyData` objects, which look like this:
 ```
 
 The `range` is the distance between the highest and lowest note (in semitones). The `smoothness` shows the total distance between all notes in the melody (in semitones).
+
+### Browserify
+If you're going to use this for a [web app of some sort](https://github.com/rjsalvadorr/autocomposer-ui) and you're going to _Browserify_ it, use `src/browser-build.js` as your target. This will include the MIDI player which can play all those nice melodies on a browser.
 
 ## Potential Uses
 * Brainstorming when starting or continuing a musical composition.
