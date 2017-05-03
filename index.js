@@ -1,8 +1,8 @@
 
-var moduleMelody = require('./src/autocomposer-melody');
-var moduleMidiWriter = require('./src/autocomposer-midi-writer');
-var moduleLogic = require('./src/autocomposer-logic');
-var moduleConstants = require('./src/autocomposer-constants');
+var moduleMelody = require('./src/melody');
+var moduleMidiWriter = require('./src/midi-writer');
+var moduleLogic = require('./src/logic');
+var moduleConstants = require('./src/constants');
 
 module.exports = {
   melody: moduleMelody,

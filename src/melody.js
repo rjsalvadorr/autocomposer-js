@@ -1,9 +1,9 @@
 var tonal = require('tonal');
 var ChordUnit = require('./chord-unit');
-var MelodyUnit = require('./melody-unit');
+var MelodyData = require('./melody-data');
 
-var AcLogic = require('./autocomposer-logic');
-const AcConstants = require('./autocomposer-constants');
+var AcLogic = require('./logic');
+const AcConstants = require('./constants');
 
 /**
 * Creates melodies from a given chord progression
@@ -48,8 +48,8 @@ class AutoComposerMelody {
   }
 
     /**
-    * For a given MelodyUnit, get a simple accompaniment for it.
-    * @param {MelodyUnit} melodyUnit - melody that needs accompaniment
+    * For a given MelodyData, get a simple accompaniment for it.
+    * @param {MelodyData} melodyUnit - melody that needs accompaniment
     * @return {string[]} - array of strings, each representing one or more notes to play under each melodic note.
     */
   buildSimpleAccompaniment(melodyUnit) {
@@ -74,9 +74,9 @@ class AutoComposerMelody {
   }
 
     /**
-    * For a given MelodyUnit, return a basic bass line consisting only of root notes.
+    * For a given MelodyData, return a basic bass line consisting only of root notes.
     * @private
-    * @param {MelodyUnit} melodyUnit - melody that needs a bassline
+    * @param {MelodyData} melodyUnit - melody that needs a bassline
     * @return {string[]} - array of strings, each one representing a bass note.
     */
   buildBasicBassLine(melodyUnit) {
@@ -136,15 +136,15 @@ class AutoComposerMelody {
   }
 
     /**
-    * For a given melody, creates a MelodyUnit object
+    * For a given melody, creates a MelodyData object
     * @private
     * @param {string[]} chordProgression - a chord progression
     * @param {string} melodyString - a melody (in scientific notation)
-    * @return {MelodyUnit}
+    * @return {MelodyData}
     */
-  _buildMelodyUnit(chordProgression, melodyString) {
+  _buildMelodyData(chordProgression, melodyString) {
     var arrMelody = melodyString.split(" ");
-    var melodyUnit = new MelodyUnit.MelodyUnit(chordProgression, arrMelody);
+    var melodyUnit = new MelodyData.MelodyData(chordProgression, arrMelody);
     return melodyUnit;
   }
 
@@ -156,14 +156,14 @@ class AutoComposerMelody {
     * @param {Object} options - if true, generated melodies will be sorted, with smoothest melodies coming first.
     * @param {boolean} options.sort - if true, generated melodies will be sorted, with smoothest melodies coming first.
     * @param {number} options.limit - limits the output to a set number.
-    * @return {MelodyUnit[]} - a list of ChordUnit objects.
+    * @return {MelodyData[]} - a list of ChordUnit objects.
     */
-  _buildMelodyUnitList(chordProgression, rawMelodies, options) {
+  _buildMelodyDataList(chordProgression, rawMelodies, options) {
     var melodyUnits = [];
     var haxThis = this;
 
     rawMelodies.forEach(function(rawMelody) {
-      melodyUnits.push(haxThis._buildMelodyUnit(chordProgression, rawMelody));
+      melodyUnits.push(haxThis._buildMelodyData(chordProgression, rawMelody));
     });
 
     if(options) {
@@ -298,7 +298,7 @@ class AutoComposerMelody {
     * @private
     * @deprecated
     * @param {string[]} chordProgression - chord progression given by user
-    * @return {MelodyUnit[]} - an array of notes (written in scientific pitch)
+    * @return {MelodyData[]} - an array of notes (written in scientific pitch)
     */
   buildAllMelodies(chordProgression) {
     var chordUnitList = this._buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);
@@ -307,7 +307,7 @@ class AutoComposerMelody {
     var melodyUnits = [];
     var haxThis = this;
     melodies.forEach(function(rawMelody) {
-      melodyUnits.push(haxThis._buildMelodyUnit(chordProgression, rawMelody));
+      melodyUnits.push(haxThis._buildMelodyData(chordProgression, rawMelody));
     });
 
     return melodyUnits;
@@ -335,7 +335,7 @@ class AutoComposerMelody {
     * @param {Object} [options.raw] - if true, returns output as strings (default = false)
     * @param {Object} [options.limit] - if false, returns all the generated melodies, not just the top 100 (default = true)
     * @param {Object} [options.filter] - if false, returns melodies that are considered too "ugly" for the default process. (default = true)
-    * @return {MelodyUnit[]} - an array of MelodyUnits
+    * @return {MelodyData[]} - an array of MelodyDatas
     */
   buildSimpleMelodies(chordProgression, options) {
     // TODO - change the input to accept both {string} and {string[]}
@@ -369,7 +369,7 @@ class AutoComposerMelody {
       return rawMelodies;
     }
 
-    melodyUnits = this._buildMelodyUnitList(chordProgression, rawMelodies, {sort: sortOption, limit: limitOption});
+    melodyUnits = this._buildMelodyDataList(chordProgression, rawMelodies, {sort: sortOption, limit: limitOption});
     return melodyUnits;
   }
 

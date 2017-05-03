@@ -1,62 +1,68 @@
 window.esdocSearchIndex = [
   [
+    "autocomposer-js/src/constants.js~acconstants",
+    "variable/index.html#static-variable-AcConstants",
+    "<span>AcConstants</span> <span class=\"search-result-import-path\">autocomposer-js/src/constants.js</span>",
+    "variable"
+  ],
+  [
     "autocomposer-js/src/browser-build.js~autocomposerjs",
     "variable/index.html#static-variable-AutoComposerJS",
     "<span>AutoComposerJS</span> <span class=\"search-result-import-path\">autocomposer-js/src/browser-build.js</span>",
     "variable"
   ],
   [
-    "autocomposer-js/src/autocomposer-logic.js~autocomposerlogic",
-    "class/src/autocomposer-logic.js~AutoComposerLogic.html",
-    "<span>AutoComposerLogic</span> <span class=\"search-result-import-path\">autocomposer-js/src/autocomposer-logic.js</span>",
+    "autocomposer-js/src/logic.js~autocomposerlogic",
+    "class/src/logic.js~AutoComposerLogic.html",
+    "<span>AutoComposerLogic</span> <span class=\"search-result-import-path\">autocomposer-js/src/logic.js</span>",
     "class"
   ],
   [
-    "autocomposer-js/src/autocomposer-melody.js~autocomposermelody",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html",
-    "<span>AutoComposerMelody</span> <span class=\"search-result-import-path\">autocomposer-js/src/autocomposer-melody.js</span>",
+    "autocomposer-js/src/melody.js~autocomposermelody",
+    "class/src/melody.js~AutoComposerMelody.html",
+    "<span>AutoComposerMelody</span> <span class=\"search-result-import-path\">autocomposer-js/src/melody.js</span>",
     "class"
   ],
   [
-    "autocomposer-js/src/autocomposer-midi-player.js~autocomposermidiplayer",
-    "class/src/autocomposer-midi-player.js~AutoComposerMidiPlayer.html",
-    "<span>AutoComposerMidiPlayer</span> <span class=\"search-result-import-path\">autocomposer-js/src/autocomposer-midi-player.js</span>",
+    "autocomposer-js/src/midi-player.js~autocomposermidiplayer",
+    "class/src/midi-player.js~AutoComposerMidiPlayer.html",
+    "<span>AutoComposerMidiPlayer</span> <span class=\"search-result-import-path\">autocomposer-js/src/midi-player.js</span>",
     "class"
   ],
   [
-    "autocomposer-js/src/autocomposer-midi-writer.js~autocomposermidiwriter",
-    "class/src/autocomposer-midi-writer.js~AutoComposerMidiWriter.html",
-    "<span>AutoComposerMidiWriter</span> <span class=\"search-result-import-path\">autocomposer-js/src/autocomposer-midi-writer.js</span>",
+    "autocomposer-js/src/midi-writer.js~autocomposermidiwriter",
+    "class/src/midi-writer.js~AutoComposerMidiWriter.html",
+    "<span>AutoComposerMidiWriter</span> <span class=\"search-result-import-path\">autocomposer-js/src/midi-writer.js</span>",
     "class"
   ],
   [
-    "autocomposer-js/src/melody-unit.js~melodyunit",
-    "class/src/melody-unit.js~MelodyUnit.html",
-    "<span>MelodyUnit</span> <span class=\"search-result-import-path\">autocomposer-js/src/melody-unit.js</span>",
+    "autocomposer-js/src/melody-data.js~melodydata",
+    "class/src/melody-data.js~MelodyData.html",
+    "<span>MelodyData</span> <span class=\"search-result-import-path\">autocomposer-js/src/melody-data.js</span>",
     "class"
   ],
   [
-    "autocomposer-js/src/autocomposer-logic.js~autocomposerlogic",
+    "autocomposer-js/src/logic.js~autocomposerlogic",
     "variable/index.html#static-variable-autoComposerLogic",
-    "<span>autoComposerLogic</span> <span class=\"search-result-import-path\">autocomposer-js/src/autocomposer-logic.js</span>",
+    "<span>autoComposerLogic</span> <span class=\"search-result-import-path\">autocomposer-js/src/logic.js</span>",
     "variable"
   ],
   [
-    "autocomposer-js/src/autocomposer-melody.js~autocomposermelody",
+    "autocomposer-js/src/melody.js~autocomposermelody",
     "variable/index.html#static-variable-autoComposerMelody",
-    "<span>autoComposerMelody</span> <span class=\"search-result-import-path\">autocomposer-js/src/autocomposer-melody.js</span>",
+    "<span>autoComposerMelody</span> <span class=\"search-result-import-path\">autocomposer-js/src/melody.js</span>",
     "variable"
   ],
   [
-    "autocomposer-js/src/autocomposer-midi-player.js~autocomposermidiplayer",
+    "autocomposer-js/src/midi-player.js~autocomposermidiplayer",
     "variable/index.html#static-variable-autoComposerMidiPlayer",
-    "<span>autoComposerMidiPlayer</span> <span class=\"search-result-import-path\">autocomposer-js/src/autocomposer-midi-player.js</span>",
+    "<span>autoComposerMidiPlayer</span> <span class=\"search-result-import-path\">autocomposer-js/src/midi-player.js</span>",
     "variable"
   ],
   [
-    "autocomposer-js/src/autocomposer-midi-writer.js~autocomposermidiwriter",
+    "autocomposer-js/src/midi-writer.js~autocomposermidiwriter",
     "variable/index.html#static-variable-autoComposerMidiWriter",
-    "<span>autoComposerMidiWriter</span> <span class=\"search-result-import-path\">autocomposer-js/src/autocomposer-midi-writer.js</span>",
+    "<span>autoComposerMidiWriter</span> <span class=\"search-result-import-path\">autocomposer-js/src/midi-writer.js</span>",
     "variable"
   ],
   [
@@ -176,31 +182,31 @@ window.esdocSearchIndex = [
   [
     "",
     "test-file/test/autocomposer-melody.js.html#lineNumber61",
-    "AutoComposerMelody #_buildMelodyUnit",
+    "AutoComposerMelody #_buildMelodyData",
     "test"
   ],
   [
     "",
     "test-file/test/autocomposer-melody.js.html#lineNumber62",
-    "AutoComposerMelody #_buildMelodyUnit should build a melody unit with metadata for each raw melody",
+    "AutoComposerMelody #_buildMelodyData should build a melody unit with metadata for each raw melody",
     "test"
   ],
   [
     "",
     "test-file/test/autocomposer-melody.js.html#lineNumber91",
-    "AutoComposerMelody #_buildMelodyUnitList",
+    "AutoComposerMelody #_buildMelodyDataList",
     "test"
   ],
   [
     "",
     "test-file/test/autocomposer-melody.js.html#lineNumber101",
-    "AutoComposerMelody #_buildMelodyUnitList should limit the output if specified",
+    "AutoComposerMelody #_buildMelodyDataList should limit the output if specified",
     "test"
   ],
   [
     "",
     "test-file/test/autocomposer-melody.js.html#lineNumber95",
-    "AutoComposerMelody #_buildMelodyUnitList should sort the output if specified",
+    "AutoComposerMelody #_buildMelodyDataList should sort the output if specified",
     "test"
   ],
   [
@@ -600,186 +606,6 @@ window.esdocSearchIndex = [
     "external"
   ],
   [
-    "src/autocomposer-constants.js",
-    "file/src/autocomposer-constants.js.html",
-    "src/autocomposer-constants.js",
-    "file"
-  ],
-  [
-    "src/autocomposer-logic.js",
-    "file/src/autocomposer-logic.js.html",
-    "src/autocomposer-logic.js",
-    "file"
-  ],
-  [
-    "src/autocomposer-logic.js~autocomposerlogic#convertaccidentalstoascii",
-    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-method-convertAccidentalsToAscii",
-    "src/autocomposer-logic.js~AutoComposerLogic#convertAccidentalsToAscii",
-    "method"
-  ],
-  [
-    "src/autocomposer-logic.js~autocomposerlogic#convertasciiaccidentalstohtml",
-    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-method-convertAsciiAccidentalsToHtml",
-    "src/autocomposer-logic.js~AutoComposerLogic#convertAsciiAccidentalsToHtml",
-    "method"
-  ],
-  [
-    "src/autocomposer-logic.js~autocomposerlogic#convertasciiaccidentalstotext",
-    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-method-convertAsciiAccidentalsToText",
-    "src/autocomposer-logic.js~AutoComposerLogic#convertAsciiAccidentalsToText",
-    "method"
-  ],
-  [
-    "src/autocomposer-logic.js~autocomposerlogic#filtermelodyrange",
-    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-method-filterMelodyRange",
-    "src/autocomposer-logic.js~AutoComposerLogic#filterMelodyRange",
-    "method"
-  ],
-  [
-    "src/autocomposer-logic.js~autocomposerlogic#filterrepetition",
-    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-method-filterRepetition",
-    "src/autocomposer-logic.js~AutoComposerLogic#filterRepetition",
-    "method"
-  ],
-  [
-    "src/autocomposer-logic.js~autocomposerlogic#getchorddictionary",
-    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-method-getChordDictionary",
-    "src/autocomposer-logic.js~AutoComposerLogic#getChordDictionary",
-    "method"
-  ],
-  [
-    "src/autocomposer-logic.js~autocomposerlogic#isvalidtext",
-    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-method-isValidText",
-    "src/autocomposer-logic.js~AutoComposerLogic#isValidText",
-    "method"
-  ],
-  [
-    "src/autocomposer-melody.js",
-    "file/src/autocomposer-melody.js.html",
-    "src/autocomposer-melody.js",
-    "file"
-  ],
-  [
-    "src/autocomposer-melody.js~autocomposermelody#buildsimpleaccompaniment",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-buildSimpleAccompaniment",
-    "src/autocomposer-melody.js~AutoComposerMelody#buildSimpleAccompaniment",
-    "method"
-  ],
-  [
-    "src/autocomposer-melody.js~autocomposermelody#buildsimplemelodies",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-method-buildSimpleMelodies",
-    "src/autocomposer-melody.js~AutoComposerMelody#buildSimpleMelodies",
-    "method"
-  ],
-  [
-    "src/autocomposer-melody.js~autocomposermelody#constructor",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-constructor-constructor",
-    "src/autocomposer-melody.js~AutoComposerMelody#constructor",
-    "method"
-  ],
-  [
-    "src/autocomposer-melody.js~autocomposermelody#lowerlimit",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-member-lowerLimit",
-    "src/autocomposer-melody.js~AutoComposerMelody#lowerLimit",
-    "member"
-  ],
-  [
-    "src/autocomposer-melody.js~autocomposermelody#upperlimit",
-    "class/src/autocomposer-melody.js~AutoComposerMelody.html#instance-member-upperLimit",
-    "src/autocomposer-melody.js~AutoComposerMelody#upperLimit",
-    "member"
-  ],
-  [
-    "src/autocomposer-midi-player.js",
-    "file/src/autocomposer-midi-player.js.html",
-    "src/autocomposer-midi-player.js",
-    "file"
-  ],
-  [
-    "src/autocomposer-midi-player.js~autocomposermidiplayer#audiocontext",
-    "class/src/autocomposer-midi-player.js~AutoComposerMidiPlayer.html#instance-member-audioContext",
-    "src/autocomposer-midi-player.js~AutoComposerMidiPlayer#audioContext",
-    "member"
-  ],
-  [
-    "src/autocomposer-midi-player.js~autocomposermidiplayer#constructor",
-    "class/src/autocomposer-midi-player.js~AutoComposerMidiPlayer.html#instance-constructor-constructor",
-    "src/autocomposer-midi-player.js~AutoComposerMidiPlayer#constructor",
-    "method"
-  ],
-  [
-    "src/autocomposer-midi-player.js~autocomposermidiplayer#initialized",
-    "class/src/autocomposer-midi-player.js~AutoComposerMidiPlayer.html#instance-member-initialized",
-    "src/autocomposer-midi-player.js~AutoComposerMidiPlayer#initialized",
-    "member"
-  ],
-  [
-    "src/autocomposer-midi-player.js~autocomposermidiplayer#instruments",
-    "class/src/autocomposer-midi-player.js~AutoComposerMidiPlayer.html#instance-member-instruments",
-    "src/autocomposer-midi-player.js~AutoComposerMidiPlayer#instruments",
-    "member"
-  ],
-  [
-    "src/autocomposer-midi-player.js~autocomposermidiplayer#numinstrumentsinit",
-    "class/src/autocomposer-midi-player.js~AutoComposerMidiPlayer.html#instance-member-numInstrumentsInit",
-    "src/autocomposer-midi-player.js~AutoComposerMidiPlayer#numInstrumentsInit",
-    "member"
-  ],
-  [
-    "src/autocomposer-midi-player.js~autocomposermidiplayer#playmelodysolo",
-    "class/src/autocomposer-midi-player.js~AutoComposerMidiPlayer.html#instance-method-playMelodySolo",
-    "src/autocomposer-midi-player.js~AutoComposerMidiPlayer#playMelodySolo",
-    "method"
-  ],
-  [
-    "src/autocomposer-midi-player.js~autocomposermidiplayer#playmelodywithaccompaniment",
-    "class/src/autocomposer-midi-player.js~AutoComposerMidiPlayer.html#instance-method-playMelodyWithAccompaniment",
-    "src/autocomposer-midi-player.js~AutoComposerMidiPlayer#playMelodyWithAccompaniment",
-    "method"
-  ],
-  [
-    "src/autocomposer-midi-player.js~autocomposermidiplayer#playbacklocked",
-    "class/src/autocomposer-midi-player.js~AutoComposerMidiPlayer.html#instance-member-playbackLocked",
-    "src/autocomposer-midi-player.js~AutoComposerMidiPlayer#playbackLocked",
-    "member"
-  ],
-  [
-    "src/autocomposer-midi-player.js~autocomposermidiplayer#player",
-    "class/src/autocomposer-midi-player.js~AutoComposerMidiPlayer.html#instance-member-player",
-    "src/autocomposer-midi-player.js~AutoComposerMidiPlayer#player",
-    "member"
-  ],
-  [
-    "src/autocomposer-midi-player.js~autocomposermidiplayer#stopplayback",
-    "class/src/autocomposer-midi-player.js~AutoComposerMidiPlayer.html#instance-method-stopPlayback",
-    "src/autocomposer-midi-player.js~AutoComposerMidiPlayer#stopPlayback",
-    "method"
-  ],
-  [
-    "src/autocomposer-midi-writer.js",
-    "file/src/autocomposer-midi-writer.js.html",
-    "src/autocomposer-midi-writer.js",
-    "file"
-  ],
-  [
-    "src/autocomposer-midi-writer.js~autocomposermidiwriter#buildmelodymidi",
-    "class/src/autocomposer-midi-writer.js~AutoComposerMidiWriter.html#instance-method-buildMelodyMidi",
-    "src/autocomposer-midi-writer.js~AutoComposerMidiWriter#buildMelodyMidi",
-    "method"
-  ],
-  [
-    "src/autocomposer-midi-writer.js~autocomposermidiwriter#buildmelodymidiwithaccompaniment",
-    "class/src/autocomposer-midi-writer.js~AutoComposerMidiWriter.html#instance-method-buildMelodyMidiWithAccompaniment",
-    "src/autocomposer-midi-writer.js~AutoComposerMidiWriter#buildMelodyMidiWithAccompaniment",
-    "method"
-  ],
-  [
-    "src/autocomposer-midi-writer.js~autocomposermidiwriter#constructor",
-    "class/src/autocomposer-midi-writer.js~AutoComposerMidiWriter.html#instance-constructor-constructor",
-    "src/autocomposer-midi-writer.js~AutoComposerMidiWriter#constructor",
-    "method"
-  ],
-  [
     "src/browser-build.js",
     "file/src/browser-build.js.html",
     "src/browser-build.js",
@@ -792,46 +618,226 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/melody-unit.js",
-    "file/src/melody-unit.js.html",
-    "src/melody-unit.js",
+    "src/constants.js",
+    "file/src/constants.js.html",
+    "src/constants.js",
     "file"
   ],
   [
-    "src/melody-unit.js~melodyunit#chordprogression",
-    "class/src/melody-unit.js~MelodyUnit.html#instance-member-chordProgression",
-    "src/melody-unit.js~MelodyUnit#chordProgression",
-    "member"
+    "src/logic.js",
+    "file/src/logic.js.html",
+    "src/logic.js",
+    "file"
   ],
   [
-    "src/melody-unit.js~melodyunit#constructor",
-    "class/src/melody-unit.js~MelodyUnit.html#instance-constructor-constructor",
-    "src/melody-unit.js~MelodyUnit#constructor",
+    "src/logic.js~autocomposerlogic#convertaccidentalstoascii",
+    "class/src/logic.js~AutoComposerLogic.html#instance-method-convertAccidentalsToAscii",
+    "src/logic.js~AutoComposerLogic#convertAccidentalsToAscii",
     "method"
   ],
   [
-    "src/melody-unit.js~melodyunit#melodynotes",
-    "class/src/melody-unit.js~MelodyUnit.html#instance-member-melodyNotes",
-    "src/melody-unit.js~MelodyUnit#melodyNotes",
+    "src/logic.js~autocomposerlogic#convertasciiaccidentalstohtml",
+    "class/src/logic.js~AutoComposerLogic.html#instance-method-convertAsciiAccidentalsToHtml",
+    "src/logic.js~AutoComposerLogic#convertAsciiAccidentalsToHtml",
+    "method"
+  ],
+  [
+    "src/logic.js~autocomposerlogic#convertasciiaccidentalstotext",
+    "class/src/logic.js~AutoComposerLogic.html#instance-method-convertAsciiAccidentalsToText",
+    "src/logic.js~AutoComposerLogic#convertAsciiAccidentalsToText",
+    "method"
+  ],
+  [
+    "src/logic.js~autocomposerlogic#filtermelodyrange",
+    "class/src/logic.js~AutoComposerLogic.html#instance-method-filterMelodyRange",
+    "src/logic.js~AutoComposerLogic#filterMelodyRange",
+    "method"
+  ],
+  [
+    "src/logic.js~autocomposerlogic#filterrepetition",
+    "class/src/logic.js~AutoComposerLogic.html#instance-method-filterRepetition",
+    "src/logic.js~AutoComposerLogic#filterRepetition",
+    "method"
+  ],
+  [
+    "src/logic.js~autocomposerlogic#getchorddictionary",
+    "class/src/logic.js~AutoComposerLogic.html#instance-method-getChordDictionary",
+    "src/logic.js~AutoComposerLogic#getChordDictionary",
+    "method"
+  ],
+  [
+    "src/logic.js~autocomposerlogic#isvalidtext",
+    "class/src/logic.js~AutoComposerLogic.html#instance-method-isValidText",
+    "src/logic.js~AutoComposerLogic#isValidText",
+    "method"
+  ],
+  [
+    "src/melody-data.js",
+    "file/src/melody-data.js.html",
+    "src/melody-data.js",
+    "file"
+  ],
+  [
+    "src/melody-data.js~melodydata#chordprogression",
+    "class/src/melody-data.js~MelodyData.html#instance-member-chordProgression",
+    "src/melody-data.js~MelodyData#chordProgression",
     "member"
   ],
   [
-    "src/melody-unit.js~melodyunit#melodystring",
-    "class/src/melody-unit.js~MelodyUnit.html#instance-member-melodyString",
-    "src/melody-unit.js~MelodyUnit#melodyString",
+    "src/melody-data.js~melodydata#constructor",
+    "class/src/melody-data.js~MelodyData.html#instance-constructor-constructor",
+    "src/melody-data.js~MelodyData#constructor",
+    "method"
+  ],
+  [
+    "src/melody-data.js~melodydata#melodynotes",
+    "class/src/melody-data.js~MelodyData.html#instance-member-melodyNotes",
+    "src/melody-data.js~MelodyData#melodyNotes",
     "member"
   ],
   [
-    "src/melody-unit.js~melodyunit#range",
-    "class/src/melody-unit.js~MelodyUnit.html#instance-member-range",
-    "src/melody-unit.js~MelodyUnit#range",
+    "src/melody-data.js~melodydata#melodystring",
+    "class/src/melody-data.js~MelodyData.html#instance-member-melodyString",
+    "src/melody-data.js~MelodyData#melodyString",
     "member"
   ],
   [
-    "src/melody-unit.js~melodyunit#smoothness",
-    "class/src/melody-unit.js~MelodyUnit.html#instance-member-smoothness",
-    "src/melody-unit.js~MelodyUnit#smoothness",
+    "src/melody-data.js~melodydata#range",
+    "class/src/melody-data.js~MelodyData.html#instance-member-range",
+    "src/melody-data.js~MelodyData#range",
     "member"
+  ],
+  [
+    "src/melody-data.js~melodydata#smoothness",
+    "class/src/melody-data.js~MelodyData.html#instance-member-smoothness",
+    "src/melody-data.js~MelodyData#smoothness",
+    "member"
+  ],
+  [
+    "src/melody.js",
+    "file/src/melody.js.html",
+    "src/melody.js",
+    "file"
+  ],
+  [
+    "src/melody.js~autocomposermelody#buildsimpleaccompaniment",
+    "class/src/melody.js~AutoComposerMelody.html#instance-method-buildSimpleAccompaniment",
+    "src/melody.js~AutoComposerMelody#buildSimpleAccompaniment",
+    "method"
+  ],
+  [
+    "src/melody.js~autocomposermelody#buildsimplemelodies",
+    "class/src/melody.js~AutoComposerMelody.html#instance-method-buildSimpleMelodies",
+    "src/melody.js~AutoComposerMelody#buildSimpleMelodies",
+    "method"
+  ],
+  [
+    "src/melody.js~autocomposermelody#constructor",
+    "class/src/melody.js~AutoComposerMelody.html#instance-constructor-constructor",
+    "src/melody.js~AutoComposerMelody#constructor",
+    "method"
+  ],
+  [
+    "src/melody.js~autocomposermelody#lowerlimit",
+    "class/src/melody.js~AutoComposerMelody.html#instance-member-lowerLimit",
+    "src/melody.js~AutoComposerMelody#lowerLimit",
+    "member"
+  ],
+  [
+    "src/melody.js~autocomposermelody#upperlimit",
+    "class/src/melody.js~AutoComposerMelody.html#instance-member-upperLimit",
+    "src/melody.js~AutoComposerMelody#upperLimit",
+    "member"
+  ],
+  [
+    "src/midi-player.js",
+    "file/src/midi-player.js.html",
+    "src/midi-player.js",
+    "file"
+  ],
+  [
+    "src/midi-player.js~autocomposermidiplayer#audiocontext",
+    "class/src/midi-player.js~AutoComposerMidiPlayer.html#instance-member-audioContext",
+    "src/midi-player.js~AutoComposerMidiPlayer#audioContext",
+    "member"
+  ],
+  [
+    "src/midi-player.js~autocomposermidiplayer#constructor",
+    "class/src/midi-player.js~AutoComposerMidiPlayer.html#instance-constructor-constructor",
+    "src/midi-player.js~AutoComposerMidiPlayer#constructor",
+    "method"
+  ],
+  [
+    "src/midi-player.js~autocomposermidiplayer#initialized",
+    "class/src/midi-player.js~AutoComposerMidiPlayer.html#instance-member-initialized",
+    "src/midi-player.js~AutoComposerMidiPlayer#initialized",
+    "member"
+  ],
+  [
+    "src/midi-player.js~autocomposermidiplayer#instruments",
+    "class/src/midi-player.js~AutoComposerMidiPlayer.html#instance-member-instruments",
+    "src/midi-player.js~AutoComposerMidiPlayer#instruments",
+    "member"
+  ],
+  [
+    "src/midi-player.js~autocomposermidiplayer#numinstrumentsinit",
+    "class/src/midi-player.js~AutoComposerMidiPlayer.html#instance-member-numInstrumentsInit",
+    "src/midi-player.js~AutoComposerMidiPlayer#numInstrumentsInit",
+    "member"
+  ],
+  [
+    "src/midi-player.js~autocomposermidiplayer#playmelodysolo",
+    "class/src/midi-player.js~AutoComposerMidiPlayer.html#instance-method-playMelodySolo",
+    "src/midi-player.js~AutoComposerMidiPlayer#playMelodySolo",
+    "method"
+  ],
+  [
+    "src/midi-player.js~autocomposermidiplayer#playmelodywithaccompaniment",
+    "class/src/midi-player.js~AutoComposerMidiPlayer.html#instance-method-playMelodyWithAccompaniment",
+    "src/midi-player.js~AutoComposerMidiPlayer#playMelodyWithAccompaniment",
+    "method"
+  ],
+  [
+    "src/midi-player.js~autocomposermidiplayer#playbacklocked",
+    "class/src/midi-player.js~AutoComposerMidiPlayer.html#instance-member-playbackLocked",
+    "src/midi-player.js~AutoComposerMidiPlayer#playbackLocked",
+    "member"
+  ],
+  [
+    "src/midi-player.js~autocomposermidiplayer#player",
+    "class/src/midi-player.js~AutoComposerMidiPlayer.html#instance-member-player",
+    "src/midi-player.js~AutoComposerMidiPlayer#player",
+    "member"
+  ],
+  [
+    "src/midi-player.js~autocomposermidiplayer#stopplayback",
+    "class/src/midi-player.js~AutoComposerMidiPlayer.html#instance-method-stopPlayback",
+    "src/midi-player.js~AutoComposerMidiPlayer#stopPlayback",
+    "method"
+  ],
+  [
+    "src/midi-writer.js",
+    "file/src/midi-writer.js.html",
+    "src/midi-writer.js",
+    "file"
+  ],
+  [
+    "src/midi-writer.js~autocomposermidiwriter#buildmelodymidi",
+    "class/src/midi-writer.js~AutoComposerMidiWriter.html#instance-method-buildMelodyMidi",
+    "src/midi-writer.js~AutoComposerMidiWriter#buildMelodyMidi",
+    "method"
+  ],
+  [
+    "src/midi-writer.js~autocomposermidiwriter#buildmelodymidiwithaccompaniment",
+    "class/src/midi-writer.js~AutoComposerMidiWriter.html#instance-method-buildMelodyMidiWithAccompaniment",
+    "src/midi-writer.js~AutoComposerMidiWriter#buildMelodyMidiWithAccompaniment",
+    "method"
+  ],
+  [
+    "src/midi-writer.js~autocomposermidiwriter#constructor",
+    "class/src/midi-writer.js~AutoComposerMidiWriter.html#instance-constructor-constructor",
+    "src/midi-writer.js~AutoComposerMidiWriter#constructor",
+    "method"
   ],
   [
     "test/autocomposer-logic.js",

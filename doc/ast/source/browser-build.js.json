@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 447,
+  "end": 382,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 447,
+    "end": 382,
     "loc": {
       "start": {
         "line": 1,
@@ -166,7 +166,7 @@
       {
         "type": "ExpressionStatement",
         "start": 53,
-        "end": 110,
+        "end": 97,
         "loc": {
           "start": {
             "line": 3,
@@ -174,13 +174,13 @@
           },
           "end": {
             "line": 3,
-            "column": 57
+            "column": 44
           }
         },
         "expression": {
           "type": "AssignmentExpression",
           "start": 53,
-          "end": 109,
+          "end": 96,
           "loc": {
             "start": {
               "line": 3,
@@ -188,7 +188,7 @@
             },
             "end": {
               "line": 3,
-              "column": 56
+              "column": 43
             }
           },
           "operator": "=",
@@ -245,7 +245,7 @@
           "right": {
             "type": "CallExpression",
             "start": 77,
-            "end": 109,
+            "end": 96,
             "loc": {
               "start": {
                 "line": 3,
@@ -253,7 +253,7 @@
               },
               "end": {
                 "line": 3,
-                "column": 56
+                "column": 43
               }
             },
             "callee": {
@@ -277,7 +277,7 @@
               {
                 "type": "StringLiteral",
                 "start": 85,
-                "end": 108,
+                "end": 95,
                 "loc": {
                   "start": {
                     "line": 3,
@@ -285,14 +285,14 @@
                   },
                   "end": {
                     "line": 3,
-                    "column": 55
+                    "column": 42
                   }
                 },
                 "extra": {
-                  "rawValue": "./autocomposer-melody",
-                  "raw": "'./autocomposer-melody'"
+                  "rawValue": "./melody",
+                  "raw": "'./melody'"
                 },
-                "value": "./autocomposer-melody"
+                "value": "./melody"
               }
             ]
           }
@@ -300,8 +300,8 @@
       },
       {
         "type": "ExpressionStatement",
-        "start": 112,
-        "end": 178,
+        "start": 99,
+        "end": 152,
         "loc": {
           "start": {
             "line": 4,
@@ -309,13 +309,13 @@
           },
           "end": {
             "line": 4,
-            "column": 66
+            "column": 53
           }
         },
         "expression": {
           "type": "AssignmentExpression",
-          "start": 112,
-          "end": 177,
+          "start": 99,
+          "end": 151,
           "loc": {
             "start": {
               "line": 4,
@@ -323,14 +323,14 @@
             },
             "end": {
               "line": 4,
-              "column": 65
+              "column": 52
             }
           },
           "operator": "=",
           "left": {
             "type": "MemberExpression",
-            "start": 112,
-            "end": 137,
+            "start": 99,
+            "end": 124,
             "loc": {
               "start": {
                 "line": 4,
@@ -343,8 +343,8 @@
             },
             "object": {
               "type": "Identifier",
-              "start": 112,
-              "end": 126,
+              "start": 99,
+              "end": 113,
               "loc": {
                 "start": {
                   "line": 4,
@@ -360,8 +360,8 @@
             },
             "property": {
               "type": "Identifier",
-              "start": 127,
-              "end": 137,
+              "start": 114,
+              "end": 124,
               "loc": {
                 "start": {
                   "line": 4,
@@ -379,8 +379,8 @@
           },
           "right": {
             "type": "CallExpression",
-            "start": 140,
-            "end": 177,
+            "start": 127,
+            "end": 151,
             "loc": {
               "start": {
                 "line": 4,
@@ -388,13 +388,13 @@
               },
               "end": {
                 "line": 4,
-                "column": 65
+                "column": 52
               }
             },
             "callee": {
               "type": "Identifier",
-              "start": 140,
-              "end": 147,
+              "start": 127,
+              "end": 134,
               "loc": {
                 "start": {
                   "line": 4,
@@ -411,8 +411,8 @@
             "arguments": [
               {
                 "type": "StringLiteral",
-                "start": 148,
-                "end": 176,
+                "start": 135,
+                "end": 150,
                 "loc": {
                   "start": {
                     "line": 4,
@@ -420,14 +420,14 @@
                   },
                   "end": {
                     "line": 4,
-                    "column": 64
+                    "column": 51
                   }
                 },
                 "extra": {
-                  "rawValue": "./autocomposer-midi-writer",
-                  "raw": "'./autocomposer-midi-writer'"
+                  "rawValue": "./midi-writer",
+                  "raw": "'./midi-writer'"
                 },
-                "value": "./autocomposer-midi-writer"
+                "value": "./midi-writer"
               }
             ]
           }
@@ -435,8 +435,8 @@
       },
       {
         "type": "ExpressionStatement",
-        "start": 180,
-        "end": 246,
+        "start": 154,
+        "end": 207,
         "loc": {
           "start": {
             "line": 5,
@@ -444,13 +444,13 @@
           },
           "end": {
             "line": 5,
-            "column": 66
+            "column": 53
           }
         },
         "expression": {
           "type": "AssignmentExpression",
-          "start": 180,
-          "end": 245,
+          "start": 154,
+          "end": 206,
           "loc": {
             "start": {
               "line": 5,
@@ -458,14 +458,14 @@
             },
             "end": {
               "line": 5,
-              "column": 65
+              "column": 52
             }
           },
           "operator": "=",
           "left": {
             "type": "MemberExpression",
-            "start": 180,
-            "end": 205,
+            "start": 154,
+            "end": 179,
             "loc": {
               "start": {
                 "line": 5,
@@ -478,8 +478,8 @@
             },
             "object": {
               "type": "Identifier",
-              "start": 180,
-              "end": 194,
+              "start": 154,
+              "end": 168,
               "loc": {
                 "start": {
                   "line": 5,
@@ -495,8 +495,8 @@
             },
             "property": {
               "type": "Identifier",
-              "start": 195,
-              "end": 205,
+              "start": 169,
+              "end": 179,
               "loc": {
                 "start": {
                   "line": 5,
@@ -514,8 +514,8 @@
           },
           "right": {
             "type": "CallExpression",
-            "start": 208,
-            "end": 245,
+            "start": 182,
+            "end": 206,
             "loc": {
               "start": {
                 "line": 5,
@@ -523,13 +523,13 @@
               },
               "end": {
                 "line": 5,
-                "column": 65
+                "column": 52
               }
             },
             "callee": {
               "type": "Identifier",
-              "start": 208,
-              "end": 215,
+              "start": 182,
+              "end": 189,
               "loc": {
                 "start": {
                   "line": 5,
@@ -546,8 +546,8 @@
             "arguments": [
               {
                 "type": "StringLiteral",
-                "start": 216,
-                "end": 244,
+                "start": 190,
+                "end": 205,
                 "loc": {
                   "start": {
                     "line": 5,
@@ -555,14 +555,14 @@
                   },
                   "end": {
                     "line": 5,
-                    "column": 64
+                    "column": 51
                   }
                 },
                 "extra": {
-                  "rawValue": "./autocomposer-midi-player",
-                  "raw": "'./autocomposer-midi-player'"
+                  "rawValue": "./midi-player",
+                  "raw": "'./midi-player'"
                 },
-                "value": "./autocomposer-midi-player"
+                "value": "./midi-player"
               }
             ]
           }
@@ -570,8 +570,8 @@
       },
       {
         "type": "ExpressionStatement",
-        "start": 248,
-        "end": 303,
+        "start": 209,
+        "end": 251,
         "loc": {
           "start": {
             "line": 6,
@@ -579,13 +579,13 @@
           },
           "end": {
             "line": 6,
-            "column": 55
+            "column": 42
           }
         },
         "expression": {
           "type": "AssignmentExpression",
-          "start": 248,
-          "end": 302,
+          "start": 209,
+          "end": 250,
           "loc": {
             "start": {
               "line": 6,
@@ -593,14 +593,14 @@
             },
             "end": {
               "line": 6,
-              "column": 54
+              "column": 41
             }
           },
           "operator": "=",
           "left": {
             "type": "MemberExpression",
-            "start": 248,
-            "end": 268,
+            "start": 209,
+            "end": 229,
             "loc": {
               "start": {
                 "line": 6,
@@ -613,8 +613,8 @@
             },
             "object": {
               "type": "Identifier",
-              "start": 248,
-              "end": 262,
+              "start": 209,
+              "end": 223,
               "loc": {
                 "start": {
                   "line": 6,
@@ -630,8 +630,8 @@
             },
             "property": {
               "type": "Identifier",
-              "start": 263,
-              "end": 268,
+              "start": 224,
+              "end": 229,
               "loc": {
                 "start": {
                   "line": 6,
@@ -649,8 +649,8 @@
           },
           "right": {
             "type": "CallExpression",
-            "start": 271,
-            "end": 302,
+            "start": 232,
+            "end": 250,
             "loc": {
               "start": {
                 "line": 6,
@@ -658,13 +658,13 @@
               },
               "end": {
                 "line": 6,
-                "column": 54
+                "column": 41
               }
             },
             "callee": {
               "type": "Identifier",
-              "start": 271,
-              "end": 278,
+              "start": 232,
+              "end": 239,
               "loc": {
                 "start": {
                   "line": 6,
@@ -681,8 +681,8 @@
             "arguments": [
               {
                 "type": "StringLiteral",
-                "start": 279,
-                "end": 301,
+                "start": 240,
+                "end": 249,
                 "loc": {
                   "start": {
                     "line": 6,
@@ -690,14 +690,14 @@
                   },
                   "end": {
                     "line": 6,
-                    "column": 53
+                    "column": 40
                   }
                 },
                 "extra": {
-                  "rawValue": "./autocomposer-logic",
-                  "raw": "'./autocomposer-logic'"
+                  "rawValue": "./logic",
+                  "raw": "'./logic'"
                 },
-                "value": "./autocomposer-logic"
+                "value": "./logic"
               }
             ]
           }
@@ -705,8 +705,8 @@
       },
       {
         "type": "ExpressionStatement",
-        "start": 305,
-        "end": 368,
+        "start": 253,
+        "end": 303,
         "loc": {
           "start": {
             "line": 7,
@@ -714,13 +714,13 @@
           },
           "end": {
             "line": 7,
-            "column": 63
+            "column": 50
           }
         },
         "expression": {
           "type": "AssignmentExpression",
-          "start": 305,
-          "end": 367,
+          "start": 253,
+          "end": 302,
           "loc": {
             "start": {
               "line": 7,
@@ -728,14 +728,14 @@
             },
             "end": {
               "line": 7,
-              "column": 62
+              "column": 49
             }
           },
           "operator": "=",
           "left": {
             "type": "MemberExpression",
-            "start": 305,
-            "end": 329,
+            "start": 253,
+            "end": 277,
             "loc": {
               "start": {
                 "line": 7,
@@ -748,8 +748,8 @@
             },
             "object": {
               "type": "Identifier",
-              "start": 305,
-              "end": 319,
+              "start": 253,
+              "end": 267,
               "loc": {
                 "start": {
                   "line": 7,
@@ -765,8 +765,8 @@
             },
             "property": {
               "type": "Identifier",
-              "start": 320,
-              "end": 329,
+              "start": 268,
+              "end": 277,
               "loc": {
                 "start": {
                   "line": 7,
@@ -784,8 +784,8 @@
           },
           "right": {
             "type": "CallExpression",
-            "start": 332,
-            "end": 367,
+            "start": 280,
+            "end": 302,
             "loc": {
               "start": {
                 "line": 7,
@@ -793,13 +793,13 @@
               },
               "end": {
                 "line": 7,
-                "column": 62
+                "column": 49
               }
             },
             "callee": {
               "type": "Identifier",
-              "start": 332,
-              "end": 339,
+              "start": 280,
+              "end": 287,
               "loc": {
                 "start": {
                   "line": 7,
@@ -816,8 +816,8 @@
             "arguments": [
               {
                 "type": "StringLiteral",
-                "start": 340,
-                "end": 366,
+                "start": 288,
+                "end": 301,
                 "loc": {
                   "start": {
                     "line": 7,
@@ -825,14 +825,14 @@
                   },
                   "end": {
                     "line": 7,
-                    "column": 61
+                    "column": 48
                   }
                 },
                 "extra": {
-                  "rawValue": "./autocomposer-constants",
-                  "raw": "'./autocomposer-constants'"
+                  "rawValue": "./constants",
+                  "raw": "'./constants'"
                 },
-                "value": "./autocomposer-constants"
+                "value": "./constants"
               }
             ]
           }
@@ -840,8 +840,8 @@
       },
       {
         "type": "ExpressionStatement",
-        "start": 372,
-        "end": 411,
+        "start": 307,
+        "end": 346,
         "loc": {
           "start": {
             "line": 9,
@@ -854,8 +854,8 @@
         },
         "expression": {
           "type": "AssignmentExpression",
-          "start": 372,
-          "end": 410,
+          "start": 307,
+          "end": 345,
           "loc": {
             "start": {
               "line": 9,
@@ -869,8 +869,8 @@
           "operator": "=",
           "left": {
             "type": "MemberExpression",
-            "start": 372,
-            "end": 393,
+            "start": 307,
+            "end": 328,
             "loc": {
               "start": {
                 "line": 9,
@@ -883,8 +883,8 @@
             },
             "object": {
               "type": "Identifier",
-              "start": 372,
-              "end": 378,
+              "start": 307,
+              "end": 313,
               "loc": {
                 "start": {
                   "line": 9,
@@ -900,8 +900,8 @@
             },
             "property": {
               "type": "Identifier",
-              "start": 379,
-              "end": 393,
+              "start": 314,
+              "end": 328,
               "loc": {
                 "start": {
                   "line": 9,
@@ -919,8 +919,8 @@
           },
           "right": {
             "type": "Identifier",
-            "start": 396,
-            "end": 410,
+            "start": 331,
+            "end": 345,
             "loc": {
               "start": {
                 "line": 9,
@@ -938,8 +938,8 @@
       },
       {
         "type": "Identifier",
-        "start": 415,
-        "end": 445,
+        "start": 350,
+        "end": 380,
         "loc": {
           "start": {
             "line": 11,
@@ -952,8 +952,8 @@
         },
         "declaration": {
           "type": "Identifier",
-          "start": 430,
-          "end": 444,
+          "start": 365,
+          "end": 379,
           "loc": {
             "start": {
               "line": 11,
@@ -973,8 +973,8 @@
       },
       {
         "type": "ExportDefaultDeclaration",
-        "start": 415,
-        "end": 445,
+        "start": 350,
+        "end": 380,
         "loc": {
           "start": {
             "line": 11,
@@ -1556,9 +1556,9 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "./autocomposer-melody",
+      "value": "./melody",
       "start": 85,
-      "end": 108,
+      "end": 95,
       "loc": {
         "start": {
           "line": 3,
@@ -1566,7 +1566,7 @@
         },
         "end": {
           "line": 3,
-          "column": 55
+          "column": 42
         }
       }
     },
@@ -1582,16 +1582,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 108,
-      "end": 109,
+      "start": 95,
+      "end": 96,
       "loc": {
         "start": {
           "line": 3,
-          "column": 55
+          "column": 42
         },
         "end": {
           "line": 3,
-          "column": 56
+          "column": 43
         }
       }
     },
@@ -1608,16 +1608,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 109,
-      "end": 110,
+      "start": 96,
+      "end": 97,
       "loc": {
         "start": {
           "line": 3,
-          "column": 56
+          "column": 43
         },
         "end": {
           "line": 3,
-          "column": 57
+          "column": 44
         }
       }
     },
@@ -1634,8 +1634,8 @@
         "binop": null
       },
       "value": "AutoComposerJS",
-      "start": 112,
-      "end": 126,
+      "start": 99,
+      "end": 113,
       "loc": {
         "start": {
           "line": 4,
@@ -1660,8 +1660,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 126,
-      "end": 127,
+      "start": 113,
+      "end": 114,
       "loc": {
         "start": {
           "line": 4,
@@ -1686,8 +1686,8 @@
         "binop": null
       },
       "value": "midiWriter",
-      "start": 127,
-      "end": 137,
+      "start": 114,
+      "end": 124,
       "loc": {
         "start": {
           "line": 4,
@@ -1713,8 +1713,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 138,
-      "end": 139,
+      "start": 125,
+      "end": 126,
       "loc": {
         "start": {
           "line": 4,
@@ -1739,8 +1739,8 @@
         "binop": null
       },
       "value": "require",
-      "start": 140,
-      "end": 147,
+      "start": 127,
+      "end": 134,
       "loc": {
         "start": {
           "line": 4,
@@ -1764,8 +1764,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 147,
-      "end": 148,
+      "start": 134,
+      "end": 135,
       "loc": {
         "start": {
           "line": 4,
@@ -1790,9 +1790,9 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "./autocomposer-midi-writer",
-      "start": 148,
-      "end": 176,
+      "value": "./midi-writer",
+      "start": 135,
+      "end": 150,
       "loc": {
         "start": {
           "line": 4,
@@ -1800,7 +1800,7 @@
         },
         "end": {
           "line": 4,
-          "column": 64
+          "column": 51
         }
       }
     },
@@ -1816,16 +1816,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 176,
-      "end": 177,
+      "start": 150,
+      "end": 151,
       "loc": {
         "start": {
           "line": 4,
-          "column": 64
+          "column": 51
         },
         "end": {
           "line": 4,
-          "column": 65
+          "column": 52
         }
       }
     },
@@ -1842,16 +1842,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 177,
-      "end": 178,
+      "start": 151,
+      "end": 152,
       "loc": {
         "start": {
           "line": 4,
-          "column": 65
+          "column": 52
         },
         "end": {
           "line": 4,
-          "column": 66
+          "column": 53
         }
       }
     },
@@ -1868,8 +1868,8 @@
         "binop": null
       },
       "value": "AutoComposerJS",
-      "start": 180,
-      "end": 194,
+      "start": 154,
+      "end": 168,
       "loc": {
         "start": {
           "line": 5,
@@ -1894,8 +1894,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 194,
-      "end": 195,
+      "start": 168,
+      "end": 169,
       "loc": {
         "start": {
           "line": 5,
@@ -1920,8 +1920,8 @@
         "binop": null
       },
       "value": "midiPlayer",
-      "start": 195,
-      "end": 205,
+      "start": 169,
+      "end": 179,
       "loc": {
         "start": {
           "line": 5,
@@ -1947,8 +1947,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 206,
-      "end": 207,
+      "start": 180,
+      "end": 181,
       "loc": {
         "start": {
           "line": 5,
@@ -1973,8 +1973,8 @@
         "binop": null
       },
       "value": "require",
-      "start": 208,
-      "end": 215,
+      "start": 182,
+      "end": 189,
       "loc": {
         "start": {
           "line": 5,
@@ -1998,8 +1998,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 215,
-      "end": 216,
+      "start": 189,
+      "end": 190,
       "loc": {
         "start": {
           "line": 5,
@@ -2024,9 +2024,9 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "./autocomposer-midi-player",
-      "start": 216,
-      "end": 244,
+      "value": "./midi-player",
+      "start": 190,
+      "end": 205,
       "loc": {
         "start": {
           "line": 5,
@@ -2034,7 +2034,7 @@
         },
         "end": {
           "line": 5,
-          "column": 64
+          "column": 51
         }
       }
     },
@@ -2050,16 +2050,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 244,
-      "end": 245,
+      "start": 205,
+      "end": 206,
       "loc": {
         "start": {
           "line": 5,
-          "column": 64
+          "column": 51
         },
         "end": {
           "line": 5,
-          "column": 65
+          "column": 52
         }
       }
     },
@@ -2076,16 +2076,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 245,
-      "end": 246,
+      "start": 206,
+      "end": 207,
       "loc": {
         "start": {
           "line": 5,
-          "column": 65
+          "column": 52
         },
         "end": {
           "line": 5,
-          "column": 66
+          "column": 53
         }
       }
     },
@@ -2102,8 +2102,8 @@
         "binop": null
       },
       "value": "AutoComposerJS",
-      "start": 248,
-      "end": 262,
+      "start": 209,
+      "end": 223,
       "loc": {
         "start": {
           "line": 6,
@@ -2128,8 +2128,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 262,
-      "end": 263,
+      "start": 223,
+      "end": 224,
       "loc": {
         "start": {
           "line": 6,
@@ -2154,8 +2154,8 @@
         "binop": null
       },
       "value": "logic",
-      "start": 263,
-      "end": 268,
+      "start": 224,
+      "end": 229,
       "loc": {
         "start": {
           "line": 6,
@@ -2181,8 +2181,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 269,
-      "end": 270,
+      "start": 230,
+      "end": 231,
       "loc": {
         "start": {
           "line": 6,
@@ -2207,8 +2207,8 @@
         "binop": null
       },
       "value": "require",
-      "start": 271,
-      "end": 278,
+      "start": 232,
+      "end": 239,
       "loc": {
         "start": {
           "line": 6,
@@ -2232,8 +2232,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 278,
-      "end": 279,
+      "start": 239,
+      "end": 240,
       "loc": {
         "start": {
           "line": 6,
@@ -2258,9 +2258,9 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "./autocomposer-logic",
-      "start": 279,
-      "end": 301,
+      "value": "./logic",
+      "start": 240,
+      "end": 249,
       "loc": {
         "start": {
           "line": 6,
@@ -2268,7 +2268,7 @@
         },
         "end": {
           "line": 6,
-          "column": 53
+          "column": 40
         }
       }
     },
@@ -2284,16 +2284,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 301,
-      "end": 302,
+      "start": 249,
+      "end": 250,
       "loc": {
         "start": {
           "line": 6,
-          "column": 53
+          "column": 40
         },
         "end": {
           "line": 6,
-          "column": 54
+          "column": 41
         }
       }
     },
@@ -2310,16 +2310,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 302,
-      "end": 303,
+      "start": 250,
+      "end": 251,
       "loc": {
         "start": {
           "line": 6,
-          "column": 54
+          "column": 41
         },
         "end": {
           "line": 6,
-          "column": 55
+          "column": 42
         }
       }
     },
@@ -2336,8 +2336,8 @@
         "binop": null
       },
       "value": "AutoComposerJS",
-      "start": 305,
-      "end": 319,
+      "start": 253,
+      "end": 267,
       "loc": {
         "start": {
           "line": 7,
@@ -2362,8 +2362,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 319,
-      "end": 320,
+      "start": 267,
+      "end": 268,
       "loc": {
         "start": {
           "line": 7,
@@ -2388,8 +2388,8 @@
         "binop": null
       },
       "value": "constants",
-      "start": 320,
-      "end": 329,
+      "start": 268,
+      "end": 277,
       "loc": {
         "start": {
           "line": 7,
@@ -2415,8 +2415,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 330,
-      "end": 331,
+      "start": 278,
+      "end": 279,
       "loc": {
         "start": {
           "line": 7,
@@ -2441,8 +2441,8 @@
         "binop": null
       },
       "value": "require",
-      "start": 332,
-      "end": 339,
+      "start": 280,
+      "end": 287,
       "loc": {
         "start": {
           "line": 7,
@@ -2466,8 +2466,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 339,
-      "end": 340,
+      "start": 287,
+      "end": 288,
       "loc": {
         "start": {
           "line": 7,
@@ -2492,9 +2492,9 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "./autocomposer-constants",
-      "start": 340,
-      "end": 366,
+      "value": "./constants",
+      "start": 288,
+      "end": 301,
       "loc": {
         "start": {
           "line": 7,
@@ -2502,7 +2502,7 @@
         },
         "end": {
           "line": 7,
-          "column": 61
+          "column": 48
         }
       }
     },
@@ -2518,16 +2518,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 366,
-      "end": 367,
+      "start": 301,
+      "end": 302,
       "loc": {
         "start": {
           "line": 7,
-          "column": 61
+          "column": 48
         },
         "end": {
           "line": 7,
-          "column": 62
+          "column": 49
         }
       }
     },
@@ -2544,16 +2544,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 367,
-      "end": 368,
+      "start": 302,
+      "end": 303,
       "loc": {
         "start": {
           "line": 7,
-          "column": 62
+          "column": 49
         },
         "end": {
           "line": 7,
-          "column": 63
+          "column": 50
         }
       }
     },
@@ -2570,8 +2570,8 @@
         "binop": null
       },
       "value": "window",
-      "start": 372,
-      "end": 378,
+      "start": 307,
+      "end": 313,
       "loc": {
         "start": {
           "line": 9,
@@ -2596,8 +2596,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 378,
-      "end": 379,
+      "start": 313,
+      "end": 314,
       "loc": {
         "start": {
           "line": 9,
@@ -2622,8 +2622,8 @@
         "binop": null
       },
       "value": "AutoComposerJS",
-      "start": 379,
-      "end": 393,
+      "start": 314,
+      "end": 328,
       "loc": {
         "start": {
           "line": 9,
@@ -2649,8 +2649,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 394,
-      "end": 395,
+      "start": 329,
+      "end": 330,
       "loc": {
         "start": {
           "line": 9,
@@ -2675,8 +2675,8 @@
         "binop": null
       },
       "value": "AutoComposerJS",
-      "start": 396,
-      "end": 410,
+      "start": 331,
+      "end": 345,
       "loc": {
         "start": {
           "line": 9,
@@ -2701,8 +2701,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 410,
-      "end": 411,
+      "start": 345,
+      "end": 346,
       "loc": {
         "start": {
           "line": 9,
@@ -2729,8 +2729,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 415,
-      "end": 421,
+      "start": 350,
+      "end": 356,
       "loc": {
         "start": {
           "line": 11,
@@ -2757,8 +2757,8 @@
         "updateContext": null
       },
       "value": "default",
-      "start": 422,
-      "end": 429,
+      "start": 357,
+      "end": 364,
       "loc": {
         "start": {
           "line": 11,
@@ -2783,8 +2783,8 @@
         "binop": null
       },
       "value": "AutoComposerJS",
-      "start": 430,
-      "end": 444,
+      "start": 365,
+      "end": 379,
       "loc": {
         "start": {
           "line": 11,
@@ -2809,8 +2809,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 444,
-      "end": 445,
+      "start": 379,
+      "end": 380,
       "loc": {
         "start": {
           "line": 11,
@@ -2835,8 +2835,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 447,
-      "end": 447,
+      "start": 382,
+      "end": 382,
       "loc": {
         "start": {
           "line": 12,

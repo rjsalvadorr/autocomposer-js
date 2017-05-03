@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/autocomposer-melody.js | AutoComposer API Document</title>
+  <title data-ice="title">src/melody.js | AutoComposer API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -32,28 +32,28 @@
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-logic.js~AutoComposerLogic.html">AutoComposerLogic</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-melody.js~AutoComposerMelody.html">AutoComposerMelody</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-midi-player.js~AutoComposerMidiPlayer.html">AutoComposerMidiPlayer</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-midi-writer.js~AutoComposerMidiWriter.html">AutoComposerMidiWriter</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/melody-unit.js~MelodyUnit.html">MelodyUnit</a></span></span></li>
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/logic.js~AutoComposerLogic.html">AutoComposerLogic</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/melody-data.js~MelodyData.html">MelodyData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/melody.js~AutoComposerMelody.html">AutoComposerMelody</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/midi-player.js~AutoComposerMidiPlayer.html">AutoComposerMidiPlayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/midi-writer.js~AutoComposerMidiWriter.html">AutoComposerMidiWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoComposerJS">AutoComposerJS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AcConstants">AcConstants</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerLogic">autoComposerLogic</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerMelody">autoComposerMelody</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerMidiPlayer">autoComposerMidiPlayer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerMidiWriter">autoComposerMidiWriter</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoComposerJS">AutoComposerJS</a></span></span></li>
 </ul>
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">src/autocomposer-melody.js</h1>
+<div class="content" data-ice="content"><h1 data-ice="title">src/melody.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">var tonal = require(&apos;tonal&apos;);
 var ChordUnit = require(&apos;./chord-unit&apos;);
-var MelodyUnit = require(&apos;./melody-unit&apos;);
+var MelodyData = require(&apos;./melody-data&apos;);
 
-var AcLogic = require(&apos;./autocomposer-logic&apos;);
-const AcConstants = require(&apos;./autocomposer-constants&apos;);
+var AcLogic = require(&apos;./logic&apos;);
+const AcConstants = require(&apos;./constants&apos;);
 
 /**
 * Creates melodies from a given chord progression
@@ -98,8 +98,8 @@ class AutoComposerMelody {
   }
 
     /**
-    * For a given MelodyUnit, get a simple accompaniment for it.
-    * @param {MelodyUnit} melodyUnit - melody that needs accompaniment
+    * For a given MelodyData, get a simple accompaniment for it.
+    * @param {MelodyData} melodyUnit - melody that needs accompaniment
     * @return {string[]} - array of strings, each representing one or more notes to play under each melodic note.
     */
   buildSimpleAccompaniment(melodyUnit) {
@@ -124,9 +124,9 @@ class AutoComposerMelody {
   }
 
     /**
-    * For a given MelodyUnit, return a basic bass line consisting only of root notes.
+    * For a given MelodyData, return a basic bass line consisting only of root notes.
     * @private
-    * @param {MelodyUnit} melodyUnit - melody that needs a bassline
+    * @param {MelodyData} melodyUnit - melody that needs a bassline
     * @return {string[]} - array of strings, each one representing a bass note.
     */
   buildBasicBassLine(melodyUnit) {
@@ -186,15 +186,15 @@ class AutoComposerMelody {
   }
 
     /**
-    * For a given melody, creates a MelodyUnit object
+    * For a given melody, creates a MelodyData object
     * @private
     * @param {string[]} chordProgression - a chord progression
     * @param {string} melodyString - a melody (in scientific notation)
-    * @return {MelodyUnit}
+    * @return {MelodyData}
     */
-  _buildMelodyUnit(chordProgression, melodyString) {
+  _buildMelodyData(chordProgression, melodyString) {
     var arrMelody = melodyString.split(&quot; &quot;);
-    var melodyUnit = new MelodyUnit.MelodyUnit(chordProgression, arrMelody);
+    var melodyUnit = new MelodyData.MelodyData(chordProgression, arrMelody);
     return melodyUnit;
   }
 
@@ -206,14 +206,14 @@ class AutoComposerMelody {
     * @param {Object} options - if true, generated melodies will be sorted, with smoothest melodies coming first.
     * @param {boolean} options.sort - if true, generated melodies will be sorted, with smoothest melodies coming first.
     * @param {number} options.limit - limits the output to a set number.
-    * @return {MelodyUnit[]} - a list of ChordUnit objects.
+    * @return {MelodyData[]} - a list of ChordUnit objects.
     */
-  _buildMelodyUnitList(chordProgression, rawMelodies, options) {
+  _buildMelodyDataList(chordProgression, rawMelodies, options) {
     var melodyUnits = [];
     var haxThis = this;
 
     rawMelodies.forEach(function(rawMelody) {
-      melodyUnits.push(haxThis._buildMelodyUnit(chordProgression, rawMelody));
+      melodyUnits.push(haxThis._buildMelodyData(chordProgression, rawMelody));
     });
 
     if(options) {
@@ -348,7 +348,7 @@ class AutoComposerMelody {
     * @private
     * @deprecated
     * @param {string[]} chordProgression - chord progression given by user
-    * @return {MelodyUnit[]} - an array of notes (written in scientific pitch)
+    * @return {MelodyData[]} - an array of notes (written in scientific pitch)
     */
   buildAllMelodies(chordProgression) {
     var chordUnitList = this._buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);
@@ -357,7 +357,7 @@ class AutoComposerMelody {
     var melodyUnits = [];
     var haxThis = this;
     melodies.forEach(function(rawMelody) {
-      melodyUnits.push(haxThis._buildMelodyUnit(chordProgression, rawMelody));
+      melodyUnits.push(haxThis._buildMelodyData(chordProgression, rawMelody));
     });
 
     return melodyUnits;
@@ -385,7 +385,7 @@ class AutoComposerMelody {
     * @param {Object} [options.raw] - if true, returns output as strings (default = false)
     * @param {Object} [options.limit] - if false, returns all the generated melodies, not just the top 100 (default = true)
     * @param {Object} [options.filter] - if false, returns melodies that are considered too &quot;ugly&quot; for the default process. (default = true)
-    * @return {MelodyUnit[]} - an array of MelodyUnits
+    * @return {MelodyData[]} - an array of MelodyDatas
     */
   buildSimpleMelodies(chordProgression, options) {
     // TODO - change the input to accept both {string} and {string[]}
@@ -419,7 +419,7 @@ class AutoComposerMelody {
       return rawMelodies;
     }
 
-    melodyUnits = this._buildMelodyUnitList(chordProgression, rawMelodies, {sort: sortOption, limit: limitOption});
+    melodyUnits = this._buildMelodyDataList(chordProgression, rawMelodies, {sort: sortOption, limit: limitOption});
     return melodyUnits;
   }
 

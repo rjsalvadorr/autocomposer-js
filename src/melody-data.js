@@ -4,7 +4,7 @@ var range = require('tonal-range')
 * Represents a melody and associated metadata.
 * @public
 */
-class MelodyUnit {
+class MelodyData {
     /**
     * @param {string[]} chordProgression - array of chord symbols
     * @param {string[]} melodyNotes - array of notes in the melody
@@ -58,4 +58,4 @@ class MelodyUnit {
 
 }
 
-exports.MelodyUnit = MelodyUnit;
+exports.MelodyData = MelodyData;

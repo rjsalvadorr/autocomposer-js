@@ -4,8 +4,8 @@ const MidiPlayer = require('midi-player-js');
 const SoundfontPlayer = require('soundfont-player');
 const tonalNote = require('tonal-note');
 
-const AcMidiWriter = require('./autocomposer-midi-writer');
-const AcConstants = require('./autocomposer-constants');
+const AcMidiWriter = require('./midi-writer');
+const AcConstants = require('./constants');
 const INSTRUMENT_DATA = AcConstants.instrumentData;
 
 /**
@@ -29,17 +29,35 @@ class AutoComposerMidiPlayer {
 
     // is this kind of scope hackery necessary?!
     var haxThis = this;
-    var currentInstrument;
+    var currentInstrument, sfOptions, numLowerLimit = 0, numUpperLimit = 0, instrNotes;
 
     for (var instrumentRole in INSTRUMENT_DATA) {
       // initialize each instrument
       if(typeof INSTRUMENT_DATA[instrumentRole] !== "function") {
-        Soundfont.instrument(this.audioContext, INSTRUMENT_DATA[instrumentRole].name, {soundfont: 'FluidR3_GM'}).then(function (sfInstrument) {
+        instrNotes = [];
+        numLowerLimit = tonalNote.midi(INSTRUMENT_DATA[instrumentRole].lowerLimit);
+        numUpperLimit = tonalNote.midi(INSTRUMENT_DATA[instrumentRole].upperLimit);
+
+        for(var midiCode = numLowerLimit; midiCode <= numUpperLimit; midiCode++) {
+          // Specifies available notes for playback on this instrument.
+          // There's no sense loading notes that this instrument would never play!
+          instrNotes.push(midiCode);
+        }
+
+        sfOptions = {
+          soundfont: 'FluidR3_GM',
+          // TODO - find a way to limit the notes. This approach doesn't work for some reason...
+          // notes: instrNotes
+        };
+
+        Soundfont.instrument(this.audioContext, INSTRUMENT_DATA[instrumentRole].name, sfOptions).then(function (sfInstrument) {
           currentInstrument = INSTRUMENT_DATA.getByName(sfInstrument.name);
 
           haxThis.instruments[currentInstrument.role] = sfInstrument;
 
           haxThis.numInstrumentsInit++;
+
+          console.log("Instrument loaded!");
 
           if(haxThis.numInstrumentsInit === AcConstants.DEFAULT_NUM_INSTRUMENTS) {
             haxThis._finishLoad();

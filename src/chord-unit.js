@@ -1,5 +1,3 @@
-var AutoComposerLogic = require('../src/autocomposer-logic');
-
 /**
 * Represents some data built around a specific chord.
 * Has a reference to the next ChordUnit in the progression, and the chord tones that will be used in melody generation.

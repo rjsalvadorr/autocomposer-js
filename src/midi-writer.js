@@ -3,7 +3,7 @@ var MidiPlayer = require('midi-player-js');
 var SoundfontPlayer = require('soundfont-player');
 var tonalNote = require('tonal-note');
 
-const AcConstants = require('./autocomposer-constants');
+const AcConstants = require('./constants');
 const INSTRUMENT_DATA = AcConstants.instrumentData;
 
 /**

@@ -1,180 +1,58 @@
 {
   "type": "File",
   "start": 0,
-  "end": 899,
+  "end": 834,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 32,
+      "line": 30,
       "column": 0
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 899,
+    "end": 834,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 32,
+        "line": 30,
         "column": 0
       }
     },
     "sourceType": "module",
     "body": [
       {
-        "type": "VariableDeclaration",
-        "start": 0,
-        "end": 61,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 61
-          }
-        },
-        "declarations": [
-          {
-            "type": "VariableDeclarator",
-            "start": 4,
-            "end": 60,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 4
-              },
-              "end": {
-                "line": 1,
-                "column": 60
-              }
-            },
-            "id": {
-              "type": "Identifier",
-              "start": 4,
-              "end": 21,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 4
-                },
-                "end": {
-                  "line": 1,
-                  "column": 21
-                },
-                "identifierName": "AutoComposerLogic"
-              },
-              "name": "AutoComposerLogic"
-            },
-            "init": {
-              "type": "CallExpression",
-              "start": 24,
-              "end": 60,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 24
-                },
-                "end": {
-                  "line": 1,
-                  "column": 60
-                }
-              },
-              "callee": {
-                "type": "Identifier",
-                "start": 24,
-                "end": 31,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 24
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 31
-                  },
-                  "identifierName": "require"
-                },
-                "name": "require"
-              },
-              "arguments": [
-                {
-                  "type": "StringLiteral",
-                  "start": 32,
-                  "end": 59,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 32
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 59
-                    }
-                  },
-                  "extra": {
-                    "rawValue": "../src/autocomposer-logic",
-                    "raw": "'../src/autocomposer-logic'"
-                  },
-                  "value": "../src/autocomposer-logic"
-                }
-              ]
-            }
-          }
-        ],
-        "kind": "var",
-        "trailingComments": [
-          {
-            "type": "CommentBlock",
-            "value": "*\r\n* Represents some data built around a specific chord.\r\n* Has a reference to the next ChordUnit in the progression, and the chord tones that will be used in melody generation.\r\n* @private\r\n",
-            "start": 65,
-            "end": 260,
-            "loc": {
-              "start": {
-                "line": 3,
-                "column": 0
-              },
-              "end": {
-                "line": 7,
-                "column": 2
-              }
-            }
-          }
-        ]
-      },
-      {
         "type": "Identifier",
-        "start": 262,
-        "end": 872,
+        "start": 197,
+        "end": 807,
         "loc": {
           "start": {
-            "line": 8,
+            "line": 6,
             "column": 0
           },
           "end": {
-            "line": 29,
+            "line": 27,
             "column": 1
           }
         },
         "id": {
           "type": "Identifier",
-          "start": 268,
-          "end": 277,
+          "start": 203,
+          "end": 212,
           "loc": {
             "start": {
-              "line": 8,
+              "line": 6,
               "column": 6
             },
             "end": {
-              "line": 8,
+              "line": 6,
               "column": 15
             },
             "identifierName": "ChordUnit"
@@ -185,45 +63,45 @@
         "superClass": null,
         "body": {
           "type": "ClassBody",
-          "start": 278,
-          "end": 872,
+          "start": 213,
+          "end": 807,
           "loc": {
             "start": {
-              "line": 8,
+              "line": 6,
               "column": 16
             },
             "end": {
-              "line": 29,
+              "line": 27,
               "column": 1
             }
           },
           "body": [
             {
               "type": "ClassMethod",
-              "start": 481,
-              "end": 720,
+              "start": 416,
+              "end": 655,
               "loc": {
                 "start": {
-                  "line": 14,
+                  "line": 12,
                   "column": 2
                 },
                 "end": {
-                  "line": 21,
+                  "line": 19,
                   "column": 3
                 }
               },
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 481,
-                "end": 492,
+                "start": 416,
+                "end": 427,
                 "loc": {
                   "start": {
-                    "line": 14,
+                    "line": 12,
                     "column": 2
                   },
                   "end": {
-                    "line": 14,
+                    "line": 12,
                     "column": 13
                   },
                   "identifierName": "constructor"
@@ -240,15 +118,15 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 493,
-                  "end": 498,
+                  "start": 428,
+                  "end": 433,
                   "loc": {
                     "start": {
-                      "line": 14,
+                      "line": 12,
                       "column": 14
                     },
                     "end": {
-                      "line": 14,
+                      "line": 12,
                       "column": 19
                     },
                     "identifierName": "chord"
@@ -257,15 +135,15 @@
                 },
                 {
                   "type": "Identifier",
-                  "start": 500,
-                  "end": 510,
+                  "start": 435,
+                  "end": 445,
                   "loc": {
                     "start": {
-                      "line": 14,
+                      "line": 12,
                       "column": 21
                     },
                     "end": {
-                      "line": 14,
+                      "line": 12,
                       "column": 31
                     },
                     "identifierName": "chordTones"
@@ -274,15 +152,15 @@
                 },
                 {
                   "type": "Identifier",
-                  "start": 512,
-                  "end": 525,
+                  "start": 447,
+                  "end": 460,
                   "loc": {
                     "start": {
-                      "line": 14,
+                      "line": 12,
                       "column": 33
                     },
                     "end": {
-                      "line": 14,
+                      "line": 12,
                       "column": 46
                     },
                     "identifierName": "nextChordUnit"
@@ -292,23 +170,158 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 527,
-                "end": 720,
+                "start": 462,
+                "end": 655,
                 "loc": {
                   "start": {
-                    "line": 14,
+                    "line": 12,
                     "column": 48
                   },
                   "end": {
-                    "line": 21,
+                    "line": 19,
                     "column": 3
                   }
                 },
                 "body": [
                   {
                     "type": "ExpressionStatement",
-                    "start": 561,
-                    "end": 580,
+                    "start": 496,
+                    "end": 515,
+                    "loc": {
+                      "start": {
+                        "line": 14,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 14,
+                        "column": 23
+                      }
+                    },
+                    "expression": {
+                      "type": "AssignmentExpression",
+                      "start": 496,
+                      "end": 514,
+                      "loc": {
+                        "start": {
+                          "line": 14,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 14,
+                          "column": 22
+                        }
+                      },
+                      "operator": "=",
+                      "left": {
+                        "type": "MemberExpression",
+                        "start": 496,
+                        "end": 506,
+                        "loc": {
+                          "start": {
+                            "line": 14,
+                            "column": 4
+                          },
+                          "end": {
+                            "line": 14,
+                            "column": 14
+                          }
+                        },
+                        "object": {
+                          "type": "ThisExpression",
+                          "start": 496,
+                          "end": 500,
+                          "loc": {
+                            "start": {
+                              "line": 14,
+                              "column": 4
+                            },
+                            "end": {
+                              "line": 14,
+                              "column": 8
+                            }
+                          },
+                          "leadingComments": null
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "start": 501,
+                          "end": 506,
+                          "loc": {
+                            "start": {
+                              "line": 14,
+                              "column": 9
+                            },
+                            "end": {
+                              "line": 14,
+                              "column": 14
+                            },
+                            "identifierName": "chord"
+                          },
+                          "name": "chord"
+                        },
+                        "computed": false,
+                        "leadingComments": null
+                      },
+                      "right": {
+                        "type": "Identifier",
+                        "start": 509,
+                        "end": 514,
+                        "loc": {
+                          "start": {
+                            "line": 14,
+                            "column": 17
+                          },
+                          "end": {
+                            "line": 14,
+                            "column": 22
+                          },
+                          "identifierName": "chord"
+                        },
+                        "name": "chord"
+                      },
+                      "leadingComments": null
+                    },
+                    "leadingComments": [
+                      {
+                        "type": "CommentBlock",
+                        "value": "* @type {string} ",
+                        "start": 469,
+                        "end": 490,
+                        "loc": {
+                          "start": {
+                            "line": 13,
+                            "column": 4
+                          },
+                          "end": {
+                            "line": 13,
+                            "column": 25
+                          }
+                        }
+                      }
+                    ],
+                    "trailingComments": [
+                      {
+                        "type": "CommentBlock",
+                        "value": "* @type {string[]} ",
+                        "start": 521,
+                        "end": 544,
+                        "loc": {
+                          "start": {
+                            "line": 15,
+                            "column": 4
+                          },
+                          "end": {
+                            "line": 15,
+                            "column": 27
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 550,
+                    "end": 579,
                     "loc": {
                       "start": {
                         "line": 16,
@@ -316,13 +329,13 @@
                       },
                       "end": {
                         "line": 16,
-                        "column": 23
+                        "column": 33
                       }
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 561,
-                      "end": 579,
+                      "start": 550,
+                      "end": 578,
                       "loc": {
                         "start": {
                           "line": 16,
@@ -330,14 +343,14 @@
                         },
                         "end": {
                           "line": 16,
-                          "column": 22
+                          "column": 32
                         }
                       },
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 561,
-                        "end": 571,
+                        "start": 550,
+                        "end": 565,
                         "loc": {
                           "start": {
                             "line": 16,
@@ -345,13 +358,13 @@
                           },
                           "end": {
                             "line": 16,
-                            "column": 14
+                            "column": 19
                           }
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 561,
-                          "end": 565,
+                          "start": 550,
+                          "end": 554,
                           "loc": {
                             "start": {
                               "line": 16,
@@ -366,8 +379,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 566,
-                          "end": 571,
+                          "start": 555,
+                          "end": 565,
                           "loc": {
                             "start": {
                               "line": 16,
@@ -375,40 +388,40 @@
                             },
                             "end": {
                               "line": 16,
-                              "column": 14
+                              "column": 19
                             },
-                            "identifierName": "chord"
+                            "identifierName": "chordTones"
                           },
-                          "name": "chord"
+                          "name": "chordTones"
                         },
                         "computed": false,
                         "leadingComments": null
                       },
                       "right": {
                         "type": "Identifier",
-                        "start": 574,
-                        "end": 579,
+                        "start": 568,
+                        "end": 578,
                         "loc": {
                           "start": {
                             "line": 16,
-                            "column": 17
+                            "column": 22
                           },
                           "end": {
                             "line": 16,
-                            "column": 22
+                            "column": 32
                           },
-                          "identifierName": "chord"
+                          "identifierName": "chordTones"
                         },
-                        "name": "chord"
+                        "name": "chordTones"
                       },
                       "leadingComments": null
                     },
                     "leadingComments": [
                       {
                         "type": "CommentBlock",
-                        "value": "* @type {string} ",
-                        "start": 534,
-                        "end": 555,
+                        "value": "* @type {string[]} ",
+                        "start": 521,
+                        "end": 544,
                         "loc": {
                           "start": {
                             "line": 15,
@@ -416,7 +429,7 @@
                           },
                           "end": {
                             "line": 15,
-                            "column": 25
+                            "column": 27
                           }
                         }
                       }
@@ -424,8 +437,8 @@
                     "trailingComments": [
                       {
                         "type": "CommentBlock",
-                        "value": "* @type {string[]} ",
-                        "start": 586,
+                        "value": "* @type {ChordUnit} ",
+                        "start": 585,
                         "end": 609,
                         "loc": {
                           "start": {
@@ -434,7 +447,7 @@
                           },
                           "end": {
                             "line": 17,
-                            "column": 27
+                            "column": 28
                           }
                         }
                       }
@@ -443,7 +456,7 @@
                   {
                     "type": "ExpressionStatement",
                     "start": 615,
-                    "end": 644,
+                    "end": 650,
                     "loc": {
                       "start": {
                         "line": 18,
@@ -451,13 +464,13 @@
                       },
                       "end": {
                         "line": 18,
-                        "column": 33
+                        "column": 39
                       }
                     },
                     "expression": {
                       "type": "AssignmentExpression",
                       "start": 615,
-                      "end": 643,
+                      "end": 649,
                       "loc": {
                         "start": {
                           "line": 18,
@@ -465,14 +478,14 @@
                         },
                         "end": {
                           "line": 18,
-                          "column": 32
+                          "column": 38
                         }
                       },
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
                         "start": 615,
-                        "end": 630,
+                        "end": 633,
                         "loc": {
                           "start": {
                             "line": 18,
@@ -480,7 +493,7 @@
                           },
                           "end": {
                             "line": 18,
-                            "column": 19
+                            "column": 22
                           }
                         },
                         "object": {
@@ -502,7 +515,7 @@
                         "property": {
                           "type": "Identifier",
                           "start": 620,
-                          "end": 630,
+                          "end": 633,
                           "loc": {
                             "start": {
                               "line": 18,
@@ -510,141 +523,6 @@
                             },
                             "end": {
                               "line": 18,
-                              "column": 19
-                            },
-                            "identifierName": "chordTones"
-                          },
-                          "name": "chordTones"
-                        },
-                        "computed": false,
-                        "leadingComments": null
-                      },
-                      "right": {
-                        "type": "Identifier",
-                        "start": 633,
-                        "end": 643,
-                        "loc": {
-                          "start": {
-                            "line": 18,
-                            "column": 22
-                          },
-                          "end": {
-                            "line": 18,
-                            "column": 32
-                          },
-                          "identifierName": "chordTones"
-                        },
-                        "name": "chordTones"
-                      },
-                      "leadingComments": null
-                    },
-                    "leadingComments": [
-                      {
-                        "type": "CommentBlock",
-                        "value": "* @type {string[]} ",
-                        "start": 586,
-                        "end": 609,
-                        "loc": {
-                          "start": {
-                            "line": 17,
-                            "column": 4
-                          },
-                          "end": {
-                            "line": 17,
-                            "column": 27
-                          }
-                        }
-                      }
-                    ],
-                    "trailingComments": [
-                      {
-                        "type": "CommentBlock",
-                        "value": "* @type {ChordUnit} ",
-                        "start": 650,
-                        "end": 674,
-                        "loc": {
-                          "start": {
-                            "line": 19,
-                            "column": 4
-                          },
-                          "end": {
-                            "line": 19,
-                            "column": 28
-                          }
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "ExpressionStatement",
-                    "start": 680,
-                    "end": 715,
-                    "loc": {
-                      "start": {
-                        "line": 20,
-                        "column": 4
-                      },
-                      "end": {
-                        "line": 20,
-                        "column": 39
-                      }
-                    },
-                    "expression": {
-                      "type": "AssignmentExpression",
-                      "start": 680,
-                      "end": 714,
-                      "loc": {
-                        "start": {
-                          "line": 20,
-                          "column": 4
-                        },
-                        "end": {
-                          "line": 20,
-                          "column": 38
-                        }
-                      },
-                      "operator": "=",
-                      "left": {
-                        "type": "MemberExpression",
-                        "start": 680,
-                        "end": 698,
-                        "loc": {
-                          "start": {
-                            "line": 20,
-                            "column": 4
-                          },
-                          "end": {
-                            "line": 20,
-                            "column": 22
-                          }
-                        },
-                        "object": {
-                          "type": "ThisExpression",
-                          "start": 680,
-                          "end": 684,
-                          "loc": {
-                            "start": {
-                              "line": 20,
-                              "column": 4
-                            },
-                            "end": {
-                              "line": 20,
-                              "column": 8
-                            }
-                          },
-                          "leadingComments": null
-                        },
-                        "property": {
-                          "type": "Identifier",
-                          "start": 685,
-                          "end": 698,
-                          "loc": {
-                            "start": {
-                              "line": 20,
-                              "column": 9
-                            },
-                            "end": {
-                              "line": 20,
                               "column": 22
                             },
                             "identifierName": "nextChordUnit"
@@ -656,15 +534,15 @@
                       },
                       "right": {
                         "type": "Identifier",
-                        "start": 701,
-                        "end": 714,
+                        "start": 636,
+                        "end": 649,
                         "loc": {
                           "start": {
-                            "line": 20,
+                            "line": 18,
                             "column": 25
                           },
                           "end": {
-                            "line": 20,
+                            "line": 18,
                             "column": 38
                           },
                           "identifierName": "nextChordUnit"
@@ -677,15 +555,15 @@
                       {
                         "type": "CommentBlock",
                         "value": "* @type {ChordUnit} ",
-                        "start": 650,
-                        "end": 674,
+                        "start": 585,
+                        "end": 609,
                         "loc": {
                           "start": {
-                            "line": 19,
+                            "line": 17,
                             "column": 4
                           },
                           "end": {
-                            "line": 19,
+                            "line": 17,
                             "column": 28
                           }
                         }
@@ -700,15 +578,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\r\n    * @param {string} chord - chord symbol\r\n    * @param {string[]} chordTones - array of notes in the melody\r\n    * @param {ChordUnit} nextChordUnit - next ChordUnit in the chain\r\n    ",
-                  "start": 285,
-                  "end": 477,
+                  "start": 220,
+                  "end": 412,
                   "loc": {
                     "start": {
-                      "line": 9,
+                      "line": 7,
                       "column": 4
                     },
                     "end": {
-                      "line": 13,
+                      "line": 11,
                       "column": 6
                     }
                   }
@@ -718,15 +596,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\r\n    * @param {ChordUnit} next - the next ChordUnit in the chain.\r\n    ",
-                  "start": 728,
-                  "end": 805,
+                  "start": 663,
+                  "end": 740,
                   "loc": {
                     "start": {
-                      "line": 23,
+                      "line": 21,
                       "column": 4
                     },
                     "end": {
-                      "line": 25,
+                      "line": 23,
                       "column": 6
                     }
                   }
@@ -735,30 +613,30 @@
             },
             {
               "type": "ClassMethod",
-              "start": 809,
-              "end": 869,
+              "start": 744,
+              "end": 804,
               "loc": {
                 "start": {
-                  "line": 26,
+                  "line": 24,
                   "column": 2
                 },
                 "end": {
-                  "line": 28,
+                  "line": 26,
                   "column": 3
                 }
               },
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 809,
-                "end": 825,
+                "start": 744,
+                "end": 760,
                 "loc": {
                   "start": {
-                    "line": 26,
+                    "line": 24,
                     "column": 2
                   },
                   "end": {
-                    "line": 26,
+                    "line": 24,
                     "column": 18
                   },
                   "identifierName": "setNextChordUnit"
@@ -775,15 +653,15 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 826,
-                  "end": 830,
+                  "start": 761,
+                  "end": 765,
                   "loc": {
                     "start": {
-                      "line": 26,
+                      "line": 24,
                       "column": 19
                     },
                     "end": {
-                      "line": 26,
+                      "line": 24,
                       "column": 23
                     },
                     "identifierName": "next"
@@ -793,87 +671,87 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 832,
-                "end": 869,
+                "start": 767,
+                "end": 804,
                 "loc": {
                   "start": {
-                    "line": 26,
+                    "line": 24,
                     "column": 25
                   },
                   "end": {
-                    "line": 28,
+                    "line": 26,
                     "column": 3
                   }
                 },
                 "body": [
                   {
                     "type": "ExpressionStatement",
-                    "start": 839,
-                    "end": 864,
+                    "start": 774,
+                    "end": 799,
                     "loc": {
                       "start": {
-                        "line": 27,
+                        "line": 25,
                         "column": 4
                       },
                       "end": {
-                        "line": 27,
+                        "line": 25,
                         "column": 29
                       }
                     },
                     "expression": {
                       "type": "CallExpression",
-                      "start": 839,
-                      "end": 863,
+                      "start": 774,
+                      "end": 798,
                       "loc": {
                         "start": {
-                          "line": 27,
+                          "line": 25,
                           "column": 4
                         },
                         "end": {
-                          "line": 27,
+                          "line": 25,
                           "column": 28
                         }
                       },
                       "callee": {
                         "type": "MemberExpression",
-                        "start": 839,
-                        "end": 857,
+                        "start": 774,
+                        "end": 792,
                         "loc": {
                           "start": {
-                            "line": 27,
+                            "line": 25,
                             "column": 4
                           },
                           "end": {
-                            "line": 27,
+                            "line": 25,
                             "column": 22
                           }
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 839,
-                          "end": 843,
+                          "start": 774,
+                          "end": 778,
                           "loc": {
                             "start": {
-                              "line": 27,
+                              "line": 25,
                               "column": 4
                             },
                             "end": {
-                              "line": 27,
+                              "line": 25,
                               "column": 8
                             }
                           }
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 844,
-                          "end": 857,
+                          "start": 779,
+                          "end": 792,
                           "loc": {
                             "start": {
-                              "line": 27,
+                              "line": 25,
                               "column": 9
                             },
                             "end": {
-                              "line": 27,
+                              "line": 25,
                               "column": 22
                             },
                             "identifierName": "nextChordUnit"
@@ -885,15 +763,15 @@
                       "arguments": [
                         {
                           "type": "Identifier",
-                          "start": 858,
-                          "end": 862,
+                          "start": 793,
+                          "end": 797,
                           "loc": {
                             "start": {
-                              "line": 27,
+                              "line": 25,
                               "column": 23
                             },
                             "end": {
-                              "line": 27,
+                              "line": 25,
                               "column": 27
                             },
                             "identifierName": "next"
@@ -910,15 +788,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\r\n    * @param {ChordUnit} next - the next ChordUnit in the chain.\r\n    ",
-                  "start": 728,
-                  "end": 805,
+                  "start": 663,
+                  "end": 740,
                   "loc": {
                     "start": {
-                      "line": 23,
+                      "line": 21,
                       "column": 4
                     },
                     "end": {
-                      "line": 25,
+                      "line": 23,
                       "column": 6
                     }
                   }
@@ -933,15 +811,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 876,
-        "end": 897,
+        "start": 811,
+        "end": 832,
         "loc": {
           "start": {
-            "line": 31,
+            "line": 29,
             "column": 0
           },
           "end": {
-            "line": 31,
+            "line": 29,
             "column": 21
           }
         },
@@ -949,29 +827,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 885,
-            "end": 894,
+            "start": 820,
+            "end": 829,
             "loc": {
               "start": {
-                "line": 31,
+                "line": 29,
                 "column": 9
               },
               "end": {
-                "line": 31,
+                "line": 29,
                 "column": 18
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 885,
-              "end": 894,
+              "start": 820,
+              "end": 829,
               "loc": {
                 "start": {
-                  "line": 31,
+                  "line": 29,
                   "column": 9
                 },
                 "end": {
-                  "line": 31,
+                  "line": 29,
                   "column": 18
                 },
                 "identifierName": "ChordUnit"
@@ -980,15 +858,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 885,
-              "end": 894,
+              "start": 820,
+              "end": 829,
               "loc": {
                 "start": {
-                  "line": 31,
+                  "line": 29,
                   "column": 9
                 },
                 "end": {
-                  "line": 31,
+                  "line": 29,
                   "column": 18
                 },
                 "identifierName": "ChordUnit"
@@ -1001,43 +879,43 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 876,
-        "end": 897,
+        "start": 811,
+        "end": 832,
         "loc": {
           "start": {
-            "line": 31,
+            "line": 29,
             "column": 0
           },
           "end": {
-            "line": 31,
+            "line": 29,
             "column": 21
           }
         },
         "declaration": {
           "type": "ClassDeclaration",
-          "start": 262,
-          "end": 872,
+          "start": 197,
+          "end": 807,
           "loc": {
             "start": {
-              "line": 8,
+              "line": 6,
               "column": 0
             },
             "end": {
-              "line": 29,
+              "line": 27,
               "column": 1
             }
           },
           "id": {
             "type": "Identifier",
-            "start": 268,
-            "end": 277,
+            "start": 203,
+            "end": 212,
             "loc": {
               "start": {
-                "line": 8,
+                "line": 6,
                 "column": 6
               },
               "end": {
-                "line": 8,
+                "line": 6,
                 "column": 15
               },
               "identifierName": "ChordUnit"
@@ -1048,45 +926,45 @@
           "superClass": null,
           "body": {
             "type": "ClassBody",
-            "start": 278,
-            "end": 872,
+            "start": 213,
+            "end": 807,
             "loc": {
               "start": {
-                "line": 8,
+                "line": 6,
                 "column": 16
               },
               "end": {
-                "line": 29,
+                "line": 27,
                 "column": 1
               }
             },
             "body": [
               {
                 "type": "ClassMethod",
-                "start": 481,
-                "end": 720,
+                "start": 416,
+                "end": 655,
                 "loc": {
                   "start": {
-                    "line": 14,
+                    "line": 12,
                     "column": 2
                   },
                   "end": {
-                    "line": 21,
+                    "line": 19,
                     "column": 3
                   }
                 },
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 481,
-                  "end": 492,
+                  "start": 416,
+                  "end": 427,
                   "loc": {
                     "start": {
-                      "line": 14,
+                      "line": 12,
                       "column": 2
                     },
                     "end": {
-                      "line": 14,
+                      "line": 12,
                       "column": 13
                     },
                     "identifierName": "constructor"
@@ -1103,15 +981,15 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 493,
-                    "end": 498,
+                    "start": 428,
+                    "end": 433,
                     "loc": {
                       "start": {
-                        "line": 14,
+                        "line": 12,
                         "column": 14
                       },
                       "end": {
-                        "line": 14,
+                        "line": 12,
                         "column": 19
                       },
                       "identifierName": "chord"
@@ -1120,15 +998,15 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 500,
-                    "end": 510,
+                    "start": 435,
+                    "end": 445,
                     "loc": {
                       "start": {
-                        "line": 14,
+                        "line": 12,
                         "column": 21
                       },
                       "end": {
-                        "line": 14,
+                        "line": 12,
                         "column": 31
                       },
                       "identifierName": "chordTones"
@@ -1137,15 +1015,15 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 512,
-                    "end": 525,
+                    "start": 447,
+                    "end": 460,
                     "loc": {
                       "start": {
-                        "line": 14,
+                        "line": 12,
                         "column": 33
                       },
                       "end": {
-                        "line": 14,
+                        "line": 12,
                         "column": 46
                       },
                       "identifierName": "nextChordUnit"
@@ -1155,23 +1033,158 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 527,
-                  "end": 720,
+                  "start": 462,
+                  "end": 655,
                   "loc": {
                     "start": {
-                      "line": 14,
+                      "line": 12,
                       "column": 48
                     },
                     "end": {
-                      "line": 21,
+                      "line": 19,
                       "column": 3
                     }
                   },
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 561,
-                      "end": 580,
+                      "start": 496,
+                      "end": 515,
+                      "loc": {
+                        "start": {
+                          "line": 14,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 14,
+                          "column": 23
+                        }
+                      },
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "start": 496,
+                        "end": 514,
+                        "loc": {
+                          "start": {
+                            "line": 14,
+                            "column": 4
+                          },
+                          "end": {
+                            "line": 14,
+                            "column": 22
+                          }
+                        },
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "start": 496,
+                          "end": 506,
+                          "loc": {
+                            "start": {
+                              "line": 14,
+                              "column": 4
+                            },
+                            "end": {
+                              "line": 14,
+                              "column": 14
+                            }
+                          },
+                          "object": {
+                            "type": "ThisExpression",
+                            "start": 496,
+                            "end": 500,
+                            "loc": {
+                              "start": {
+                                "line": 14,
+                                "column": 4
+                              },
+                              "end": {
+                                "line": 14,
+                                "column": 8
+                              }
+                            },
+                            "leadingComments": null
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 501,
+                            "end": 506,
+                            "loc": {
+                              "start": {
+                                "line": 14,
+                                "column": 9
+                              },
+                              "end": {
+                                "line": 14,
+                                "column": 14
+                              },
+                              "identifierName": "chord"
+                            },
+                            "name": "chord"
+                          },
+                          "computed": false,
+                          "leadingComments": null
+                        },
+                        "right": {
+                          "type": "Identifier",
+                          "start": 509,
+                          "end": 514,
+                          "loc": {
+                            "start": {
+                              "line": 14,
+                              "column": 17
+                            },
+                            "end": {
+                              "line": 14,
+                              "column": 22
+                            },
+                            "identifierName": "chord"
+                          },
+                          "name": "chord"
+                        },
+                        "leadingComments": null
+                      },
+                      "leadingComments": [
+                        {
+                          "type": "CommentBlock",
+                          "value": "* @type {string} ",
+                          "start": 469,
+                          "end": 490,
+                          "loc": {
+                            "start": {
+                              "line": 13,
+                              "column": 4
+                            },
+                            "end": {
+                              "line": 13,
+                              "column": 25
+                            }
+                          }
+                        }
+                      ],
+                      "trailingComments": [
+                        {
+                          "type": "CommentBlock",
+                          "value": "* @type {string[]} ",
+                          "start": 521,
+                          "end": 544,
+                          "loc": {
+                            "start": {
+                              "line": 15,
+                              "column": 4
+                            },
+                            "end": {
+                              "line": 15,
+                              "column": 27
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "ExpressionStatement",
+                      "start": 550,
+                      "end": 579,
                       "loc": {
                         "start": {
                           "line": 16,
@@ -1179,13 +1192,13 @@
                         },
                         "end": {
                           "line": 16,
-                          "column": 23
+                          "column": 33
                         }
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 561,
-                        "end": 579,
+                        "start": 550,
+                        "end": 578,
                         "loc": {
                           "start": {
                             "line": 16,
@@ -1193,14 +1206,14 @@
                           },
                           "end": {
                             "line": 16,
-                            "column": 22
+                            "column": 32
                           }
                         },
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 561,
-                          "end": 571,
+                          "start": 550,
+                          "end": 565,
                           "loc": {
                             "start": {
                               "line": 16,
@@ -1208,13 +1221,13 @@
                             },
                             "end": {
                               "line": 16,
-                              "column": 14
+                              "column": 19
                             }
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 561,
-                            "end": 565,
+                            "start": 550,
+                            "end": 554,
                             "loc": {
                               "start": {
                                 "line": 16,
@@ -1229,8 +1242,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 566,
-                            "end": 571,
+                            "start": 555,
+                            "end": 565,
                             "loc": {
                               "start": {
                                 "line": 16,
@@ -1238,40 +1251,40 @@
                               },
                               "end": {
                                 "line": 16,
-                                "column": 14
+                                "column": 19
                               },
-                              "identifierName": "chord"
+                              "identifierName": "chordTones"
                             },
-                            "name": "chord"
+                            "name": "chordTones"
                           },
                           "computed": false,
                           "leadingComments": null
                         },
                         "right": {
                           "type": "Identifier",
-                          "start": 574,
-                          "end": 579,
+                          "start": 568,
+                          "end": 578,
                           "loc": {
                             "start": {
                               "line": 16,
-                              "column": 17
+                              "column": 22
                             },
                             "end": {
                               "line": 16,
-                              "column": 22
+                              "column": 32
                             },
-                            "identifierName": "chord"
+                            "identifierName": "chordTones"
                           },
-                          "name": "chord"
+                          "name": "chordTones"
                         },
                         "leadingComments": null
                       },
                       "leadingComments": [
                         {
                           "type": "CommentBlock",
-                          "value": "* @type {string} ",
-                          "start": 534,
-                          "end": 555,
+                          "value": "* @type {string[]} ",
+                          "start": 521,
+                          "end": 544,
                           "loc": {
                             "start": {
                               "line": 15,
@@ -1279,7 +1292,7 @@
                             },
                             "end": {
                               "line": 15,
-                              "column": 25
+                              "column": 27
                             }
                           }
                         }
@@ -1287,8 +1300,8 @@
                       "trailingComments": [
                         {
                           "type": "CommentBlock",
-                          "value": "* @type {string[]} ",
-                          "start": 586,
+                          "value": "* @type {ChordUnit} ",
+                          "start": 585,
                           "end": 609,
                           "loc": {
                             "start": {
@@ -1297,7 +1310,7 @@
                             },
                             "end": {
                               "line": 17,
-                              "column": 27
+                              "column": 28
                             }
                           }
                         }
@@ -1306,7 +1319,7 @@
                     {
                       "type": "ExpressionStatement",
                       "start": 615,
-                      "end": 644,
+                      "end": 650,
                       "loc": {
                         "start": {
                           "line": 18,
@@ -1314,13 +1327,13 @@
                         },
                         "end": {
                           "line": 18,
-                          "column": 33
+                          "column": 39
                         }
                       },
                       "expression": {
                         "type": "AssignmentExpression",
                         "start": 615,
-                        "end": 643,
+                        "end": 649,
                         "loc": {
                           "start": {
                             "line": 18,
@@ -1328,14 +1341,14 @@
                           },
                           "end": {
                             "line": 18,
-                            "column": 32
+                            "column": 38
                           }
                         },
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
                           "start": 615,
-                          "end": 630,
+                          "end": 633,
                           "loc": {
                             "start": {
                               "line": 18,
@@ -1343,7 +1356,7 @@
                             },
                             "end": {
                               "line": 18,
-                              "column": 19
+                              "column": 22
                             }
                           },
                           "object": {
@@ -1365,7 +1378,7 @@
                           "property": {
                             "type": "Identifier",
                             "start": 620,
-                            "end": 630,
+                            "end": 633,
                             "loc": {
                               "start": {
                                 "line": 18,
@@ -1373,141 +1386,6 @@
                               },
                               "end": {
                                 "line": 18,
-                                "column": 19
-                              },
-                              "identifierName": "chordTones"
-                            },
-                            "name": "chordTones"
-                          },
-                          "computed": false,
-                          "leadingComments": null
-                        },
-                        "right": {
-                          "type": "Identifier",
-                          "start": 633,
-                          "end": 643,
-                          "loc": {
-                            "start": {
-                              "line": 18,
-                              "column": 22
-                            },
-                            "end": {
-                              "line": 18,
-                              "column": 32
-                            },
-                            "identifierName": "chordTones"
-                          },
-                          "name": "chordTones"
-                        },
-                        "leadingComments": null
-                      },
-                      "leadingComments": [
-                        {
-                          "type": "CommentBlock",
-                          "value": "* @type {string[]} ",
-                          "start": 586,
-                          "end": 609,
-                          "loc": {
-                            "start": {
-                              "line": 17,
-                              "column": 4
-                            },
-                            "end": {
-                              "line": 17,
-                              "column": 27
-                            }
-                          }
-                        }
-                      ],
-                      "trailingComments": [
-                        {
-                          "type": "CommentBlock",
-                          "value": "* @type {ChordUnit} ",
-                          "start": 650,
-                          "end": 674,
-                          "loc": {
-                            "start": {
-                              "line": 19,
-                              "column": 4
-                            },
-                            "end": {
-                              "line": 19,
-                              "column": 28
-                            }
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "type": "ExpressionStatement",
-                      "start": 680,
-                      "end": 715,
-                      "loc": {
-                        "start": {
-                          "line": 20,
-                          "column": 4
-                        },
-                        "end": {
-                          "line": 20,
-                          "column": 39
-                        }
-                      },
-                      "expression": {
-                        "type": "AssignmentExpression",
-                        "start": 680,
-                        "end": 714,
-                        "loc": {
-                          "start": {
-                            "line": 20,
-                            "column": 4
-                          },
-                          "end": {
-                            "line": 20,
-                            "column": 38
-                          }
-                        },
-                        "operator": "=",
-                        "left": {
-                          "type": "MemberExpression",
-                          "start": 680,
-                          "end": 698,
-                          "loc": {
-                            "start": {
-                              "line": 20,
-                              "column": 4
-                            },
-                            "end": {
-                              "line": 20,
-                              "column": 22
-                            }
-                          },
-                          "object": {
-                            "type": "ThisExpression",
-                            "start": 680,
-                            "end": 684,
-                            "loc": {
-                              "start": {
-                                "line": 20,
-                                "column": 4
-                              },
-                              "end": {
-                                "line": 20,
-                                "column": 8
-                              }
-                            },
-                            "leadingComments": null
-                          },
-                          "property": {
-                            "type": "Identifier",
-                            "start": 685,
-                            "end": 698,
-                            "loc": {
-                              "start": {
-                                "line": 20,
-                                "column": 9
-                              },
-                              "end": {
-                                "line": 20,
                                 "column": 22
                               },
                               "identifierName": "nextChordUnit"
@@ -1519,15 +1397,15 @@
                         },
                         "right": {
                           "type": "Identifier",
-                          "start": 701,
-                          "end": 714,
+                          "start": 636,
+                          "end": 649,
                           "loc": {
                             "start": {
-                              "line": 20,
+                              "line": 18,
                               "column": 25
                             },
                             "end": {
-                              "line": 20,
+                              "line": 18,
                               "column": 38
                             },
                             "identifierName": "nextChordUnit"
@@ -1540,15 +1418,15 @@
                         {
                           "type": "CommentBlock",
                           "value": "* @type {ChordUnit} ",
-                          "start": 650,
-                          "end": 674,
+                          "start": 585,
+                          "end": 609,
                           "loc": {
                             "start": {
-                              "line": 19,
+                              "line": 17,
                               "column": 4
                             },
                             "end": {
-                              "line": 19,
+                              "line": 17,
                               "column": 28
                             }
                           }
@@ -1563,15 +1441,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\r\n    * @param {string} chord - chord symbol\r\n    * @param {string[]} chordTones - array of notes in the melody\r\n    * @param {ChordUnit} nextChordUnit - next ChordUnit in the chain\r\n    ",
-                    "start": 285,
-                    "end": 477,
+                    "start": 220,
+                    "end": 412,
                     "loc": {
                       "start": {
-                        "line": 9,
+                        "line": 7,
                         "column": 4
                       },
                       "end": {
-                        "line": 13,
+                        "line": 11,
                         "column": 6
                       }
                     }
@@ -1581,15 +1459,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\r\n    * @param {ChordUnit} next - the next ChordUnit in the chain.\r\n    ",
-                    "start": 728,
-                    "end": 805,
+                    "start": 663,
+                    "end": 740,
                     "loc": {
                       "start": {
-                        "line": 23,
+                        "line": 21,
                         "column": 4
                       },
                       "end": {
-                        "line": 25,
+                        "line": 23,
                         "column": 6
                       }
                     }
@@ -1598,30 +1476,30 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 809,
-                "end": 869,
+                "start": 744,
+                "end": 804,
                 "loc": {
                   "start": {
-                    "line": 26,
+                    "line": 24,
                     "column": 2
                   },
                   "end": {
-                    "line": 28,
+                    "line": 26,
                     "column": 3
                   }
                 },
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 809,
-                  "end": 825,
+                  "start": 744,
+                  "end": 760,
                   "loc": {
                     "start": {
-                      "line": 26,
+                      "line": 24,
                       "column": 2
                     },
                     "end": {
-                      "line": 26,
+                      "line": 24,
                       "column": 18
                     },
                     "identifierName": "setNextChordUnit"
@@ -1638,15 +1516,15 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 826,
-                    "end": 830,
+                    "start": 761,
+                    "end": 765,
                     "loc": {
                       "start": {
-                        "line": 26,
+                        "line": 24,
                         "column": 19
                       },
                       "end": {
-                        "line": 26,
+                        "line": 24,
                         "column": 23
                       },
                       "identifierName": "next"
@@ -1656,87 +1534,87 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 832,
-                  "end": 869,
+                  "start": 767,
+                  "end": 804,
                   "loc": {
                     "start": {
-                      "line": 26,
+                      "line": 24,
                       "column": 25
                     },
                     "end": {
-                      "line": 28,
+                      "line": 26,
                       "column": 3
                     }
                   },
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 839,
-                      "end": 864,
+                      "start": 774,
+                      "end": 799,
                       "loc": {
                         "start": {
-                          "line": 27,
+                          "line": 25,
                           "column": 4
                         },
                         "end": {
-                          "line": 27,
+                          "line": 25,
                           "column": 29
                         }
                       },
                       "expression": {
                         "type": "CallExpression",
-                        "start": 839,
-                        "end": 863,
+                        "start": 774,
+                        "end": 798,
                         "loc": {
                           "start": {
-                            "line": 27,
+                            "line": 25,
                             "column": 4
                           },
                           "end": {
-                            "line": 27,
+                            "line": 25,
                             "column": 28
                           }
                         },
                         "callee": {
                           "type": "MemberExpression",
-                          "start": 839,
-                          "end": 857,
+                          "start": 774,
+                          "end": 792,
                           "loc": {
                             "start": {
-                              "line": 27,
+                              "line": 25,
                               "column": 4
                             },
                             "end": {
-                              "line": 27,
+                              "line": 25,
                               "column": 22
                             }
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 839,
-                            "end": 843,
+                            "start": 774,
+                            "end": 778,
                             "loc": {
                               "start": {
-                                "line": 27,
+                                "line": 25,
                                 "column": 4
                               },
                               "end": {
-                                "line": 27,
+                                "line": 25,
                                 "column": 8
                               }
                             }
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 844,
-                            "end": 857,
+                            "start": 779,
+                            "end": 792,
                             "loc": {
                               "start": {
-                                "line": 27,
+                                "line": 25,
                                 "column": 9
                               },
                               "end": {
-                                "line": 27,
+                                "line": 25,
                                 "column": 22
                               },
                               "identifierName": "nextChordUnit"
@@ -1748,15 +1626,15 @@
                         "arguments": [
                           {
                             "type": "Identifier",
-                            "start": 858,
-                            "end": 862,
+                            "start": 793,
+                            "end": 797,
                             "loc": {
                               "start": {
-                                "line": 27,
+                                "line": 25,
                                 "column": 23
                               },
                               "end": {
-                                "line": 27,
+                                "line": 25,
                                 "column": 27
                               },
                               "identifierName": "next"
@@ -1773,15 +1651,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\r\n    * @param {ChordUnit} next - the next ChordUnit in the chain.\r\n    ",
-                    "start": 728,
-                    "end": 805,
+                    "start": 663,
+                    "end": 740,
                     "loc": {
                       "start": {
-                        "line": 23,
+                        "line": 21,
                         "column": 4
                       },
                       "end": {
-                        "line": 25,
+                        "line": 23,
                         "column": 6
                       }
                     }
@@ -1794,15 +1672,15 @@
             {
               "type": "CommentBlock",
               "value": "*\r\n* Represents some data built around a specific chord.\r\n* Has a reference to the next ChordUnit in the progression, and the chord tones that will be used in melody generation.\r\n* @private\r\n",
-              "start": 65,
-              "end": 260,
+              "start": 0,
+              "end": 195,
               "loc": {
                 "start": {
-                  "line": 3,
+                  "line": 1,
                   "column": 0
                 },
                 "end": {
-                  "line": 7,
+                  "line": 5,
                   "column": 2
                 }
               }
@@ -1822,15 +1700,15 @@
     {
       "type": "CommentBlock",
       "value": "*\r\n* Represents some data built around a specific chord.\r\n* Has a reference to the next ChordUnit in the progression, and the chord tones that will be used in melody generation.\r\n* @private\r\n",
-      "start": 65,
-      "end": 260,
+      "start": 0,
+      "end": 195,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 1,
           "column": 0
         },
         "end": {
-          "line": 7,
+          "line": 5,
           "column": 2
         }
       }
@@ -1838,15 +1716,15 @@
     {
       "type": "CommentBlock",
       "value": "*\r\n    * @param {string} chord - chord symbol\r\n    * @param {string[]} chordTones - array of notes in the melody\r\n    * @param {ChordUnit} nextChordUnit - next ChordUnit in the chain\r\n    ",
-      "start": 285,
-      "end": 477,
+      "start": 220,
+      "end": 412,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 7,
           "column": 4
         },
         "end": {
-          "line": 13,
+          "line": 11,
           "column": 6
         }
       }
@@ -1854,15 +1732,15 @@
     {
       "type": "CommentBlock",
       "value": "* @type {string} ",
-      "start": 534,
-      "end": 555,
+      "start": 469,
+      "end": 490,
       "loc": {
         "start": {
-          "line": 15,
+          "line": 13,
           "column": 4
         },
         "end": {
-          "line": 15,
+          "line": 13,
           "column": 25
         }
       }
@@ -1870,7 +1748,23 @@
     {
       "type": "CommentBlock",
       "value": "* @type {string[]} ",
-      "start": 586,
+      "start": 521,
+      "end": 544,
+      "loc": {
+        "start": {
+          "line": 15,
+          "column": 4
+        },
+        "end": {
+          "line": 15,
+          "column": 27
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "* @type {ChordUnit} ",
+      "start": 585,
       "end": 609,
       "loc": {
         "start": {
@@ -1879,22 +1773,6 @@
         },
         "end": {
           "line": 17,
-          "column": 27
-        }
-      }
-    },
-    {
-      "type": "CommentBlock",
-      "value": "* @type {ChordUnit} ",
-      "start": 650,
-      "end": 674,
-      "loc": {
-        "start": {
-          "line": 19,
-          "column": 4
-        },
-        "end": {
-          "line": 19,
           "column": 28
         }
       }
@@ -1902,15 +1780,15 @@
     {
       "type": "CommentBlock",
       "value": "*\r\n    * @param {ChordUnit} next - the next ChordUnit in the chain.\r\n    ",
-      "start": 728,
-      "end": 805,
+      "start": 663,
+      "end": 740,
       "loc": {
         "start": {
-          "line": 23,
+          "line": 21,
           "column": 4
         },
         "end": {
-          "line": 25,
+          "line": 23,
           "column": 6
         }
       }
@@ -1918,227 +1796,17 @@
   ],
   "tokens": [
     {
-      "type": {
-        "label": "var",
-        "keyword": "var",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "var",
-      "start": 0,
-      "end": 3,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 3
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "AutoComposerLogic",
-      "start": 4,
-      "end": 21,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 4
-        },
-        "end": {
-          "line": 1,
-          "column": 21
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "=",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": true,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "=",
-      "start": 22,
-      "end": 23,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 22
-        },
-        "end": {
-          "line": 1,
-          "column": 23
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "require",
-      "start": 24,
-      "end": 31,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 24
-        },
-        "end": {
-          "line": 1,
-          "column": 31
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "(",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 31,
-      "end": 32,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 31
-        },
-        "end": {
-          "line": 1,
-          "column": 32
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "../src/autocomposer-logic",
-      "start": 32,
-      "end": 59,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 32
-        },
-        "end": {
-          "line": 1,
-          "column": 59
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ")",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 59,
-      "end": 60,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 59
-        },
-        "end": {
-          "line": 1,
-          "column": 60
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 60,
-      "end": 61,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 60
-        },
-        "end": {
-          "line": 1,
-          "column": 61
-        }
-      }
-    },
-    {
       "type": "CommentBlock",
       "value": "*\r\n* Represents some data built around a specific chord.\r\n* Has a reference to the next ChordUnit in the progression, and the chord tones that will be used in melody generation.\r\n* @private\r\n",
-      "start": 65,
-      "end": 260,
+      "start": 0,
+      "end": 195,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 1,
           "column": 0
         },
         "end": {
-          "line": 7,
+          "line": 5,
           "column": 2
         }
       }
@@ -2158,15 +1826,15 @@
         "updateContext": null
       },
       "value": "class",
-      "start": 262,
-      "end": 267,
+      "start": 197,
+      "end": 202,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 6,
           "column": 0
         },
         "end": {
-          "line": 8,
+          "line": 6,
           "column": 5
         }
       }
@@ -2184,15 +1852,15 @@
         "binop": null
       },
       "value": "ChordUnit",
-      "start": 268,
-      "end": 277,
+      "start": 203,
+      "end": 212,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 6,
           "column": 6
         },
         "end": {
-          "line": 8,
+          "line": 6,
           "column": 15
         }
       }
@@ -2209,15 +1877,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 278,
-      "end": 279,
+      "start": 213,
+      "end": 214,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 6,
           "column": 16
         },
         "end": {
-          "line": 8,
+          "line": 6,
           "column": 17
         }
       }
@@ -2225,15 +1893,15 @@
     {
       "type": "CommentBlock",
       "value": "*\r\n    * @param {string} chord - chord symbol\r\n    * @param {string[]} chordTones - array of notes in the melody\r\n    * @param {ChordUnit} nextChordUnit - next ChordUnit in the chain\r\n    ",
-      "start": 285,
-      "end": 477,
+      "start": 220,
+      "end": 412,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 7,
           "column": 4
         },
         "end": {
-          "line": 13,
+          "line": 11,
           "column": 6
         }
       }
@@ -2251,15 +1919,15 @@
         "binop": null
       },
       "value": "constructor",
-      "start": 481,
-      "end": 492,
+      "start": 416,
+      "end": 427,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 12,
           "column": 2
         },
         "end": {
-          "line": 14,
+          "line": 12,
           "column": 13
         }
       }
@@ -2276,15 +1944,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 492,
-      "end": 493,
+      "start": 427,
+      "end": 428,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 12,
           "column": 13
         },
         "end": {
-          "line": 14,
+          "line": 12,
           "column": 14
         }
       }
@@ -2302,15 +1970,15 @@
         "binop": null
       },
       "value": "chord",
-      "start": 493,
-      "end": 498,
+      "start": 428,
+      "end": 433,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 12,
           "column": 14
         },
         "end": {
-          "line": 14,
+          "line": 12,
           "column": 19
         }
       }
@@ -2328,15 +1996,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 498,
-      "end": 499,
+      "start": 433,
+      "end": 434,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 12,
           "column": 19
         },
         "end": {
-          "line": 14,
+          "line": 12,
           "column": 20
         }
       }
@@ -2354,15 +2022,15 @@
         "binop": null
       },
       "value": "chordTones",
-      "start": 500,
-      "end": 510,
+      "start": 435,
+      "end": 445,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 12,
           "column": 21
         },
         "end": {
-          "line": 14,
+          "line": 12,
           "column": 31
         }
       }
@@ -2380,15 +2048,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 510,
-      "end": 511,
+      "start": 445,
+      "end": 446,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 12,
           "column": 31
         },
         "end": {
-          "line": 14,
+          "line": 12,
           "column": 32
         }
       }
@@ -2406,15 +2074,15 @@
         "binop": null
       },
       "value": "nextChordUnit",
-      "start": 512,
-      "end": 525,
+      "start": 447,
+      "end": 460,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 12,
           "column": 33
         },
         "end": {
-          "line": 14,
+          "line": 12,
           "column": 46
         }
       }
@@ -2431,15 +2099,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 525,
-      "end": 526,
+      "start": 460,
+      "end": 461,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 12,
           "column": 46
         },
         "end": {
-          "line": 14,
+          "line": 12,
           "column": 47
         }
       }
@@ -2456,15 +2124,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 527,
-      "end": 528,
+      "start": 462,
+      "end": 463,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 12,
           "column": 48
         },
         "end": {
-          "line": 14,
+          "line": 12,
           "column": 49
         }
       }
@@ -2472,15 +2140,15 @@
     {
       "type": "CommentBlock",
       "value": "* @type {string} ",
-      "start": 534,
-      "end": 555,
+      "start": 469,
+      "end": 490,
       "loc": {
         "start": {
-          "line": 15,
+          "line": 13,
           "column": 4
         },
         "end": {
-          "line": 15,
+          "line": 13,
           "column": 25
         }
       }
@@ -2500,8 +2168,183 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 561,
-      "end": 565,
+      "start": 496,
+      "end": 500,
+      "loc": {
+        "start": {
+          "line": 14,
+          "column": 4
+        },
+        "end": {
+          "line": 14,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ".",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 500,
+      "end": 501,
+      "loc": {
+        "start": {
+          "line": 14,
+          "column": 8
+        },
+        "end": {
+          "line": 14,
+          "column": 9
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "chord",
+      "start": 501,
+      "end": 506,
+      "loc": {
+        "start": {
+          "line": 14,
+          "column": 9
+        },
+        "end": {
+          "line": 14,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "=",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": true,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "=",
+      "start": 507,
+      "end": 508,
+      "loc": {
+        "start": {
+          "line": 14,
+          "column": 15
+        },
+        "end": {
+          "line": 14,
+          "column": 16
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "chord",
+      "start": 509,
+      "end": 514,
+      "loc": {
+        "start": {
+          "line": 14,
+          "column": 17
+        },
+        "end": {
+          "line": 14,
+          "column": 22
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 514,
+      "end": 515,
+      "loc": {
+        "start": {
+          "line": 14,
+          "column": 22
+        },
+        "end": {
+          "line": 14,
+          "column": 23
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "* @type {string[]} ",
+      "start": 521,
+      "end": 544,
+      "loc": {
+        "start": {
+          "line": 15,
+          "column": 4
+        },
+        "end": {
+          "line": 15,
+          "column": 27
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "this",
+        "keyword": "this",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "this",
+      "start": 550,
+      "end": 554,
       "loc": {
         "start": {
           "line": 16,
@@ -2526,8 +2369,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 565,
-      "end": 566,
+      "start": 554,
+      "end": 555,
       "loc": {
         "start": {
           "line": 16,
@@ -2551,9 +2394,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "chord",
-      "start": 566,
-      "end": 571,
+      "value": "chordTones",
+      "start": 555,
+      "end": 565,
       "loc": {
         "start": {
           "line": 16,
@@ -2561,7 +2404,7 @@
         },
         "end": {
           "line": 16,
-          "column": 14
+          "column": 19
         }
       }
     },
@@ -2579,16 +2422,16 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 572,
-      "end": 573,
+      "start": 566,
+      "end": 567,
       "loc": {
         "start": {
           "line": 16,
-          "column": 15
+          "column": 20
         },
         "end": {
           "line": 16,
-          "column": 16
+          "column": 21
         }
       }
     },
@@ -2604,17 +2447,17 @@
         "postfix": false,
         "binop": null
       },
-      "value": "chord",
-      "start": 574,
-      "end": 579,
+      "value": "chordTones",
+      "start": 568,
+      "end": 578,
       "loc": {
         "start": {
           "line": 16,
-          "column": 17
+          "column": 22
         },
         "end": {
           "line": 16,
-          "column": 22
+          "column": 32
         }
       }
     },
@@ -2631,23 +2474,23 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 579,
-      "end": 580,
+      "start": 578,
+      "end": 579,
       "loc": {
         "start": {
           "line": 16,
-          "column": 22
+          "column": 32
         },
         "end": {
           "line": 16,
-          "column": 23
+          "column": 33
         }
       }
     },
     {
       "type": "CommentBlock",
-      "value": "* @type {string[]} ",
-      "start": 586,
+      "value": "* @type {ChordUnit} ",
+      "start": 585,
       "end": 609,
       "loc": {
         "start": {
@@ -2656,7 +2499,7 @@
         },
         "end": {
           "line": 17,
-          "column": 27
+          "column": 28
         }
       }
     },
@@ -2726,191 +2569,16 @@
         "postfix": false,
         "binop": null
       },
-      "value": "chordTones",
-      "start": 620,
-      "end": 630,
-      "loc": {
-        "start": {
-          "line": 18,
-          "column": 9
-        },
-        "end": {
-          "line": 18,
-          "column": 19
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "=",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": true,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "=",
-      "start": 631,
-      "end": 632,
-      "loc": {
-        "start": {
-          "line": 18,
-          "column": 20
-        },
-        "end": {
-          "line": 18,
-          "column": 21
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "chordTones",
-      "start": 633,
-      "end": 643,
-      "loc": {
-        "start": {
-          "line": 18,
-          "column": 22
-        },
-        "end": {
-          "line": 18,
-          "column": 32
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 643,
-      "end": 644,
-      "loc": {
-        "start": {
-          "line": 18,
-          "column": 32
-        },
-        "end": {
-          "line": 18,
-          "column": 33
-        }
-      }
-    },
-    {
-      "type": "CommentBlock",
-      "value": "* @type {ChordUnit} ",
-      "start": 650,
-      "end": 674,
-      "loc": {
-        "start": {
-          "line": 19,
-          "column": 4
-        },
-        "end": {
-          "line": 19,
-          "column": 28
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "this",
-        "keyword": "this",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "this",
-      "start": 680,
-      "end": 684,
-      "loc": {
-        "start": {
-          "line": 20,
-          "column": 4
-        },
-        "end": {
-          "line": 20,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ".",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 684,
-      "end": 685,
-      "loc": {
-        "start": {
-          "line": 20,
-          "column": 8
-        },
-        "end": {
-          "line": 20,
-          "column": 9
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
       "value": "nextChordUnit",
-      "start": 685,
-      "end": 698,
+      "start": 620,
+      "end": 633,
       "loc": {
         "start": {
-          "line": 20,
+          "line": 18,
           "column": 9
         },
         "end": {
-          "line": 20,
+          "line": 18,
           "column": 22
         }
       }
@@ -2929,15 +2597,15 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 699,
-      "end": 700,
+      "start": 634,
+      "end": 635,
       "loc": {
         "start": {
-          "line": 20,
+          "line": 18,
           "column": 23
         },
         "end": {
-          "line": 20,
+          "line": 18,
           "column": 24
         }
       }
@@ -2955,15 +2623,15 @@
         "binop": null
       },
       "value": "nextChordUnit",
-      "start": 701,
-      "end": 714,
+      "start": 636,
+      "end": 649,
       "loc": {
         "start": {
-          "line": 20,
+          "line": 18,
           "column": 25
         },
         "end": {
-          "line": 20,
+          "line": 18,
           "column": 38
         }
       }
@@ -2981,15 +2649,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 714,
-      "end": 715,
+      "start": 649,
+      "end": 650,
       "loc": {
         "start": {
-          "line": 20,
+          "line": 18,
           "column": 38
         },
         "end": {
-          "line": 20,
+          "line": 18,
           "column": 39
         }
       }
@@ -3006,15 +2674,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 719,
-      "end": 720,
+      "start": 654,
+      "end": 655,
       "loc": {
         "start": {
-          "line": 21,
+          "line": 19,
           "column": 2
         },
         "end": {
-          "line": 21,
+          "line": 19,
           "column": 3
         }
       }
@@ -3022,15 +2690,15 @@
     {
       "type": "CommentBlock",
       "value": "*\r\n    * @param {ChordUnit} next - the next ChordUnit in the chain.\r\n    ",
-      "start": 728,
-      "end": 805,
+      "start": 663,
+      "end": 740,
       "loc": {
         "start": {
-          "line": 23,
+          "line": 21,
           "column": 4
         },
         "end": {
-          "line": 25,
+          "line": 23,
           "column": 6
         }
       }
@@ -3048,15 +2716,15 @@
         "binop": null
       },
       "value": "setNextChordUnit",
-      "start": 809,
-      "end": 825,
+      "start": 744,
+      "end": 760,
       "loc": {
         "start": {
-          "line": 26,
+          "line": 24,
           "column": 2
         },
         "end": {
-          "line": 26,
+          "line": 24,
           "column": 18
         }
       }
@@ -3073,15 +2741,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 825,
-      "end": 826,
+      "start": 760,
+      "end": 761,
       "loc": {
         "start": {
-          "line": 26,
+          "line": 24,
           "column": 18
         },
         "end": {
-          "line": 26,
+          "line": 24,
           "column": 19
         }
       }
@@ -3099,15 +2767,15 @@
         "binop": null
       },
       "value": "next",
-      "start": 826,
-      "end": 830,
+      "start": 761,
+      "end": 765,
       "loc": {
         "start": {
-          "line": 26,
+          "line": 24,
           "column": 19
         },
         "end": {
-          "line": 26,
+          "line": 24,
           "column": 23
         }
       }
@@ -3124,15 +2792,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 830,
-      "end": 831,
+      "start": 765,
+      "end": 766,
       "loc": {
         "start": {
-          "line": 26,
+          "line": 24,
           "column": 23
         },
         "end": {
-          "line": 26,
+          "line": 24,
           "column": 24
         }
       }
@@ -3149,15 +2817,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 832,
-      "end": 833,
+      "start": 767,
+      "end": 768,
       "loc": {
         "start": {
-          "line": 26,
+          "line": 24,
           "column": 25
         },
         "end": {
-          "line": 26,
+          "line": 24,
           "column": 26
         }
       }
@@ -3177,15 +2845,15 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 839,
-      "end": 843,
+      "start": 774,
+      "end": 778,
       "loc": {
         "start": {
-          "line": 27,
+          "line": 25,
           "column": 4
         },
         "end": {
-          "line": 27,
+          "line": 25,
           "column": 8
         }
       }
@@ -3203,15 +2871,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 843,
-      "end": 844,
+      "start": 778,
+      "end": 779,
       "loc": {
         "start": {
-          "line": 27,
+          "line": 25,
           "column": 8
         },
         "end": {
-          "line": 27,
+          "line": 25,
           "column": 9
         }
       }
@@ -3229,15 +2897,15 @@
         "binop": null
       },
       "value": "nextChordUnit",
-      "start": 844,
-      "end": 857,
+      "start": 779,
+      "end": 792,
       "loc": {
         "start": {
-          "line": 27,
+          "line": 25,
           "column": 9
         },
         "end": {
-          "line": 27,
+          "line": 25,
           "column": 22
         }
       }
@@ -3254,15 +2922,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 857,
-      "end": 858,
+      "start": 792,
+      "end": 793,
       "loc": {
         "start": {
-          "line": 27,
+          "line": 25,
           "column": 22
         },
         "end": {
-          "line": 27,
+          "line": 25,
           "column": 23
         }
       }
@@ -3280,15 +2948,15 @@
         "binop": null
       },
       "value": "next",
-      "start": 858,
-      "end": 862,
+      "start": 793,
+      "end": 797,
       "loc": {
         "start": {
-          "line": 27,
+          "line": 25,
           "column": 23
         },
         "end": {
-          "line": 27,
+          "line": 25,
           "column": 27
         }
       }
@@ -3305,15 +2973,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 862,
-      "end": 863,
+      "start": 797,
+      "end": 798,
       "loc": {
         "start": {
-          "line": 27,
+          "line": 25,
           "column": 27
         },
         "end": {
-          "line": 27,
+          "line": 25,
           "column": 28
         }
       }
@@ -3331,15 +2999,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 863,
-      "end": 864,
+      "start": 798,
+      "end": 799,
       "loc": {
         "start": {
-          "line": 27,
+          "line": 25,
           "column": 28
         },
         "end": {
-          "line": 27,
+          "line": 25,
           "column": 29
         }
       }
@@ -3356,15 +3024,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 868,
-      "end": 869,
+      "start": 803,
+      "end": 804,
       "loc": {
         "start": {
-          "line": 28,
+          "line": 26,
           "column": 2
         },
         "end": {
-          "line": 28,
+          "line": 26,
           "column": 3
         }
       }
@@ -3381,15 +3049,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 871,
-      "end": 872,
+      "start": 806,
+      "end": 807,
       "loc": {
         "start": {
-          "line": 29,
+          "line": 27,
           "column": 0
         },
         "end": {
-          "line": 29,
+          "line": 27,
           "column": 1
         }
       }
@@ -3409,15 +3077,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 876,
-      "end": 882,
+      "start": 811,
+      "end": 817,
       "loc": {
         "start": {
-          "line": 31,
+          "line": 29,
           "column": 0
         },
         "end": {
-          "line": 31,
+          "line": 29,
           "column": 6
         }
       }
@@ -3434,15 +3102,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 883,
-      "end": 884,
+      "start": 818,
+      "end": 819,
       "loc": {
         "start": {
-          "line": 31,
+          "line": 29,
           "column": 7
         },
         "end": {
-          "line": 31,
+          "line": 29,
           "column": 8
         }
       }
@@ -3460,15 +3128,15 @@
         "binop": null
       },
       "value": "ChordUnit",
-      "start": 885,
-      "end": 894,
+      "start": 820,
+      "end": 829,
       "loc": {
         "start": {
-          "line": 31,
+          "line": 29,
           "column": 9
         },
         "end": {
-          "line": 31,
+          "line": 29,
           "column": 18
         }
       }
@@ -3485,15 +3153,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 895,
-      "end": 896,
+      "start": 830,
+      "end": 831,
       "loc": {
         "start": {
-          "line": 31,
+          "line": 29,
           "column": 19
         },
         "end": {
-          "line": 31,
+          "line": 29,
           "column": 20
         }
       }
@@ -3511,15 +3179,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 896,
-      "end": 897,
+      "start": 831,
+      "end": 832,
       "loc": {
         "start": {
-          "line": 31,
+          "line": 29,
           "column": 20
         },
         "end": {
-          "line": 31,
+          "line": 29,
           "column": 21
         }
       }
@@ -3537,15 +3205,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 899,
-      "end": 899,
+      "start": 834,
+      "end": 834,
       "loc": {
         "start": {
-          "line": 32,
+          "line": 30,
           "column": 0
         },
         "end": {
-          "line": 32,
+          "line": 30,
           "column": 0
         }
       }
