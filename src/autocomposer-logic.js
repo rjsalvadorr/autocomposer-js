@@ -6,22 +6,6 @@ var note = require('tonal-note');
  * Encapsulates data and musical logic to be used by the application
  */
 class AutoComposerLogic {
-  constructor() {
-    this.DEFAULT_LOWER_LIMIT = "Db4";
-    this.DEFAULT_UPPER_LIMIT = "G#5";
-
-    this.ACCOMPANIMENT_LOWER_LIMIT = "Gb2";
-    this.ACCOMPANIMENT_UPPER_LIMIT = "C#4";
-
-    this.BASS_LOWER_LIMIT = "E1";
-    this.BASS_UPPER_LIMIT = "F2";
-
-    this.INITIAL_PROGRESSION = "G Em C D",
-    this.NUM_MELODIES_LIMIT = 100; // Number of melodies that the user sees.
-    this.NUM_GENERATIONS_LIMIT = 100000; // Number of melody generation attempts that the program will make.
-    this.CHORDS_LIMIT = 4;
-  }
-
   /**
   * Returns all the chord types available for use.
   * @return {string[]} - chord types available for use
@@ -120,4 +104,4 @@ class AutoComposerLogic {
 
 };
 
-exports.AutoComposerLogic = AutoComposerLogic;
+module.exports = new AutoComposerLogic();

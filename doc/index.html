@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl">
+  <title data-ice="title">AutoComposer API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <a data-ice="repoURL" href="https://github.com/rjsalvadorr/autocomposer-js.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-logic.js~AutoComposerLogic.html">AutoComposerLogic</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-melody.js~AutoComposerMelody.html">AutoComposerMelody</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-midi-player.js~AutoComposerMidiPlayer.html">AutoComposerMidiPlayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-midi-writer.js~AutoComposerMidiWriter.html">AutoComposerMidiWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/melody-unit.js~MelodyUnit.html">MelodyUnit</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerLogic">autoComposerLogic</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerMelody">autoComposerMelody</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerMidiPlayer">autoComposerMidiPlayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerMidiWriter">autoComposerMidiWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoComposerJS">AutoComposerJS</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="autocomposerjs">AutoComposerJS</h1>
+<p>See it in action <a href="http://www.rj-salvador.com/apps/autocomposer">here</a>.</p>
+<h2 id="overview">Overview</h2>
+<p>AutoComposerJS creates small musical snippets that conform to the <em>best practices</em> of Western music theory. In its current form, it does this by writing a simple melody over a chord progression. It also has a few more tricks:</p>
+<ul>
+<li>Writes basic accompaniment for melodies.</li>
+<li>Can present generated melodies in the following formats:<ul>
+<li><strong>Musical score</strong></li>
+<li><strong>MIDI file</strong></li>
+<li><strong>Audio</strong> - the program play back generated MIDI files in the browser</li>
+</ul>
+</li>
+</ul>
+<p>If you&apos;re a music nerd that frequently wonders about the melodic possibilities in a chord progression, this program can help you out.
+It visualizes various sequences of chord tones that fit in a chord progression, and ranks them by smoothness.
+In our case, smoothness is calculated as the sum of intervals between the notes of a melody.</p>
+<h2 id="usage">Usage</h2>
+<p>Install the package through NPM</p>
+<p><code>npm install --save autocomposer-js</code></p>
+<p>And then it&apos;ll be usable in your code!</p>
+<pre><code><code class="source-code prettyprint">var AutoComposerJS = require(&apos;autocomposer-js&apos;)
+var chordProgression = &quot;Gm Em C D&quot;.split(&quot; &quot;)
+var allTheMelodies = AutoComposerJS.melody.buildSimpleMelodies(chordProgression)</code>
+</code></pre><p>Or just drop the file in <code>dist/</code> through a script tag like so:</p>
+<pre><code><code class="source-code prettyprint">&lt;script src=&quot;path/to/autocomposer-js.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+  var chordProgression = &quot;Gm Em C D&quot;.split(&quot; &quot;)
+  var allTheMelodies = AutoComposerJS.melody.buildSimpleMelodies(chordProgression)
+&lt;/script&gt;</code>
+</code></pre><h2 id="potential-uses">Potential Uses</h2>
+<ul>
+<li>Brainstorming when starting or continuing a musical composition.</li>
+<li>Exploring how melody and harmony work together.</li>
+</ul>
+<h2 id="more-info">More info</h2>
+<p>Check out the <a href="https://github.com/rjsalvadorr/autocomposer-js/wiki">project wiki</a>, since that&apos;s updated more often than this file.</p>
+</div>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.5.2)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

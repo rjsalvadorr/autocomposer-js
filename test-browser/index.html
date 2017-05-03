@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>AutoComposer Tests</title>
+
+    <style>
+      body {
+        background-color: #ddd;
+        font-family: sans-serif;
+      }
+
+      code,
+      textarea,
+      #output-melodies {
+        font-family: monospace;
+        white-space: pre-wrap;
+      }
+
+      #output-melodies {
+        background-color: #fff;
+        border: 1px solid #888;
+      }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.slim.min.js"></script>
+  </head>
+  <body>
+    <h1 id="main-title">AutoComposer Tests</h1>
+    <p>
+      On this page, we're messing around with the music library, and testing out stuff on browsers.<br>
+      If you're looking for unit tests, they're not here. You can check them out at the <a href="../doc/index.html">documentation page</a>.
+    </p>
+
+    <hr>
+
+    <h2>Audio Playback</h2>
+    <p>Write the melodies in scientific notation, like <code>C4 Eb4 G4</code> </p>
+
+    <h3>Playing a Single Melody</h3>
+    <label for="solo-melody">Solo Melody</label>
+    <input type="text" id="solo-melody" name="solo-melody" value="C4 E4 G4"/><br>
+
+    <button id="button-play-solo" name="button-play">Play music!</button>
+
+    <h3>Playing Three Melodies</h3>
+    <label for="first-melody">Melody 1</label>
+    <input type="text" id="first-melody" name="first-melody" value="C4 E4 G4"/><br>
+
+    <label for="second-melody">Melody 2</label>
+    <input type="text" id="second-melody" name="second-melody" value="E3 C3 D3"/><br>
+
+    <label for="third-melody">Melody 3</label>
+    <input type="text" id="third-melody" name="third-melody" value="G2 A2 B2"/><br>
+
+    <button id="button-play" name="button-play">Play music!</button>
+
+    <hr>
+
+    <h2>Testing simple melody generation</h2>
+    <label for="chk-raw">Raw output: </label><input type="checkbox" id="chk-raw" name="chk-raw"/><br>
+    <label for="chk-limit">Limit output?: </label><input type="checkbox" id="chk-limit" name="chk-limit"/><br>
+    <label for="chk-filtered">Filter melodies?: </label><input type="checkbox" id="chk-filtered" name="chk-filtered"/><br>
+    <button id="btn-melody-gen" name="btn-melody-gen">Generate melody for "Gm D7"</button>
+    <p id="output-melodies"></p>
+
+    <hr>
+
+    <script src="../dist/autocomposer-js.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>

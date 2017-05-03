@@ -1,4 +1,5 @@
 // Testing to see if the package works properly.
+var assert = require('assert');
 var AutoComposer = require('../index.js');
 
 describe('AutoComposer', function() {

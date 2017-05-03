@@ -1,9 +1,58 @@
-var tonal = require('tonal');
-var ChordUnit = require('./chord-unit');
-var MelodyUnit = require('./melody-unit');
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/autocomposer-melody.js | AutoComposer API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
 
-var AcLogic = require('./autocomposer-logic');
-const AcConstants = require('./autocomposer-constants');
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <a data-ice="repoURL" href="https://github.com/rjsalvadorr/autocomposer-js.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-logic.js~AutoComposerLogic.html">AutoComposerLogic</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-melody.js~AutoComposerMelody.html">AutoComposerMelody</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-midi-player.js~AutoComposerMidiPlayer.html">AutoComposerMidiPlayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-midi-writer.js~AutoComposerMidiWriter.html">AutoComposerMidiWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/melody-unit.js~MelodyUnit.html">MelodyUnit</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerLogic">autoComposerLogic</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerMelody">autoComposerMelody</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerMidiPlayer">autoComposerMidiPlayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerMidiWriter">autoComposerMidiWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoComposerJS">AutoComposerJS</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/autocomposer-melody.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">var tonal = require(&apos;tonal&apos;);
+var ChordUnit = require(&apos;./chord-unit&apos;);
+var MelodyUnit = require(&apos;./melody-unit&apos;);
+
+var AcLogic = require(&apos;./autocomposer-logic&apos;);
+const AcConstants = require(&apos;./autocomposer-constants&apos;);
 
 /**
 * Creates melodies from a given chord progression
@@ -40,7 +89,7 @@ class AutoComposerMelody {
     var indexToRemove;
     pitchArray.forEach(function(pitch) {
       indexToRemove = chordTones.indexOf(pitch);
-      if (indexToRemove > -1) {
+      if (indexToRemove &gt; -1) {
         chordTones.splice(indexToRemove, 1);
       }
     });
@@ -56,18 +105,18 @@ class AutoComposerMelody {
     // Omit root note, and maybe avoid doubling the top note as well.
     var noteArray = [], chordNotes, currentChord, bassPitch, topPitch;
 
-    for(var i = 0; i < melodyUnit.chordProgression.length; i++) {
+    for(var i = 0; i &lt; melodyUnit.chordProgression.length; i++) {
       currentChord = melodyUnit.chordProgression[i];
-      bassPitch = tonal.chord.parse(currentChord)["tonic"];
+      bassPitch = tonal.chord.parse(currentChord)[&quot;tonic&quot;];
       topPitch =  tonal.note.pc(melodyUnit.melodyNotes[i]);
 
       chordNotes = tonal.chord.notes(currentChord);
       chordNotes = this._removePitchesFromChordTones(chordNotes, [topPitch]);
 
-      for(var j = 0; j < chordNotes.length; j++) {
+      for(var j = 0; j &lt; chordNotes.length; j++) {
         chordNotes[j] = this._getLowestNoteInRange(chordNotes[j], AcConstants.ACCOMPANIMENT_LOWER_LIMIT, AcConstants.ACCOMPANIMENT_UPPER_LIMIT);
       }
-      noteArray.push(chordNotes.join(" "));
+      noteArray.push(chordNotes.join(&quot; &quot;));
     }
 
     return noteArray;
@@ -83,9 +132,9 @@ class AutoComposerMelody {
     var noteArray = [], currentChord, bassPitch, bassNote;
 
     // return all the lowest root notes for the progression.
-    for(var i = 0; i < melodyUnit.chordProgression.length; i++) {
+    for(var i = 0; i &lt; melodyUnit.chordProgression.length; i++) {
       currentChord = melodyUnit.chordProgression[i];
-      bassPitch = tonal.chord.parse(currentChord)["tonic"];
+      bassPitch = tonal.chord.parse(currentChord)[&quot;tonic&quot;];
       bassNote = this._getLowestNoteInRange(bassPitch, AcConstants.BASS_LOWER_LIMIT, AcConstants.BASS_UPPER_LIMIT);
 
       noteArray.push(bassNote);
@@ -106,13 +155,13 @@ class AutoComposerMelody {
     var chordTones = tonal.chord(chord);
     var chordTonesInRange = tonal.range.pitchSet(chordTones, [lowerLimit, upperLimit]);
 
-    for(var i = 0; i < chordTonesInRange.length; i++) {
-      for(var j = 0; j < chordTones.length; j++) {
-        // Fixing pesky issue where D7 was returned as "D Gb A C" instead of "D F# A C"
+    for(var i = 0; i &lt; chordTonesInRange.length; i++) {
+      for(var j = 0; j &lt; chordTones.length; j++) {
+        // Fixing pesky issue where D7 was returned as &quot;D Gb A C&quot; instead of &quot;D F# A C&quot;
         // If the current chord tone is enharmonic with the note from the pitch set,
         // Override it with the chord tone.
         if(tonal.note.pc(chordTonesInRange[i]) != chordTones[j]
-          && tonal.note.enharmonics(chordTones[j]).indexOf(tonal.note.pc(chordTonesInRange[i])) > -1) {
+          &amp;&amp; tonal.note.enharmonics(chordTones[j]).indexOf(tonal.note.pc(chordTonesInRange[i])) &gt; -1) {
           chordTonesInRange[i] = chordTones[j] + tonal.note.oct(chordTonesInRange[i]);
         }
       }
@@ -143,7 +192,7 @@ class AutoComposerMelody {
     * @return {MelodyUnit}
     */
   _buildMelodyUnit(chordProgression, melodyString) {
-    var arrMelody = melodyString.split(" ");
+    var arrMelody = melodyString.split(&quot; &quot;);
     var melodyUnit = new MelodyUnit.MelodyUnit(chordProgression, arrMelody);
     return melodyUnit;
   }
@@ -199,7 +248,7 @@ class AutoComposerMelody {
     var chordUnitList = [];
     var chordTonesInRange;
 
-    for(var i = chordProgression.length - 1; i >= 0; i--) {
+    for(var i = chordProgression.length - 1; i &gt;= 0; i--) {
       chordTonesInRange = this._getAllChordTones(chordProgression[i], lowerLimit, upperLimit);
 
       if(i === chordProgression.length) {
@@ -230,14 +279,14 @@ class AutoComposerMelody {
     var isNotRepetitive, timestamp, haxThis = this;
 
     if(melodyList) {
-      // We're somewhere along the middle of the chain.
-      for(var i = 0; i < melodyList.length; i++) {
+      // We&apos;re somewhere along the middle of the chain.
+      for(var i = 0; i &lt; melodyList.length; i++) {
         currentMelody = melodyList[i];
 
-        for(var j = 0; j < chordTones.length; j++) {
+        for(var j = 0; j &lt; chordTones.length; j++) {
           currentChordTone = chordTones[j];
 
-          if(melodyList.length > 10000) {
+          if(melodyList.length &gt; 10000) {
             timestamp = new Date().valueOf().toString().slice(-8);
             if(timestamp % 8 === 0) {
               // Randomly skips generation every now and then.
@@ -246,17 +295,17 @@ class AutoComposerMelody {
             }
           }
 
-          newMelody = currentMelody + " " + currentChordTone;
+          newMelody = currentMelody + &quot; &quot; + currentChordTone;
 
           if(options.filtered) {
             // check the distance of the last note and the new chord tone
-            // if it's more than an octave, skip this.
+            // if it&apos;s more than an octave, skip this.
             isInRange = AcLogic.filterMelodyRange(newMelody);
             if(!isInRange) {
               break;
             }
 
-            if(newMelody.split(" ").length >= 3) {
+            if(newMelody.split(&quot; &quot;).length &gt;= 3) {
               // check if melody is too repetitive. For our purposes, three of the same notes in a row
               // would be too repetitive.
               isNotRepetitive =  AcLogic.filterRepetition(newMelody);
@@ -280,14 +329,14 @@ class AutoComposerMelody {
     }
 
     if(chordUnit.nextChordUnit) {
-      // We're somewhere before the end of the chain.
+      // We&apos;re somewhere before the end of the chain.
       return this._buildSimpleMelodiesCore(chordUnit.nextChordUnit, returnList, options);
     } else {
       // End of the chain.
-      if(options.filtered && returnList.length > AcConstants.NUM_MELODIES_LIMIT) {
-        console.log("Generated  " + returnList.length + " melodies. Creating list of " + AcConstants.NUM_MELODIES_LIMIT + "...");
+      if(options.filtered &amp;&amp; returnList.length &gt; AcConstants.NUM_MELODIES_LIMIT) {
+        console.log(&quot;Generated  &quot; + returnList.length + &quot; melodies. Creating list of &quot; + AcConstants.NUM_MELODIES_LIMIT + &quot;...&quot;);
       } else {
-        console.log("Generated  " + returnList.length + " melodies.");
+        console.log(&quot;Generated  &quot; + returnList.length + &quot; melodies.&quot;);
       }
       return returnList;
     }
@@ -334,7 +383,7 @@ class AutoComposerMelody {
     * @param {Object} [options] - options for melody generation
     * @param {Object} [options.raw] - if true, returns output as strings (default = false)
     * @param {Object} [options.limit] - if false, returns all the generated melodies, not just the top 100 (default = true)
-    * @param {Object} [options.filter] - if false, returns melodies that are considered too "ugly" for the default process. (default = true)
+    * @param {Object} [options.filter] - if false, returns melodies that are considered too &quot;ugly&quot; for the default process. (default = true)
     * @return {MelodyUnit[]} - an array of MelodyUnits
     */
   buildSimpleMelodies(chordProgression, options) {
@@ -345,9 +394,9 @@ class AutoComposerMelody {
 
     if(options) {
       // In all these ternary operations, the default value is on the right.
-      rawOption = options.raw && (options.raw === "true" || options.raw === true) ? true : false;
-      filterOption = typeof options.filter !== "undefined" && (options.filter === "false" || options.limit === false) ? false : true;
-      if(typeof options.filter !== "undefined" && (options.limit === "false" || options.limit === false)) {
+      rawOption = options.raw &amp;&amp; (options.raw === &quot;true&quot; || options.raw === true) ? true : false;
+      filterOption = typeof options.filter !== &quot;undefined&quot; &amp;&amp; (options.filter === &quot;false&quot; || options.limit === false) ? false : true;
+      if(typeof options.filter !== &quot;undefined&quot; &amp;&amp; (options.limit === &quot;false&quot; || options.limit === false)) {
         limitOption = null;
         sortOption = false;
       } else {
@@ -376,3 +425,20 @@ class AutoComposerMelody {
 };
 
 module.exports = new AutoComposerMelody();
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.5.2)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

@@ -1,7 +1,6 @@
 var assert = require('assert');
 
-var AcLogic = require('../src/autocomposer-logic');
-var AutoComposerLogic = new AcLogic.AutoComposerLogic();
+var AutoComposerLogic = require('../src/autocomposer-logic');
 
 describe('AutoComposerLogic', function() {
   describe('#filterMelodyRange', function() {
