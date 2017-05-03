@@ -1,7 +1,7 @@
 {
   "name": "autocomposer-js",
-  "author": "rjsalvadorr@gmail.com",
-  "version": "0.1.1",
+  "author": "RJ Salvador",
+  "version": "0.1.2",
   "description": "A web app that displays simple musical melodies based on a chord progression",
   "main": "index.js",
   "repository": {
@@ -13,7 +13,6 @@
     "build-browser": "browserify src/browser-build.js -t [ babelify --presets [ react ] ] | uglifyjs -o dist/autocomposer-js.js",
     "build-all": "npm test && npm run build-browser"
   },
-  "author": "RJ Salvador",
   "license": "ISC",
   "dependencies": {
     "midi-player-js": "^1.1.1",
