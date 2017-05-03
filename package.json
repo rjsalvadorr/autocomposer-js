@@ -1,5 +1,6 @@
 {
   "name": "autocomposer-js",
+  "author": "rjsalvadorr@gmail.com",
   "version": "0.1.1",
   "description": "A web app that displays simple musical melodies based on a chord progression",
   "main": "index.js",
