@@ -7,3 +7,5 @@ AutoComposerJS.logic = require('./autocomposer-logic');
 AutoComposerJS.constants = require('./autocomposer-constants');
 
 window.AutoComposerJS = AutoComposerJS;
+
+module.exports = AutoComposerJS;

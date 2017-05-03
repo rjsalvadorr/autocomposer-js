@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "mocha && esdoc",
-    "build-browser": "browserify src/browser-build.js -t [ babelify --presets [ react ] ] | uglifyjs -o dist/autocomposer-js.js",
+    "build-browser": "browserify src/browser-build.js | uglifyjs -o dist/autocomposer-js.js",
     "build-all": "npm test && npm run build-browser"
   },
   "license": "ISC",
@@ -24,9 +24,6 @@
     "tonal-range": "^0.69.5"
   },
   "devDependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
-    "babelify": "^7.3.0",
     "browserify": "^14.3.0",
     "esdoc": "^0.5.2",
     "esdoc-node": "^1.0.2",

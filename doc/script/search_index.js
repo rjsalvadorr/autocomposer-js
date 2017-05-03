@@ -1,5 +1,11 @@
 window.esdocSearchIndex = [
   [
+    "autocomposer-js/src/browser-build.js~autocomposerjs",
+    "variable/index.html#static-variable-AutoComposerJS",
+    "<span>AutoComposerJS</span> <span class=\"search-result-import-path\">autocomposer-js/src/browser-build.js</span>",
+    "variable"
+  ],
+  [
     "autocomposer-js/src/autocomposer-logic.js~autocomposerlogic",
     "class/src/autocomposer-logic.js~AutoComposerLogic.html",
     "<span>AutoComposerLogic</span> <span class=\"search-result-import-path\">autocomposer-js/src/autocomposer-logic.js</span>",
