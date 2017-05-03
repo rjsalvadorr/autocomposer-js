@@ -1,6 +1,6 @@
 // Plays MIDI files on the browser!
 
-const MidiPlayer = require('midi-player-js');
+const GMidiPlayer = require('midi-player-js');
 const SoundfontPlayer = require('soundfont-player');
 const tonalNote = require('tonal-note');
 
@@ -9,11 +9,10 @@ const AcConstants = require('./constants');
 const INSTRUMENT_DATA = AcConstants.instrumentData;
 
 /**
-* Class responsible for playing audio on the browser.
+* Submodule responsible for playing audio on the browser.
 * @emits {statusUpdate} - Emits this event when the audio player loads.
 */
-
-class AutoComposerMidiPlayer {
+class MidiPlayer {
   constructor() {
     this.instruments = {};
     this.numInstrumentsInit = 0;
@@ -123,7 +122,7 @@ class AutoComposerMidiPlayer {
     */
   _finishLoad() {
     var haxThis = this;
-    this.player = new MidiPlayer.Player(function(event) {
+    this.player = new GMidiPlayer.Player(function(event) {
       haxThis._midiCallback(event);
     });
     this.initialized = true;
@@ -179,4 +178,4 @@ class AutoComposerMidiPlayer {
   }
 }
 
-module.exports = new AutoComposerMidiPlayer();
+module.exports = new MidiPlayer();

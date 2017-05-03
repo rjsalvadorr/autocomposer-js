@@ -1,16 +1,16 @@
-var MidiWriter = require('midi-writer-js');
-var MidiPlayer = require('midi-player-js');
-var SoundfontPlayer = require('soundfont-player');
-var tonalNote = require('tonal-note');
+const GMidiWriter = require('midi-writer-js');
+const GMidiPlayer = require('midi-player-js');
+const SoundfontPlayer = require('soundfont-player');
+const tonalNote = require('tonal-note');
 
 const AcConstants = require('./constants');
 const INSTRUMENT_DATA = AcConstants.instrumentData;
 
 /**
-* Class responsible for generating MIDI files for future playback.
+* Submodule responsible for generating MIDI files for future playback.
 */
 
-class AutoComposerMidiWriter {
+class MidiWriter {
   constructor() {
   }
 
@@ -26,7 +26,7 @@ class AutoComposerMidiWriter {
       if(!wait) {
           wait = "0";
       }
-      return new MidiWriter.NoteEvent({pitch: arrNumMidi, duration: duration, wait: wait, velocity: 100});
+      return new GMidiWriter.NoteEvent({pitch: arrNumMidi, duration: duration, wait: wait, velocity: 100});
   }
 
     /**
@@ -38,8 +38,8 @@ class AutoComposerMidiWriter {
     */
   _buildTrack(arrChordNotes, instrData) {
     var notes, midiNumber, midiNumbers;
-    var returnTrack = new MidiWriter.Track();
-    returnTrack.addEvent(new MidiWriter.ProgramChangeEvent({instrument : instrData.midiInstrumentCode}));
+    var returnTrack = new GMidiWriter.Track();
+    returnTrack.addEvent(new GMidiWriter.ProgramChangeEvent({instrument : instrData.midiInstrumentCode}));
     returnTrack.addInstrumentName(instrData.name);
 
     for(var i = 0; i < arrChordNotes.length; i++) {
@@ -65,7 +65,7 @@ class AutoComposerMidiWriter {
     var tracks = [], midiNumber;
     tracks[0] = this._buildTrack(arrMelody, INSTRUMENT_DATA["melody"]);
 
-    var write = new MidiWriter.Writer(tracks);
+    var write = new GMidiWriter.Writer(tracks);
 
     return write.dataUri();
   }
@@ -86,10 +86,10 @@ class AutoComposerMidiWriter {
 
     tracks = [melodyTrack, accompanimentTrack, bassTrack];
 
-    var write = new MidiWriter.Writer(tracks);
+    var write = new GMidiWriter.Writer(tracks);
 
     return write.dataUri();
   }
 }
 
-module.exports = new AutoComposerMidiWriter();
+module.exports = new MidiWriter();

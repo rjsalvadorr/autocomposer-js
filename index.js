@@ -7,6 +7,7 @@ var moduleConstants = require('./src/constants');
 module.exports = {
   melody: moduleMelody,
   midiWriter: moduleMidiWriter,
+  // the player is not included!
   logic: moduleLogic,
   constants: moduleConstants
 }

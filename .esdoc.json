@@ -1,7 +1,8 @@
 {
   "title": "AutoComposer",
   "source": "./src",
-  "excludes": ["\\.config\\.(js|es6)$", "(ac-.*|.*-panel|.*-output|.*-row)\\.js$"],
+  "excludes": ["\\.config\\.(js|es6)$", "(browser.*)\\.js$"],
+  "undocumentIdentifier": false,
   "destination": "./doc",
   "access": ["public"],
   "plugins": [{"name": "esdoc-node"}],

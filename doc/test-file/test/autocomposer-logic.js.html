@@ -32,17 +32,12 @@
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/logic.js~AutoComposerLogic.html">AutoComposerLogic</a></span></span></li>
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/logic.js~Logic.html">Logic</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/melody-data.js~MelodyData.html">MelodyData</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/melody.js~AutoComposerMelody.html">AutoComposerMelody</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/midi-player.js~AutoComposerMidiPlayer.html">AutoComposerMidiPlayer</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/midi-writer.js~AutoComposerMidiWriter.html">AutoComposerMidiWriter</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoComposerJS">AutoComposerJS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/melody.js~Melody.html">Melody</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/midi-player.js~MidiPlayer.html">MidiPlayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/midi-writer.js~MidiWriter.html">MidiWriter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AcConstants">AcConstants</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerLogic">autoComposerLogic</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerMelody">autoComposerMelody</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerMidiPlayer">autoComposerMidiPlayer</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerMidiWriter">autoComposerMidiWriter</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -50,7 +45,7 @@
 <div class="content" data-ice="content"><h1 data-ice="title">test/autocomposer-logic.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">var assert = require(&apos;assert&apos;);
 
-var AutoComposerLogic = require(&apos;../src/logic&apos;);
+var AutoComposerLogic = require(&apos;../index&apos;).logic;
 
 describe(&apos;AutoComposerLogic&apos;, function() {
   describe(&apos;#filterMelodyRange&apos;, function() {

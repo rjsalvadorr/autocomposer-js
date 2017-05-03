@@ -32,17 +32,12 @@
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/logic.js~AutoComposerLogic.html">AutoComposerLogic</a></span></span></li>
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/logic.js~Logic.html">Logic</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/melody-data.js~MelodyData.html">MelodyData</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/melody.js~AutoComposerMelody.html">AutoComposerMelody</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/midi-player.js~AutoComposerMidiPlayer.html">AutoComposerMidiPlayer</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/midi-writer.js~AutoComposerMidiWriter.html">AutoComposerMidiWriter</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoComposerJS">AutoComposerJS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/melody.js~Melody.html">Melody</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/midi-player.js~MidiPlayer.html">MidiPlayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/midi-writer.js~MidiWriter.html">MidiWriter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AcConstants">AcConstants</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerLogic">autoComposerLogic</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerMelody">autoComposerMelody</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerMidiPlayer">autoComposerMidiPlayer</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerMidiWriter">autoComposerMidiWriter</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -76,7 +71,22 @@ var allTheMelodies = AutoComposerJS.melody.buildSimpleMelodies(chordProgression)
   var chordProgression = &quot;Gm Em C D&quot;.split(&quot; &quot;)
   var allTheMelodies = AutoComposerJS.melody.buildSimpleMelodies(chordProgression)
 &lt;/script&gt;</code>
-</code></pre><h2 id="potential-uses">Potential Uses</h2>
+</code></pre><p>The melodies will be returned as <code>MelodyData</code> objects, which look like this:</p>
+<pre><code><code class="source-code prettyprint">{
+   &quot;chordProgression&quot;:[
+      &quot;Gm&quot;,
+      &quot;D7&quot;
+   ],
+   &quot;melodyNotes&quot;:[
+      &quot;D5&quot;,
+      &quot;C5&quot;
+   ],
+   &quot;smoothness&quot;:2,
+   &quot;range&quot;:2,
+   &quot;melodyString&quot;:&quot;D5 C5&quot;
+}</code>
+</code></pre><p>The <code>range</code> is the distance between the highest and lowest note (in semitones). The <code>smoothness</code> shows the total distance between all notes in the melody (in semitones).</p>
+<h2 id="potential-uses">Potential Uses</h2>
 <ul>
 <li>Brainstorming when starting or continuing a musical composition.</li>
 <li>Exploring how melody and harmony work together.</li>

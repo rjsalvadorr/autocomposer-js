@@ -32,35 +32,30 @@
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/logic.js~AutoComposerLogic.html">AutoComposerLogic</a></span></span></li>
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/logic.js~Logic.html">Logic</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/melody-data.js~MelodyData.html">MelodyData</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/melody.js~AutoComposerMelody.html">AutoComposerMelody</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/midi-player.js~AutoComposerMidiPlayer.html">AutoComposerMidiPlayer</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/midi-writer.js~AutoComposerMidiWriter.html">AutoComposerMidiWriter</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoComposerJS">AutoComposerJS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/melody.js~Melody.html">Melody</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/midi-player.js~MidiPlayer.html">MidiPlayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/midi-writer.js~MidiWriter.html">MidiWriter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AcConstants">AcConstants</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerLogic">autoComposerLogic</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerMelody">autoComposerMelody</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerMidiPlayer">autoComposerMidiPlayer</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerMidiWriter">autoComposerMidiWriter</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/midi-writer.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">var MidiWriter = require(&apos;midi-writer-js&apos;);
-var MidiPlayer = require(&apos;midi-player-js&apos;);
-var SoundfontPlayer = require(&apos;soundfont-player&apos;);
-var tonalNote = require(&apos;tonal-note&apos;);
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">const GMidiWriter = require(&apos;midi-writer-js&apos;);
+const GMidiPlayer = require(&apos;midi-player-js&apos;);
+const SoundfontPlayer = require(&apos;soundfont-player&apos;);
+const tonalNote = require(&apos;tonal-note&apos;);
 
 const AcConstants = require(&apos;./constants&apos;);
 const INSTRUMENT_DATA = AcConstants.instrumentData;
 
 /**
-* Class responsible for generating MIDI files for future playback.
+* Submodule responsible for generating MIDI files for future playback.
 */
 
-class AutoComposerMidiWriter {
+class MidiWriter {
   constructor() {
   }
 
@@ -76,7 +71,7 @@ class AutoComposerMidiWriter {
       if(!wait) {
           wait = &quot;0&quot;;
       }
-      return new MidiWriter.NoteEvent({pitch: arrNumMidi, duration: duration, wait: wait, velocity: 100});
+      return new GMidiWriter.NoteEvent({pitch: arrNumMidi, duration: duration, wait: wait, velocity: 100});
   }
 
     /**
@@ -88,8 +83,8 @@ class AutoComposerMidiWriter {
     */
   _buildTrack(arrChordNotes, instrData) {
     var notes, midiNumber, midiNumbers;
-    var returnTrack = new MidiWriter.Track();
-    returnTrack.addEvent(new MidiWriter.ProgramChangeEvent({instrument : instrData.midiInstrumentCode}));
+    var returnTrack = new GMidiWriter.Track();
+    returnTrack.addEvent(new GMidiWriter.ProgramChangeEvent({instrument : instrData.midiInstrumentCode}));
     returnTrack.addInstrumentName(instrData.name);
 
     for(var i = 0; i &lt; arrChordNotes.length; i++) {
@@ -115,7 +110,7 @@ class AutoComposerMidiWriter {
     var tracks = [], midiNumber;
     tracks[0] = this._buildTrack(arrMelody, INSTRUMENT_DATA[&quot;melody&quot;]);
 
-    var write = new MidiWriter.Writer(tracks);
+    var write = new GMidiWriter.Writer(tracks);
 
     return write.dataUri();
   }
@@ -136,13 +131,13 @@ class AutoComposerMidiWriter {
 
     tracks = [melodyTrack, accompanimentTrack, bassTrack];
 
-    var write = new MidiWriter.Writer(tracks);
+    var write = new GMidiWriter.Writer(tracks);
 
     return write.dataUri();
   }
 }
 
-module.exports = new AutoComposerMidiWriter();
+module.exports = new MidiWriter();
 </code></pre>
 
 </div>

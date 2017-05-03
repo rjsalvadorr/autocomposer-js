@@ -38,6 +38,26 @@ Or just drop the file in `dist/` through a script tag like so:
 </script>
 ```
 
+The melodies will be returned as `MelodyData` objects, which look like this:
+
+```
+{
+   "chordProgression":[
+      "Gm",
+      "D7"
+   ],
+   "melodyNotes":[
+      "D5",
+      "C5"
+   ],
+   "smoothness":2,
+   "range":2,
+   "melodyString":"D5 C5"
+}
+```
+
+The `range` is the distance between the highest and lowest note (in semitones). The `smoothness` shows the total distance between all notes in the melody (in semitones).
+
 ## Potential Uses
 * Brainstorming when starting or continuing a musical composition.
 * Exploring how melody and harmony work together.

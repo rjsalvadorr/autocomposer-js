@@ -5,7 +5,7 @@ var note = require('tonal-note');
 /**
  * Encapsulates data and musical logic to be used by the application
  */
-class AutoComposerLogic {
+class Logic {
   /**
   * Returns all the chord types available for use.
   * @return {string[]} - chord types available for use
@@ -104,4 +104,4 @@ class AutoComposerLogic {
 
 };
 
-module.exports = new AutoComposerLogic();
+module.exports = new Logic();

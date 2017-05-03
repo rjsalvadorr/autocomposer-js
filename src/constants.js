@@ -1,3 +1,19 @@
+/**
+* Constants used by the application.
+* @public
+* @type {Object}
+* @property {string} DEFAULT_NOTE_DURATION - Note duration for simple melodies
+* @property {number} DEFAULT_NUM_INSTRUMENTS - Default number of instruments
+* @property {string} DEFAULT_LOWER_LIMIT - Lower limit of main melody's range (pitch in scientific notation)
+* @property {string} DEFAULT_UPPER_LIMIT - Upper limit of main melody's range (pitch in scientific notation)
+* @property {string} ACCOMPANIMENT_LOWER_LIMIT - Lower limit of accompaniment range (pitch in scientific notation)
+* @property {string} ACCOMPANIMENT_UPPER_LIMIT - Upper limit of accompaniment range (pitch in scientific notation)
+* @property {string} BASS_LOWER_LIMIT - Lower limit of bassline's range (pitch in scientific notation)
+* @property {string} BASS_UPPER_LIMIT - Upper limit of bassline's range (pitch in scientific notation)
+* @property {number} NUM_GENERATIONS_LIMIT - Limit on number of melody generation attempts (unused)
+* @property {number} NUM_MELODIES_LIMIT - Limit on number of returned melodies
+* @property {Object} instrumentData - Data for the default instruments used by the app.
+*/
 var AcConstants = {
   DEFAULT_NOTE_DURATION: "1",
   DEFAULT_NUM_INSTRUMENTS: 3,

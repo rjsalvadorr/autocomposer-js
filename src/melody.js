@@ -6,9 +6,9 @@ var AcLogic = require('./logic');
 const AcConstants = require('./constants');
 
 /**
-* Creates melodies from a given chord progression
+* Submodule responsible for creating melodies from a given chord progression.
 */
-class AutoComposerMelody {
+class Melody {
   constructor() {
     /** @type {string} */
     this.lowerLimit = AcConstants.DEFAULT_LOWER_LIMIT;
@@ -375,4 +375,4 @@ class AutoComposerMelody {
 
 };
 
-module.exports = new AutoComposerMelody();
+module.exports = new Melody();

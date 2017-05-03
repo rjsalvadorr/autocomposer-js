@@ -1,7 +1,7 @@
 var assert = require('assert');
 const _ = require('underscore');
 
-var AutoComposerMelody = require('../src/melody');
+var AutoComposerMelody = require('../index').melody;
 
 AutoComposerMelody._sendStatusUpdate = function() {
   // Overriding this function with nothing since it contains browser code.
