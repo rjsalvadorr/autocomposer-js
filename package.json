@@ -6,7 +6,7 @@
     "composition",
     "theory"
   ],
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A web app that displays simple musical melodies based on a chord progression",
   "main": "index.js",
   "repository": {
