@@ -13,8 +13,16 @@
         font-family: sans-serif;
       }
 
-      code {
-        white-space: pre;
+      code,
+      textarea,
+      #output-melodies {
+        font-family: monospace;
+        white-space: pre-wrap;
+      }
+
+      #output-melodies {
+        background-color: #fff;
+        border: 1px solid #888;
       }
     </style>
 
@@ -52,21 +60,16 @@
 
     <hr>
 
-    <script src="autocomposer-js.js"></script>
-    <script>
-      $(document).ready(function() {
-        $('#button-play-solo').click(function() {
-          var melody = $( "#solo-melody" ).val().split(" ");
-          AutoComposerJS.midiPlayer.playMelodySolo(melody);
-        });
+    <h2>Testing simple melody generation</h2>
+    <label for="chk-raw">Raw output: </label><input type="checkbox" id="chk-raw" name="chk-raw"/><br>
+    <label for="chk-limit">Limit output?: </label><input type="checkbox" id="chk-limit" name="chk-limit"/><br>
+    <label for="chk-filtered">Filter melodies?: </label><input type="checkbox" id="chk-filtered" name="chk-filtered"/><br>
+    <button id="btn-melody-gen" name="btn-melody-gen">Generate melody for "Gm D7"</button>
+    <p id="output-melodies"></p>
 
-        $('#button-play').click(function() {
-          var melody1 = $( "#first-melody" ).val().split(" ");
-          var melody2 = $( "#second-melody" ).val().split(" ");
-          var melody3 = $( "#third-melody" ).val().split(" ");
-          AutoComposerJS.midiPlayer.playMelodyWithAccompaniment(melody1, melody2, melody3);
-        });
-      });
-    </script>
+    <hr>
+
+    <script src="../dist/autocomposer-js.js"></script>
+    <script src="index.js"></script>
   </body>
 </html>

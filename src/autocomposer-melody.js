@@ -3,6 +3,7 @@ var ChordUnit = require('./chord-unit');
 var MelodyUnit = require('./melody-unit');
 
 var AcLogic = require('./autocomposer-logic');
+const AcConstants = require('./autocomposer-constants');
 
 /**
 * Creates melodies from a given chord progression
@@ -16,11 +17,11 @@ class AutoComposerMelody {
   */
   constructor() {
     /** @type {string[]} */
-    this.chordProgression = AcLogic.INITIAL_PROGRESSION;
+    this.chordProgression = AcConstants.INITIAL_PROGRESSION;
     /** @type {string} */
-    this.lowerLimit = AcLogic.DEFAULT_LOWER_LIMIT;
+    this.lowerLimit = AcConstants.DEFAULT_LOWER_LIMIT;
     /** @type {string} */
-    this.upperLimit = AcLogic.DEFAULT_UPPER_LIMIT;
+    this.upperLimit = AcConstants.DEFAULT_UPPER_LIMIT;
   }
 
   /**
@@ -83,7 +84,7 @@ class AutoComposerMelody {
       chordNotes = this._removePitchesFromChordTones(chordNotes, [topPitch]);
 
       for(var j = 0; j < chordNotes.length; j++) {
-        chordNotes[j] = this._getLowestNoteInRange(chordNotes[j], AcLogic.ACCOMPANIMENT_LOWER_LIMIT, AcLogic.ACCOMPANIMENT_UPPER_LIMIT);
+        chordNotes[j] = this._getLowestNoteInRange(chordNotes[j], AcConstants.ACCOMPANIMENT_LOWER_LIMIT, AcConstants.ACCOMPANIMENT_UPPER_LIMIT);
       }
       noteArray.push(chordNotes.join(" "));
     }
@@ -104,7 +105,7 @@ class AutoComposerMelody {
     for(var i = 0; i < melodyUnit.chordProgression.length; i++) {
       currentChord = melodyUnit.chordProgression[i];
       bassPitch = tonal.chord.parse(currentChord)["tonic"];
-      bassNote = this._getLowestNoteInRange(bassPitch, AcLogic.BASS_LOWER_LIMIT, AcLogic.BASS_UPPER_LIMIT);
+      bassNote = this._getLowestNoteInRange(bassPitch, AcConstants.BASS_LOWER_LIMIT, AcConstants.BASS_UPPER_LIMIT);
 
       noteArray.push(bassNote);
     }
@@ -302,8 +303,8 @@ class AutoComposerMelody {
       return this._buildSimpleMelodiesCore(chordUnit.nextChordUnit, returnList, options);
     } else {
       // End of the chain.
-      if(options.filtered && returnList.length > AcLogic.NUM_MELODIES_LIMIT) {
-        this._sendStatusUpdate("Generated  " + returnList.length + " melodies. Creating list of " + AcLogic.NUM_MELODIES_LIMIT + "...");
+      if(options.filtered && returnList.length > AcConstants.NUM_MELODIES_LIMIT) {
+        this._sendStatusUpdate("Generated  " + returnList.length + " melodies. Creating list of " + AcConstants.NUM_MELODIES_LIMIT + "...");
       } else {
         this._sendStatusUpdate("Generated  " + returnList.length + " melodies.");
       }
@@ -356,6 +357,7 @@ class AutoComposerMelody {
     * @return {MelodyUnit[]} - an array of MelodyUnits
     */
   buildSimpleMelodies(chordProgression, options) {
+    // TODO - change the input to accept both {string} and {string[]}
     var useDefault, melodyUnits, rawMelodies, coreOptions, muOptions;
     var rawOption, limitOption, filterOption, sortOption;
     var chordUnitList = this._buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);
@@ -369,14 +371,14 @@ class AutoComposerMelody {
         sortOption = false;
       } else {
         // default vals
-        limitOption = AcLogic.NUM_MELODIES_LIMIT;
+        limitOption = AcConstants.NUM_MELODIES_LIMIT;
         sortOption = true;
       }
     } else {
       // default values
       rawOption = false;
       filterOption = true;
-      limitOption = AcLogic.NUM_MELODIES_LIMIT;
+      limitOption = AcConstants.NUM_MELODIES_LIMIT;
       sortOption = true;
     }
 

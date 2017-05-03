@@ -49,6 +49,7 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">module.exports = {
   DEFAULT_NOTE_DURATION: &quot;1&quot;,
   DEFAULT_NUM_INSTRUMENTS: 3,
+
   instrumentData: {
     melody: {
       role: &quot;melody&quot;,
@@ -76,7 +77,21 @@
       }
       return null;
     }
-  }
+  },
+
+  DEFAULT_LOWER_LIMIT: &quot;Db4&quot;,
+  DEFAULT_UPPER_LIMIT: &quot;G#5&quot;,
+
+  ACCOMPANIMENT_LOWER_LIMIT: &quot;Gb2&quot;,
+  ACCOMPANIMENT_UPPER_LIMIT: &quot;C#4&quot;,
+
+  BASS_LOWER_LIMIT: &quot;E1&quot;,
+  BASS_UPPER_LIMIT: &quot;F2&quot;,
+
+  INITIAL_PROGRESSION: &quot;G Em C D&quot;, // TODO - remove this. This is for the UI, and doesn&apos;t belong here. :(
+
+  NUM_GENERATIONS_LIMIT: 100000, // Number of melody generation attempts that the program will make.
+  NUM_MELODIES_LIMIT: 100 // Number of melodies that&apos;s returned&apos;
 }
 </code></pre>
 

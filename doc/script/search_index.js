@@ -606,60 +606,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/autocomposer-logic.js~autocomposerlogic#accompaniment_lower_limit",
-    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-member-ACCOMPANIMENT_LOWER_LIMIT",
-    "src/autocomposer-logic.js~AutoComposerLogic#ACCOMPANIMENT_LOWER_LIMIT",
-    "member"
-  ],
-  [
-    "src/autocomposer-logic.js~autocomposerlogic#accompaniment_upper_limit",
-    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-member-ACCOMPANIMENT_UPPER_LIMIT",
-    "src/autocomposer-logic.js~AutoComposerLogic#ACCOMPANIMENT_UPPER_LIMIT",
-    "member"
-  ],
-  [
-    "src/autocomposer-logic.js~autocomposerlogic#bass_lower_limit",
-    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-member-BASS_LOWER_LIMIT",
-    "src/autocomposer-logic.js~AutoComposerLogic#BASS_LOWER_LIMIT",
-    "member"
-  ],
-  [
-    "src/autocomposer-logic.js~autocomposerlogic#bass_upper_limit",
-    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-member-BASS_UPPER_LIMIT",
-    "src/autocomposer-logic.js~AutoComposerLogic#BASS_UPPER_LIMIT",
-    "member"
-  ],
-  [
-    "src/autocomposer-logic.js~autocomposerlogic#chords_limit",
-    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-member-CHORDS_LIMIT",
-    "src/autocomposer-logic.js~AutoComposerLogic#CHORDS_LIMIT",
-    "member"
-  ],
-  [
-    "src/autocomposer-logic.js~autocomposerlogic#default_lower_limit",
-    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-member-DEFAULT_LOWER_LIMIT",
-    "src/autocomposer-logic.js~AutoComposerLogic#DEFAULT_LOWER_LIMIT",
-    "member"
-  ],
-  [
-    "src/autocomposer-logic.js~autocomposerlogic#default_upper_limit",
-    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-member-DEFAULT_UPPER_LIMIT",
-    "src/autocomposer-logic.js~AutoComposerLogic#DEFAULT_UPPER_LIMIT",
-    "member"
-  ],
-  [
-    "src/autocomposer-logic.js~autocomposerlogic#num_generations_limit",
-    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-member-NUM_GENERATIONS_LIMIT",
-    "src/autocomposer-logic.js~AutoComposerLogic#NUM_GENERATIONS_LIMIT",
-    "member"
-  ],
-  [
-    "src/autocomposer-logic.js~autocomposerlogic#constructor",
-    "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-constructor-constructor",
-    "src/autocomposer-logic.js~AutoComposerLogic#constructor",
-    "method"
-  ],
-  [
     "src/autocomposer-logic.js~autocomposerlogic#convertaccidentalstoascii",
     "class/src/autocomposer-logic.js~AutoComposerLogic.html#instance-method-convertAccidentalsToAscii",
     "src/autocomposer-logic.js~AutoComposerLogic#convertAccidentalsToAscii",
