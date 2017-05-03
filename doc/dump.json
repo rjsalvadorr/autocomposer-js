@@ -2307,7 +2307,7 @@
     "__docId__": 79,
     "kind": "file",
     "name": "src/browser-build.js",
-    "content": "var AutoComposerJS = window.AutoComposerJS || {};\r\n\r\nAutoComposerJS.melody = require('./autocomposer-melody');\r\nAutoComposerJS.midiWriter = require('./autocomposer-midi-writer');\r\nAutoComposerJS.midiPlayer = require('./autocomposer-midi-player');\r\nAutoComposerJS.logic = require('./autocomposer-logic');\r\nAutoComposerJS.constants = require('./autocomposer-constants');\r\n\r\nwindow.AutoComposerJS = AutoComposerJS;\r\n\r\nmodule.exports = AutoComposerJS;",
+    "content": "var AutoComposerJS = window.AutoComposerJS || {};\r\n\r\nAutoComposerJS.melody = require('./autocomposer-melody');\r\nAutoComposerJS.midiWriter = require('./autocomposer-midi-writer');\r\nAutoComposerJS.midiPlayer = require('./autocomposer-midi-player');\r\nAutoComposerJS.logic = require('./autocomposer-logic');\r\nAutoComposerJS.constants = require('./autocomposer-constants');\r\n\r\nwindow.AutoComposerJS = AutoComposerJS;\r\n\r\nmodule.exports = AutoComposerJS;\r\n",
     "static": true,
     "longname": "src/browser-build.js",
     "access": null,

@@ -1,6 +1,7 @@
 {
   "name": "autocomposer-js",
-  "author": "RJ Salvador",
+  "author": "rjsalvadorr@gmail.com",
+  "keywords": ["music","composition","theory"],
   "version": "0.1.3",
   "description": "A web app that displays simple musical melodies based on a chord progression",
   "main": "index.js",
@@ -8,6 +9,7 @@
     "type": "git",
     "url": "https://github.com/rjsalvadorr/autocomposer-js.git"
   },
+  "homepage": "http://www.rj-salvador.com/apps/autocomposer",
   "scripts": {
     "test": "mocha && esdoc",
     "build-browser": "browserify src/browser-build.js | uglifyjs -o dist/autocomposer-js.js",
