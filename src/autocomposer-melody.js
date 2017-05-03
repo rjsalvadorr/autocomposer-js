@@ -2,8 +2,7 @@ var tonal = require('tonal');
 var ChordUnit = require('./chord-unit');
 var MelodyUnit = require('./melody-unit');
 
-var AutoComposerLogic = require('./autocomposer-logic');
-var AcLogic = new AutoComposerLogic.AutoComposerLogic();
+var AcLogic = require('./autocomposer-logic');
 
 /**
 * Creates melodies from a given chord progression
@@ -15,13 +14,13 @@ class AutoComposerMelody {
   * @param {string} lowerLimit - lower boundary note (in scientific notation)
   * @param {string} upperLimit - upper boundary note (in scientific notation)
   */
-  constructor(chordProgression, lowerLimit, upperLimit) {
+  constructor() {
     /** @type {string[]} */
-    this.chordProgression = chordProgression || AcLogic.INITIAL_PROGRESSION;
+    this.chordProgression = AcLogic.INITIAL_PROGRESSION;
     /** @type {string} */
-    this.lowerLimit = lowerLimit || AcLogic.DEFAULT_LOWER_LIMIT;
+    this.lowerLimit = AcLogic.DEFAULT_LOWER_LIMIT;
     /** @type {string} */
-    this.upperLimit = upperLimit || AcLogic.DEFAULT_UPPER_LIMIT;
+    this.upperLimit = AcLogic.DEFAULT_UPPER_LIMIT;
   }
 
   /**
@@ -393,4 +392,4 @@ class AutoComposerMelody {
 
 };
 
-exports.AutoComposerMelody = AutoComposerMelody;
+module.exports = new AutoComposerMelody();

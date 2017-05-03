@@ -1,15 +1,13 @@
 var assert = require('assert');
 const _ = require('underscore');
 
-var AcMelody = require('../src/autocomposer-melody');
-var AutoComposerMelody = new AcMelody.AutoComposerMelody();
+var AutoComposerMelody = require('../src/autocomposer-melody');
 
 AutoComposerMelody._sendStatusUpdate = function() {
   // Overriding this function with nothing since it contains browser code.
 }
 
-var AutoComposerLogic = require('../src/autocomposer-logic');
-var AcLogic = new AutoComposerLogic.AutoComposerLogic();
+var AcLogic = require('../src/autocomposer-logic');
 
 var TEST_CHORD_1 = "Gm7";
 var TEST_CHORD_2 = "Cm7";

@@ -1,6 +1,5 @@
 var React = require('react');
-var AutoComposerLogic = require('../autocomposer-logic');
-var AcLogic = new AutoComposerLogic.AutoComposerLogic();
+var AcLogic = require('../autocomposer-logic');
 
 /**
 * React Component representing the Help/Info Panel
@@ -32,7 +31,6 @@ class HelpPanel extends React.Component {
   }
 
   closePanel(event) {
-    console.debug("help panel, closePanel()");
     this.props.closeFunction("showHelp", false);
   }
 

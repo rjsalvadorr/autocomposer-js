@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 938,
+  "end": 899,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 938,
+    "end": 899,
     "loc": {
       "start": {
         "line": 1,
@@ -31,7 +31,7 @@
       {
         "type": "VariableDeclaration",
         "start": 0,
-        "end": 51,
+        "end": 61,
         "loc": {
           "start": {
             "line": 1,
@@ -39,14 +39,14 @@
           },
           "end": {
             "line": 1,
-            "column": 51
+            "column": 61
           }
         },
         "declarations": [
           {
             "type": "VariableDeclarator",
             "start": 4,
-            "end": 50,
+            "end": 60,
             "loc": {
               "start": {
                 "line": 1,
@@ -54,13 +54,13 @@
               },
               "end": {
                 "line": 1,
-                "column": 50
+                "column": 60
               }
             },
             "id": {
               "type": "Identifier",
               "start": 4,
-              "end": 11,
+              "end": 21,
               "loc": {
                 "start": {
                   "line": 1,
@@ -68,38 +68,38 @@
                 },
                 "end": {
                   "line": 1,
-                  "column": 11
+                  "column": 21
                 },
-                "identifierName": "AcLogic"
+                "identifierName": "AutoComposerLogic"
               },
-              "name": "AcLogic"
+              "name": "AutoComposerLogic"
             },
             "init": {
               "type": "CallExpression",
-              "start": 14,
-              "end": 50,
+              "start": 24,
+              "end": 60,
               "loc": {
                 "start": {
                   "line": 1,
-                  "column": 14
+                  "column": 24
                 },
                 "end": {
                   "line": 1,
-                  "column": 50
+                  "column": 60
                 }
               },
               "callee": {
                 "type": "Identifier",
-                "start": 14,
-                "end": 21,
+                "start": 24,
+                "end": 31,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 14
+                    "column": 24
                   },
                   "end": {
                     "line": 1,
-                    "column": 21
+                    "column": 31
                   },
                   "identifierName": "require"
                 },
@@ -108,16 +108,16 @@
               "arguments": [
                 {
                   "type": "StringLiteral",
-                  "start": 22,
-                  "end": 49,
+                  "start": 32,
+                  "end": 59,
                   "loc": {
                     "start": {
                       "line": 1,
-                      "column": 22
+                      "column": 32
                     },
                     "end": {
                       "line": 1,
-                      "column": 49
+                      "column": 59
                     }
                   },
                   "extra": {
@@ -130,137 +130,21 @@
             }
           }
         ],
-        "kind": "var"
-      },
-      {
-        "type": "VariableDeclaration",
-        "start": 53,
-        "end": 109,
-        "loc": {
-          "start": {
-            "line": 2,
-            "column": 0
-          },
-          "end": {
-            "line": 2,
-            "column": 56
-          }
-        },
-        "declarations": [
-          {
-            "type": "VariableDeclarator",
-            "start": 57,
-            "end": 108,
-            "loc": {
-              "start": {
-                "line": 2,
-                "column": 4
-              },
-              "end": {
-                "line": 2,
-                "column": 55
-              }
-            },
-            "id": {
-              "type": "Identifier",
-              "start": 57,
-              "end": 74,
-              "loc": {
-                "start": {
-                  "line": 2,
-                  "column": 4
-                },
-                "end": {
-                  "line": 2,
-                  "column": 21
-                },
-                "identifierName": "AutoComposerLogic"
-              },
-              "name": "AutoComposerLogic"
-            },
-            "init": {
-              "type": "NewExpression",
-              "start": 77,
-              "end": 108,
-              "loc": {
-                "start": {
-                  "line": 2,
-                  "column": 24
-                },
-                "end": {
-                  "line": 2,
-                  "column": 55
-                }
-              },
-              "callee": {
-                "type": "MemberExpression",
-                "start": 81,
-                "end": 106,
-                "loc": {
-                  "start": {
-                    "line": 2,
-                    "column": 28
-                  },
-                  "end": {
-                    "line": 2,
-                    "column": 53
-                  }
-                },
-                "object": {
-                  "type": "Identifier",
-                  "start": 81,
-                  "end": 88,
-                  "loc": {
-                    "start": {
-                      "line": 2,
-                      "column": 28
-                    },
-                    "end": {
-                      "line": 2,
-                      "column": 35
-                    },
-                    "identifierName": "AcLogic"
-                  },
-                  "name": "AcLogic"
-                },
-                "property": {
-                  "type": "Identifier",
-                  "start": 89,
-                  "end": 106,
-                  "loc": {
-                    "start": {
-                      "line": 2,
-                      "column": 36
-                    },
-                    "end": {
-                      "line": 2,
-                      "column": 53
-                    },
-                    "identifierName": "AutoComposerLogic"
-                  },
-                  "name": "AutoComposerLogic"
-                },
-                "computed": false
-              },
-              "arguments": []
-            }
-          }
-        ],
         "kind": "var",
         "trailingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\r\n * Represents some data built around a specific chord.\r\n * Has a reference to the next ChordUnit in the progression, and the chord tones that will be used in melody generation.\r\n ",
-            "start": 113,
-            "end": 299,
+            "value": "*\r\n* Represents some data built around a specific chord.\r\n* Has a reference to the next ChordUnit in the progression, and the chord tones that will be used in melody generation.\r\n* @private\r\n",
+            "start": 65,
+            "end": 260,
             "loc": {
               "start": {
-                "line": 4,
+                "line": 3,
                 "column": 0
               },
               "end": {
                 "line": 7,
-                "column": 3
+                "column": 2
               }
             }
           }
@@ -268,8 +152,8 @@
       },
       {
         "type": "Identifier",
-        "start": 301,
-        "end": 911,
+        "start": 262,
+        "end": 872,
         "loc": {
           "start": {
             "line": 8,
@@ -282,8 +166,8 @@
         },
         "id": {
           "type": "Identifier",
-          "start": 307,
-          "end": 316,
+          "start": 268,
+          "end": 277,
           "loc": {
             "start": {
               "line": 8,
@@ -301,8 +185,8 @@
         "superClass": null,
         "body": {
           "type": "ClassBody",
-          "start": 317,
-          "end": 911,
+          "start": 278,
+          "end": 872,
           "loc": {
             "start": {
               "line": 8,
@@ -316,8 +200,8 @@
           "body": [
             {
               "type": "ClassMethod",
-              "start": 520,
-              "end": 759,
+              "start": 481,
+              "end": 720,
               "loc": {
                 "start": {
                   "line": 14,
@@ -331,8 +215,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 520,
-                "end": 531,
+                "start": 481,
+                "end": 492,
                 "loc": {
                   "start": {
                     "line": 14,
@@ -356,8 +240,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 532,
-                  "end": 537,
+                  "start": 493,
+                  "end": 498,
                   "loc": {
                     "start": {
                       "line": 14,
@@ -373,8 +257,8 @@
                 },
                 {
                   "type": "Identifier",
-                  "start": 539,
-                  "end": 549,
+                  "start": 500,
+                  "end": 510,
                   "loc": {
                     "start": {
                       "line": 14,
@@ -390,8 +274,8 @@
                 },
                 {
                   "type": "Identifier",
-                  "start": 551,
-                  "end": 564,
+                  "start": 512,
+                  "end": 525,
                   "loc": {
                     "start": {
                       "line": 14,
@@ -408,8 +292,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 566,
-                "end": 759,
+                "start": 527,
+                "end": 720,
                 "loc": {
                   "start": {
                     "line": 14,
@@ -423,8 +307,8 @@
                 "body": [
                   {
                     "type": "ExpressionStatement",
-                    "start": 600,
-                    "end": 619,
+                    "start": 561,
+                    "end": 580,
                     "loc": {
                       "start": {
                         "line": 16,
@@ -437,8 +321,8 @@
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 600,
-                      "end": 618,
+                      "start": 561,
+                      "end": 579,
                       "loc": {
                         "start": {
                           "line": 16,
@@ -452,8 +336,8 @@
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 600,
-                        "end": 610,
+                        "start": 561,
+                        "end": 571,
                         "loc": {
                           "start": {
                             "line": 16,
@@ -466,8 +350,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 600,
-                          "end": 604,
+                          "start": 561,
+                          "end": 565,
                           "loc": {
                             "start": {
                               "line": 16,
@@ -482,8 +366,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 605,
-                          "end": 610,
+                          "start": 566,
+                          "end": 571,
                           "loc": {
                             "start": {
                               "line": 16,
@@ -502,8 +386,8 @@
                       },
                       "right": {
                         "type": "Identifier",
-                        "start": 613,
-                        "end": 618,
+                        "start": 574,
+                        "end": 579,
                         "loc": {
                           "start": {
                             "line": 16,
@@ -523,8 +407,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "* @type {string} ",
-                        "start": 573,
-                        "end": 594,
+                        "start": 534,
+                        "end": 555,
                         "loc": {
                           "start": {
                             "line": 15,
@@ -541,8 +425,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "* @type {string[]} ",
-                        "start": 625,
-                        "end": 648,
+                        "start": 586,
+                        "end": 609,
                         "loc": {
                           "start": {
                             "line": 17,
@@ -558,8 +442,8 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 654,
-                    "end": 683,
+                    "start": 615,
+                    "end": 644,
                     "loc": {
                       "start": {
                         "line": 18,
@@ -572,8 +456,8 @@
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 654,
-                      "end": 682,
+                      "start": 615,
+                      "end": 643,
                       "loc": {
                         "start": {
                           "line": 18,
@@ -587,8 +471,8 @@
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 654,
-                        "end": 669,
+                        "start": 615,
+                        "end": 630,
                         "loc": {
                           "start": {
                             "line": 18,
@@ -601,8 +485,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 654,
-                          "end": 658,
+                          "start": 615,
+                          "end": 619,
                           "loc": {
                             "start": {
                               "line": 18,
@@ -617,8 +501,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 659,
-                          "end": 669,
+                          "start": 620,
+                          "end": 630,
                           "loc": {
                             "start": {
                               "line": 18,
@@ -637,8 +521,8 @@
                       },
                       "right": {
                         "type": "Identifier",
-                        "start": 672,
-                        "end": 682,
+                        "start": 633,
+                        "end": 643,
                         "loc": {
                           "start": {
                             "line": 18,
@@ -658,8 +542,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "* @type {string[]} ",
-                        "start": 625,
-                        "end": 648,
+                        "start": 586,
+                        "end": 609,
                         "loc": {
                           "start": {
                             "line": 17,
@@ -676,8 +560,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "* @type {ChordUnit} ",
-                        "start": 689,
-                        "end": 713,
+                        "start": 650,
+                        "end": 674,
                         "loc": {
                           "start": {
                             "line": 19,
@@ -693,8 +577,8 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 719,
-                    "end": 754,
+                    "start": 680,
+                    "end": 715,
                     "loc": {
                       "start": {
                         "line": 20,
@@ -707,8 +591,8 @@
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 719,
-                      "end": 753,
+                      "start": 680,
+                      "end": 714,
                       "loc": {
                         "start": {
                           "line": 20,
@@ -722,8 +606,8 @@
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 719,
-                        "end": 737,
+                        "start": 680,
+                        "end": 698,
                         "loc": {
                           "start": {
                             "line": 20,
@@ -736,8 +620,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 719,
-                          "end": 723,
+                          "start": 680,
+                          "end": 684,
                           "loc": {
                             "start": {
                               "line": 20,
@@ -752,8 +636,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 724,
-                          "end": 737,
+                          "start": 685,
+                          "end": 698,
                           "loc": {
                             "start": {
                               "line": 20,
@@ -772,8 +656,8 @@
                       },
                       "right": {
                         "type": "Identifier",
-                        "start": 740,
-                        "end": 753,
+                        "start": 701,
+                        "end": 714,
                         "loc": {
                           "start": {
                             "line": 20,
@@ -793,8 +677,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "* @type {ChordUnit} ",
-                        "start": 689,
-                        "end": 713,
+                        "start": 650,
+                        "end": 674,
                         "loc": {
                           "start": {
                             "line": 19,
@@ -816,8 +700,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\r\n    * @param {string} chord - chord symbol\r\n    * @param {string[]} chordTones - array of notes in the melody\r\n    * @param {ChordUnit} nextChordUnit - next ChordUnit in the chain\r\n    ",
-                  "start": 324,
-                  "end": 516,
+                  "start": 285,
+                  "end": 477,
                   "loc": {
                     "start": {
                       "line": 9,
@@ -834,8 +718,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\r\n    * @param {ChordUnit} next - the next ChordUnit in the chain.\r\n    ",
-                  "start": 767,
-                  "end": 844,
+                  "start": 728,
+                  "end": 805,
                   "loc": {
                     "start": {
                       "line": 23,
@@ -851,8 +735,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 848,
-              "end": 908,
+              "start": 809,
+              "end": 869,
               "loc": {
                 "start": {
                   "line": 26,
@@ -866,8 +750,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 848,
-                "end": 864,
+                "start": 809,
+                "end": 825,
                 "loc": {
                   "start": {
                     "line": 26,
@@ -891,8 +775,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 865,
-                  "end": 869,
+                  "start": 826,
+                  "end": 830,
                   "loc": {
                     "start": {
                       "line": 26,
@@ -909,8 +793,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 871,
-                "end": 908,
+                "start": 832,
+                "end": 869,
                 "loc": {
                   "start": {
                     "line": 26,
@@ -924,8 +808,8 @@
                 "body": [
                   {
                     "type": "ExpressionStatement",
-                    "start": 878,
-                    "end": 903,
+                    "start": 839,
+                    "end": 864,
                     "loc": {
                       "start": {
                         "line": 27,
@@ -938,8 +822,8 @@
                     },
                     "expression": {
                       "type": "CallExpression",
-                      "start": 878,
-                      "end": 902,
+                      "start": 839,
+                      "end": 863,
                       "loc": {
                         "start": {
                           "line": 27,
@@ -952,8 +836,8 @@
                       },
                       "callee": {
                         "type": "MemberExpression",
-                        "start": 878,
-                        "end": 896,
+                        "start": 839,
+                        "end": 857,
                         "loc": {
                           "start": {
                             "line": 27,
@@ -966,8 +850,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 878,
-                          "end": 882,
+                          "start": 839,
+                          "end": 843,
                           "loc": {
                             "start": {
                               "line": 27,
@@ -981,8 +865,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 883,
-                          "end": 896,
+                          "start": 844,
+                          "end": 857,
                           "loc": {
                             "start": {
                               "line": 27,
@@ -1001,8 +885,8 @@
                       "arguments": [
                         {
                           "type": "Identifier",
-                          "start": 897,
-                          "end": 901,
+                          "start": 858,
+                          "end": 862,
                           "loc": {
                             "start": {
                               "line": 27,
@@ -1026,8 +910,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\r\n    * @param {ChordUnit} next - the next ChordUnit in the chain.\r\n    ",
-                  "start": 767,
-                  "end": 844,
+                  "start": 728,
+                  "end": 805,
                   "loc": {
                     "start": {
                       "line": 23,
@@ -1049,8 +933,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 915,
-        "end": 936,
+        "start": 876,
+        "end": 897,
         "loc": {
           "start": {
             "line": 31,
@@ -1065,8 +949,8 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 924,
-            "end": 933,
+            "start": 885,
+            "end": 894,
             "loc": {
               "start": {
                 "line": 31,
@@ -1079,8 +963,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 924,
-              "end": 933,
+              "start": 885,
+              "end": 894,
               "loc": {
                 "start": {
                   "line": 31,
@@ -1096,8 +980,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 924,
-              "end": 933,
+              "start": 885,
+              "end": 894,
               "loc": {
                 "start": {
                   "line": 31,
@@ -1117,8 +1001,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 915,
-        "end": 936,
+        "start": 876,
+        "end": 897,
         "loc": {
           "start": {
             "line": 31,
@@ -1131,8 +1015,8 @@
         },
         "declaration": {
           "type": "ClassDeclaration",
-          "start": 301,
-          "end": 911,
+          "start": 262,
+          "end": 872,
           "loc": {
             "start": {
               "line": 8,
@@ -1145,8 +1029,8 @@
           },
           "id": {
             "type": "Identifier",
-            "start": 307,
-            "end": 316,
+            "start": 268,
+            "end": 277,
             "loc": {
               "start": {
                 "line": 8,
@@ -1164,8 +1048,8 @@
           "superClass": null,
           "body": {
             "type": "ClassBody",
-            "start": 317,
-            "end": 911,
+            "start": 278,
+            "end": 872,
             "loc": {
               "start": {
                 "line": 8,
@@ -1179,8 +1063,8 @@
             "body": [
               {
                 "type": "ClassMethod",
-                "start": 520,
-                "end": 759,
+                "start": 481,
+                "end": 720,
                 "loc": {
                   "start": {
                     "line": 14,
@@ -1194,8 +1078,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 520,
-                  "end": 531,
+                  "start": 481,
+                  "end": 492,
                   "loc": {
                     "start": {
                       "line": 14,
@@ -1219,8 +1103,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 532,
-                    "end": 537,
+                    "start": 493,
+                    "end": 498,
                     "loc": {
                       "start": {
                         "line": 14,
@@ -1236,8 +1120,8 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 539,
-                    "end": 549,
+                    "start": 500,
+                    "end": 510,
                     "loc": {
                       "start": {
                         "line": 14,
@@ -1253,8 +1137,8 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 551,
-                    "end": 564,
+                    "start": 512,
+                    "end": 525,
                     "loc": {
                       "start": {
                         "line": 14,
@@ -1271,8 +1155,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 566,
-                  "end": 759,
+                  "start": 527,
+                  "end": 720,
                   "loc": {
                     "start": {
                       "line": 14,
@@ -1286,8 +1170,8 @@
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 600,
-                      "end": 619,
+                      "start": 561,
+                      "end": 580,
                       "loc": {
                         "start": {
                           "line": 16,
@@ -1300,8 +1184,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 600,
-                        "end": 618,
+                        "start": 561,
+                        "end": 579,
                         "loc": {
                           "start": {
                             "line": 16,
@@ -1315,8 +1199,8 @@
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 600,
-                          "end": 610,
+                          "start": 561,
+                          "end": 571,
                           "loc": {
                             "start": {
                               "line": 16,
@@ -1329,8 +1213,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 600,
-                            "end": 604,
+                            "start": 561,
+                            "end": 565,
                             "loc": {
                               "start": {
                                 "line": 16,
@@ -1345,8 +1229,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 605,
-                            "end": 610,
+                            "start": 566,
+                            "end": 571,
                             "loc": {
                               "start": {
                                 "line": 16,
@@ -1365,8 +1249,8 @@
                         },
                         "right": {
                           "type": "Identifier",
-                          "start": 613,
-                          "end": 618,
+                          "start": 574,
+                          "end": 579,
                           "loc": {
                             "start": {
                               "line": 16,
@@ -1386,8 +1270,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "* @type {string} ",
-                          "start": 573,
-                          "end": 594,
+                          "start": 534,
+                          "end": 555,
                           "loc": {
                             "start": {
                               "line": 15,
@@ -1404,8 +1288,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "* @type {string[]} ",
-                          "start": 625,
-                          "end": 648,
+                          "start": 586,
+                          "end": 609,
                           "loc": {
                             "start": {
                               "line": 17,
@@ -1421,8 +1305,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 654,
-                      "end": 683,
+                      "start": 615,
+                      "end": 644,
                       "loc": {
                         "start": {
                           "line": 18,
@@ -1435,8 +1319,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 654,
-                        "end": 682,
+                        "start": 615,
+                        "end": 643,
                         "loc": {
                           "start": {
                             "line": 18,
@@ -1450,8 +1334,8 @@
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 654,
-                          "end": 669,
+                          "start": 615,
+                          "end": 630,
                           "loc": {
                             "start": {
                               "line": 18,
@@ -1464,8 +1348,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 654,
-                            "end": 658,
+                            "start": 615,
+                            "end": 619,
                             "loc": {
                               "start": {
                                 "line": 18,
@@ -1480,8 +1364,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 659,
-                            "end": 669,
+                            "start": 620,
+                            "end": 630,
                             "loc": {
                               "start": {
                                 "line": 18,
@@ -1500,8 +1384,8 @@
                         },
                         "right": {
                           "type": "Identifier",
-                          "start": 672,
-                          "end": 682,
+                          "start": 633,
+                          "end": 643,
                           "loc": {
                             "start": {
                               "line": 18,
@@ -1521,8 +1405,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "* @type {string[]} ",
-                          "start": 625,
-                          "end": 648,
+                          "start": 586,
+                          "end": 609,
                           "loc": {
                             "start": {
                               "line": 17,
@@ -1539,8 +1423,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "* @type {ChordUnit} ",
-                          "start": 689,
-                          "end": 713,
+                          "start": 650,
+                          "end": 674,
                           "loc": {
                             "start": {
                               "line": 19,
@@ -1556,8 +1440,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 719,
-                      "end": 754,
+                      "start": 680,
+                      "end": 715,
                       "loc": {
                         "start": {
                           "line": 20,
@@ -1570,8 +1454,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 719,
-                        "end": 753,
+                        "start": 680,
+                        "end": 714,
                         "loc": {
                           "start": {
                             "line": 20,
@@ -1585,8 +1469,8 @@
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 719,
-                          "end": 737,
+                          "start": 680,
+                          "end": 698,
                           "loc": {
                             "start": {
                               "line": 20,
@@ -1599,8 +1483,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 719,
-                            "end": 723,
+                            "start": 680,
+                            "end": 684,
                             "loc": {
                               "start": {
                                 "line": 20,
@@ -1615,8 +1499,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 724,
-                            "end": 737,
+                            "start": 685,
+                            "end": 698,
                             "loc": {
                               "start": {
                                 "line": 20,
@@ -1635,8 +1519,8 @@
                         },
                         "right": {
                           "type": "Identifier",
-                          "start": 740,
-                          "end": 753,
+                          "start": 701,
+                          "end": 714,
                           "loc": {
                             "start": {
                               "line": 20,
@@ -1656,8 +1540,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "* @type {ChordUnit} ",
-                          "start": 689,
-                          "end": 713,
+                          "start": 650,
+                          "end": 674,
                           "loc": {
                             "start": {
                               "line": 19,
@@ -1679,8 +1563,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\r\n    * @param {string} chord - chord symbol\r\n    * @param {string[]} chordTones - array of notes in the melody\r\n    * @param {ChordUnit} nextChordUnit - next ChordUnit in the chain\r\n    ",
-                    "start": 324,
-                    "end": 516,
+                    "start": 285,
+                    "end": 477,
                     "loc": {
                       "start": {
                         "line": 9,
@@ -1697,8 +1581,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\r\n    * @param {ChordUnit} next - the next ChordUnit in the chain.\r\n    ",
-                    "start": 767,
-                    "end": 844,
+                    "start": 728,
+                    "end": 805,
                     "loc": {
                       "start": {
                         "line": 23,
@@ -1714,8 +1598,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 848,
-                "end": 908,
+                "start": 809,
+                "end": 869,
                 "loc": {
                   "start": {
                     "line": 26,
@@ -1729,8 +1613,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 848,
-                  "end": 864,
+                  "start": 809,
+                  "end": 825,
                   "loc": {
                     "start": {
                       "line": 26,
@@ -1754,8 +1638,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 865,
-                    "end": 869,
+                    "start": 826,
+                    "end": 830,
                     "loc": {
                       "start": {
                         "line": 26,
@@ -1772,8 +1656,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 871,
-                  "end": 908,
+                  "start": 832,
+                  "end": 869,
                   "loc": {
                     "start": {
                       "line": 26,
@@ -1787,8 +1671,8 @@
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 878,
-                      "end": 903,
+                      "start": 839,
+                      "end": 864,
                       "loc": {
                         "start": {
                           "line": 27,
@@ -1801,8 +1685,8 @@
                       },
                       "expression": {
                         "type": "CallExpression",
-                        "start": 878,
-                        "end": 902,
+                        "start": 839,
+                        "end": 863,
                         "loc": {
                           "start": {
                             "line": 27,
@@ -1815,8 +1699,8 @@
                         },
                         "callee": {
                           "type": "MemberExpression",
-                          "start": 878,
-                          "end": 896,
+                          "start": 839,
+                          "end": 857,
                           "loc": {
                             "start": {
                               "line": 27,
@@ -1829,8 +1713,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 878,
-                            "end": 882,
+                            "start": 839,
+                            "end": 843,
                             "loc": {
                               "start": {
                                 "line": 27,
@@ -1844,8 +1728,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 883,
-                            "end": 896,
+                            "start": 844,
+                            "end": 857,
                             "loc": {
                               "start": {
                                 "line": 27,
@@ -1864,8 +1748,8 @@
                         "arguments": [
                           {
                             "type": "Identifier",
-                            "start": 897,
-                            "end": 901,
+                            "start": 858,
+                            "end": 862,
                             "loc": {
                               "start": {
                                 "line": 27,
@@ -1889,8 +1773,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\r\n    * @param {ChordUnit} next - the next ChordUnit in the chain.\r\n    ",
-                    "start": 767,
-                    "end": 844,
+                    "start": 728,
+                    "end": 805,
                     "loc": {
                       "start": {
                         "line": 23,
@@ -1909,17 +1793,17 @@
           "leadingComments": [
             {
               "type": "CommentBlock",
-              "value": "*\r\n * Represents some data built around a specific chord.\r\n * Has a reference to the next ChordUnit in the progression, and the chord tones that will be used in melody generation.\r\n ",
-              "start": 113,
-              "end": 299,
+              "value": "*\r\n* Represents some data built around a specific chord.\r\n* Has a reference to the next ChordUnit in the progression, and the chord tones that will be used in melody generation.\r\n* @private\r\n",
+              "start": 65,
+              "end": 260,
               "loc": {
                 "start": {
-                  "line": 4,
+                  "line": 3,
                   "column": 0
                 },
                 "end": {
                   "line": 7,
-                  "column": 3
+                  "column": 2
                 }
               }
             }
@@ -1937,25 +1821,25 @@
   "comments": [
     {
       "type": "CommentBlock",
-      "value": "*\r\n * Represents some data built around a specific chord.\r\n * Has a reference to the next ChordUnit in the progression, and the chord tones that will be used in melody generation.\r\n ",
-      "start": 113,
-      "end": 299,
+      "value": "*\r\n* Represents some data built around a specific chord.\r\n* Has a reference to the next ChordUnit in the progression, and the chord tones that will be used in melody generation.\r\n* @private\r\n",
+      "start": 65,
+      "end": 260,
       "loc": {
         "start": {
-          "line": 4,
+          "line": 3,
           "column": 0
         },
         "end": {
           "line": 7,
-          "column": 3
+          "column": 2
         }
       }
     },
     {
       "type": "CommentBlock",
       "value": "*\r\n    * @param {string} chord - chord symbol\r\n    * @param {string[]} chordTones - array of notes in the melody\r\n    * @param {ChordUnit} nextChordUnit - next ChordUnit in the chain\r\n    ",
-      "start": 324,
-      "end": 516,
+      "start": 285,
+      "end": 477,
       "loc": {
         "start": {
           "line": 9,
@@ -1970,8 +1854,8 @@
     {
       "type": "CommentBlock",
       "value": "* @type {string} ",
-      "start": 573,
-      "end": 594,
+      "start": 534,
+      "end": 555,
       "loc": {
         "start": {
           "line": 15,
@@ -1986,8 +1870,8 @@
     {
       "type": "CommentBlock",
       "value": "* @type {string[]} ",
-      "start": 625,
-      "end": 648,
+      "start": 586,
+      "end": 609,
       "loc": {
         "start": {
           "line": 17,
@@ -2002,8 +1886,8 @@
     {
       "type": "CommentBlock",
       "value": "* @type {ChordUnit} ",
-      "start": 689,
-      "end": 713,
+      "start": 650,
+      "end": 674,
       "loc": {
         "start": {
           "line": 19,
@@ -2018,8 +1902,8 @@
     {
       "type": "CommentBlock",
       "value": "*\r\n    * @param {ChordUnit} next - the next ChordUnit in the chain.\r\n    ",
-      "start": 767,
-      "end": 844,
+      "start": 728,
+      "end": 805,
       "loc": {
         "start": {
           "line": 23,
@@ -2073,9 +1957,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "AcLogic",
+      "value": "AutoComposerLogic",
       "start": 4,
-      "end": 11,
+      "end": 21,
       "loc": {
         "start": {
           "line": 1,
@@ -2083,7 +1967,7 @@
         },
         "end": {
           "line": 1,
-          "column": 11
+          "column": 21
         }
       }
     },
@@ -2101,16 +1985,16 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 12,
-      "end": 13,
+      "start": 22,
+      "end": 23,
       "loc": {
         "start": {
           "line": 1,
-          "column": 12
+          "column": 22
         },
         "end": {
           "line": 1,
-          "column": 13
+          "column": 23
         }
       }
     },
@@ -2127,16 +2011,16 @@
         "binop": null
       },
       "value": "require",
-      "start": 14,
-      "end": 21,
+      "start": 24,
+      "end": 31,
       "loc": {
         "start": {
           "line": 1,
-          "column": 14
+          "column": 24
         },
         "end": {
           "line": 1,
-          "column": 21
+          "column": 31
         }
       }
     },
@@ -2152,16 +2036,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 21,
-      "end": 22,
+      "start": 31,
+      "end": 32,
       "loc": {
         "start": {
           "line": 1,
-          "column": 21
+          "column": 31
         },
         "end": {
           "line": 1,
-          "column": 22
+          "column": 32
         }
       }
     },
@@ -2179,16 +2063,16 @@
         "updateContext": null
       },
       "value": "../src/autocomposer-logic",
-      "start": 22,
-      "end": 49,
+      "start": 32,
+      "end": 59,
       "loc": {
         "start": {
           "line": 1,
-          "column": 22
+          "column": 32
         },
         "end": {
           "line": 1,
-          "column": 49
+          "column": 59
         }
       }
     },
@@ -2204,16 +2088,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 49,
-      "end": 50,
+      "start": 59,
+      "end": 60,
       "loc": {
         "start": {
           "line": 1,
-          "column": 49
+          "column": 59
         },
         "end": {
           "line": 1,
-          "column": 50
+          "column": 60
         }
       }
     },
@@ -2230,295 +2114,32 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 50,
-      "end": 51,
+      "start": 60,
+      "end": 61,
       "loc": {
         "start": {
           "line": 1,
-          "column": 50
+          "column": 60
         },
         "end": {
           "line": 1,
-          "column": 51
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "var",
-        "keyword": "var",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "var",
-      "start": 53,
-      "end": 56,
-      "loc": {
-        "start": {
-          "line": 2,
-          "column": 0
-        },
-        "end": {
-          "line": 2,
-          "column": 3
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "AutoComposerLogic",
-      "start": 57,
-      "end": 74,
-      "loc": {
-        "start": {
-          "line": 2,
-          "column": 4
-        },
-        "end": {
-          "line": 2,
-          "column": 21
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "=",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": true,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "=",
-      "start": 75,
-      "end": 76,
-      "loc": {
-        "start": {
-          "line": 2,
-          "column": 22
-        },
-        "end": {
-          "line": 2,
-          "column": 23
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "new",
-        "keyword": "new",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "new",
-      "start": 77,
-      "end": 80,
-      "loc": {
-        "start": {
-          "line": 2,
-          "column": 24
-        },
-        "end": {
-          "line": 2,
-          "column": 27
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "AcLogic",
-      "start": 81,
-      "end": 88,
-      "loc": {
-        "start": {
-          "line": 2,
-          "column": 28
-        },
-        "end": {
-          "line": 2,
-          "column": 35
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ".",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 88,
-      "end": 89,
-      "loc": {
-        "start": {
-          "line": 2,
-          "column": 35
-        },
-        "end": {
-          "line": 2,
-          "column": 36
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "AutoComposerLogic",
-      "start": 89,
-      "end": 106,
-      "loc": {
-        "start": {
-          "line": 2,
-          "column": 36
-        },
-        "end": {
-          "line": 2,
-          "column": 53
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "(",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 106,
-      "end": 107,
-      "loc": {
-        "start": {
-          "line": 2,
-          "column": 53
-        },
-        "end": {
-          "line": 2,
-          "column": 54
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ")",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 107,
-      "end": 108,
-      "loc": {
-        "start": {
-          "line": 2,
-          "column": 54
-        },
-        "end": {
-          "line": 2,
-          "column": 55
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 108,
-      "end": 109,
-      "loc": {
-        "start": {
-          "line": 2,
-          "column": 55
-        },
-        "end": {
-          "line": 2,
-          "column": 56
+          "column": 61
         }
       }
     },
     {
       "type": "CommentBlock",
-      "value": "*\r\n * Represents some data built around a specific chord.\r\n * Has a reference to the next ChordUnit in the progression, and the chord tones that will be used in melody generation.\r\n ",
-      "start": 113,
-      "end": 299,
+      "value": "*\r\n* Represents some data built around a specific chord.\r\n* Has a reference to the next ChordUnit in the progression, and the chord tones that will be used in melody generation.\r\n* @private\r\n",
+      "start": 65,
+      "end": 260,
       "loc": {
         "start": {
-          "line": 4,
+          "line": 3,
           "column": 0
         },
         "end": {
           "line": 7,
-          "column": 3
+          "column": 2
         }
       }
     },
@@ -2537,8 +2158,8 @@
         "updateContext": null
       },
       "value": "class",
-      "start": 301,
-      "end": 306,
+      "start": 262,
+      "end": 267,
       "loc": {
         "start": {
           "line": 8,
@@ -2563,8 +2184,8 @@
         "binop": null
       },
       "value": "ChordUnit",
-      "start": 307,
-      "end": 316,
+      "start": 268,
+      "end": 277,
       "loc": {
         "start": {
           "line": 8,
@@ -2588,8 +2209,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 317,
-      "end": 318,
+      "start": 278,
+      "end": 279,
       "loc": {
         "start": {
           "line": 8,
@@ -2604,8 +2225,8 @@
     {
       "type": "CommentBlock",
       "value": "*\r\n    * @param {string} chord - chord symbol\r\n    * @param {string[]} chordTones - array of notes in the melody\r\n    * @param {ChordUnit} nextChordUnit - next ChordUnit in the chain\r\n    ",
-      "start": 324,
-      "end": 516,
+      "start": 285,
+      "end": 477,
       "loc": {
         "start": {
           "line": 9,
@@ -2630,8 +2251,8 @@
         "binop": null
       },
       "value": "constructor",
-      "start": 520,
-      "end": 531,
+      "start": 481,
+      "end": 492,
       "loc": {
         "start": {
           "line": 14,
@@ -2655,8 +2276,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 531,
-      "end": 532,
+      "start": 492,
+      "end": 493,
       "loc": {
         "start": {
           "line": 14,
@@ -2681,8 +2302,8 @@
         "binop": null
       },
       "value": "chord",
-      "start": 532,
-      "end": 537,
+      "start": 493,
+      "end": 498,
       "loc": {
         "start": {
           "line": 14,
@@ -2707,8 +2328,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 537,
-      "end": 538,
+      "start": 498,
+      "end": 499,
       "loc": {
         "start": {
           "line": 14,
@@ -2733,8 +2354,8 @@
         "binop": null
       },
       "value": "chordTones",
-      "start": 539,
-      "end": 549,
+      "start": 500,
+      "end": 510,
       "loc": {
         "start": {
           "line": 14,
@@ -2759,8 +2380,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 549,
-      "end": 550,
+      "start": 510,
+      "end": 511,
       "loc": {
         "start": {
           "line": 14,
@@ -2785,8 +2406,8 @@
         "binop": null
       },
       "value": "nextChordUnit",
-      "start": 551,
-      "end": 564,
+      "start": 512,
+      "end": 525,
       "loc": {
         "start": {
           "line": 14,
@@ -2810,8 +2431,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 564,
-      "end": 565,
+      "start": 525,
+      "end": 526,
       "loc": {
         "start": {
           "line": 14,
@@ -2835,8 +2456,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 566,
-      "end": 567,
+      "start": 527,
+      "end": 528,
       "loc": {
         "start": {
           "line": 14,
@@ -2851,8 +2472,8 @@
     {
       "type": "CommentBlock",
       "value": "* @type {string} ",
-      "start": 573,
-      "end": 594,
+      "start": 534,
+      "end": 555,
       "loc": {
         "start": {
           "line": 15,
@@ -2879,8 +2500,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 600,
-      "end": 604,
+      "start": 561,
+      "end": 565,
       "loc": {
         "start": {
           "line": 16,
@@ -2905,8 +2526,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 604,
-      "end": 605,
+      "start": 565,
+      "end": 566,
       "loc": {
         "start": {
           "line": 16,
@@ -2931,8 +2552,8 @@
         "binop": null
       },
       "value": "chord",
-      "start": 605,
-      "end": 610,
+      "start": 566,
+      "end": 571,
       "loc": {
         "start": {
           "line": 16,
@@ -2958,8 +2579,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 611,
-      "end": 612,
+      "start": 572,
+      "end": 573,
       "loc": {
         "start": {
           "line": 16,
@@ -2984,8 +2605,8 @@
         "binop": null
       },
       "value": "chord",
-      "start": 613,
-      "end": 618,
+      "start": 574,
+      "end": 579,
       "loc": {
         "start": {
           "line": 16,
@@ -3010,8 +2631,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 618,
-      "end": 619,
+      "start": 579,
+      "end": 580,
       "loc": {
         "start": {
           "line": 16,
@@ -3026,8 +2647,8 @@
     {
       "type": "CommentBlock",
       "value": "* @type {string[]} ",
-      "start": 625,
-      "end": 648,
+      "start": 586,
+      "end": 609,
       "loc": {
         "start": {
           "line": 17,
@@ -3054,8 +2675,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 654,
-      "end": 658,
+      "start": 615,
+      "end": 619,
       "loc": {
         "start": {
           "line": 18,
@@ -3080,8 +2701,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 658,
-      "end": 659,
+      "start": 619,
+      "end": 620,
       "loc": {
         "start": {
           "line": 18,
@@ -3106,8 +2727,8 @@
         "binop": null
       },
       "value": "chordTones",
-      "start": 659,
-      "end": 669,
+      "start": 620,
+      "end": 630,
       "loc": {
         "start": {
           "line": 18,
@@ -3133,8 +2754,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 670,
-      "end": 671,
+      "start": 631,
+      "end": 632,
       "loc": {
         "start": {
           "line": 18,
@@ -3159,8 +2780,8 @@
         "binop": null
       },
       "value": "chordTones",
-      "start": 672,
-      "end": 682,
+      "start": 633,
+      "end": 643,
       "loc": {
         "start": {
           "line": 18,
@@ -3185,8 +2806,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 682,
-      "end": 683,
+      "start": 643,
+      "end": 644,
       "loc": {
         "start": {
           "line": 18,
@@ -3201,8 +2822,8 @@
     {
       "type": "CommentBlock",
       "value": "* @type {ChordUnit} ",
-      "start": 689,
-      "end": 713,
+      "start": 650,
+      "end": 674,
       "loc": {
         "start": {
           "line": 19,
@@ -3229,8 +2850,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 719,
-      "end": 723,
+      "start": 680,
+      "end": 684,
       "loc": {
         "start": {
           "line": 20,
@@ -3255,8 +2876,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 723,
-      "end": 724,
+      "start": 684,
+      "end": 685,
       "loc": {
         "start": {
           "line": 20,
@@ -3281,8 +2902,8 @@
         "binop": null
       },
       "value": "nextChordUnit",
-      "start": 724,
-      "end": 737,
+      "start": 685,
+      "end": 698,
       "loc": {
         "start": {
           "line": 20,
@@ -3308,8 +2929,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 738,
-      "end": 739,
+      "start": 699,
+      "end": 700,
       "loc": {
         "start": {
           "line": 20,
@@ -3334,8 +2955,8 @@
         "binop": null
       },
       "value": "nextChordUnit",
-      "start": 740,
-      "end": 753,
+      "start": 701,
+      "end": 714,
       "loc": {
         "start": {
           "line": 20,
@@ -3360,8 +2981,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 753,
-      "end": 754,
+      "start": 714,
+      "end": 715,
       "loc": {
         "start": {
           "line": 20,
@@ -3385,8 +3006,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 758,
-      "end": 759,
+      "start": 719,
+      "end": 720,
       "loc": {
         "start": {
           "line": 21,
@@ -3401,8 +3022,8 @@
     {
       "type": "CommentBlock",
       "value": "*\r\n    * @param {ChordUnit} next - the next ChordUnit in the chain.\r\n    ",
-      "start": 767,
-      "end": 844,
+      "start": 728,
+      "end": 805,
       "loc": {
         "start": {
           "line": 23,
@@ -3427,8 +3048,8 @@
         "binop": null
       },
       "value": "setNextChordUnit",
-      "start": 848,
-      "end": 864,
+      "start": 809,
+      "end": 825,
       "loc": {
         "start": {
           "line": 26,
@@ -3452,8 +3073,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 864,
-      "end": 865,
+      "start": 825,
+      "end": 826,
       "loc": {
         "start": {
           "line": 26,
@@ -3478,8 +3099,8 @@
         "binop": null
       },
       "value": "next",
-      "start": 865,
-      "end": 869,
+      "start": 826,
+      "end": 830,
       "loc": {
         "start": {
           "line": 26,
@@ -3503,8 +3124,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 869,
-      "end": 870,
+      "start": 830,
+      "end": 831,
       "loc": {
         "start": {
           "line": 26,
@@ -3528,8 +3149,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 871,
-      "end": 872,
+      "start": 832,
+      "end": 833,
       "loc": {
         "start": {
           "line": 26,
@@ -3556,8 +3177,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 878,
-      "end": 882,
+      "start": 839,
+      "end": 843,
       "loc": {
         "start": {
           "line": 27,
@@ -3582,8 +3203,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 882,
-      "end": 883,
+      "start": 843,
+      "end": 844,
       "loc": {
         "start": {
           "line": 27,
@@ -3608,8 +3229,8 @@
         "binop": null
       },
       "value": "nextChordUnit",
-      "start": 883,
-      "end": 896,
+      "start": 844,
+      "end": 857,
       "loc": {
         "start": {
           "line": 27,
@@ -3633,8 +3254,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 896,
-      "end": 897,
+      "start": 857,
+      "end": 858,
       "loc": {
         "start": {
           "line": 27,
@@ -3659,8 +3280,8 @@
         "binop": null
       },
       "value": "next",
-      "start": 897,
-      "end": 901,
+      "start": 858,
+      "end": 862,
       "loc": {
         "start": {
           "line": 27,
@@ -3684,8 +3305,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 901,
-      "end": 902,
+      "start": 862,
+      "end": 863,
       "loc": {
         "start": {
           "line": 27,
@@ -3710,8 +3331,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 902,
-      "end": 903,
+      "start": 863,
+      "end": 864,
       "loc": {
         "start": {
           "line": 27,
@@ -3735,8 +3356,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 907,
-      "end": 908,
+      "start": 868,
+      "end": 869,
       "loc": {
         "start": {
           "line": 28,
@@ -3760,8 +3381,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 910,
-      "end": 911,
+      "start": 871,
+      "end": 872,
       "loc": {
         "start": {
           "line": 29,
@@ -3788,8 +3409,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 915,
-      "end": 921,
+      "start": 876,
+      "end": 882,
       "loc": {
         "start": {
           "line": 31,
@@ -3813,8 +3434,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 922,
-      "end": 923,
+      "start": 883,
+      "end": 884,
       "loc": {
         "start": {
           "line": 31,
@@ -3839,8 +3460,8 @@
         "binop": null
       },
       "value": "ChordUnit",
-      "start": 924,
-      "end": 933,
+      "start": 885,
+      "end": 894,
       "loc": {
         "start": {
           "line": 31,
@@ -3864,8 +3485,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 934,
-      "end": 935,
+      "start": 895,
+      "end": 896,
       "loc": {
         "start": {
           "line": 31,
@@ -3890,8 +3511,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 935,
-      "end": 936,
+      "start": 896,
+      "end": 897,
       "loc": {
         "start": {
           "line": 31,
@@ -3916,8 +3537,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 938,
-      "end": 938,
+      "start": 899,
+      "end": 899,
       "loc": {
         "start": {
           "line": 32,

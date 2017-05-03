@@ -20043,7 +20043,7 @@ class CalculationExploration {
 
 exports.CalculationExploration = new CalculationExploration();
 
-},{"../../src/autocomposer-logic":58,"../../src/autocomposer-melody":59}],57:[function(require,module,exports){
+},{"../../src/autocomposer-logic":59,"../../src/autocomposer-melody":60}],57:[function(require,module,exports){
 window.jQuery = window.$ = require("jquery");
 const CalculationExploration = require("./calculations");
 var calc = CalculationExploration.CalculationExploration;
@@ -20051,8 +20051,8 @@ var calc = CalculationExploration.CalculationExploration;
 const BrowserPlayer = require("./browser-player");
 var testPlayer = BrowserPlayer.BrowserPlayer;
 
-const AcMidi = require("../../src/autocomposer-midi");
-var player = new AcMidi.AutoComposerMidi();
+const MidiWriter = require("../../src/autocomposer-midi-writer");
+const MidiPlayer = require("../../src/autocomposer-midi-player");
 
 var debugMessage1 = "Range is from Db4 to G#5\n\nAverage chord tones in that range for:";
 debugMessage1 += "\nmajor triads: " + calc.getAverageChordTonesInRange("M");
@@ -20090,14 +20090,14 @@ $(document).ready(function(){
 
   $('#button-play-solo').click(function() {
     var melody = $( "#solo-melody" ).val().split(" ");
-    player.playMelodySolo(melody);
+    MidiPlayer.playMelodySolo(melody);
   });
 
   $('#button-play').click(function() {
     var melody1 = $( "#first-melody" ).val().split(" ");
     var melody2 = $( "#second-melody" ).val().split(" ");
     var melody3 = $( "#third-melody" ).val().split(" ");
-    player.playMelodyWithAccompaniment(melody1, melody2, melody3);
+    MidiPlayer.playMelodyWithAccompaniment(melody1, melody2, melody3);
   });
 
   // $('#button-play').click(function() {
@@ -20106,7 +20106,41 @@ $(document).ready(function(){
 
 });
 
-},{"../../src/autocomposer-midi":60,"./browser-player":55,"./calculations":56,"jquery":11}],58:[function(require,module,exports){
+},{"../../src/autocomposer-midi-player":61,"../../src/autocomposer-midi-writer":62,"./browser-player":55,"./calculations":56,"jquery":11}],58:[function(require,module,exports){
+module.exports = {
+  DEFAULT_NOTE_DURATION: "1",
+  DEFAULT_NUM_INSTRUMENTS: 3,
+  instrumentData: {
+    melody: {
+      role: "melody",
+      name: "violin",
+      gain: 1.7,
+      midiInstrumentCode: 40
+    },
+    accompaniment: {
+      role: "accompaniment",
+      name: "acoustic_guitar_steel",
+      gain: 1.6,
+      midiInstrumentCode: 25
+    },
+    bass: {
+      role: "bass",
+      name: "acoustic_bass",
+      gain: 1.65,
+      midiInstrumentCode: 32
+    },
+    getByName: function(instrName) {
+      for (var instrumentRole in this) {
+        if(instrName === this[instrumentRole].name) {
+          return this[instrumentRole];
+        }
+      }
+      return null;
+    }
+  }
+}
+
+},{}],59:[function(require,module,exports){
 var range = require('tonal-range');
 var chord = require('tonal-chord');
 var note = require('tonal-note');
@@ -20229,15 +20263,14 @@ class AutoComposerLogic {
 
 };
 
-exports.AutoComposerLogic = AutoComposerLogic;
+module.exports = new AutoComposerLogic();
 
-},{"tonal-chord":28,"tonal-note":38,"tonal-range":49}],59:[function(require,module,exports){
+},{"tonal-chord":28,"tonal-note":38,"tonal-range":49}],60:[function(require,module,exports){
 var tonal = require('tonal');
 var ChordUnit = require('./chord-unit');
 var MelodyUnit = require('./melody-unit');
 
-var AutoComposerLogic = require('./autocomposer-logic');
-var AcLogic = new AutoComposerLogic.AutoComposerLogic();
+var AcLogic = require('./autocomposer-logic');
 
 /**
 * Creates melodies from a given chord progression
@@ -20249,13 +20282,13 @@ class AutoComposerMelody {
   * @param {string} lowerLimit - lower boundary note (in scientific notation)
   * @param {string} upperLimit - upper boundary note (in scientific notation)
   */
-  constructor(chordProgression, lowerLimit, upperLimit) {
+  constructor() {
     /** @type {string[]} */
-    this.chordProgression = chordProgression || AcLogic.INITIAL_PROGRESSION;
+    this.chordProgression = AcLogic.INITIAL_PROGRESSION;
     /** @type {string} */
-    this.lowerLimit = lowerLimit || AcLogic.DEFAULT_LOWER_LIMIT;
+    this.lowerLimit = AcLogic.DEFAULT_LOWER_LIMIT;
     /** @type {string} */
-    this.upperLimit = upperLimit || AcLogic.DEFAULT_UPPER_LIMIT;
+    this.upperLimit = AcLogic.DEFAULT_UPPER_LIMIT;
   }
 
   /**
@@ -20627,56 +20660,31 @@ class AutoComposerMelody {
 
 };
 
-exports.AutoComposerMelody = AutoComposerMelody;
+module.exports = new AutoComposerMelody();
 
-},{"./autocomposer-logic":58,"./chord-unit":61,"./melody-unit":62,"tonal":54}],60:[function(require,module,exports){
-var MidiWriter = require('midi-writer-js');
-var MidiPlayer = require('midi-player-js');
-var SoundfontPlayer = require('soundfont-player');
-var tonalNote = require('tonal-note');
+},{"./autocomposer-logic":59,"./chord-unit":63,"./melody-unit":64,"tonal":54}],61:[function(require,module,exports){
+// Plays MIDI files on the browser!
+
+const MidiPlayer = require('midi-player-js');
+const SoundfontPlayer = require('soundfont-player');
+const tonalNote = require('tonal-note');
+
+const AcMidiWriter = require('./autocomposer-midi-writer');
+const AcConstants = require('./autocomposer-constants');
+const INSTRUMENT_DATA = AcConstants.instrumentData;
 
 /**
-* Class responsible for playing audio and generating MIDI files for users.
-* @emits {statusUpdate} - Emits this event when the audio player successfully loads.
+* Class responsible for playing audio on the browser.
+* @emits {statusUpdate} - Emits this event when the audio player loads.
 */
-class AutoComposerMidi {
+
+class AutoComposerMidiPlayer {
   constructor() {
-    this.NOTE_DURATION = "1";
-    this.NUM_INSTRUMENTS = 3;
-
-    this.instrumentData = {
-      melody: {
-        name: "violin",
-        sfInstrument: null, // actual instrument to be used by the app
-        gain: 1.7,
-        midiInstrumentCode: 40
-      },
-      accompaniment: {
-        name: "acoustic_guitar_steel",
-        sfInstrument: null,
-        gain: 1.6,
-        midiInstrumentCode: 25
-      },
-      bass: {
-        name: "acoustic_bass",
-        sfInstrument: null,
-        gain: 1.65,
-        midiInstrumentCode: 32
-      },
-      getByName: function(instrName) {
-        for (var instrumentRole in this) {
-          if(instrName === this[instrumentRole].name) {
-            return this[instrumentRole];
-          }
-        }
-        return null;
-      }
-    };
-
+    this.instruments = {};
     this.numInstrumentsInit = 0;
 
     this.player = null;
-    this.audioContext = new AudioContext;
+    this.audioContext = new AudioContext();
 
     this.initialized = false;
     // Added this flag to fix an issue where notes randomly play again after the track ends.
@@ -20688,22 +20696,21 @@ class AutoComposerMidi {
     var haxThis = this;
     var currentInstrument;
 
-    for (var instrumentRole in this.instrumentData) {
+    for (var instrumentRole in INSTRUMENT_DATA) {
       // initialize each instrument
-      if(typeof this.instrumentData[instrumentRole] !== "function")
-      Soundfont.instrument(this.audioContext, haxThis.instrumentData[instrumentRole].name, {soundfont: 'FluidR3_GM'}).then(function (sfInstrument) {
-        currentInstrument = haxThis.instrumentData.getByName(sfInstrument.name);
-        currentInstrument.sfInstrument = sfInstrument;
+      if(typeof INSTRUMENT_DATA[instrumentRole] !== "function") {
+        Soundfont.instrument(this.audioContext, INSTRUMENT_DATA[instrumentRole].name, {soundfont: 'FluidR3_GM'}).then(function (sfInstrument) {
+          currentInstrument = INSTRUMENT_DATA.getByName(sfInstrument.name);
 
-        haxThis.numInstrumentsInit++;
+          haxThis.instruments[currentInstrument.role] = sfInstrument;
 
-        console.log("[INNER FUNCTION] instrumentRole=" + instrumentRole);
-        console.log(currentInstrument);
-        console.log(sfInstrument);
-        if(haxThis.numInstrumentsInit === haxThis.NUM_INSTRUMENTS) {
-          haxThis._finishLoad();
-        }
-      });
+          haxThis.numInstrumentsInit++;
+
+          if(haxThis.numInstrumentsInit === AcConstants.DEFAULT_NUM_INSTRUMENTS) {
+            haxThis._finishLoad();
+          }
+        });
+      }
     }
 
   }
@@ -20715,20 +20722,20 @@ class AutoComposerMidi {
     */
   _midiCallback(event) {
     // callback for MIDI events
-    var instr1 = this.instrumentData["melody"];
-    var instr2 = this.instrumentData["accompaniment"];
-    var instr3 = this.instrumentData["bass"];
+    var instr1 = this.instruments["melody"];
+    var instr2 = this.instruments["accompaniment"];
+    var instr3 = this.instruments["bass"];
 
     if (!this.playbackLocked && event.name == 'Note on' && event.velocity > 0) {
         switch(event.track) {
           case 1:
-            instr1.sfInstrument.play(event.noteName, this.audioContext.currentTime, {gain: instr1.gain});
+            instr1.play(event.noteName, this.audioContext.currentTime, {gain: instr1.gain});
             break;
           case 2:
-            instr2.sfInstrument.play(event.noteName, this.audioContext.currentTime, {gain: instr2.gain});
+            instr2.play(event.noteName, this.audioContext.currentTime, {gain: instr2.gain});
             break;
           case 3:
-            instr3.sfInstrument.play(event.noteName, this.audioContext.currentTime, {gain: instr3.gain});
+            instr3.play(event.noteName, this.audioContext.currentTime, {gain: instr3.gain});
             break;
           default:
             // nothing!
@@ -20738,13 +20745,13 @@ class AutoComposerMidi {
     if (event.name == 'Note off') {
       switch(event.track) {
         case 1:
-          instr1.sfInstrument.stop();
+          instr1.stop();
           break;
         case 2:
-          instr2.sfInstrument.stop();
+          instr2.stop();
           break;
         case 3:
-          instr3.sfInstrument.stop();
+          instr3.stop();
           break;
         default:
           // nothing!
@@ -20774,89 +20781,11 @@ class AutoComposerMidi {
   }
 
     /**
-    * Builds MIDI info for a note or chord
-    * @private
-    * @param {number[]} arrNumMidi - MIDI numbers for a set of pitches
-    * @param {number} duration - MIDI number for a pitch
-    * @param {number} wait
-    * @return {MidiWriter.NoteEvent} - ???
-    */
-  _buildMidi(arrNumMidi, duration, wait) {
-      if(!wait) {
-          wait = "0";
-      }
-      return new MidiWriter.NoteEvent({pitch: arrNumMidi, duration: duration, wait: wait, velocity: 100});
-  }
-
-    /**
-    * Builds a Track from a given chord.
-    * @private
-    * @param {string[]} arrChordNotes - chordNotes
-    * @param {Object} instrumentData - instrument data for track
-    * @return {Track} - a MidiWriter Track
-    */
-  _buildTrack(arrChordNotes, instrumentData) {
-    var notes, midiNumber, midiNumbers;
-    var returnTrack = new MidiWriter.Track();
-    returnTrack.addEvent(new MidiWriter.ProgramChangeEvent({instrument : instrumentData.midiInstrumentCode}));
-    returnTrack.addInstrumentName(instrumentData.name);
-
-    for(var i = 0; i < arrChordNotes.length; i++) {
-      midiNumbers = [];
-      notes = arrChordNotes[i].split(" ");
-
-      notes.forEach(function(note){
-        midiNumbers.push(tonalNote.midi(note));
-      })
-
-      returnTrack.addEvent(this._buildMidi(midiNumbers, this.NOTE_DURATION));
-    }
-
-    return returnTrack;
-  }
-
-    /**
-    * Gets the MIDI data for a given melody.
-    * @private
-    * @param {string[]} arrMelody - our melody
-    * @return {string} - MIDI data, as a DataURI string
-    */
-  _buildMelodyMidiSolo(arrMelody) {
-    var tracks = [], midiNumber;
-    tracks[0] = this._buildTrack(arrMelody, this.instrumentData["melody"]);
-
-    var write = new MidiWriter.Writer(tracks);
-
-    return write.dataUri();
-  }
-
-    /**
-    * Gets the MIDI data for a given melody, with accompaniment.
-    * @param {string[]} arrMelody - main melody
-    * @param {string[]} arrAcompanimentLine - accompaniment line
-    * @param {string[]} arrBassLine - bass line
-    * @return {string} - MIDI data, as a DataURI string.
-    */
-  buildMelodyMidiWithAccompaniment(arrMelody, arrAcompanimentLine, arrBassLine) {
-    var tracks, midiNumber;
-
-    var melodyTrack = this._buildTrack(arrMelody, this.instrumentData["melody"]);
-    var accompanimentTrack = this._buildTrack(arrAcompanimentLine, this.instrumentData["accompaniment"]);
-    var bassTrack = this._buildTrack(arrBassLine, this.instrumentData["bass"]);
-
-    tracks = [melodyTrack, accompanimentTrack, bassTrack];
-
-    var write = new MidiWriter.Writer(tracks);
-
-    return write.dataUri();
-  }
-
-    /**
     * Plays the given melody.
     * @param {string[]} melodySolo - solo melody (violin)
     */
   playMelodySolo(melodySolo) {
-    var strMidi = this._buildMelodyMidiSolo(melodySolo);
+    var strMidi = AcMidiWriter.buildMelodyMidi(melodySolo);
     this._playMelody(strMidi);
   }
     /**
@@ -20866,7 +20795,7 @@ class AutoComposerMidi {
     * @param {string[]} melodyBass - bass melody (bass)
     */
   playMelodyWithAccompaniment(melodySolo, melodyAccomp, melodyBass) {
-    var strMidi = this.buildMelodyMidiWithAccompaniment(melodySolo, melodyAccomp, melodyBass);
+    var strMidi = AcMidiWriter.buildMelodyMidiWithAccompaniment(melodySolo, melodyAccomp, melodyBass);
     this._playMelody(strMidi);
   }
 
@@ -20890,23 +20819,120 @@ class AutoComposerMidi {
     * Stops all playback
     */
   stopPlayback() {
-    this.instrumentData["melody"].sfInstrument.stop();
-    this.instrumentData["accompaniment"].sfInstrument.stop();
-    this.instrumentData["bass"].sfInstrument.stop();
+    this.instruments["melody"].stop();
+    this.instruments["accompaniment"].stop();
+    this.instruments["bass"].stop();
     this.player.stop();
   }
 }
 
-exports.AutoComposerMidi = AutoComposerMidi;
+module.exports = new AutoComposerMidiPlayer();
 
-},{"midi-player-js":12,"midi-writer-js":13,"soundfont-player":24,"tonal-note":38}],61:[function(require,module,exports){
-var AcLogic = require('../src/autocomposer-logic');
-var AutoComposerLogic = new AcLogic.AutoComposerLogic();
+},{"./autocomposer-constants":58,"./autocomposer-midi-writer":62,"midi-player-js":12,"soundfont-player":24,"tonal-note":38}],62:[function(require,module,exports){
+var MidiWriter = require('midi-writer-js');
+var MidiPlayer = require('midi-player-js');
+var SoundfontPlayer = require('soundfont-player');
+var tonalNote = require('tonal-note');
+
+const AcConstants = require('./autocomposer-constants');
+const INSTRUMENT_DATA = AcConstants.instrumentData;
 
 /**
- * Represents some data built around a specific chord.
- * Has a reference to the next ChordUnit in the progression, and the chord tones that will be used in melody generation.
- */
+* Class responsible for generating MIDI files for future playback.
+*/
+
+class AutoComposerMidiWriter {
+  constructor() {
+  }
+
+    /**
+    * Builds MIDI info for a note or chord
+    * @private
+    * @param {number[]} arrNumMidi - MIDI numbers for a set of pitches
+    * @param {number} duration - MIDI number for a pitch
+    * @param {number} wait
+    * @return {MidiWriter.NoteEvent} - ???
+    */
+  _buildMidi(arrNumMidi, duration, wait) {
+      if(!wait) {
+          wait = "0";
+      }
+      return new MidiWriter.NoteEvent({pitch: arrNumMidi, duration: duration, wait: wait, velocity: 100});
+  }
+
+    /**
+    * Builds a Track from a given chord.
+    * @private
+    * @param {string[]} arrChordNotes - chordNotes
+    * @param {Object} instrData - instrument data for track
+    * @return {Track} - a MidiWriter Track
+    */
+  _buildTrack(arrChordNotes, instrData) {
+    var notes, midiNumber, midiNumbers;
+    var returnTrack = new MidiWriter.Track();
+    returnTrack.addEvent(new MidiWriter.ProgramChangeEvent({instrument : instrData.midiInstrumentCode}));
+    returnTrack.addInstrumentName(instrData.name);
+
+    for(var i = 0; i < arrChordNotes.length; i++) {
+      midiNumbers = [];
+      notes = arrChordNotes[i].split(" ");
+
+      notes.forEach(function(note){
+        midiNumbers.push(tonalNote.midi(note));
+      })
+
+      returnTrack.addEvent(this._buildMidi(midiNumbers, AcConstants.DEFAULT_NOTE_DURATION));
+    }
+
+    return returnTrack;
+  }
+
+    /**
+    * Gets the MIDI data for a given melody.
+    * @param {string[]} arrMelody - our melody
+    * @return {string} - MIDI data, as a DataURI string
+    */
+  buildMelodyMidi(arrMelody) {
+    var tracks = [], midiNumber;
+    tracks[0] = this._buildTrack(arrMelody, INSTRUMENT_DATA["melody"]);
+
+    var write = new MidiWriter.Writer(tracks);
+
+    return write.dataUri();
+  }
+
+    /**
+    * Gets the MIDI data for a given melody, with accompaniment.
+    * @param {string[]} arrMelody - main melody
+    * @param {string[]} arrAcompanimentLine - accompaniment line
+    * @param {string[]} arrBassLine - bass line
+    * @return {string} - MIDI data, as a DataURI string.
+    */
+  buildMelodyMidiWithAccompaniment(arrMelody, arrAcompanimentLine, arrBassLine) {
+    var tracks, midiNumber;
+
+    var melodyTrack = this._buildTrack(arrMelody, INSTRUMENT_DATA["melody"]);
+    var accompanimentTrack = this._buildTrack(arrAcompanimentLine, INSTRUMENT_DATA["accompaniment"]);
+    var bassTrack = this._buildTrack(arrBassLine, INSTRUMENT_DATA["bass"]);
+
+    tracks = [melodyTrack, accompanimentTrack, bassTrack];
+
+    var write = new MidiWriter.Writer(tracks);
+
+    return write.dataUri();
+  }
+}
+
+module.exports = new AutoComposerMidiWriter();
+
+},{"./autocomposer-constants":58,"midi-player-js":12,"midi-writer-js":13,"soundfont-player":24,"tonal-note":38}],63:[function(require,module,exports){
+var AutoComposerLogic = require('../src/autocomposer-logic');
+
+/**
+* Represents some data built around a specific chord.
+* Has a reference to the next ChordUnit in the progression, and the chord tones that will be used in melody generation.
+* @private
+*/
 class ChordUnit {
     /**
     * @param {string} chord - chord symbol
@@ -20932,12 +20958,13 @@ class ChordUnit {
 
 exports.ChordUnit = ChordUnit;
 
-},{"../src/autocomposer-logic":58}],62:[function(require,module,exports){
+},{"../src/autocomposer-logic":59}],64:[function(require,module,exports){
 var range = require('tonal-range')
 
 /**
- * Represents a melody and associated metadata.
- */
+* Represents a melody and associated metadata.
+* @public
+*/
 class MelodyUnit {
     /**
     * @param {string[]} chordProgression - array of chord symbols

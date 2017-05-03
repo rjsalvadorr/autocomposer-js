@@ -1,5 +1,4 @@
-var AcLogic = require('../src/autocomposer-logic');
-var AutoComposerLogic = new AcLogic.AutoComposerLogic();
+var AutoComposerLogic = require('../src/autocomposer-logic');
 
 /**
 * Represents some data built around a specific chord.

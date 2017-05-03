@@ -2,14 +2,10 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const moment = require('moment');
 
-var AutoComposerLogic = require('./autocomposer-logic');
-var AcLogic = new AutoComposerLogic.AutoComposerLogic();
-
-var AutoComposerMelody = require('./autocomposer-melody');
-var AcMelody = new AutoComposerMelody.AutoComposerMelody();
-
-var acMidi = require('./autocomposer-midi');
-var AcMidi = new acMidi.AutoComposerMidi();
+var AcLogic = require('./autocomposer-logic');
+var AcMelody = require('./autocomposer-melody');
+var AcMidiWriter = require('./autocomposer-midi-writer');
+var AcMidiPlayer = require('./autocomposer-midi-player');
 
 var AcButton = require('./react/ac-button');
 var AcToggleButton = require('./react/ac-toggle-button');
@@ -146,7 +142,6 @@ class AutoComposer extends React.Component {
   * @param {boolean} [useDataStore] - If true, the data store is changed instead of the state object.
   */
   callbackChangeState(stateKey, newState, useDataStore) {
-    console.debug("app, callbackChangeState(" + stateKey + ", " + newState + ", " + useDataStore + ")");
     if(useDataStore) {
       this.store[stateKey] = newState;
     } else {
@@ -259,7 +254,7 @@ class AutoComposer extends React.Component {
   */
   playMelody(event) {
     if(this.store.melodies.length > 0) {
-      AcMidi.playMelodyWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);
+      AcMidiPlayer.playMelodyWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);
     }
   }
 
@@ -269,7 +264,7 @@ class AutoComposer extends React.Component {
   */
   playMelodySolo(event) {
     if(this.store.melodies.length > 0) {
-      AcMidi.playMelodySolo(this.store.melodies[0]);
+      AcMidiPlayer.playMelodySolo(this.store.melodies[0]);
     }
   }
 
@@ -278,7 +273,7 @@ class AutoComposer extends React.Component {
   * @param {Object} event - React event
   */
   stopMusic(event) {
-    AcMidi.stopPlayback();
+    AcMidiPlayer.stopPlayback();
   }
 
   /**
@@ -288,7 +283,7 @@ class AutoComposer extends React.Component {
   downloadMidi(event) {
     if(this.store.melodies.length > 0) {
       //download MIDI file
-      var dataString = AcMidi.buildMelodyMidiWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);
+      var dataString = AcMidiWriter.buildMelodyMidiWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);
       var timestamp = moment().format("YYMMDDHHmmss");
       var fileName = "autocomposer_" + timestamp + "_" + this.state.chordProgressionRaw.replace(/\s+/g, "-");
       download(dataString, fileName, "audio/midi");

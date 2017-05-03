@@ -120,4 +120,4 @@ class AutoComposerLogic {
 
 };
 
-exports.AutoComposerLogic = AutoComposerLogic;
+module.exports = new AutoComposerLogic();

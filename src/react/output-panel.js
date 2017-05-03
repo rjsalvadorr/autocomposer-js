@@ -1,7 +1,6 @@
 var React = require('react');
 
-var AutoComposerMelody = require('../autocomposer-melody');
-var AcMelody = new AutoComposerMelody.AutoComposerMelody();
+var AcMelody = require('../autocomposer-melody');
 
 var MelodyRow = require('./melody-row');
 var AcButton = require('./ac-button');

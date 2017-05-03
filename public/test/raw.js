@@ -5,8 +5,8 @@ var calc = CalculationExploration.CalculationExploration;
 const BrowserPlayer = require("./browser-player");
 var testPlayer = BrowserPlayer.BrowserPlayer;
 
-const AcMidi = require("../../src/autocomposer-midi");
-var player = new AcMidi.AutoComposerMidi();
+const MidiWriter = require("../../src/autocomposer-midi-writer");
+const MidiPlayer = require("../../src/autocomposer-midi-player");
 
 var debugMessage1 = "Range is from Db4 to G#5\n\nAverage chord tones in that range for:";
 debugMessage1 += "\nmajor triads: " + calc.getAverageChordTonesInRange("M");
@@ -44,14 +44,14 @@ $(document).ready(function(){
 
   $('#button-play-solo').click(function() {
     var melody = $( "#solo-melody" ).val().split(" ");
-    player.playMelodySolo(melody);
+    MidiPlayer.playMelodySolo(melody);
   });
 
   $('#button-play').click(function() {
     var melody1 = $( "#first-melody" ).val().split(" ");
     var melody2 = $( "#second-melody" ).val().split(" ");
     var melody3 = $( "#third-melody" ).val().split(" ");
-    player.playMelodyWithAccompaniment(melody1, melody2, melody3);
+    MidiPlayer.playMelodyWithAccompaniment(melody1, melody2, melody3);
   });
 
   // $('#button-play').click(function() {

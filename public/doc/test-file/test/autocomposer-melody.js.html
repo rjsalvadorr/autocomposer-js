@@ -33,12 +33,14 @@
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-logic.js~AutoComposerLogic.html">AutoComposerLogic</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-main.js~AutoComposer.html">AutoComposer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-melody.js~AutoComposerMelody.html">AutoComposerMelody</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-midi.js~AutoComposerMidi.html">AutoComposerMidi</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/chord-unit.js~ChordUnit.html">ChordUnit</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-midi-player.js~AutoComposerMidiPlayer.html">AutoComposerMidiPlayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-midi-writer.js~AutoComposerMidiWriter.html">AutoComposerMidiWriter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/melody-unit.js~MelodyUnit.html">MelodyUnit</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposer">autoComposer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerLogic">autoComposerLogic</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerMelody">autoComposerMelody</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerMidiPlayer">autoComposerMidiPlayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerMidiWriter">autoComposerMidiWriter</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -47,15 +49,13 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">var assert = require(&apos;assert&apos;);
 const _ = require(&apos;underscore&apos;);
 
-var AcMelody = require(&apos;../src/autocomposer-melody&apos;);
-var AutoComposerMelody = new AcMelody.AutoComposerMelody();
+var AutoComposerMelody = require(&apos;../src/autocomposer-melody&apos;);
 
 AutoComposerMelody._sendStatusUpdate = function() {
   // Overriding this function with nothing since it contains browser code.
 }
 
-var AutoComposerLogic = require(&apos;../src/autocomposer-logic&apos;);
-var AcLogic = new AutoComposerLogic.AutoComposerLogic();
+var AcLogic = require(&apos;../src/autocomposer-logic&apos;);
 
 var TEST_CHORD_1 = &quot;Gm7&quot;;
 var TEST_CHORD_2 = &quot;Cm7&quot;;
@@ -216,7 +216,7 @@ describe(&apos;AutoComposerMelody&apos;, function() {
     var melodyListRefactor2 = AutoComposerMelody.buildSimpleMelodies(chordProgression, {somethingDumb: &quot;yes&quot;});
     var melodyListRawRefactor = AutoComposerMelody.buildSimpleMelodies(chordProgression, {raw: true});
     var melodyListAllRefactor = AutoComposerMelody.buildSimpleMelodies(chordProgression, {limit: false, filter: false});
-    
+
     assert.deepEqual(melodyList, melodyListRefactor);
     assert.deepEqual(melodyList, melodyListRefactor2);
     assert.deepEqual(melodyListRaw, melodyListRawRefactor);

@@ -33,12 +33,14 @@
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-logic.js~AutoComposerLogic.html">AutoComposerLogic</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-main.js~AutoComposer.html">AutoComposer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-melody.js~AutoComposerMelody.html">AutoComposerMelody</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-midi.js~AutoComposerMidi.html">AutoComposerMidi</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/chord-unit.js~ChordUnit.html">ChordUnit</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-midi-player.js~AutoComposerMidiPlayer.html">AutoComposerMidiPlayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/autocomposer-midi-writer.js~AutoComposerMidiWriter.html">AutoComposerMidiWriter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/melody-unit.js~MelodyUnit.html">MelodyUnit</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposer">autoComposer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerLogic">autoComposerLogic</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerMelody">autoComposerMelody</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerMidiPlayer">autoComposerMidiPlayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-autoComposerMidiWriter">autoComposerMidiWriter</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -48,14 +50,10 @@
 const ReactDOM = require(&apos;react-dom&apos;);
 const moment = require(&apos;moment&apos;);
 
-var AutoComposerLogic = require(&apos;./autocomposer-logic&apos;);
-var AcLogic = new AutoComposerLogic.AutoComposerLogic();
-
-var AutoComposerMelody = require(&apos;./autocomposer-melody&apos;);
-var AcMelody = new AutoComposerMelody.AutoComposerMelody();
-
-var acMidi = require(&apos;./autocomposer-midi&apos;);
-var AcMidi = new acMidi.AutoComposerMidi();
+var AcLogic = require(&apos;./autocomposer-logic&apos;);
+var AcMelody = require(&apos;./autocomposer-melody&apos;);
+var AcMidiWriter = require(&apos;./autocomposer-midi-writer&apos;);
+var AcMidiPlayer = require(&apos;./autocomposer-midi-player&apos;);
 
 var AcButton = require(&apos;./react/ac-button&apos;);
 var AcToggleButton = require(&apos;./react/ac-toggle-button&apos;);
@@ -192,7 +190,6 @@ class AutoComposer extends React.Component {
   * @param {boolean} [useDataStore] - If true, the data store is changed instead of the state object.
   */
   callbackChangeState(stateKey, newState, useDataStore) {
-    console.debug(&quot;app, callbackChangeState(&quot; + stateKey + &quot;, &quot; + newState + &quot;, &quot; + useDataStore + &quot;)&quot;);
     if(useDataStore) {
       this.store[stateKey] = newState;
     } else {
@@ -305,7 +302,7 @@ class AutoComposer extends React.Component {
   */
   playMelody(event) {
     if(this.store.melodies.length &gt; 0) {
-      AcMidi.playMelodyWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);
+      AcMidiPlayer.playMelodyWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);
     }
   }
 
@@ -315,7 +312,7 @@ class AutoComposer extends React.Component {
   */
   playMelodySolo(event) {
     if(this.store.melodies.length &gt; 0) {
-      AcMidi.playMelodySolo(this.store.melodies[0]);
+      AcMidiPlayer.playMelodySolo(this.store.melodies[0]);
     }
   }
 
@@ -324,7 +321,7 @@ class AutoComposer extends React.Component {
   * @param {Object} event - React event
   */
   stopMusic(event) {
-    AcMidi.stopPlayback();
+    AcMidiPlayer.stopPlayback();
   }
 
   /**
@@ -334,7 +331,7 @@ class AutoComposer extends React.Component {
   downloadMidi(event) {
     if(this.store.melodies.length &gt; 0) {
       //download MIDI file
-      var dataString = AcMidi.buildMelodyMidiWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);
+      var dataString = AcMidiWriter.buildMelodyMidiWithAccompaniment(this.store.melodies[0], this.store.melodies[1], this.store.melodies[2]);
       var timestamp = moment().format(&quot;YYMMDDHHmmss&quot;);
       var fileName = &quot;autocomposer_&quot; + timestamp + &quot;_&quot; + this.state.chordProgressionRaw.replace(/\s+/g, &quot;-&quot;);
       download(dataString, fileName, &quot;audio/midi&quot;);
