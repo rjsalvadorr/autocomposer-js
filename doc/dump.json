@@ -365,7 +365,7 @@
     "__docId__": 14,
     "kind": "file",
     "name": "src/autocomposer-melody.js",
-    "content": "var tonal = require('tonal');\r\nvar ChordUnit = require('./chord-unit');\r\nvar MelodyUnit = require('./melody-unit');\r\n\r\nvar AcLogic = require('./autocomposer-logic');\r\nconst AcConstants = require('./autocomposer-constants');\r\n\r\n/**\r\n* Creates melodies from a given chord progression\r\n* @emits {statusUpdate} - Emits a \"statusUpdate\" event with details when important events happen (like melody generation finishing, etc.)\r\n*/\r\nclass AutoComposerMelody {\r\n  constructor() {\r\n    /** @type {string} */\r\n    this.lowerLimit = AcConstants.DEFAULT_LOWER_LIMIT;\r\n    /** @type {string} */\r\n    this.upperLimit = AcConstants.DEFAULT_UPPER_LIMIT;\r\n  }\r\n\r\n  /**\r\n  * Sends a status update that's displayed to the user.\r\n  * @private\r\n  * @param {string} message - status update message\r\n  * @emits {statusUpdate}\r\n  */\r\n  _sendStatusUpdate(message) {\r\n    var updateEvent = new CustomEvent('statusUpdate', {detail: message});\r\n    document.body.dispatchEvent(updateEvent);\r\n  }\r\n\r\n    /**\r\n    * For a given note, find its lowest instance in the specified range.\r\n    * @private\r\n    * @param {string} pitch - pitch class\r\n    * @param {string} lowerLimit - note (written in scientific notation)\r\n    * @param {string} upperLimit - note (written in scientific notation)\r\n    * @return {string[]} - an array of notes (written in scientific pitch)\r\n    */\r\n  _getLowestNoteInRange(pitch, lowerLimit, upperLimit) {\r\n    var chordTonesInRange = tonal.range.pitchSet(pitch, [lowerLimit, upperLimit]);\r\n    return chordTonesInRange[0];\r\n  }\r\n\r\n    /**\r\n    * For a given array of chord tones, remove the specified pitches.\r\n    * @private\r\n    * @param {string[]} chordTones - chord tones\r\n    * @param {string[]} pitchArray - pitches to remove\r\n    * @return {string[]} - the remaining chord tones\r\n    */\r\n  _removePitchesFromChordTones(chordTones, pitchArray) {\r\n    var indexToRemove;\r\n    pitchArray.forEach(function(pitch) {\r\n      indexToRemove = chordTones.indexOf(pitch);\r\n      if (indexToRemove > -1) {\r\n        chordTones.splice(indexToRemove, 1);\r\n      }\r\n    });\r\n    return chordTones;\r\n  }\r\n\r\n    /**\r\n    * For a given MelodyUnit, get a simple accompaniment for it.\r\n    * @param {MelodyUnit} melodyUnit - melody that needs accompaniment\r\n    * @return {string[]} - array of strings, each representing one or more notes to play under each melodic note.\r\n    */\r\n  buildSimpleAccompaniment(melodyUnit) {\r\n    // Omit root note, and maybe avoid doubling the top note as well.\r\n    var noteArray = [], chordNotes, currentChord, bassPitch, topPitch;\r\n\r\n    for(var i = 0; i < melodyUnit.chordProgression.length; i++) {\r\n      currentChord = melodyUnit.chordProgression[i];\r\n      bassPitch = tonal.chord.parse(currentChord)[\"tonic\"];\r\n      topPitch =  tonal.note.pc(melodyUnit.melodyNotes[i]);\r\n\r\n      chordNotes = tonal.chord.notes(currentChord);\r\n      chordNotes = this._removePitchesFromChordTones(chordNotes, [topPitch]);\r\n\r\n      for(var j = 0; j < chordNotes.length; j++) {\r\n        chordNotes[j] = this._getLowestNoteInRange(chordNotes[j], AcConstants.ACCOMPANIMENT_LOWER_LIMIT, AcConstants.ACCOMPANIMENT_UPPER_LIMIT);\r\n      }\r\n      noteArray.push(chordNotes.join(\" \"));\r\n    }\r\n\r\n    return noteArray;\r\n  }\r\n\r\n    /**\r\n    * For a given MelodyUnit, return a basic bass line consisting only of root notes.\r\n    * @private\r\n    * @param {MelodyUnit} melodyUnit - melody that needs a bassline\r\n    * @return {string[]} - array of strings, each one representing a bass note.\r\n    */\r\n  buildBasicBassLine(melodyUnit) {\r\n    var noteArray = [], currentChord, bassPitch, bassNote;\r\n\r\n    // return all the lowest root notes for the progression.\r\n    for(var i = 0; i < melodyUnit.chordProgression.length; i++) {\r\n      currentChord = melodyUnit.chordProgression[i];\r\n      bassPitch = tonal.chord.parse(currentChord)[\"tonic\"];\r\n      bassNote = this._getLowestNoteInRange(bassPitch, AcConstants.BASS_LOWER_LIMIT, AcConstants.BASS_UPPER_LIMIT);\r\n\r\n      noteArray.push(bassNote);\r\n    }\r\n\r\n    return noteArray;\r\n  }\r\n\r\n    /**\r\n    * For a given chord, get all the chord tones between the upper and lower limits.\r\n    * @private\r\n    * @param {string} chord - chord symbol\r\n    * @param {string} lowerLimit - note (written in scientific notation)\r\n    * @param {string} upperLimit - note (written in scientific notation)\r\n    * @return {string[]} - an array of notes (written in scientific pitch)\r\n    */\r\n  _getAllChordTones(chord, lowerLimit, upperLimit) {\r\n    var chordTones = tonal.chord(chord);\r\n    var chordTonesInRange = tonal.range.pitchSet(chordTones, [lowerLimit, upperLimit]);\r\n\r\n    for(var i = 0; i < chordTonesInRange.length; i++) {\r\n      for(var j = 0; j < chordTones.length; j++) {\r\n        // Fixing pesky issue where D7 was returned as \"D Gb A C\" instead of \"D F# A C\"\r\n        // If the current chord tone is enharmonic with the note from the pitch set,\r\n        // Override it with the chord tone.\r\n        if(tonal.note.pc(chordTonesInRange[i]) != chordTones[j]\r\n          && tonal.note.enharmonics(chordTones[j]).indexOf(tonal.note.pc(chordTonesInRange[i])) > -1) {\r\n          chordTonesInRange[i] = chordTones[j] + tonal.note.oct(chordTonesInRange[i]);\r\n        }\r\n      }\r\n    }\r\n\r\n    return chordTonesInRange;\r\n  }\r\n\r\n    /**\r\n    * For a given chord symbol, creates a ChordUnit object\r\n    * @private\r\n    * @param {string} chord - chord symbol\r\n    * @param {string} lowerLimit - note (in scientific notation)\r\n    * @param {string} upperLimit - note (in scientific notation)\r\n    * @return {ChordUnit}\r\n    */\r\n  _buildChordUnit(chord, lowerLimit, upperLimit) {\r\n    var chordTonesInRange = this._getAllChordTones(chord, lowerLimit, upperLimit);\r\n    var chordUnit = new ChordUnit.ChordUnit(chord, chordTonesInRange, null);\r\n    return chordUnit;\r\n  }\r\n\r\n    /**\r\n    * For a given melody, creates a MelodyUnit object\r\n    * @private\r\n    * @param {string[]} chordProgression - a chord progression\r\n    * @param {string} melodyString - a melody (in scientific notation)\r\n    * @return {MelodyUnit}\r\n    */\r\n  _buildMelodyUnit(chordProgression, melodyString) {\r\n    var arrMelody = melodyString.split(\" \");\r\n    var melodyUnit = new MelodyUnit.MelodyUnit(chordProgression, arrMelody);\r\n    return melodyUnit;\r\n  }\r\n\r\n    /**\r\n    * For a given chord progression and melody, generate a series of melodies that fit over the progression\r\n    * @private\r\n    * @param {string[]} chordProgression - a chord progression\r\n    * @param {string[]} rawMelodies - a string representing the melody\r\n    * @param {Object} options - if true, generated melodies will be sorted, with smoothest melodies coming first.\r\n    * @param {boolean} options.sort - if true, generated melodies will be sorted, with smoothest melodies coming first.\r\n    * @param {number} options.limit - limits the output to a set number.\r\n    * @return {MelodyUnit[]} - a list of ChordUnit objects.\r\n    */\r\n  _buildMelodyUnitList(chordProgression, rawMelodies, options) {\r\n    var melodyUnits = [];\r\n    var haxThis = this;\r\n\r\n    rawMelodies.forEach(function(rawMelody) {\r\n      melodyUnits.push(haxThis._buildMelodyUnit(chordProgression, rawMelody));\r\n    });\r\n\r\n    if(options) {\r\n      if(options.sort) {\r\n        melodyUnits.sort(function(a, b) {\r\n          return a.smoothness - b.smoothness;\r\n        });\r\n      }\r\n\r\n      if(options.limit) {\r\n        melodyUnits.splice(options.limit);\r\n      }\r\n    }\r\n    return melodyUnits;\r\n  }\r\n\r\n    /**\r\n    * For a given chord progression, generate a series of melodies that fit over the progression\r\n    * @private\r\n    * @param {string[]} chordProgression - chord symbols\r\n    * @param {string} lowerLimit - lower limit (in scientific notation). Optional value.\r\n    * @param {string} upperLimit - upper limit (in scientific notation). Optional value.\r\n    * @return {ChordUnit[]} - a list of ChordUnit objects.\r\n    */\r\n  _buildChordUnitList(chordProgression, lowerLimit, upperLimit) {\r\n    if(lowerLimit == null) {\r\n      lowerLimit = this.lowerLimit;\r\n    }\r\n    if(upperLimit == null) {\r\n      upperLimit = this.upperLimit;\r\n    }\r\n\r\n    var chordUnitList = [];\r\n    var chordTonesInRange;\r\n\r\n    for(var i = chordProgression.length - 1; i >= 0; i--) {\r\n      chordTonesInRange = this._getAllChordTones(chordProgression[i], lowerLimit, upperLimit);\r\n\r\n      if(i === chordProgression.length) {\r\n        chordUnitList[i] = new ChordUnit.ChordUnit(chordProgression[i], chordTonesInRange, null);\r\n      } else {\r\n        chordUnitList[i] = new ChordUnit.ChordUnit(chordProgression[i], chordTonesInRange, chordUnitList[i + 1]);\r\n      }\r\n    }\r\n\r\n    return chordUnitList;\r\n  }\r\n\r\n    /**\r\n    * Recursive function that adds new notes to the previous notes passed into it.\r\n    * On the first call of this function, melodyList should be null.\r\n    * @private\r\n    * @param {ChordUnit} chordUnit - the ChordUnit for the next chord\r\n    * @param {?string[]} melodyList - list of existing melodies\r\n    * @param {Object} options - if true, generated melodies will be filtered\r\n    * @param {boolean} options.filtered - if true, generated melodies will be filtered\r\n    * @return {string[]} - a list of melodies. Each element is a string represeting a melody. Each melody string is written as a series of pitches delimited by a space.\r\n    */\r\n  _buildSimpleMelodiesCore(chordUnit, melodyList, options) {\r\n    var returnList = [];\r\n    var chordTones = chordUnit.chordTones;\r\n    var currentMelody, currentChordTone;\r\n    var rawMelody, newMelody, isInRange;\r\n    var isNotRepetitive, timestamp, haxThis = this;\r\n\r\n    if(melodyList) {\r\n      // We're somewhere along the middle of the chain.\r\n      for(var i = 0; i < melodyList.length; i++) {\r\n        currentMelody = melodyList[i];\r\n\r\n        for(var j = 0; j < chordTones.length; j++) {\r\n          currentChordTone = chordTones[j];\r\n\r\n          if(melodyList.length > 10000) {\r\n            timestamp = new Date().valueOf().toString().slice(-8);\r\n            if(timestamp % 8 === 0) {\r\n              // Randomly skips generation every now and then.\r\n              // Removes 20% of results?\r\n              break;\r\n            }\r\n          }\r\n\r\n          newMelody = currentMelody + \" \" + currentChordTone;\r\n\r\n          if(options.filtered) {\r\n            // check the distance of the last note and the new chord tone\r\n            // if it's more than an octave, skip this.\r\n            isInRange = AcLogic.filterMelodyRange(newMelody);\r\n            if(!isInRange) {\r\n              break;\r\n            }\r\n\r\n            if(newMelody.split(\" \").length >= 3) {\r\n              // check if melody is too repetitive. For our purposes, three of the same notes in a row\r\n              // would be too repetitive.\r\n              isNotRepetitive =  AcLogic.filterRepetition(newMelody);\r\n            } else {\r\n              isNotRepetitive = true;\r\n            }\r\n            if(!isNotRepetitive) {\r\n              break;\r\n            }\r\n\r\n            returnList.push(newMelody);\r\n          } else {\r\n            returnList.push(newMelody);\r\n          }\r\n        }\r\n      }\r\n    } else {\r\n      // This is the beginning of the chain.\r\n      melodyList = chordUnit.chordTones;\r\n      returnList.push.apply(returnList, melodyList);\r\n    }\r\n\r\n    if(chordUnit.nextChordUnit) {\r\n      // We're somewhere before the end of the chain.\r\n      return this._buildSimpleMelodiesCore(chordUnit.nextChordUnit, returnList, options);\r\n    } else {\r\n      // End of the chain.\r\n      if(options.filtered && returnList.length > AcConstants.NUM_MELODIES_LIMIT) {\r\n        this._sendStatusUpdate(\"Generated  \" + returnList.length + \" melodies. Creating list of \" + AcConstants.NUM_MELODIES_LIMIT + \"...\");\r\n      } else {\r\n        this._sendStatusUpdate(\"Generated  \" + returnList.length + \" melodies.\");\r\n      }\r\n      return returnList;\r\n    }\r\n  }\r\n\r\n    /**\r\n    * For a given chord progression, generate a series of melodies that fit over the progression.\r\n    * @private\r\n    * @deprecated\r\n    * @param {string[]} chordProgression - chord progression given by user\r\n    * @return {MelodyUnit[]} - an array of notes (written in scientific pitch)\r\n    */\r\n  buildAllMelodies(chordProgression) {\r\n    var chordUnitList = this._buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);\r\n    var melodies = this._buildSimpleMelodiesCore(chordUnitList[0], null, {filtered: false});\r\n\r\n    var melodyUnits = [];\r\n    var haxThis = this;\r\n    melodies.forEach(function(rawMelody) {\r\n      melodyUnits.push(haxThis._buildMelodyUnit(chordProgression, rawMelody));\r\n    });\r\n\r\n    return melodyUnits;\r\n  }\r\n\r\n    /**\r\n    * For a given chord progression, generate a series of melodies that fit over the progression.\r\n    * @private\r\n    * @deprecated\r\n    * @param {string[]} chordProgression - chord progression given by user\r\n    * @return {string[]} - an array of notes (written in scientific pitch)\r\n    */\r\n  buildRawMelodies(chordProgression) {\r\n    var chordUnitList = this._buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);\r\n    var melodies = this._buildSimpleMelodiesCore(chordUnitList[0], null, {filtered: true});\r\n\r\n    return melodies;\r\n  }\r\n\r\n    /**\r\n    * For a given chord progression, generate a series of melodies that fit over the progression.\r\n    * The melodies are sorted by smoothness, and are limited to the smoothest 100 melodies by default.\r\n    * @param {string[]} chordProgression - chord progression given by user\r\n    * @param {Object} [options] - options for melody generation\r\n    * @param {Object} [options.raw] - if true, returns output as strings (default = false)\r\n    * @param {Object} [options.limit] - if false, returns all the generated melodies, not just the top 100 (default = true)\r\n    * @param {Object} [options.filter] - if false, returns melodies that are considered too \"ugly\" for the default process. (default = true)\r\n    * @return {MelodyUnit[]} - an array of MelodyUnits\r\n    */\r\n  buildSimpleMelodies(chordProgression, options) {\r\n    // TODO - change the input to accept both {string} and {string[]}\r\n    var useDefault, melodyUnits, rawMelodies, coreOptions, muOptions;\r\n    var rawOption, limitOption, filterOption, sortOption;\r\n    var chordUnitList = this._buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);\r\n\r\n    if(options) {\r\n      // In all these ternary operations, the default value is on the right.\r\n      rawOption = options.raw && (options.raw === \"true\" || options.raw === true) ? true : false;\r\n      filterOption = typeof options.filter !== \"undefined\" && (options.filter === \"false\" || options.limit === false) ? false : true;\r\n      if(typeof options.filter !== \"undefined\" && (options.limit === \"false\" || options.limit === false)) {\r\n        limitOption = null;\r\n        sortOption = false;\r\n      } else {\r\n        // default vals\r\n        limitOption = AcConstants.NUM_MELODIES_LIMIT;\r\n        sortOption = true;\r\n      }\r\n    } else {\r\n      // default values\r\n      rawOption = false;\r\n      filterOption = true;\r\n      limitOption = AcConstants.NUM_MELODIES_LIMIT;\r\n      sortOption = true;\r\n    }\r\n\r\n    rawMelodies = this._buildSimpleMelodiesCore(chordUnitList[0], null, {filtered: filterOption});\r\n\r\n    if(rawOption) {\r\n      return rawMelodies;\r\n    }\r\n\r\n    melodyUnits = this._buildMelodyUnitList(chordProgression, rawMelodies, {sort: sortOption, limit: limitOption});\r\n    return melodyUnits;\r\n  }\r\n\r\n};\r\n\r\nmodule.exports = new AutoComposerMelody();\r\n",
+    "content": "var tonal = require('tonal');\r\nvar ChordUnit = require('./chord-unit');\r\nvar MelodyUnit = require('./melody-unit');\r\n\r\nvar AcLogic = require('./autocomposer-logic');\r\nconst AcConstants = require('./autocomposer-constants');\r\n\r\n/**\r\n* Creates melodies from a given chord progression\r\n*/\r\nclass AutoComposerMelody {\r\n  constructor() {\r\n    /** @type {string} */\r\n    this.lowerLimit = AcConstants.DEFAULT_LOWER_LIMIT;\r\n    /** @type {string} */\r\n    this.upperLimit = AcConstants.DEFAULT_UPPER_LIMIT;\r\n  }\r\n\r\n    /**\r\n    * For a given note, find its lowest instance in the specified range.\r\n    * @private\r\n    * @param {string} pitch - pitch class\r\n    * @param {string} lowerLimit - note (written in scientific notation)\r\n    * @param {string} upperLimit - note (written in scientific notation)\r\n    * @return {string[]} - an array of notes (written in scientific pitch)\r\n    */\r\n  _getLowestNoteInRange(pitch, lowerLimit, upperLimit) {\r\n    var chordTonesInRange = tonal.range.pitchSet(pitch, [lowerLimit, upperLimit]);\r\n    return chordTonesInRange[0];\r\n  }\r\n\r\n    /**\r\n    * For a given array of chord tones, remove the specified pitches.\r\n    * @private\r\n    * @param {string[]} chordTones - chord tones\r\n    * @param {string[]} pitchArray - pitches to remove\r\n    * @return {string[]} - the remaining chord tones\r\n    */\r\n  _removePitchesFromChordTones(chordTones, pitchArray) {\r\n    var indexToRemove;\r\n    pitchArray.forEach(function(pitch) {\r\n      indexToRemove = chordTones.indexOf(pitch);\r\n      if (indexToRemove > -1) {\r\n        chordTones.splice(indexToRemove, 1);\r\n      }\r\n    });\r\n    return chordTones;\r\n  }\r\n\r\n    /**\r\n    * For a given MelodyUnit, get a simple accompaniment for it.\r\n    * @param {MelodyUnit} melodyUnit - melody that needs accompaniment\r\n    * @return {string[]} - array of strings, each representing one or more notes to play under each melodic note.\r\n    */\r\n  buildSimpleAccompaniment(melodyUnit) {\r\n    // Omit root note, and maybe avoid doubling the top note as well.\r\n    var noteArray = [], chordNotes, currentChord, bassPitch, topPitch;\r\n\r\n    for(var i = 0; i < melodyUnit.chordProgression.length; i++) {\r\n      currentChord = melodyUnit.chordProgression[i];\r\n      bassPitch = tonal.chord.parse(currentChord)[\"tonic\"];\r\n      topPitch =  tonal.note.pc(melodyUnit.melodyNotes[i]);\r\n\r\n      chordNotes = tonal.chord.notes(currentChord);\r\n      chordNotes = this._removePitchesFromChordTones(chordNotes, [topPitch]);\r\n\r\n      for(var j = 0; j < chordNotes.length; j++) {\r\n        chordNotes[j] = this._getLowestNoteInRange(chordNotes[j], AcConstants.ACCOMPANIMENT_LOWER_LIMIT, AcConstants.ACCOMPANIMENT_UPPER_LIMIT);\r\n      }\r\n      noteArray.push(chordNotes.join(\" \"));\r\n    }\r\n\r\n    return noteArray;\r\n  }\r\n\r\n    /**\r\n    * For a given MelodyUnit, return a basic bass line consisting only of root notes.\r\n    * @private\r\n    * @param {MelodyUnit} melodyUnit - melody that needs a bassline\r\n    * @return {string[]} - array of strings, each one representing a bass note.\r\n    */\r\n  buildBasicBassLine(melodyUnit) {\r\n    var noteArray = [], currentChord, bassPitch, bassNote;\r\n\r\n    // return all the lowest root notes for the progression.\r\n    for(var i = 0; i < melodyUnit.chordProgression.length; i++) {\r\n      currentChord = melodyUnit.chordProgression[i];\r\n      bassPitch = tonal.chord.parse(currentChord)[\"tonic\"];\r\n      bassNote = this._getLowestNoteInRange(bassPitch, AcConstants.BASS_LOWER_LIMIT, AcConstants.BASS_UPPER_LIMIT);\r\n\r\n      noteArray.push(bassNote);\r\n    }\r\n\r\n    return noteArray;\r\n  }\r\n\r\n    /**\r\n    * For a given chord, get all the chord tones between the upper and lower limits.\r\n    * @private\r\n    * @param {string} chord - chord symbol\r\n    * @param {string} lowerLimit - note (written in scientific notation)\r\n    * @param {string} upperLimit - note (written in scientific notation)\r\n    * @return {string[]} - an array of notes (written in scientific pitch)\r\n    */\r\n  _getAllChordTones(chord, lowerLimit, upperLimit) {\r\n    var chordTones = tonal.chord(chord);\r\n    var chordTonesInRange = tonal.range.pitchSet(chordTones, [lowerLimit, upperLimit]);\r\n\r\n    for(var i = 0; i < chordTonesInRange.length; i++) {\r\n      for(var j = 0; j < chordTones.length; j++) {\r\n        // Fixing pesky issue where D7 was returned as \"D Gb A C\" instead of \"D F# A C\"\r\n        // If the current chord tone is enharmonic with the note from the pitch set,\r\n        // Override it with the chord tone.\r\n        if(tonal.note.pc(chordTonesInRange[i]) != chordTones[j]\r\n          && tonal.note.enharmonics(chordTones[j]).indexOf(tonal.note.pc(chordTonesInRange[i])) > -1) {\r\n          chordTonesInRange[i] = chordTones[j] + tonal.note.oct(chordTonesInRange[i]);\r\n        }\r\n      }\r\n    }\r\n\r\n    return chordTonesInRange;\r\n  }\r\n\r\n    /**\r\n    * For a given chord symbol, creates a ChordUnit object\r\n    * @private\r\n    * @param {string} chord - chord symbol\r\n    * @param {string} lowerLimit - note (in scientific notation)\r\n    * @param {string} upperLimit - note (in scientific notation)\r\n    * @return {ChordUnit}\r\n    */\r\n  _buildChordUnit(chord, lowerLimit, upperLimit) {\r\n    var chordTonesInRange = this._getAllChordTones(chord, lowerLimit, upperLimit);\r\n    var chordUnit = new ChordUnit.ChordUnit(chord, chordTonesInRange, null);\r\n    return chordUnit;\r\n  }\r\n\r\n    /**\r\n    * For a given melody, creates a MelodyUnit object\r\n    * @private\r\n    * @param {string[]} chordProgression - a chord progression\r\n    * @param {string} melodyString - a melody (in scientific notation)\r\n    * @return {MelodyUnit}\r\n    */\r\n  _buildMelodyUnit(chordProgression, melodyString) {\r\n    var arrMelody = melodyString.split(\" \");\r\n    var melodyUnit = new MelodyUnit.MelodyUnit(chordProgression, arrMelody);\r\n    return melodyUnit;\r\n  }\r\n\r\n    /**\r\n    * For a given chord progression and melody, generate a series of melodies that fit over the progression\r\n    * @private\r\n    * @param {string[]} chordProgression - a chord progression\r\n    * @param {string[]} rawMelodies - a string representing the melody\r\n    * @param {Object} options - if true, generated melodies will be sorted, with smoothest melodies coming first.\r\n    * @param {boolean} options.sort - if true, generated melodies will be sorted, with smoothest melodies coming first.\r\n    * @param {number} options.limit - limits the output to a set number.\r\n    * @return {MelodyUnit[]} - a list of ChordUnit objects.\r\n    */\r\n  _buildMelodyUnitList(chordProgression, rawMelodies, options) {\r\n    var melodyUnits = [];\r\n    var haxThis = this;\r\n\r\n    rawMelodies.forEach(function(rawMelody) {\r\n      melodyUnits.push(haxThis._buildMelodyUnit(chordProgression, rawMelody));\r\n    });\r\n\r\n    if(options) {\r\n      if(options.sort) {\r\n        melodyUnits.sort(function(a, b) {\r\n          return a.smoothness - b.smoothness;\r\n        });\r\n      }\r\n\r\n      if(options.limit) {\r\n        melodyUnits.splice(options.limit);\r\n      }\r\n    }\r\n    return melodyUnits;\r\n  }\r\n\r\n    /**\r\n    * For a given chord progression, generate a series of melodies that fit over the progression\r\n    * @private\r\n    * @param {string[]} chordProgression - chord symbols\r\n    * @param {string} lowerLimit - lower limit (in scientific notation). Optional value.\r\n    * @param {string} upperLimit - upper limit (in scientific notation). Optional value.\r\n    * @return {ChordUnit[]} - a list of ChordUnit objects.\r\n    */\r\n  _buildChordUnitList(chordProgression, lowerLimit, upperLimit) {\r\n    if(lowerLimit == null) {\r\n      lowerLimit = this.lowerLimit;\r\n    }\r\n    if(upperLimit == null) {\r\n      upperLimit = this.upperLimit;\r\n    }\r\n\r\n    var chordUnitList = [];\r\n    var chordTonesInRange;\r\n\r\n    for(var i = chordProgression.length - 1; i >= 0; i--) {\r\n      chordTonesInRange = this._getAllChordTones(chordProgression[i], lowerLimit, upperLimit);\r\n\r\n      if(i === chordProgression.length) {\r\n        chordUnitList[i] = new ChordUnit.ChordUnit(chordProgression[i], chordTonesInRange, null);\r\n      } else {\r\n        chordUnitList[i] = new ChordUnit.ChordUnit(chordProgression[i], chordTonesInRange, chordUnitList[i + 1]);\r\n      }\r\n    }\r\n\r\n    return chordUnitList;\r\n  }\r\n\r\n    /**\r\n    * Recursive function that adds new notes to the previous notes passed into it.\r\n    * On the first call of this function, melodyList should be null.\r\n    * @private\r\n    * @param {ChordUnit} chordUnit - the ChordUnit for the next chord\r\n    * @param {?string[]} melodyList - list of existing melodies\r\n    * @param {Object} options - if true, generated melodies will be filtered\r\n    * @param {boolean} options.filtered - if true, generated melodies will be filtered\r\n    * @return {string[]} - a list of melodies. Each element is a string represeting a melody. Each melody string is written as a series of pitches delimited by a space.\r\n    */\r\n  _buildSimpleMelodiesCore(chordUnit, melodyList, options) {\r\n    var returnList = [];\r\n    var chordTones = chordUnit.chordTones;\r\n    var currentMelody, currentChordTone;\r\n    var rawMelody, newMelody, isInRange;\r\n    var isNotRepetitive, timestamp, haxThis = this;\r\n\r\n    if(melodyList) {\r\n      // We're somewhere along the middle of the chain.\r\n      for(var i = 0; i < melodyList.length; i++) {\r\n        currentMelody = melodyList[i];\r\n\r\n        for(var j = 0; j < chordTones.length; j++) {\r\n          currentChordTone = chordTones[j];\r\n\r\n          if(melodyList.length > 10000) {\r\n            timestamp = new Date().valueOf().toString().slice(-8);\r\n            if(timestamp % 8 === 0) {\r\n              // Randomly skips generation every now and then.\r\n              // Removes 20% of results?\r\n              break;\r\n            }\r\n          }\r\n\r\n          newMelody = currentMelody + \" \" + currentChordTone;\r\n\r\n          if(options.filtered) {\r\n            // check the distance of the last note and the new chord tone\r\n            // if it's more than an octave, skip this.\r\n            isInRange = AcLogic.filterMelodyRange(newMelody);\r\n            if(!isInRange) {\r\n              break;\r\n            }\r\n\r\n            if(newMelody.split(\" \").length >= 3) {\r\n              // check if melody is too repetitive. For our purposes, three of the same notes in a row\r\n              // would be too repetitive.\r\n              isNotRepetitive =  AcLogic.filterRepetition(newMelody);\r\n            } else {\r\n              isNotRepetitive = true;\r\n            }\r\n            if(!isNotRepetitive) {\r\n              break;\r\n            }\r\n\r\n            returnList.push(newMelody);\r\n          } else {\r\n            returnList.push(newMelody);\r\n          }\r\n        }\r\n      }\r\n    } else {\r\n      // This is the beginning of the chain.\r\n      melodyList = chordUnit.chordTones;\r\n      returnList.push.apply(returnList, melodyList);\r\n    }\r\n\r\n    if(chordUnit.nextChordUnit) {\r\n      // We're somewhere before the end of the chain.\r\n      return this._buildSimpleMelodiesCore(chordUnit.nextChordUnit, returnList, options);\r\n    } else {\r\n      // End of the chain.\r\n      if(options.filtered && returnList.length > AcConstants.NUM_MELODIES_LIMIT) {\r\n        console.log(\"Generated  \" + returnList.length + \" melodies. Creating list of \" + AcConstants.NUM_MELODIES_LIMIT + \"...\");\r\n      } else {\r\n        console.log(\"Generated  \" + returnList.length + \" melodies.\");\r\n      }\r\n      return returnList;\r\n    }\r\n  }\r\n\r\n    /**\r\n    * For a given chord progression, generate a series of melodies that fit over the progression.\r\n    * @private\r\n    * @deprecated\r\n    * @param {string[]} chordProgression - chord progression given by user\r\n    * @return {MelodyUnit[]} - an array of notes (written in scientific pitch)\r\n    */\r\n  buildAllMelodies(chordProgression) {\r\n    var chordUnitList = this._buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);\r\n    var melodies = this._buildSimpleMelodiesCore(chordUnitList[0], null, {filtered: false});\r\n\r\n    var melodyUnits = [];\r\n    var haxThis = this;\r\n    melodies.forEach(function(rawMelody) {\r\n      melodyUnits.push(haxThis._buildMelodyUnit(chordProgression, rawMelody));\r\n    });\r\n\r\n    return melodyUnits;\r\n  }\r\n\r\n    /**\r\n    * For a given chord progression, generate a series of melodies that fit over the progression.\r\n    * @private\r\n    * @deprecated\r\n    * @param {string[]} chordProgression - chord progression given by user\r\n    * @return {string[]} - an array of notes (written in scientific pitch)\r\n    */\r\n  buildRawMelodies(chordProgression) {\r\n    var chordUnitList = this._buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);\r\n    var melodies = this._buildSimpleMelodiesCore(chordUnitList[0], null, {filtered: true});\r\n\r\n    return melodies;\r\n  }\r\n\r\n    /**\r\n    * For a given chord progression, generate a series of melodies that fit over the progression.\r\n    * The melodies are sorted by smoothness, and are limited to the smoothest 100 melodies by default.\r\n    * @param {string[]} chordProgression - chord progression given by user\r\n    * @param {Object} [options] - options for melody generation\r\n    * @param {Object} [options.raw] - if true, returns output as strings (default = false)\r\n    * @param {Object} [options.limit] - if false, returns all the generated melodies, not just the top 100 (default = true)\r\n    * @param {Object} [options.filter] - if false, returns melodies that are considered too \"ugly\" for the default process. (default = true)\r\n    * @return {MelodyUnit[]} - an array of MelodyUnits\r\n    */\r\n  buildSimpleMelodies(chordProgression, options) {\r\n    // TODO - change the input to accept both {string} and {string[]}\r\n    var useDefault, melodyUnits, rawMelodies, coreOptions, muOptions;\r\n    var rawOption, limitOption, filterOption, sortOption;\r\n    var chordUnitList = this._buildChordUnitList(chordProgression, this.lowerLimit, this.upperLimit);\r\n\r\n    if(options) {\r\n      // In all these ternary operations, the default value is on the right.\r\n      rawOption = options.raw && (options.raw === \"true\" || options.raw === true) ? true : false;\r\n      filterOption = typeof options.filter !== \"undefined\" && (options.filter === \"false\" || options.limit === false) ? false : true;\r\n      if(typeof options.filter !== \"undefined\" && (options.limit === \"false\" || options.limit === false)) {\r\n        limitOption = null;\r\n        sortOption = false;\r\n      } else {\r\n        // default vals\r\n        limitOption = AcConstants.NUM_MELODIES_LIMIT;\r\n        sortOption = true;\r\n      }\r\n    } else {\r\n      // default values\r\n      rawOption = false;\r\n      filterOption = true;\r\n      limitOption = AcConstants.NUM_MELODIES_LIMIT;\r\n      sortOption = true;\r\n    }\r\n\r\n    rawMelodies = this._buildSimpleMelodiesCore(chordUnitList[0], null, {filtered: filterOption});\r\n\r\n    if(rawOption) {\r\n      return rawMelodies;\r\n    }\r\n\r\n    melodyUnits = this._buildMelodyUnitList(chordProgression, rawMelodies, {sort: sortOption, limit: limitOption});\r\n    return melodyUnits;\r\n  }\r\n\r\n};\r\n\r\nmodule.exports = new AutoComposerMelody();\r\n",
     "static": true,
     "longname": "src/autocomposer-melody.js",
     "access": null,
@@ -514,16 +514,8 @@
     "importPath": "autocomposer-js/src/autocomposer-melody.js",
     "importStyle": null,
     "description": "Creates melodies from a given chord progression",
-    "lineNumber": 12,
+    "lineNumber": 11,
     "pseudoExport": true,
-    "emits": [
-      {
-        "types": [
-          "statusUpdate"
-        ],
-        "description": "Emits a \"statusUpdate\" event with details when important events happen (like melody generation finishing, etc.)"
-      }
-    ],
     "interface": false
   },
   {
@@ -537,7 +529,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#constructor",
     "access": null,
     "description": null,
-    "lineNumber": 13,
+    "lineNumber": 12,
     "undocument": true,
     "unknown": [
       {
@@ -556,7 +548,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#lowerLimit",
     "access": null,
     "description": null,
-    "lineNumber": 15,
+    "lineNumber": 14,
     "type": {
       "nullable": null,
       "types": [
@@ -575,7 +567,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#upperLimit",
     "access": null,
     "description": null,
-    "lineNumber": 17,
+    "lineNumber": 16,
     "type": {
       "nullable": null,
       "types": [
@@ -588,39 +580,6 @@
   {
     "__docId__": 24,
     "kind": "method",
-    "name": "_sendStatusUpdate",
-    "memberof": "src/autocomposer-melody.js~AutoComposerMelody",
-    "generator": false,
-    "async": false,
-    "static": false,
-    "longname": "src/autocomposer-melody.js~AutoComposerMelody#_sendStatusUpdate",
-    "access": "private",
-    "description": "Sends a status update that's displayed to the user.",
-    "lineNumber": 26,
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "string"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "message",
-        "description": "status update message"
-      }
-    ],
-    "emits": [
-      {
-        "types": [
-          "statusUpdate"
-        ],
-        "description": ""
-      }
-    ]
-  },
-  {
-    "__docId__": 25,
-    "kind": "method",
     "name": "_getLowestNoteInRange",
     "memberof": "src/autocomposer-melody.js~AutoComposerMelody",
     "generator": false,
@@ -629,7 +588,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#_getLowestNoteInRange",
     "access": "private",
     "description": "For a given note, find its lowest instance in the specified range.",
-    "lineNumber": 39,
+    "lineNumber": 27,
     "params": [
       {
         "nullable": null,
@@ -672,7 +631,7 @@
     }
   },
   {
-    "__docId__": 26,
+    "__docId__": 25,
     "kind": "method",
     "name": "_removePitchesFromChordTones",
     "memberof": "src/autocomposer-melody.js~AutoComposerMelody",
@@ -682,7 +641,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#_removePitchesFromChordTones",
     "access": "private",
     "description": "For a given array of chord tones, remove the specified pitches.",
-    "lineNumber": 51,
+    "lineNumber": 39,
     "params": [
       {
         "nullable": null,
@@ -715,7 +674,7 @@
     }
   },
   {
-    "__docId__": 27,
+    "__docId__": 26,
     "kind": "method",
     "name": "buildSimpleAccompaniment",
     "memberof": "src/autocomposer-melody.js~AutoComposerMelody",
@@ -725,7 +684,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#buildSimpleAccompaniment",
     "access": null,
     "description": "For a given MelodyUnit, get a simple accompaniment for it.",
-    "lineNumber": 67,
+    "lineNumber": 55,
     "params": [
       {
         "nullable": null,
@@ -748,7 +707,7 @@
     }
   },
   {
-    "__docId__": 28,
+    "__docId__": 27,
     "kind": "method",
     "name": "buildBasicBassLine",
     "memberof": "src/autocomposer-melody.js~AutoComposerMelody",
@@ -758,7 +717,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#buildBasicBassLine",
     "access": "private",
     "description": "For a given MelodyUnit, return a basic bass line consisting only of root notes.",
-    "lineNumber": 94,
+    "lineNumber": 82,
     "params": [
       {
         "nullable": null,
@@ -781,7 +740,7 @@
     }
   },
   {
-    "__docId__": 29,
+    "__docId__": 28,
     "kind": "method",
     "name": "_getAllChordTones",
     "memberof": "src/autocomposer-melody.js~AutoComposerMelody",
@@ -791,7 +750,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#_getAllChordTones",
     "access": "private",
     "description": "For a given chord, get all the chord tones between the upper and lower limits.",
-    "lineNumber": 117,
+    "lineNumber": 105,
     "params": [
       {
         "nullable": null,
@@ -834,7 +793,7 @@
     }
   },
   {
-    "__docId__": 30,
+    "__docId__": 29,
     "kind": "method",
     "name": "_buildChordUnit",
     "memberof": "src/autocomposer-melody.js~AutoComposerMelody",
@@ -844,7 +803,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#_buildChordUnit",
     "access": "private",
     "description": "For a given chord symbol, creates a ChordUnit object",
-    "lineNumber": 144,
+    "lineNumber": 132,
     "params": [
       {
         "nullable": null,
@@ -887,7 +846,7 @@
     }
   },
   {
-    "__docId__": 31,
+    "__docId__": 30,
     "kind": "method",
     "name": "_buildMelodyUnit",
     "memberof": "src/autocomposer-melody.js~AutoComposerMelody",
@@ -897,7 +856,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#_buildMelodyUnit",
     "access": "private",
     "description": "For a given melody, creates a MelodyUnit object",
-    "lineNumber": 157,
+    "lineNumber": 145,
     "params": [
       {
         "nullable": null,
@@ -930,7 +889,7 @@
     }
   },
   {
-    "__docId__": 32,
+    "__docId__": 31,
     "kind": "method",
     "name": "_buildMelodyUnitList",
     "memberof": "src/autocomposer-melody.js~AutoComposerMelody",
@@ -940,7 +899,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#_buildMelodyUnitList",
     "access": "private",
     "description": "For a given chord progression and melody, generate a series of melodies that fit over the progression",
-    "lineNumber": 173,
+    "lineNumber": 161,
     "params": [
       {
         "nullable": null,
@@ -1003,7 +962,7 @@
     }
   },
   {
-    "__docId__": 33,
+    "__docId__": 32,
     "kind": "method",
     "name": "_buildChordUnitList",
     "memberof": "src/autocomposer-melody.js~AutoComposerMelody",
@@ -1013,7 +972,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#_buildChordUnitList",
     "access": "private",
     "description": "For a given chord progression, generate a series of melodies that fit over the progression",
-    "lineNumber": 203,
+    "lineNumber": 191,
     "params": [
       {
         "nullable": null,
@@ -1056,7 +1015,7 @@
     }
   },
   {
-    "__docId__": 34,
+    "__docId__": 33,
     "kind": "method",
     "name": "_buildSimpleMelodiesCore",
     "memberof": "src/autocomposer-melody.js~AutoComposerMelody",
@@ -1066,7 +1025,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#_buildSimpleMelodiesCore",
     "access": "private",
     "description": "Recursive function that adds new notes to the previous notes passed into it.\nOn the first call of this function, melodyList should be null.",
-    "lineNumber": 237,
+    "lineNumber": 225,
     "params": [
       {
         "nullable": null,
@@ -1119,7 +1078,7 @@
     }
   },
   {
-    "__docId__": 35,
+    "__docId__": 34,
     "kind": "method",
     "name": "buildAllMelodies",
     "memberof": "src/autocomposer-melody.js~AutoComposerMelody",
@@ -1129,7 +1088,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#buildAllMelodies",
     "access": "private",
     "description": "For a given chord progression, generate a series of melodies that fit over the progression.",
-    "lineNumber": 315,
+    "lineNumber": 303,
     "deprecated": true,
     "params": [
       {
@@ -1153,7 +1112,7 @@
     }
   },
   {
-    "__docId__": 36,
+    "__docId__": 35,
     "kind": "method",
     "name": "buildRawMelodies",
     "memberof": "src/autocomposer-melody.js~AutoComposerMelody",
@@ -1163,7 +1122,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#buildRawMelodies",
     "access": "private",
     "description": "For a given chord progression, generate a series of melodies that fit over the progression.",
-    "lineNumber": 335,
+    "lineNumber": 323,
     "deprecated": true,
     "params": [
       {
@@ -1187,7 +1146,7 @@
     }
   },
   {
-    "__docId__": 37,
+    "__docId__": 36,
     "kind": "method",
     "name": "buildSimpleMelodies",
     "memberof": "src/autocomposer-melody.js~AutoComposerMelody",
@@ -1197,7 +1156,7 @@
     "longname": "src/autocomposer-melody.js~AutoComposerMelody#buildSimpleMelodies",
     "access": null,
     "description": "For a given chord progression, generate a series of melodies that fit over the progression.\nThe melodies are sorted by smoothness, and are limited to the smoothest 100 melodies by default.",
-    "lineNumber": 352,
+    "lineNumber": 340,
     "params": [
       {
         "nullable": null,
@@ -1260,7 +1219,7 @@
     }
   },
   {
-    "__docId__": 38,
+    "__docId__": 37,
     "kind": "variable",
     "name": "autoComposerMelody",
     "memberof": "src/autocomposer-melody.js",
@@ -1271,7 +1230,7 @@
     "importPath": "autocomposer-js/src/autocomposer-melody.js",
     "importStyle": "autoComposerMelody",
     "description": null,
-    "lineNumber": 390,
+    "lineNumber": 378,
     "undocument": true,
     "unknown": [
       {
@@ -1286,7 +1245,7 @@
     }
   },
   {
-    "__docId__": 39,
+    "__docId__": 38,
     "kind": "file",
     "name": "src/autocomposer-midi-player.js",
     "content": "// Plays MIDI files on the browser!\r\n\r\nconst MidiPlayer = require('midi-player-js');\r\nconst SoundfontPlayer = require('soundfont-player');\r\nconst tonalNote = require('tonal-note');\r\n\r\nconst AcMidiWriter = require('./autocomposer-midi-writer');\r\nconst AcConstants = require('./autocomposer-constants');\r\nconst INSTRUMENT_DATA = AcConstants.instrumentData;\r\n\r\n/**\r\n* Class responsible for playing audio on the browser.\r\n* @emits {statusUpdate} - Emits this event when the audio player loads.\r\n*/\r\n\r\nclass AutoComposerMidiPlayer {\r\n  constructor() {\r\n    this.instruments = {};\r\n    this.numInstrumentsInit = 0;\r\n\r\n    this.player = null;\r\n    this.audioContext = new AudioContext();\r\n\r\n    this.initialized = false;\r\n    // Added this flag to fix an issue where notes randomly play again after the track ends.\r\n    // It only works for tracks that are all the same length. If we ever have to play tracks that have\r\n    // different lengths, we'll need a different solution.\r\n    this.playbackLocked = true;\r\n\r\n    // is this kind of scope hackery necessary?!\r\n    var haxThis = this;\r\n    var currentInstrument;\r\n\r\n    for (var instrumentRole in INSTRUMENT_DATA) {\r\n      // initialize each instrument\r\n      if(typeof INSTRUMENT_DATA[instrumentRole] !== \"function\") {\r\n        Soundfont.instrument(this.audioContext, INSTRUMENT_DATA[instrumentRole].name, {soundfont: 'FluidR3_GM'}).then(function (sfInstrument) {\r\n          currentInstrument = INSTRUMENT_DATA.getByName(sfInstrument.name);\r\n\r\n          haxThis.instruments[currentInstrument.role] = sfInstrument;\r\n\r\n          haxThis.numInstrumentsInit++;\r\n\r\n          if(haxThis.numInstrumentsInit === AcConstants.DEFAULT_NUM_INSTRUMENTS) {\r\n            haxThis._finishLoad();\r\n          }\r\n        });\r\n      }\r\n    }\r\n\r\n  }\r\n\r\n    /**\r\n    * Triggers the note playing for all instruments. Called for every MIDI event in the app.\r\n    * @private\r\n    * @param {number} event - MIDI event\r\n    */\r\n  _midiCallback(event) {\r\n    // callback for MIDI events\r\n    var instr1 = this.instruments[\"melody\"];\r\n    var instr2 = this.instruments[\"accompaniment\"];\r\n    var instr3 = this.instruments[\"bass\"];\r\n\r\n    if (!this.playbackLocked && event.name == 'Note on' && event.velocity > 0) {\r\n        switch(event.track) {\r\n          case 1:\r\n            instr1.play(event.noteName, this.audioContext.currentTime, {gain: instr1.gain});\r\n            break;\r\n          case 2:\r\n            instr2.play(event.noteName, this.audioContext.currentTime, {gain: instr2.gain});\r\n            break;\r\n          case 3:\r\n            instr3.play(event.noteName, this.audioContext.currentTime, {gain: instr3.gain});\r\n            break;\r\n          default:\r\n            // nothing!\r\n        }\r\n    }\r\n\r\n    if (event.name == 'Note off') {\r\n      switch(event.track) {\r\n        case 1:\r\n          instr1.stop();\r\n          break;\r\n        case 2:\r\n          instr2.stop();\r\n          break;\r\n        case 3:\r\n          instr3.stop();\r\n          break;\r\n        default:\r\n          // nothing!\r\n      }\r\n    }\r\n\r\n    if (event.name == \"End of Track\") {\r\n      this.playbackLocked = true;\r\n    }\r\n  }\r\n\r\n    /**\r\n    * Completes the loading of this class. The \"midiPlayerReady\" eve\r\n    * @private\r\n    * @emits {statusUpdate} - Emits this event when the audio player successfully loads\r\n    */\r\n  _finishLoad() {\r\n    var haxThis = this;\r\n    this.player = new MidiPlayer.Player(function(event) {\r\n      haxThis._midiCallback(event);\r\n    });\r\n    this.initialized = true;\r\n    this.playbackLocked = false;\r\n\r\n    var updateEvent = new CustomEvent('statusUpdate', {detail: \"MIDI player is loaded!\"});\r\n    document.body.dispatchEvent(updateEvent);\r\n  }\r\n\r\n    /**\r\n    * Plays the given melody.\r\n    * @param {string[]} melodySolo - solo melody (violin)\r\n    */\r\n  playMelodySolo(melodySolo) {\r\n    var strMidi = AcMidiWriter.buildMelodyMidi(melodySolo);\r\n    this._playMelody(strMidi);\r\n  }\r\n    /**\r\n    * Plays the given melodies.\r\n    * @param {string[]} melodySolo - solo melody (violin)\r\n    * @param {string[]} melodyAccomp - accompaniment melody (piano)\r\n    * @param {string[]} melodyBass - bass melody (bass)\r\n    */\r\n  playMelodyWithAccompaniment(melodySolo, melodyAccomp, melodyBass) {\r\n    var strMidi = AcMidiWriter.buildMelodyMidiWithAccompaniment(melodySolo, melodyAccomp, melodyBass);\r\n    this._playMelody(strMidi);\r\n  }\r\n\r\n    /**\r\n    * Actually plays the given melody\r\n    * @private\r\n    * @param {string} strMidi - MIDI data, as a DataURI string.\r\n    */\r\n  _playMelody(strMidi) {\r\n    if(this.initialized) {\r\n      this.stopPlayback();\r\n      this.playbackLocked = false;\r\n      this.player.loadDataUri(strMidi);\r\n      this.player.play();\r\n    } else {\r\n      console.warn(\"[AutoComposerMidi._playMelody()] Player isn't initialized yet...\");\r\n    }\r\n  }\r\n\r\n    /**\r\n    * Stops all playback\r\n    */\r\n  stopPlayback() {\r\n    this.instruments[\"melody\"].stop();\r\n    this.instruments[\"accompaniment\"].stop();\r\n    this.instruments[\"bass\"].stop();\r\n    this.player.stop();\r\n  }\r\n}\r\n\r\nmodule.exports = new AutoComposerMidiPlayer();\r\n",
@@ -1297,7 +1256,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 40,
+    "__docId__": 39,
     "kind": "variable",
     "name": "MidiPlayer",
     "memberof": "src/autocomposer-midi-player.js",
@@ -1323,7 +1282,7 @@
     }
   },
   {
-    "__docId__": 41,
+    "__docId__": 40,
     "kind": "variable",
     "name": "SoundfontPlayer",
     "memberof": "src/autocomposer-midi-player.js",
@@ -1349,7 +1308,7 @@
     }
   },
   {
-    "__docId__": 42,
+    "__docId__": 41,
     "kind": "variable",
     "name": "tonalNote",
     "memberof": "src/autocomposer-midi-player.js",
@@ -1375,7 +1334,7 @@
     }
   },
   {
-    "__docId__": 43,
+    "__docId__": 42,
     "kind": "variable",
     "name": "AcMidiWriter",
     "memberof": "src/autocomposer-midi-player.js",
@@ -1401,7 +1360,7 @@
     }
   },
   {
-    "__docId__": 44,
+    "__docId__": 43,
     "kind": "variable",
     "name": "AcConstants",
     "memberof": "src/autocomposer-midi-player.js",
@@ -1427,7 +1386,7 @@
     }
   },
   {
-    "__docId__": 45,
+    "__docId__": 44,
     "kind": "variable",
     "name": "INSTRUMENT_DATA",
     "memberof": "src/autocomposer-midi-player.js",
@@ -1453,7 +1412,7 @@
     }
   },
   {
-    "__docId__": 46,
+    "__docId__": 45,
     "kind": "class",
     "name": "AutoComposerMidiPlayer",
     "memberof": "src/autocomposer-midi-player.js",
@@ -1477,7 +1436,7 @@
     "interface": false
   },
   {
-    "__docId__": 47,
+    "__docId__": 46,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/autocomposer-midi-player.js~AutoComposerMidiPlayer",
@@ -1498,7 +1457,7 @@
     "params": []
   },
   {
-    "__docId__": 48,
+    "__docId__": 47,
     "kind": "member",
     "name": "instruments",
     "memberof": "src/autocomposer-midi-player.js~AutoComposerMidiPlayer",
@@ -1521,7 +1480,7 @@
     }
   },
   {
-    "__docId__": 49,
+    "__docId__": 48,
     "kind": "member",
     "name": "numInstrumentsInit",
     "memberof": "src/autocomposer-midi-player.js~AutoComposerMidiPlayer",
@@ -1544,7 +1503,7 @@
     }
   },
   {
-    "__docId__": 50,
+    "__docId__": 49,
     "kind": "member",
     "name": "player",
     "memberof": "src/autocomposer-midi-player.js~AutoComposerMidiPlayer",
@@ -1567,7 +1526,7 @@
     }
   },
   {
-    "__docId__": 51,
+    "__docId__": 50,
     "kind": "member",
     "name": "audioContext",
     "memberof": "src/autocomposer-midi-player.js~AutoComposerMidiPlayer",
@@ -1590,7 +1549,7 @@
     }
   },
   {
-    "__docId__": 52,
+    "__docId__": 51,
     "kind": "member",
     "name": "initialized",
     "memberof": "src/autocomposer-midi-player.js~AutoComposerMidiPlayer",
@@ -1613,7 +1572,7 @@
     }
   },
   {
-    "__docId__": 53,
+    "__docId__": 52,
     "kind": "member",
     "name": "playbackLocked",
     "memberof": "src/autocomposer-midi-player.js~AutoComposerMidiPlayer",
@@ -1636,7 +1595,7 @@
     }
   },
   {
-    "__docId__": 54,
+    "__docId__": 53,
     "kind": "method",
     "name": "_midiCallback",
     "memberof": "src/autocomposer-midi-player.js~AutoComposerMidiPlayer",
@@ -1661,7 +1620,7 @@
     ]
   },
   {
-    "__docId__": 55,
+    "__docId__": 54,
     "kind": "member",
     "name": "playbackLocked",
     "memberof": "src/autocomposer-midi-player.js~AutoComposerMidiPlayer",
@@ -1684,7 +1643,7 @@
     }
   },
   {
-    "__docId__": 56,
+    "__docId__": 55,
     "kind": "method",
     "name": "_finishLoad",
     "memberof": "src/autocomposer-midi-player.js~AutoComposerMidiPlayer",
@@ -1706,7 +1665,7 @@
     ]
   },
   {
-    "__docId__": 57,
+    "__docId__": 56,
     "kind": "member",
     "name": "player",
     "memberof": "src/autocomposer-midi-player.js~AutoComposerMidiPlayer",
@@ -1729,7 +1688,7 @@
     }
   },
   {
-    "__docId__": 58,
+    "__docId__": 57,
     "kind": "member",
     "name": "initialized",
     "memberof": "src/autocomposer-midi-player.js~AutoComposerMidiPlayer",
@@ -1752,7 +1711,7 @@
     }
   },
   {
-    "__docId__": 59,
+    "__docId__": 58,
     "kind": "member",
     "name": "playbackLocked",
     "memberof": "src/autocomposer-midi-player.js~AutoComposerMidiPlayer",
@@ -1775,7 +1734,7 @@
     }
   },
   {
-    "__docId__": 60,
+    "__docId__": 59,
     "kind": "method",
     "name": "playMelodySolo",
     "memberof": "src/autocomposer-midi-player.js~AutoComposerMidiPlayer",
@@ -1800,7 +1759,7 @@
     ]
   },
   {
-    "__docId__": 61,
+    "__docId__": 60,
     "kind": "method",
     "name": "playMelodyWithAccompaniment",
     "memberof": "src/autocomposer-midi-player.js~AutoComposerMidiPlayer",
@@ -1845,7 +1804,7 @@
     ]
   },
   {
-    "__docId__": 62,
+    "__docId__": 61,
     "kind": "method",
     "name": "_playMelody",
     "memberof": "src/autocomposer-midi-player.js~AutoComposerMidiPlayer",
@@ -1870,7 +1829,7 @@
     ]
   },
   {
-    "__docId__": 63,
+    "__docId__": 62,
     "kind": "member",
     "name": "playbackLocked",
     "memberof": "src/autocomposer-midi-player.js~AutoComposerMidiPlayer",
@@ -1893,7 +1852,7 @@
     }
   },
   {
-    "__docId__": 64,
+    "__docId__": 63,
     "kind": "method",
     "name": "stopPlayback",
     "memberof": "src/autocomposer-midi-player.js~AutoComposerMidiPlayer",
@@ -1907,7 +1866,7 @@
     "params": []
   },
   {
-    "__docId__": 65,
+    "__docId__": 64,
     "kind": "variable",
     "name": "autoComposerMidiPlayer",
     "memberof": "src/autocomposer-midi-player.js",
@@ -1933,7 +1892,7 @@
     }
   },
   {
-    "__docId__": 66,
+    "__docId__": 65,
     "kind": "file",
     "name": "src/autocomposer-midi-writer.js",
     "content": "var MidiWriter = require('midi-writer-js');\r\nvar MidiPlayer = require('midi-player-js');\r\nvar SoundfontPlayer = require('soundfont-player');\r\nvar tonalNote = require('tonal-note');\r\n\r\nconst AcConstants = require('./autocomposer-constants');\r\nconst INSTRUMENT_DATA = AcConstants.instrumentData;\r\n\r\n/**\r\n* Class responsible for generating MIDI files for future playback.\r\n*/\r\n\r\nclass AutoComposerMidiWriter {\r\n  constructor() {\r\n  }\r\n\r\n    /**\r\n    * Builds MIDI info for a note or chord\r\n    * @private\r\n    * @param {number[]} arrNumMidi - MIDI numbers for a set of pitches\r\n    * @param {number} duration - MIDI number for a pitch\r\n    * @param {number} wait\r\n    * @return {MidiWriter.NoteEvent} - ???\r\n    */\r\n  _buildMidi(arrNumMidi, duration, wait) {\r\n      if(!wait) {\r\n          wait = \"0\";\r\n      }\r\n      return new MidiWriter.NoteEvent({pitch: arrNumMidi, duration: duration, wait: wait, velocity: 100});\r\n  }\r\n\r\n    /**\r\n    * Builds a Track from a given chord.\r\n    * @private\r\n    * @param {string[]} arrChordNotes - chordNotes\r\n    * @param {Object} instrData - instrument data for track\r\n    * @return {Track} - a MidiWriter Track\r\n    */\r\n  _buildTrack(arrChordNotes, instrData) {\r\n    var notes, midiNumber, midiNumbers;\r\n    var returnTrack = new MidiWriter.Track();\r\n    returnTrack.addEvent(new MidiWriter.ProgramChangeEvent({instrument : instrData.midiInstrumentCode}));\r\n    returnTrack.addInstrumentName(instrData.name);\r\n\r\n    for(var i = 0; i < arrChordNotes.length; i++) {\r\n      midiNumbers = [];\r\n      notes = arrChordNotes[i].split(\" \");\r\n\r\n      notes.forEach(function(note){\r\n        midiNumbers.push(tonalNote.midi(note));\r\n      })\r\n\r\n      returnTrack.addEvent(this._buildMidi(midiNumbers, AcConstants.DEFAULT_NOTE_DURATION));\r\n    }\r\n\r\n    return returnTrack;\r\n  }\r\n\r\n    /**\r\n    * Gets the MIDI data for a given melody.\r\n    * @param {string[]} arrMelody - our melody\r\n    * @return {string} - MIDI data, as a DataURI string\r\n    */\r\n  buildMelodyMidi(arrMelody) {\r\n    var tracks = [], midiNumber;\r\n    tracks[0] = this._buildTrack(arrMelody, INSTRUMENT_DATA[\"melody\"]);\r\n\r\n    var write = new MidiWriter.Writer(tracks);\r\n\r\n    return write.dataUri();\r\n  }\r\n\r\n    /**\r\n    * Gets the MIDI data for a given melody, with accompaniment.\r\n    * @param {string[]} arrMelody - main melody\r\n    * @param {string[]} arrAcompanimentLine - accompaniment line\r\n    * @param {string[]} arrBassLine - bass line\r\n    * @return {string} - MIDI data, as a DataURI string.\r\n    */\r\n  buildMelodyMidiWithAccompaniment(arrMelody, arrAcompanimentLine, arrBassLine) {\r\n    var tracks, midiNumber;\r\n\r\n    var melodyTrack = this._buildTrack(arrMelody, INSTRUMENT_DATA[\"melody\"]);\r\n    var accompanimentTrack = this._buildTrack(arrAcompanimentLine, INSTRUMENT_DATA[\"accompaniment\"]);\r\n    var bassTrack = this._buildTrack(arrBassLine, INSTRUMENT_DATA[\"bass\"]);\r\n\r\n    tracks = [melodyTrack, accompanimentTrack, bassTrack];\r\n\r\n    var write = new MidiWriter.Writer(tracks);\r\n\r\n    return write.dataUri();\r\n  }\r\n}\r\n\r\nmodule.exports = new AutoComposerMidiWriter();\r\n",
@@ -1944,7 +1903,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 67,
+    "__docId__": 66,
     "kind": "variable",
     "name": "MidiWriter",
     "memberof": "src/autocomposer-midi-writer.js",
@@ -1970,7 +1929,7 @@
     }
   },
   {
-    "__docId__": 68,
+    "__docId__": 67,
     "kind": "variable",
     "name": "MidiPlayer",
     "memberof": "src/autocomposer-midi-writer.js",
@@ -1996,7 +1955,7 @@
     }
   },
   {
-    "__docId__": 69,
+    "__docId__": 68,
     "kind": "variable",
     "name": "SoundfontPlayer",
     "memberof": "src/autocomposer-midi-writer.js",
@@ -2022,7 +1981,7 @@
     }
   },
   {
-    "__docId__": 70,
+    "__docId__": 69,
     "kind": "variable",
     "name": "tonalNote",
     "memberof": "src/autocomposer-midi-writer.js",
@@ -2048,7 +2007,7 @@
     }
   },
   {
-    "__docId__": 71,
+    "__docId__": 70,
     "kind": "variable",
     "name": "AcConstants",
     "memberof": "src/autocomposer-midi-writer.js",
@@ -2074,7 +2033,7 @@
     }
   },
   {
-    "__docId__": 72,
+    "__docId__": 71,
     "kind": "variable",
     "name": "INSTRUMENT_DATA",
     "memberof": "src/autocomposer-midi-writer.js",
@@ -2100,7 +2059,7 @@
     }
   },
   {
-    "__docId__": 73,
+    "__docId__": 72,
     "kind": "class",
     "name": "AutoComposerMidiWriter",
     "memberof": "src/autocomposer-midi-writer.js",
@@ -2116,7 +2075,7 @@
     "interface": false
   },
   {
-    "__docId__": 74,
+    "__docId__": 73,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/autocomposer-midi-writer.js~AutoComposerMidiWriter",
@@ -2137,7 +2096,7 @@
     "params": []
   },
   {
-    "__docId__": 75,
+    "__docId__": 74,
     "kind": "method",
     "name": "_buildMidi",
     "memberof": "src/autocomposer-midi-writer.js~AutoComposerMidiWriter",
@@ -2190,7 +2149,7 @@
     }
   },
   {
-    "__docId__": 76,
+    "__docId__": 75,
     "kind": "method",
     "name": "_buildTrack",
     "memberof": "src/autocomposer-midi-writer.js~AutoComposerMidiWriter",
@@ -2233,7 +2192,7 @@
     }
   },
   {
-    "__docId__": 77,
+    "__docId__": 76,
     "kind": "method",
     "name": "buildMelodyMidi",
     "memberof": "src/autocomposer-midi-writer.js~AutoComposerMidiWriter",
@@ -2266,7 +2225,7 @@
     }
   },
   {
-    "__docId__": 78,
+    "__docId__": 77,
     "kind": "method",
     "name": "buildMelodyMidiWithAccompaniment",
     "memberof": "src/autocomposer-midi-writer.js~AutoComposerMidiWriter",
@@ -2319,7 +2278,7 @@
     }
   },
   {
-    "__docId__": 79,
+    "__docId__": 78,
     "kind": "variable",
     "name": "autoComposerMidiWriter",
     "memberof": "src/autocomposer-midi-writer.js",
@@ -2345,7 +2304,7 @@
     }
   },
   {
-    "__docId__": 80,
+    "__docId__": 79,
     "kind": "file",
     "name": "src/browser-build.js",
     "content": "var AutoComposerJS = window.AutoComposerJS || {};\r\n\r\nAutoComposerJS.melody = require('./autocomposer-melody');\r\nAutoComposerJS.midiWriter = require('./autocomposer-midi-writer');\r\nAutoComposerJS.midiPlayer = require('./autocomposer-midi-player');\r\nAutoComposerJS.logic = require('./autocomposer-logic');\r\nAutoComposerJS.constants = require('./autocomposer-constants');\r\n\r\nwindow.AutoComposerJS = AutoComposerJS;\r\n",
@@ -2356,7 +2315,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 81,
+    "__docId__": 80,
     "kind": "variable",
     "name": "AutoComposerJS",
     "memberof": "src/browser-build.js",
@@ -2382,7 +2341,7 @@
     }
   },
   {
-    "__docId__": 82,
+    "__docId__": 81,
     "kind": "file",
     "name": "src/chord-unit.js",
     "content": "var AutoComposerLogic = require('../src/autocomposer-logic');\r\n\r\n/**\r\n* Represents some data built around a specific chord.\r\n* Has a reference to the next ChordUnit in the progression, and the chord tones that will be used in melody generation.\r\n* @private\r\n*/\r\nclass ChordUnit {\r\n    /**\r\n    * @param {string} chord - chord symbol\r\n    * @param {string[]} chordTones - array of notes in the melody\r\n    * @param {ChordUnit} nextChordUnit - next ChordUnit in the chain\r\n    */\r\n  constructor(chord, chordTones, nextChordUnit) {\r\n    /** @type {string} */\r\n    this.chord = chord;\r\n    /** @type {string[]} */\r\n    this.chordTones = chordTones;\r\n    /** @type {ChordUnit} */\r\n    this.nextChordUnit = nextChordUnit;\r\n  }\r\n\r\n    /**\r\n    * @param {ChordUnit} next - the next ChordUnit in the chain.\r\n    */\r\n  setNextChordUnit(next) {\r\n    this.nextChordUnit(next);\r\n  }\r\n}\r\n\r\nexports.ChordUnit = ChordUnit;\r\n",
@@ -2393,7 +2352,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 83,
+    "__docId__": 82,
     "kind": "variable",
     "name": "AutoComposerLogic",
     "memberof": "src/chord-unit.js",
@@ -2419,7 +2378,7 @@
     }
   },
   {
-    "__docId__": 84,
+    "__docId__": 83,
     "kind": "class",
     "name": "ChordUnit",
     "memberof": "src/chord-unit.js",
@@ -2434,7 +2393,7 @@
     "interface": false
   },
   {
-    "__docId__": 85,
+    "__docId__": 84,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/chord-unit.js~ChordUnit",
@@ -2479,7 +2438,7 @@
     ]
   },
   {
-    "__docId__": 86,
+    "__docId__": 85,
     "kind": "member",
     "name": "chord",
     "memberof": "src/chord-unit.js~ChordUnit",
@@ -2498,7 +2457,7 @@
     }
   },
   {
-    "__docId__": 87,
+    "__docId__": 86,
     "kind": "member",
     "name": "chordTones",
     "memberof": "src/chord-unit.js~ChordUnit",
@@ -2517,7 +2476,7 @@
     }
   },
   {
-    "__docId__": 88,
+    "__docId__": 87,
     "kind": "member",
     "name": "nextChordUnit",
     "memberof": "src/chord-unit.js~ChordUnit",
@@ -2536,7 +2495,7 @@
     }
   },
   {
-    "__docId__": 89,
+    "__docId__": 88,
     "kind": "method",
     "name": "setNextChordUnit",
     "memberof": "src/chord-unit.js~ChordUnit",
@@ -2561,7 +2520,7 @@
     ]
   },
   {
-    "__docId__": 90,
+    "__docId__": 89,
     "kind": "file",
     "name": "src/melody-unit.js",
     "content": "var range = require('tonal-range')\r\n\r\n/**\r\n* Represents a melody and associated metadata.\r\n* @public\r\n*/\r\nclass MelodyUnit {\r\n    /**\r\n    * @param {string[]} chordProgression - array of chord symbols\r\n    * @param {string[]} melodyNotes - array of notes in the melody\r\n    */\r\n  constructor(chordProgression, melodyNotes) {\r\n  \t/** @type {string[]} */\r\n    this.chordProgression = chordProgression;\r\n    /** @type {string[]} */\r\n    this.melodyNotes = melodyNotes;\r\n    /** @type {number} */\r\n    this.smoothness = this.getSmoothness();\r\n    /** @type {number} */\r\n    this.range = this.getRange();\r\n    /** @type {string} */\r\n    this.melodyString = this.melodyNotes.join(\" \");\r\n  }\r\n\r\n    /**\r\n    * Calculates the range of this melody.\r\n    * @private\r\n    * @return {number} - Range of the melody (in semitones)\r\n    */\r\n  getRange() {\r\n    var totalRange = range.numeric(this.melodyNotes);\r\n    var highest = Math.max.apply(null, totalRange);\r\n    var lowest = Math.min.apply(null, totalRange);\r\n\r\n    return highest - lowest;\r\n  }\r\n\r\n    /**\r\n    * Calculates the smoothness of this melody.\r\n    * @private\r\n    * @return {number} - Range of the melody (in semitones)\r\n    */\r\n  getSmoothness() {\r\n    var totalSmoothness = 0;\r\n    var subset, subRange, highest, lowest, distance;\r\n\r\n    for(var i = 2; i <= this.melodyNotes.length; i++) {\r\n      subset = this.melodyNotes.slice(i - 2, i);\r\n      subRange = range.numeric(subset);\r\n      highest = Math.max.apply(null, subRange);\r\n      lowest = Math.min.apply(null, subRange);\r\n      distance = highest - lowest;\r\n      totalSmoothness += distance;\r\n    }\r\n\r\n    return totalSmoothness;\r\n  }\r\n\r\n}\r\n\r\nexports.MelodyUnit = MelodyUnit;\r\n",
@@ -2572,7 +2531,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 91,
+    "__docId__": 90,
     "kind": "variable",
     "name": "range",
     "memberof": "src/melody-unit.js",
@@ -2598,7 +2557,7 @@
     }
   },
   {
-    "__docId__": 92,
+    "__docId__": 91,
     "kind": "class",
     "name": "MelodyUnit",
     "memberof": "src/melody-unit.js",
@@ -2613,7 +2572,7 @@
     "interface": false
   },
   {
-    "__docId__": 93,
+    "__docId__": 92,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/melody-unit.js~MelodyUnit",
@@ -2648,7 +2607,7 @@
     ]
   },
   {
-    "__docId__": 94,
+    "__docId__": 93,
     "kind": "member",
     "name": "chordProgression",
     "memberof": "src/melody-unit.js~MelodyUnit",
@@ -2667,7 +2626,7 @@
     }
   },
   {
-    "__docId__": 95,
+    "__docId__": 94,
     "kind": "member",
     "name": "melodyNotes",
     "memberof": "src/melody-unit.js~MelodyUnit",
@@ -2686,7 +2645,7 @@
     }
   },
   {
-    "__docId__": 96,
+    "__docId__": 95,
     "kind": "member",
     "name": "smoothness",
     "memberof": "src/melody-unit.js~MelodyUnit",
@@ -2705,7 +2664,7 @@
     }
   },
   {
-    "__docId__": 97,
+    "__docId__": 96,
     "kind": "member",
     "name": "range",
     "memberof": "src/melody-unit.js~MelodyUnit",
@@ -2724,7 +2683,7 @@
     }
   },
   {
-    "__docId__": 98,
+    "__docId__": 97,
     "kind": "member",
     "name": "melodyString",
     "memberof": "src/melody-unit.js~MelodyUnit",
@@ -2743,7 +2702,7 @@
     }
   },
   {
-    "__docId__": 99,
+    "__docId__": 98,
     "kind": "method",
     "name": "getRange",
     "memberof": "src/melody-unit.js~MelodyUnit",
@@ -2765,7 +2724,7 @@
     }
   },
   {
-    "__docId__": 100,
+    "__docId__": 99,
     "kind": "method",
     "name": "getSmoothness",
     "memberof": "src/melody-unit.js~MelodyUnit",
@@ -2787,7 +2746,7 @@
     }
   },
   {
-    "__docId__": 102,
+    "__docId__": 101,
     "kind": "external",
     "name": "Infinity",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
@@ -2799,7 +2758,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 103,
+    "__docId__": 102,
     "kind": "external",
     "name": "NaN",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
@@ -2811,7 +2770,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 104,
+    "__docId__": 103,
     "kind": "external",
     "name": "undefined",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
@@ -2823,7 +2782,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 105,
+    "__docId__": 104,
     "kind": "external",
     "name": "null",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
@@ -2835,7 +2794,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 106,
+    "__docId__": 105,
     "kind": "external",
     "name": "Object",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
@@ -2847,7 +2806,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 107,
+    "__docId__": 106,
     "kind": "external",
     "name": "object",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
@@ -2859,7 +2818,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 108,
+    "__docId__": 107,
     "kind": "external",
     "name": "Function",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
@@ -2871,7 +2830,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 109,
+    "__docId__": 108,
     "kind": "external",
     "name": "function",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
@@ -2883,7 +2842,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 110,
+    "__docId__": 109,
     "kind": "external",
     "name": "Boolean",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
@@ -2895,7 +2854,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 111,
+    "__docId__": 110,
     "kind": "external",
     "name": "boolean",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
@@ -2907,7 +2866,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 112,
+    "__docId__": 111,
     "kind": "external",
     "name": "Symbol",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
@@ -2919,7 +2878,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 113,
+    "__docId__": 112,
     "kind": "external",
     "name": "Error",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
@@ -2931,7 +2890,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 114,
+    "__docId__": 113,
     "kind": "external",
     "name": "EvalError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
@@ -2943,7 +2902,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 115,
+    "__docId__": 114,
     "kind": "external",
     "name": "InternalError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
@@ -2955,7 +2914,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 116,
+    "__docId__": 115,
     "kind": "external",
     "name": "RangeError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
@@ -2967,7 +2926,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 117,
+    "__docId__": 116,
     "kind": "external",
     "name": "ReferenceError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
@@ -2979,7 +2938,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 118,
+    "__docId__": 117,
     "kind": "external",
     "name": "SyntaxError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
@@ -2991,7 +2950,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 119,
+    "__docId__": 118,
     "kind": "external",
     "name": "TypeError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
@@ -3003,7 +2962,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 120,
+    "__docId__": 119,
     "kind": "external",
     "name": "URIError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
@@ -3015,7 +2974,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 121,
+    "__docId__": 120,
     "kind": "external",
     "name": "Number",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
@@ -3027,7 +2986,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 122,
+    "__docId__": 121,
     "kind": "external",
     "name": "number",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
@@ -3039,7 +2998,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 123,
+    "__docId__": 122,
     "kind": "external",
     "name": "Date",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
@@ -3051,7 +3010,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 124,
+    "__docId__": 123,
     "kind": "external",
     "name": "String",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
@@ -3063,7 +3022,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 125,
+    "__docId__": 124,
     "kind": "external",
     "name": "string",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
@@ -3075,7 +3034,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 126,
+    "__docId__": 125,
     "kind": "external",
     "name": "RegExp",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
@@ -3087,7 +3046,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 127,
+    "__docId__": 126,
     "kind": "external",
     "name": "Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
@@ -3099,7 +3058,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 128,
+    "__docId__": 127,
     "kind": "external",
     "name": "Int8Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
@@ -3111,7 +3070,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 129,
+    "__docId__": 128,
     "kind": "external",
     "name": "Uint8Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
@@ -3123,7 +3082,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 130,
+    "__docId__": 129,
     "kind": "external",
     "name": "Uint8ClampedArray",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
@@ -3135,7 +3094,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 131,
+    "__docId__": 130,
     "kind": "external",
     "name": "Int16Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
@@ -3147,7 +3106,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 132,
+    "__docId__": 131,
     "kind": "external",
     "name": "Uint16Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
@@ -3159,7 +3118,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 133,
+    "__docId__": 132,
     "kind": "external",
     "name": "Int32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
@@ -3171,7 +3130,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 134,
+    "__docId__": 133,
     "kind": "external",
     "name": "Uint32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
@@ -3183,7 +3142,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 135,
+    "__docId__": 134,
     "kind": "external",
     "name": "Float32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
@@ -3195,7 +3154,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 136,
+    "__docId__": 135,
     "kind": "external",
     "name": "Float64Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
@@ -3207,7 +3166,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 137,
+    "__docId__": 136,
     "kind": "external",
     "name": "Map",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
@@ -3219,7 +3178,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 138,
+    "__docId__": 137,
     "kind": "external",
     "name": "Set",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
@@ -3231,7 +3190,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 139,
+    "__docId__": 138,
     "kind": "external",
     "name": "WeakMap",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
@@ -3243,7 +3202,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 140,
+    "__docId__": 139,
     "kind": "external",
     "name": "WeakSet",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
@@ -3255,7 +3214,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 141,
+    "__docId__": 140,
     "kind": "external",
     "name": "ArrayBuffer",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
@@ -3267,7 +3226,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 142,
+    "__docId__": 141,
     "kind": "external",
     "name": "DataView",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
@@ -3279,7 +3238,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 143,
+    "__docId__": 142,
     "kind": "external",
     "name": "JSON",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
@@ -3291,7 +3250,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 144,
+    "__docId__": 143,
     "kind": "external",
     "name": "Promise",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
@@ -3303,7 +3262,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 145,
+    "__docId__": 144,
     "kind": "external",
     "name": "Generator",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
@@ -3315,7 +3274,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 146,
+    "__docId__": 145,
     "kind": "external",
     "name": "GeneratorFunction",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
@@ -3327,7 +3286,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 147,
+    "__docId__": 146,
     "kind": "external",
     "name": "Reflect",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
@@ -3339,7 +3298,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 148,
+    "__docId__": 147,
     "kind": "external",
     "name": "Proxy",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
@@ -3352,7 +3311,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 150,
+    "__docId__": 149,
     "kind": "external",
     "name": "CanvasRenderingContext2D",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D",
@@ -3364,7 +3323,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 151,
+    "__docId__": 150,
     "kind": "external",
     "name": "DocumentFragment",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment",
@@ -3376,7 +3335,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 152,
+    "__docId__": 151,
     "kind": "external",
     "name": "Element",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Element",
@@ -3388,7 +3347,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 153,
+    "__docId__": 152,
     "kind": "external",
     "name": "Event",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Event",
@@ -3400,7 +3359,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 154,
+    "__docId__": 153,
     "kind": "external",
     "name": "Node",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Node",
@@ -3412,7 +3371,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 155,
+    "__docId__": 154,
     "kind": "external",
     "name": "NodeList",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/NodeList",
@@ -3424,7 +3383,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 156,
+    "__docId__": 155,
     "kind": "external",
     "name": "XMLHttpRequest",
     "externalLink": "https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest",
@@ -3436,7 +3395,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 157,
+    "__docId__": 156,
     "kind": "external",
     "name": "AudioContext",
     "externalLink": "https://developer.mozilla.org/en/docs/Web/API/AudioContext",
@@ -3449,7 +3408,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 158,
+    "__docId__": 157,
     "kind": "testFile",
     "name": "test/autocomposer-logic.js",
     "content": "var assert = require('assert');\r\n\r\nvar AutoComposerLogic = require('../src/autocomposer-logic');\r\n\r\ndescribe('AutoComposerLogic', function() {\r\n  describe('#filterMelodyRange', function() {\r\n    it('should filter out melodies that have a range larger than an octave', function() {\r\n      // The filter function runs on each note addition for the melody generating function.\r\n      // So it should only be expected to look at the difference between the last two notes.\r\n\r\n      melodySmallRange = \"C4 G4 A4\";\r\n      melodyOctaveRange = \"G4 C4 C5\";\r\n      melodyBigRange = \"G4 C4 D5\";\r\n\r\n      assert.equal(AutoComposerLogic.filterMelodyRange(melodySmallRange), true);\r\n      assert.equal(AutoComposerLogic.filterMelodyRange(melodyOctaveRange), true);\r\n      assert.equal(AutoComposerLogic.filterMelodyRange(melodyBigRange), false);\r\n    });\r\n  });\r\n\r\n  describe('#filterRepetition', function() {\r\n    it('should filter out melodies that are too repetitive', function() {\r\n      melodyNoRepeats = \"C4 G4 A4 E5\";\r\n      melodyOneRepeat = \"C4 G4 G4 C5 E5\";\r\n      melodyTwoRepeats = \"C4 C4 G4 D5 D5 E3\";\r\n      melodyTwoSuccessiveRepeats = \"C4 G4 G4 G4 D5 C5\";\r\n\r\n      assert.equal(AutoComposerLogic.filterRepetition(melodyNoRepeats), true);\r\n      assert.equal(AutoComposerLogic.filterRepetition(melodyOneRepeat), true);\r\n      assert.equal(AutoComposerLogic.filterRepetition(melodyTwoRepeats), false);\r\n      assert.equal(AutoComposerLogic.filterRepetition(melodyTwoSuccessiveRepeats), false);\r\n    });\r\n  });\r\n\r\n  describe('#isValidText', function() {\r\n    it('should return true for chord inputs', function() {\r\n      assert.equal(AutoComposerLogic.isValidText('Gm7'), true);\r\n      assert.equal(AutoComposerLogic.isValidText('C'), true);\r\n      assert.equal(AutoComposerLogic.isValidText('D7'), true);\r\n      assert.equal(AutoComposerLogic.isValidText('A#m7b5'), true);\r\n    });\r\n\r\n    it('should return false for non-chord inputs', function() {\r\n      assert.equal(AutoComposerLogic.isValidText('H2'), false);\r\n      assert.equal(AutoComposerLogic.isValidText('456456'), false);\r\n      assert.equal(AutoComposerLogic.isValidText('Something really silly'), false);\r\n    });\r\n  });\r\n\r\n  describe('#convertAsciiAccidentalsToHtml', function() {\r\n    it('should convert ASCII accidentals to Unicode HTML entities', function() {\r\n      assert.equal(AutoComposerLogic.convertAsciiAccidentalsToHtml('Bb'), 'B&#9837;');\r\n      assert.equal(AutoComposerLogic.convertAsciiAccidentalsToHtml('C#'), 'C&#9839;');\r\n      assert.equal(AutoComposerLogic.convertAsciiAccidentalsToHtml('Fo'), 'F&‌deg;');\r\n    });\r\n  });\r\n\r\n  describe('#convertAsciiAccidentalsToText', function() {\r\n    it('should convert ASCII accentals to Unicode versions', function() {\r\n      assert.equal(AutoComposerLogic.convertAsciiAccidentalsToText('Bb'), 'B♭');\r\n      assert.equal(AutoComposerLogic.convertAsciiAccidentalsToText('C#'), 'C♯');\r\n      assert.equal(AutoComposerLogic.convertAsciiAccidentalsToText('Fo'), 'F°');\r\n    });\r\n  });\r\n\r\n  describe('#convertAccidentalsToAscii', function() {\r\n    it('should convert Unicode accentals to ASCII versions', function() {\r\n      assert.equal(AutoComposerLogic.convertAccidentalsToAscii('B♭'), 'Bb');\r\n      assert.equal(AutoComposerLogic.convertAccidentalsToAscii('C♯'), 'C#');\r\n      assert.equal(AutoComposerLogic.convertAccidentalsToAscii('F°'), 'Fo');\r\n    });\r\n  });\r\n});\r\n",
@@ -3460,7 +3419,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 159,
+    "__docId__": 158,
     "kind": "testDescribe",
     "name": "describe0",
     "testId": 0,
@@ -3473,7 +3432,7 @@
     "lineNumber": 5
   },
   {
-    "__docId__": 160,
+    "__docId__": 159,
     "kind": "testDescribe",
     "name": "describe1",
     "testId": 1,
@@ -3486,7 +3445,7 @@
     "lineNumber": 6
   },
   {
-    "__docId__": 161,
+    "__docId__": 160,
     "kind": "testIt",
     "name": "it2",
     "testId": 2,
@@ -3499,7 +3458,7 @@
     "lineNumber": 7
   },
   {
-    "__docId__": 162,
+    "__docId__": 161,
     "kind": "testDescribe",
     "name": "describe3",
     "testId": 3,
@@ -3512,7 +3471,7 @@
     "lineNumber": 21
   },
   {
-    "__docId__": 163,
+    "__docId__": 162,
     "kind": "testIt",
     "name": "it4",
     "testId": 4,
@@ -3525,7 +3484,7 @@
     "lineNumber": 22
   },
   {
-    "__docId__": 164,
+    "__docId__": 163,
     "kind": "testDescribe",
     "name": "describe5",
     "testId": 5,
@@ -3538,7 +3497,7 @@
     "lineNumber": 35
   },
   {
-    "__docId__": 165,
+    "__docId__": 164,
     "kind": "testIt",
     "name": "it6",
     "testId": 6,
@@ -3551,7 +3510,7 @@
     "lineNumber": 36
   },
   {
-    "__docId__": 166,
+    "__docId__": 165,
     "kind": "testIt",
     "name": "it7",
     "testId": 7,
@@ -3564,7 +3523,7 @@
     "lineNumber": 43
   },
   {
-    "__docId__": 167,
+    "__docId__": 166,
     "kind": "testDescribe",
     "name": "describe8",
     "testId": 8,
@@ -3577,7 +3536,7 @@
     "lineNumber": 50
   },
   {
-    "__docId__": 168,
+    "__docId__": 167,
     "kind": "testIt",
     "name": "it9",
     "testId": 9,
@@ -3590,7 +3549,7 @@
     "lineNumber": 51
   },
   {
-    "__docId__": 169,
+    "__docId__": 168,
     "kind": "testDescribe",
     "name": "describe10",
     "testId": 10,
@@ -3603,7 +3562,7 @@
     "lineNumber": 58
   },
   {
-    "__docId__": 170,
+    "__docId__": 169,
     "kind": "testIt",
     "name": "it11",
     "testId": 11,
@@ -3616,7 +3575,7 @@
     "lineNumber": 59
   },
   {
-    "__docId__": 171,
+    "__docId__": 170,
     "kind": "testDescribe",
     "name": "describe12",
     "testId": 12,
@@ -3629,7 +3588,7 @@
     "lineNumber": 66
   },
   {
-    "__docId__": 172,
+    "__docId__": 171,
     "kind": "testIt",
     "name": "it13",
     "testId": 13,
@@ -3642,7 +3601,7 @@
     "lineNumber": 67
   },
   {
-    "__docId__": 173,
+    "__docId__": 172,
     "kind": "testFile",
     "name": "test/autocomposer-melody.js",
     "content": "var assert = require('assert');\r\nconst _ = require('underscore');\r\n\r\nvar AutoComposerMelody = require('../src/autocomposer-melody');\r\n\r\nAutoComposerMelody._sendStatusUpdate = function() {\r\n  // Overriding this function with nothing since it contains browser code.\r\n}\r\n\r\nvar AcLogic = require('../src/autocomposer-logic');\r\n\r\nvar TEST_CHORD_1 = \"Gm7\";\r\nvar TEST_CHORD_2 = \"Cm7\";\r\nvar TEST_CHORD_3 = \"D7\";\r\n\r\nvar TEST_LOWER_LIMIT_1 = \"Bb3\";\r\nvar TEST_UPPER_LIMIT_1 = \"G#4\";\r\n\r\nvar TEST_LOWER_LIMIT_2 = \"Ab4\";\r\nvar TEST_UPPER_LIMIT_2 = \"B5\";\r\n\r\ndescribe('AutoComposerMelody', function() {\r\n  describe('#_getAllChordTones', function() {\r\n    it('should return all chord tones in the range (inclusive)', function() {\r\n      expectedTones1 = [\"Bb3\", \"D4\", \"F4\", \"G4\"];\r\n      expectedTones2 = [\"A4\", \"C5\", \"D5\", \"F#5\", \"A5\"];\r\n\r\n      resultTones1 = AutoComposerMelody._getAllChordTones(TEST_CHORD_1, TEST_LOWER_LIMIT_1, TEST_UPPER_LIMIT_1);\r\n      resultTones2 = AutoComposerMelody._getAllChordTones(TEST_CHORD_3, TEST_LOWER_LIMIT_2, TEST_UPPER_LIMIT_2);\r\n\r\n      assert.deepEqual(resultTones1, expectedTones1);\r\n      assert.deepEqual(resultTones2, expectedTones2);\r\n    });\r\n  });\r\n\r\n  describe('#_buildChordUnitList', function() {\r\n    it('should return a list of ChordUnits for a given progression', function() {\r\n      var expChordUnit3 = {\r\n        chord: \"D7\",\r\n        chordTones: [\"A4\", \"C5\", \"D5\", \"F#5\", \"A5\"],\r\n      };\r\n      var expChordUnit2 = {\r\n        chord: \"Cm7\",\r\n        chordTones: [\"Bb4\", \"C5\", \"Eb5\", \"G5\", \"Bb5\"],\r\n      };\r\n      var expChordUnit1 = {\r\n        chord: \"Gm7\",\r\n        chordTones: [\"Bb4\", \"D5\", \"F5\", \"G5\", \"Bb5\"],\r\n      };\r\n\r\n      var expectedArray = [expChordUnit1, expChordUnit2, expChordUnit3];\r\n      var chordProgression = [\"Gm7\",\"Cm7\",\"D7\"];\r\n      var chordUnitList = AutoComposerMelody._buildChordUnitList(chordProgression, TEST_LOWER_LIMIT_2, TEST_UPPER_LIMIT_2);\r\n\r\n      assert.deepEqual(chordUnitList[0].chordTones, expectedArray[0].chordTones);\r\n      assert.deepEqual(chordUnitList[1].chordTones, expectedArray[1].chordTones);\r\n      assert.deepEqual(chordUnitList[2].chordTones, expectedArray[2].chordTones);\r\n    });\r\n  });\r\n\r\n  describe('#_buildMelodyUnit', function() {\r\n    it('should build a melody unit with metadata for each raw melody', function() {\r\n      var chordProgression = [\"G\", \"Em\", \"C\", \"D\"];\r\n      var melody1 = \"B3 G4 E4 F#4\";\r\n      var melody2 = \"G4 B4 C5 D5\";\r\n\r\n      exp1 = {\r\n        chordProgression: chordProgression,\r\n        melodyNotes: melody1.split(\" \"),\r\n        smoothness: 13,\r\n        range: 8,\r\n        melodyString: melody1\r\n      }\r\n\r\n      exp2 = {\r\n        chordProgression: chordProgression,\r\n        melodyNotes: melody2.split(\" \"),\r\n        smoothness: 7,\r\n        range: 7,\r\n        melodyString: melody2\r\n      }\r\n\r\n      result1 = AutoComposerMelody._buildMelodyUnit(chordProgression, melody1);\r\n      result2 = AutoComposerMelody._buildMelodyUnit(chordProgression, melody2);\r\n\r\n      assert.deepEqual(result1, exp1);\r\n      assert.deepEqual(result2, exp2);\r\n    });\r\n  });\r\n\r\n  describe('#_buildMelodyUnitList', function() {\r\n    var chordProgression = [\"G\", \"Em\", \"C\", \"D\"];\r\n    var melodies = [\"B3 G4 E4 F#4\", \"G4 B4 C5 D5\", \"G4 G4 G4 F#4\", \"G5 G5 G5 A5\"];\r\n\r\n    it('should sort the output if specified', function() {\r\n      resultSorted = AutoComposerMelody._buildMelodyUnitList(chordProgression, melodies, {sort: true});\r\n\r\n      assert(resultSorted[0].smoothness < resultSorted[3].smoothness);\r\n    });\r\n\r\n    it('should limit the output if specified', function() {\r\n      var numLimit = 2;\r\n      result = AutoComposerMelody._buildMelodyUnitList(chordProgression, melodies, {limit: numLimit});\r\n\r\n      assert.equal(result.length, numLimit);\r\n    });\r\n  });\r\n\r\n  describe('#buildSimpleMelodies', function() {\r\n    it('should return a list of melodies for a given progression', function() {\r\n      var chordProgression = [\"Gm\",\"Cm\",\"D\"];\r\n      var melodyList = AutoComposerMelody.buildAllMelodies(chordProgression);\r\n\r\n      assert.equal(typeof melodyList[0] === 'string', false);\r\n    });\r\n\r\n    it('should return less melodies if filters are on', function() {\r\n      var chordProgression = [\"Gm\",\"Cm\",\"D\"];\r\n      var melodyListAll = AutoComposerMelody.buildAllMelodies(chordProgression);\r\n      var melodyList = AutoComposerMelody.buildSimpleMelodies(chordProgression);\r\n\r\n      assert(melodyListAll.length > melodyList.length, \"Filtered melody list is smaller than an unfiltered list\");\r\n      assert.equal(typeof melodyList[0] === 'string', false);\r\n    });\r\n\r\n    it('should return raw melodies as a string array', function() {\r\n      var chordProgression = [\"Gm\",\"Cm\",\"D\"];\r\n      var melodyList = AutoComposerMelody.buildRawMelodies(chordProgression);\r\n\r\n      assert.equal(typeof melodyList[0] === 'string', true);\r\n    });\r\n  });\r\n\r\n  describe('#buildBasicBassLine', function() {\r\n    it('should return a simple bassline for a melody', function() {\r\n      var chordProgression = [\"G\", \"Em\", \"C\", \"D\"];\r\n      var melody = \"B3 G4 E4 F#4\";\r\n      var melodyUnit = AutoComposerMelody._buildMelodyUnit(chordProgression, melody);\r\n\r\n      var resultBassline = AutoComposerMelody.buildBasicBassLine(melodyUnit);\r\n      var expBassline = [\"G1\", \"E1\", \"C2\", \"D2\"];\r\n\r\n      assert.deepEqual(resultBassline, expBassline);\r\n    });\r\n  });\r\n\r\n  describe('#buildSimpleAccompaniment', function() {\r\n    it('should return a simple accompaniment for a melody', function() {\r\n      var chordProgression = [\"G\", \"Em\", \"C\", \"D\"];\r\n      var melody = \"B3 G4 E4 F#4\";\r\n      var expAccompaniment = [\"G2 D3\", \"E3 B2\", \"C3 G2\", \"D3 A2\"];\r\n\r\n      var melodyUnit = AutoComposerMelody._buildMelodyUnit(chordProgression, melody);\r\n      var resultBassline = AutoComposerMelody.buildSimpleAccompaniment(melodyUnit);\r\n\r\n      assert.deepEqual(resultBassline, expAccompaniment);\r\n    });\r\n  });\r\n\r\n  it('should not break after some refactoring...', function() {\r\n    var chordProgression = [\"Gm\",\"Cm\"];\r\n\r\n    var melodyList = AutoComposerMelody.buildSimpleMelodies(chordProgression);\r\n    var melodyListRaw = AutoComposerMelody.buildRawMelodies(chordProgression);\r\n    var melodyListAll = AutoComposerMelody.buildAllMelodies(chordProgression);\r\n\r\n    var melodyListRefactor = AutoComposerMelody.buildSimpleMelodies(chordProgression);\r\n    var melodyListRefactor2 = AutoComposerMelody.buildSimpleMelodies(chordProgression, {somethingDumb: \"yes\"});\r\n    var melodyListRawRefactor = AutoComposerMelody.buildSimpleMelodies(chordProgression, {raw: true});\r\n    var melodyListAllRefactor = AutoComposerMelody.buildSimpleMelodies(chordProgression, {limit: false, filter: false});\r\n\r\n    assert.deepEqual(melodyList, melodyListRefactor);\r\n    assert.deepEqual(melodyList, melodyListRefactor2);\r\n    assert.deepEqual(melodyListRaw, melodyListRawRefactor);\r\n    assert.deepEqual(melodyListAll, melodyListAllRefactor);\r\n  });\r\n});\r\n",
@@ -3653,7 +3612,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 174,
+    "__docId__": 173,
     "kind": "testDescribe",
     "name": "describe14",
     "testId": 14,
@@ -3666,7 +3625,7 @@
     "lineNumber": 22
   },
   {
-    "__docId__": 175,
+    "__docId__": 174,
     "kind": "testDescribe",
     "name": "describe15",
     "testId": 15,
@@ -3679,7 +3638,7 @@
     "lineNumber": 23
   },
   {
-    "__docId__": 176,
+    "__docId__": 175,
     "kind": "testIt",
     "name": "it16",
     "testId": 16,
@@ -3692,7 +3651,7 @@
     "lineNumber": 24
   },
   {
-    "__docId__": 177,
+    "__docId__": 176,
     "kind": "testDescribe",
     "name": "describe17",
     "testId": 17,
@@ -3705,7 +3664,7 @@
     "lineNumber": 36
   },
   {
-    "__docId__": 178,
+    "__docId__": 177,
     "kind": "testIt",
     "name": "it18",
     "testId": 18,
@@ -3718,7 +3677,7 @@
     "lineNumber": 37
   },
   {
-    "__docId__": 179,
+    "__docId__": 178,
     "kind": "testDescribe",
     "name": "describe19",
     "testId": 19,
@@ -3731,7 +3690,7 @@
     "lineNumber": 61
   },
   {
-    "__docId__": 180,
+    "__docId__": 179,
     "kind": "testIt",
     "name": "it20",
     "testId": 20,
@@ -3744,7 +3703,7 @@
     "lineNumber": 62
   },
   {
-    "__docId__": 181,
+    "__docId__": 180,
     "kind": "testDescribe",
     "name": "describe21",
     "testId": 21,
@@ -3757,7 +3716,7 @@
     "lineNumber": 91
   },
   {
-    "__docId__": 182,
+    "__docId__": 181,
     "kind": "testIt",
     "name": "it22",
     "testId": 22,
@@ -3770,7 +3729,7 @@
     "lineNumber": 95
   },
   {
-    "__docId__": 183,
+    "__docId__": 182,
     "kind": "testIt",
     "name": "it23",
     "testId": 23,
@@ -3783,7 +3742,7 @@
     "lineNumber": 101
   },
   {
-    "__docId__": 184,
+    "__docId__": 183,
     "kind": "testDescribe",
     "name": "describe24",
     "testId": 24,
@@ -3796,7 +3755,7 @@
     "lineNumber": 109
   },
   {
-    "__docId__": 185,
+    "__docId__": 184,
     "kind": "testIt",
     "name": "it25",
     "testId": 25,
@@ -3809,7 +3768,7 @@
     "lineNumber": 110
   },
   {
-    "__docId__": 186,
+    "__docId__": 185,
     "kind": "testIt",
     "name": "it26",
     "testId": 26,
@@ -3822,7 +3781,7 @@
     "lineNumber": 117
   },
   {
-    "__docId__": 187,
+    "__docId__": 186,
     "kind": "testIt",
     "name": "it27",
     "testId": 27,
@@ -3835,7 +3794,7 @@
     "lineNumber": 126
   },
   {
-    "__docId__": 188,
+    "__docId__": 187,
     "kind": "testDescribe",
     "name": "describe28",
     "testId": 28,
@@ -3848,7 +3807,7 @@
     "lineNumber": 134
   },
   {
-    "__docId__": 189,
+    "__docId__": 188,
     "kind": "testIt",
     "name": "it29",
     "testId": 29,
@@ -3861,7 +3820,7 @@
     "lineNumber": 135
   },
   {
-    "__docId__": 190,
+    "__docId__": 189,
     "kind": "testDescribe",
     "name": "describe30",
     "testId": 30,
@@ -3874,7 +3833,7 @@
     "lineNumber": 147
   },
   {
-    "__docId__": 191,
+    "__docId__": 190,
     "kind": "testIt",
     "name": "it31",
     "testId": 31,
@@ -3887,7 +3846,7 @@
     "lineNumber": 148
   },
   {
-    "__docId__": 192,
+    "__docId__": 191,
     "kind": "testIt",
     "name": "it32",
     "testId": 32,
@@ -3900,7 +3859,7 @@
     "lineNumber": 160
   },
   {
-    "__docId__": 193,
+    "__docId__": 192,
     "kind": "testFile",
     "name": "test/packaging.js",
     "content": "// Testing to see if the package works properly.\r\nvar assert = require('assert');\r\nvar AutoComposer = require('../index.js');\r\n\r\ndescribe('AutoComposer', function() {\r\n  it('should create a variety of simple melodies', function() {\r\n    var chordProgression = [\"G\", \"Em\", \"C\", \"D\"];\r\n    var results = AutoComposer.melody.buildSimpleMelodies(chordProgression);\r\n\r\n    assert(results, \"melody.buildSimpleMelodies() failed!\");\r\n  });\r\n});\r\n",
@@ -3911,7 +3870,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 194,
+    "__docId__": 193,
     "kind": "testDescribe",
     "name": "describe33",
     "testId": 33,
@@ -3924,7 +3883,7 @@
     "lineNumber": 5
   },
   {
-    "__docId__": 195,
+    "__docId__": 194,
     "kind": "testIt",
     "name": "it34",
     "testId": 34,

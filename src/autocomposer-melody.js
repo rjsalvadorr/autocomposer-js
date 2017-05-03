@@ -7,7 +7,6 @@ const AcConstants = require('./autocomposer-constants');
 
 /**
 * Creates melodies from a given chord progression
-* @emits {statusUpdate} - Emits a "statusUpdate" event with details when important events happen (like melody generation finishing, etc.)
 */
 class AutoComposerMelody {
   constructor() {
@@ -15,17 +14,6 @@ class AutoComposerMelody {
     this.lowerLimit = AcConstants.DEFAULT_LOWER_LIMIT;
     /** @type {string} */
     this.upperLimit = AcConstants.DEFAULT_UPPER_LIMIT;
-  }
-
-  /**
-  * Sends a status update that's displayed to the user.
-  * @private
-  * @param {string} message - status update message
-  * @emits {statusUpdate}
-  */
-  _sendStatusUpdate(message) {
-    var updateEvent = new CustomEvent('statusUpdate', {detail: message});
-    document.body.dispatchEvent(updateEvent);
   }
 
     /**
@@ -297,9 +285,9 @@ class AutoComposerMelody {
     } else {
       // End of the chain.
       if(options.filtered && returnList.length > AcConstants.NUM_MELODIES_LIMIT) {
-        this._sendStatusUpdate("Generated  " + returnList.length + " melodies. Creating list of " + AcConstants.NUM_MELODIES_LIMIT + "...");
+        console.log("Generated  " + returnList.length + " melodies. Creating list of " + AcConstants.NUM_MELODIES_LIMIT + "...");
       } else {
-        this._sendStatusUpdate("Generated  " + returnList.length + " melodies.");
+        console.log("Generated  " + returnList.length + " melodies.");
       }
       return returnList;
     }

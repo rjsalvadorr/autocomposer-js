@@ -34,5 +34,6 @@
     "mocha": "^3.3.0",
     "stylus": "^0.54.5",
     "uglify-js": "git+https://github.com/mishoo/UglifyJS2.git#harmony"
-  }
+  },
+  "tonicExampleFilename": "example.js"
 }
