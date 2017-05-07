@@ -58,7 +58,7 @@ var AcConstants = {
 
   NUM_GENERATIONS_LIMIT: 100000, // Number of melody generation attempts that the program will make.
   NUM_MELODIES_LIMIT: 100, // Number of melodies that's returned',
-  DURATION_FACTOR: 24 // All note durations are expressed as a fraction of 24. Like 3/24 for a 32nd note and 2/24 for a 32nd note triplet.
+  DURATION_FACTOR: 48 // All note durations are expressed as a fraction of 24. Like 6/48 for a 32nd note and 4/48 for a 32nd note triplet.
 }
 
 AcConstants.instrumentData["melody"].lowerLimit = AcConstants.DEFAULT_LOWER_LIMIT;
@@ -74,6 +74,7 @@ AcConstants.DUR_WHOLE = AcConstants.DURATION_FACTOR * 4;
 
 AcConstants.DUR_HALF = AcConstants.DUR_WHOLE / 2;
 AcConstants.DUR_HALF_DOT = AcConstants.DUR_HALF * 1.5;
+AcConstants.DUR_HALF_TRP = AcConstants.DUR_WHOLE / 3;
 
 AcConstants.DUR_QUARTER = AcConstants.DUR_HALF / 2;
 AcConstants.DUR_QUARTER_DOT = AcConstants.DUR_QUARTER * 1.5;
