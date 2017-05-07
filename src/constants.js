@@ -57,7 +57,8 @@ var AcConstants = {
   },
 
   NUM_GENERATIONS_LIMIT: 100000, // Number of melody generation attempts that the program will make.
-  NUM_MELODIES_LIMIT: 100 // Number of melodies that's returned'
+  NUM_MELODIES_LIMIT: 100, // Number of melodies that's returned',
+  DURATION_FACTOR: 24 // All note durations are expressed as a fraction of 24. Like 3/24 for a 32nd note and 2/24 for a 32nd note triplet.
 }
 
 AcConstants.instrumentData["melody"].lowerLimit = AcConstants.DEFAULT_LOWER_LIMIT;
@@ -68,5 +69,26 @@ AcConstants.instrumentData["accompaniment"].upperLimit = AcConstants.ACCOMPANIME
 
 AcConstants.instrumentData["bass"].lowerLimit = AcConstants.BASS_LOWER_LIMIT;
 AcConstants.instrumentData["bass"].upperLimit = AcConstants.BASS_UPPER_LIMIT;
+
+AcConstants.DUR_WHOLE = AcConstants.DURATION_FACTOR * 4;
+
+AcConstants.DUR_HALF = AcConstants.DUR_WHOLE / 2;
+AcConstants.DUR_HALF_DOT = AcConstants.DUR_HALF * 1.5;
+
+AcConstants.DUR_QUARTER = AcConstants.DUR_HALF / 2;
+AcConstants.DUR_QUARTER_DOT = AcConstants.DUR_QUARTER * 1.5;
+AcConstants.DUR_QUARTER_TRP = AcConstants.DUR_HALF / 3;
+
+AcConstants.DUR_8TH = AcConstants.DUR_QUARTER / 2;
+AcConstants.DUR_8TH_DOT = AcConstants.DUR_8TH * 1.5;
+AcConstants.DUR_8TH_TRP = AcConstants.DUR_QUARTER / 3;
+
+AcConstants.DUR_16TH = AcConstants.DUR_8TH / 2;
+AcConstants.DUR_16TH_DOT = AcConstants.DUR_16TH * 1.5;
+AcConstants.DUR_16TH_TRP = AcConstants.DUR_8TH / 3;
+
+AcConstants.DUR_32ND = AcConstants.DUR_16TH / 2;
+AcConstants.DUR_32ND_DOT = AcConstants.DUR_32ND * 1.5;
+AcConstants.DUR_32ND_TRP = AcConstants.DUR_16TH / 3;
 
 module.exports = AcConstants;
